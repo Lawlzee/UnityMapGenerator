@@ -370,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1547474739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,7 +421,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1733369140
 Transform:
   m_ObjectHideFlags: 0
@@ -449,11 +449,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 80
-  height: 80
+  height: 40
+  depth: 80
+  scale: 1
   seed: 
-  randomFillPercent: 52
+  randomFillPercent: 48
   smoothingInterations: 10
-  noiseLevel: 16.4
+  smoothingInterations3d: 1
+  noiseLevel: 19.9
+  noiseLevel3d: 0
+  noiseRandomLevel3d: 0.042
   maxAmplitude: 5
 --- !u!23 &1733369142
 MeshRenderer:

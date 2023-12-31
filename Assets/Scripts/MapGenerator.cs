@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Generator.Assets.Scripts
     {
         public int width;
         public int height;
+        public int depth;
 
         [Range(0, 100)]
         public float scale = 1f;
@@ -18,15 +20,25 @@ namespace Generator.Assets.Scripts
         [Range(0, 100)]
         public int randomFillPercent;
 
+        [Range(0, 25)]
         public int smoothingInterations;
+        [Range(0, 25)]
+        public int smoothingInterations3d;
+
+
 
         [Range(0, 100)]
         public float noiseLevel = 0.01f;
+        [Range(0, 1)]
+        public float noiseLevel3d = 0.1f;
+        [Range(0, 1)]
+        public float noiseRandomLevel3d = 0.5f;
         [Range(0, 100)]
         public float maxAmplitude = 5f;
 
 
-        private float[,] _map;
+        //private float[,] _map;
+        private bool[,,] _map;
 
         private void Start()
         {
@@ -48,114 +60,84 @@ namespace Generator.Assets.Scripts
 
         private void GenerateMap()
         {
-            var map = RandomFillMap();
-            var smoothMap = SmoothMap(map);
-            _map = CreateHeightMap(smoothMap);
-        }
-
-        private bool[,] RandomFillMap()
-        {
-            var map = new bool[width, height];
-
             int currentSeed = string.IsNullOrEmpty(seed)
                 ? Time.time.GetHashCode()
                 : seed.GetHashCode();
             System.Random rng = new System.Random(currentSeed);
 
+            var map2D = CellularAutomata2d.Create(width, depth, randomFillPercent, smoothingInterations, rng);
+
+            bool[,,] map3d = To3DMap(map2D, rng);
+            AddNoise(map3d, rng);
+            bool[,,] smoothMap3d = CellularAutomata3d.SmoothMap(map3d, smoothingInterations3d);
+
+            var mesh = MarchingCubes.CreateMesh(smoothMap3d);
+
+            GetComponent<MeshFilter>().mesh = mesh;
+
+            _map = smoothMap3d;
+        }
+
+        private bool[,,] To3DMap(bool[,] map, System.Random rng)
+        {
+            int seedX = rng.Next(Int16.MaxValue);
+            int seedY = rng.Next(Int16.MaxValue);
+
+            bool[,,] result = new bool[width, height, depth];
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int z = 0; z < depth; z++)
+                {
+                    //int heigth = map[x, z] ? height / 4 : height;
+
+                    
+                    float blockHeight;
+                    if (map[x, z])
+                    {
+                        blockHeight = height * 0.25f;
+                    }
+                    else
+                    {
+                        float noise = Mathf.PerlinNoise(x / noiseLevel + seedX, z / noiseLevel + seedY);
+                        blockHeight = height * 0.5f + noise * (height * 0.5f);
+                    }
+
+                    for (int y = 0; y < height && y < blockHeight; y++)
+                    {
+                        result[x, y, z] = true;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private void AddNoise(bool[,,] map, System.Random rng)
+        {
+            int seedX = rng.Next(short.MaxValue);
+            int seedY = rng.Next(short.MaxValue);
+            int seedZ = rng.Next(short.MaxValue);
+
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+                    for (int z = 0; z < depth; z++)
                     {
-                        map[x, y] = true;
-                    }
-                    else
-                    {
-                        map[x, y] = rng.Next(100) > randomFillPercent;
-                    }
-
-                }
-            }
-
-            return map;
-        }
-
-        private bool[,] SmoothMap(bool[,] map)
-        {
-            var buffer = new bool[width, height];
-
-            for (int i = 0; i < smoothingInterations; i++)
-            {
-                var newMap = buffer;
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        int neighbourCount = GetNeighbourCount(map, x, y);
-
-                        if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
+                        float noise = PerlinNoise.Get(new Vector3(x + seedX, y + seedY, z + seedZ), noiseRandomLevel3d);
+                        if (map[x, y, z] && noise < noiseLevel3d)
                         {
-                            newMap[x, y] = true;
-                        }
-                        else
-                        {
-                            if (neighbourCount > 4)
-                            {
-                                newMap[x, y] = true;
-                            }
-                            else if (neighbourCount < 4)
-                            {
-                                newMap[x, y] = false;
-                            }
-                            else
-                            {
-                                newMap[x, y] = map[x, y];
-                            }
-                        }
-                    }
-                }
-
-                buffer = map;
-                map = newMap;
-            }
-
-            return map;
-        }
-
-        private int GetNeighbourCount(bool[,] map, int posX, int posY)
-        {
-            int count = 0;
-
-            for (int dx = -1; dx <= 1; dx++)
-            {
-                int x = posX + dx;
-                if (x >= 0 && x < width)
-                {
-                    for (int dy = -1; dy <= 1; dy++)
-                    {
-                        int y = posY + dy;
-
-                        if (dx == 0 && dy == 0)
-                        {
-                            continue;
-                        }
-
-                        if (y >= 0
-                            && y < height
-                            && map[x, y])
-                        {
-                            count++;
+                            map[x, y, z] = !map[x, y, z];
                         }
                     }
                 }
             }
-
-            return count;
         }
 
-        private float[,] CreateHeightMap(bool[,] map)
+        private float[,] CreateHeightMap(bool[,] map, System.Random rng)
         {
+
             float[,] result = new float[width, height];
 
             for (int x = 0; x < width; x++)
@@ -176,34 +158,67 @@ namespace Generator.Assets.Scripts
             return result;
         }
 
-        private void OnDrawGizmos()
-        {
-            if (_map != null)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        float posX = -width / 2 + x + 0.5f;
-                        float posY = -height / 2 + y + 0.5f;
+        //private void OnDrawGizmos()
+        //{
+        //    if (_map != null)
+        //    {
+        //        for (int x = 0; x < width; x++)
+        //        {
+        //            float posX = -width / 2 + x + 0.5f;
+        //            for (int z = 0; z < depth; z++)
+        //            {
+        //                float posZ = -depth / 2 + z + 0.5f;
+        //
+        //                int? maxY = null;
+        //                for (int y = height - 1; y >= 0; y--)
+        //                {
+        //                    float posY = -height / 2 + y + 0.5f;
+        //
+        //                    if (_map[x, y, z])
+        //                    {
+        //                        maxY = maxY ?? y;
+        //
+        //                        float intensity = maxY.Value / (float)height;
+        //
+        //                        Gizmos.color = new Color(intensity, intensity, intensity);
+        //                        Vector3 pos = new Vector3(posX, posY, posZ);
+        //                        Gizmos.DrawCube(pos * scale, Vector3.one * scale);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //
+        //}
 
-
-                        if (_map[x, y] < 0)
-                        {
-                            Gizmos.color = Color.black;
-                            Vector3 pos = new Vector3(posX, 0, posY);
-                            Gizmos.DrawCube(pos * scale, new Vector3(1, 10, 1) * scale);
-                        }
-                        else
-                        {
-                            Gizmos.color = Color.white;
-                            Vector3 pos = new Vector3(posX, _map[x, y] * maxAmplitude, posY);
-                            Gizmos.DrawCube(pos * scale, Vector3.one * scale);
-                        }
-                    }
-                }
-            }
-
-        }
+        //private void OnDrawGizmos()
+        //{
+        //    if (_map != null)
+        //    {
+        //        for (int x = 0; x < width; x++)
+        //        {
+        //            for (int y = 0; y < height; y++)
+        //            {
+        //                float posX = -width / 2 + x + 0.5f;
+        //                float posY = -height / 2 + y + 0.5f;
+        //
+        //
+        //                if (_map[x, y] < 0)
+        //                {
+        //                    Gizmos.color = Color.black;
+        //                    Vector3 pos = new Vector3(posX, 0, posY);
+        //                    Gizmos.DrawCube(pos * scale, new Vector3(1, 10, 1) * scale);
+        //                }
+        //                else
+        //                {
+        //                    Gizmos.color = Color.white;
+        //                    Vector3 pos = new Vector3(posX, _map[x, y] * maxAmplitude, posY);
+        //                    Gizmos.DrawCube(pos * scale, Vector3.one * scale);
+        //                }
+        //            }
+        //        }
+        //    }
+        //
+        //}
     }
 }
