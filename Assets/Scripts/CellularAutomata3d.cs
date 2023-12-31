@@ -25,9 +25,7 @@ namespace Assets.Scripts
                     {
                         for (int z = 0; z < depth; z++)
                         {
-                            
-
-                            if (x == 0 || y == 0 || z == 0 || x == width - 1 || z == depth - 1)
+                            if (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1)
                             {
                                 newMap[x, y, z] = true;
                             }

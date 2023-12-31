@@ -1,3 +1,4 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,6 +70,42 @@ namespace Generator.Assets.Scripts
             mesh.SetTriangles(_triangles, 0);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+
+            var normals = mesh.normals;
+            var uvs = new Vector2[_vertices.Count];
+
+            int count = 0;
+
+            //List<Color> colors = new List<Color>();
+            for (int i = 0; i < _vertices.Count; i++)
+            {
+                var normal = normals[i];
+                var vertex = _vertices[i];
+                float dot = (Vector3.Dot(new Vector3(0, -1, 0), normal) + 1) / 2f;
+
+
+                if (count < 100 && (dot > 1 || dot < 0))
+                {
+                    Debug.Log($"dot={dot}");
+                    count++;
+                }
+
+                Vector2 uv = new Vector2(0, dot);
+
+                uvs[i] = uv;
+            }
+
+            mesh.uv = uvs;
+
+            mesh.RecalculateTangents();
+
+            //Color[] colors = new Color[_vertices.Count];
+            //
+            //for (int i = 0; i < _vertices.Count; i++)
+            //    colors[i] = Color.Lerp(Color.red, Color.green, _vertices[i].y);
+            //
+            //// assign the array of colors to the Mesh.
+            //mesh.colors = colors;
 
             return mesh;
         }

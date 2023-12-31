@@ -31,7 +31,7 @@ namespace Assets.Scripts
                 {
                     if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
                     {
-                        map[x, y] = false;
+                        map[x, y] = true;
                     }
                     else
                     {
@@ -59,7 +59,7 @@ namespace Assets.Scripts
 
                         if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
                         {
-                            newMap[x, y] = false;
+                            newMap[x, y] = true;
                         }
                         else
                         {
