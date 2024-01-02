@@ -15,39 +15,51 @@ namespace Assets.Scripts
         public Palette floor;
         public Palette walls;
         public Palette ceilling;
+        public float noise = 0.02f;
 
         public Texture2D Create(System.Random rng)
         {
             const float goldenRatio = 0.618033988749895f;
 
 
+            float rootHue = 0;
             float hue = (float)rng.NextDouble();
             Color[] colors = new Color[8];
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 2; i++)
             {
-                float b = i / 2 == 0
-                    ? 0.25f
-                    : 0.25f;
-
-                float a = i / 2 == 0
-                    ? 0.75f
-                    : 0.25f;
-
                 Palette palette1 = i / 2 == 0
                     ? floor
                     : walls; 
 
-                hue = (float)rng.NextDouble();
-                //hue = (hue + goldenRatio) % 1;
-                colors[i * 2] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
+ 
 
+                hue = (float)rng.NextDouble();
+                //if (i > 0)
+                //{
+                //    hue = (((rootHue + 0.25f) % 1) + hue * 0.5f) % 1;
+                //}
+                rootHue = hue;
+
+                //hue = (hue + goldenRatio) % 1;
+                colors[i * 4] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
+
+                //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
+                hue = (hue + noise) % 1;
+                colors[i * 4 + 2] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
+
+
+                hue = (hue + 0.2f * ((float)rng.NextDouble() - 0.5f)) % 1;
 
                 Palette palette2 = i / 2 == 0
                     ? walls
                     : ceilling;
-                hue = (float)rng.NextDouble();
+                //hue = (float)rng.NextDouble();
                 //hue = (hue + goldenRatio) % 1;
-                colors[i * 2 + 1] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
+                colors[i * 4 + 1] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
+
+                hue = (hue + noise) % 1;
+                //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
+                colors[i * 4 + 3] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
             }
 
             Texture2D texture = new Texture2D(size * 2 + transitionSize, size);

@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts
 {
-    internal class CellularAutomata3d
+    [Serializable]
+    public class CellularAutomata3d
     {
-        public static bool[,,] SmoothMap(bool[,,] map, int smoothingInterations)
+        public int smoothingInterations;
+
+        public bool[,,] SmoothMap(bool[,,] map)
         {
             int width = map.GetLength(0);
             int height = map.GetLength(1);
@@ -57,7 +60,7 @@ namespace Assets.Scripts
             return map;
         }
 
-        private static int GetNeighbourCount(bool[,,] map, int width, int height, int depth, int posX, int posY, int posZ)
+        private int GetNeighbourCount(bool[,,] map, int width, int height, int depth, int posX, int posY, int posZ)
         {
             int count = 0;
 

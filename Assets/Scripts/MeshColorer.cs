@@ -7,27 +7,22 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [Serializable]
     public class MeshColorer
     {
-        private const float grassAngle = -0.15f;
-        private const float grassMultiplier = 0.5f / (1 - grassAngle);
-        private const float stoneMultiplier = -0.5f / (1 + grassAngle);
+        [Range(-1, 1)]
+        public float grassAngle = -0.15f;
 
-        private readonly Vector3 _seed;
-        private readonly float _frequency;
-        private readonly float _frequency2;
-        private readonly float _textureFrequency2Amplitude;
+        [Range(0, 1)]
+        public float baseFrequency;
+        [Range(0, 1)]
+        public float frequency;
+        [Range(0, 1)]
+        public float amplitude;
 
-        public MeshColorer(System.Random rng, float frequency, float frequency2, float textureFrequency2Amplitude)
+        public Vector2 GetUV(Vector3 vertex, Vector3 normal, System.Random rng)
         {
-            _seed = new Vector3((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble());
-            _frequency = frequency;
-            _frequency2 = frequency2;
-            _textureFrequency2Amplitude = textureFrequency2Amplitude;
-        }
-
-        public Vector2 GetUV(Vector3 vertex, Vector3 normal)
-        {
+            Vector3Int _seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
 
             float dot = Vector3.Dot(new Vector3(0, -1, 0), normal);
             float angle;
@@ -51,8 +46,8 @@ namespace Assets.Scripts
 
             //float dot = ( + 1) / 2f;
             //float dot = Mathf.Lerp(Vector3.Dot(new Vector3(0, 1, 0), normal), 0 , 1);
-            float noise = (PerlinNoise.Get(vertex + _seed, _frequency) + 1) / 2f;
-            noise += _textureFrequency2Amplitude * PerlinNoise.Get(vertex + _seed, _frequency2);
+            float noise = (PerlinNoise.Get((vertex + _seed), baseFrequency) + 1) / 2f;
+            noise += amplitude * PerlinNoise.Get(vertex + _seed, frequency);
 
             Vector2 uv = new Vector2(angle, noise);
 

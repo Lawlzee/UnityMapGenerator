@@ -11,7 +11,6 @@ namespace Generator.Assets.Scripts
 {
     public class MarchingCubes
     {
-        private readonly int[] _windingOrder;
         private readonly Vector3[] _edgeVertex;
         private readonly List<Vector3> _vertices;
         private readonly Dictionary<Vector3, int> _verticesIndexes;
@@ -20,7 +19,6 @@ namespace Generator.Assets.Scripts
 
         private MarchingCubes()
         {
-            _windingOrder = new int[] { 2, 1, 0 };
             _edgeVertex = new Vector3[12];
             _vertices = new List<Vector3>();
             _verticesIndexes = new Dictionary<Vector3, int>();
@@ -28,12 +26,12 @@ namespace Generator.Assets.Scripts
             _cube = new float[8];
         }
 
-        public static Mesh CreateMesh(float[,,] voxels, MeshColorer meshColorer)
+        public static Mesh CreateMesh(float[,,] voxels, MeshColorer meshColorer, System.Random rng)
         {
-            return new MarchingCubes().Generate(voxels, meshColorer);
+            return new MarchingCubes().Generate(voxels, meshColorer, rng);
         }
 
-        public Mesh Generate(float[,,] voxels, MeshColorer meshColorer)
+        public Mesh Generate(float[,,] voxels, MeshColorer meshColorer, System.Random rng)
         {
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);
@@ -85,7 +83,7 @@ namespace Generator.Assets.Scripts
                 var vertex = _vertices[i];
                 var normal = normals[i];
 
-                uvs[i] = meshColorer.GetUV(vertex, normal);
+                uvs[i] = meshColorer.GetUV(vertex, normal, rng);
             }
 
             mesh.uv = uvs;

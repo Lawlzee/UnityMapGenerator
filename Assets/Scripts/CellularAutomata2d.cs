@@ -7,21 +7,25 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
+    [Serializable]
     public class CellularAutomata2d
     {
-        public static bool[,] Create(
+        [Range(0, 1)]
+        public float randomFillPercent = 0.45f;
+        [Range(0, 25)]
+        public int iterations = 10;
+
+        public bool[,] Create(
             int width, 
             int height, 
-            int randomFillPercent, 
-            int smoothingInterations, 
             System.Random rng)
         {
-            var map = RandomFillMap(width, height, randomFillPercent, rng);
-            var smoothMap = SmoothMap(map, width, height, smoothingInterations);
+            var map = RandomFillMap(width, height, rng);
+            var smoothMap = SmoothMap(map, width, height);
             return smoothMap;
         }
 
-        private static bool[,] RandomFillMap(int width, int height, int randomFillPercent, System.Random rng)
+        private bool[,] RandomFillMap(int width, int height, System.Random rng)
         {
             var map = new bool[width, height];
 
@@ -35,7 +39,7 @@ namespace Assets.Scripts
                     }
                     else
                     {
-                        map[x, y] = rng.Next(100) > randomFillPercent;
+                        map[x, y] = rng.NextDouble() > randomFillPercent;
                     }
 
                 }
@@ -44,11 +48,11 @@ namespace Assets.Scripts
             return map;
         }
 
-        private static bool[,] SmoothMap(bool[,] map, int width, int height, int smoothingInterations)
+        private bool[,] SmoothMap(bool[,] map, int width, int height)
         {
             var buffer = new bool[width, height];
 
-            for (int i = 0; i < smoothingInterations; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 var newMap = buffer;
                 for (int x = 0; x < width; x++)
@@ -86,7 +90,7 @@ namespace Assets.Scripts
             return map;
         }
 
-        private static int GetNeighbourCount(bool[,] map, int width, int height, int posX, int posY)
+        private int GetNeighbourCount(bool[,] map, int width, int height, int posX, int posY)
         {
             int count = 0;
 
