@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
 
 namespace Generator.Assets.Scripts
@@ -49,8 +50,20 @@ namespace Generator.Assets.Scripts
         [Range(0, 100)]
         public int wallRoundingFactor = 10;
 
+        [Range(0, 1)]
+        public float terrainFrequency = 0.5f;
+
+        [Range(0, 1)]
+        public float textureFrequency = 0.1f;
+        [Range(0, 1)]
+        public float textureFrequency2 = 0.7f;
+        [Range(0, 1)]
+        public float textureFrequency2Amplitude = 0.2f;
+
+        public ColorPatelette colorPatelette = new ColorPatelette();
+
         //private float[,] _map;
-        private bool[,,] _map;
+        //private bool[,,] _map;
 
         private void Start()
         {
@@ -82,24 +95,27 @@ namespace Generator.Assets.Scripts
 
             var map2D = CellularAutomata2d.Create(width, depth, randomFillPercent, smoothingInterations, rng);
 
-            bool[,,] map3d = To3DMap(map2D, rng);
+            bool[,,] map3d = Map2dToMap3d(map2D, rng);
             CarveWalls(map3d, rng);
             AddFloorAndCeilling(map3d, rng);
             AddWalls(map3d, rng);
 
             bool[,,] smoothMap3d = CellularAutomata3d.SmoothMap(map3d, smoothingInterations3d);
+            float[,,] noiseMap3d = Map3dToNoiseMap(smoothMap3d, rng);
 
-            var mesh = MarchingCubes.CreateMesh(smoothMap3d);
+            var mesh = MarchingCubes.CreateMesh(noiseMap3d, new MeshColorer(rng, textureFrequency, textureFrequency2, textureFrequency2Amplitude));
 
             GetComponent<MeshFilter>().mesh = mesh;
 
-            _map = smoothMap3d;
+            GetComponent<MeshRenderer>().material.mainTexture = colorPatelette.Create(rng);
+
+            //_map = smoothMap3d;
         }
 
-        private bool[,,] To3DMap(bool[,] map, System.Random rng)
+        private bool[,,] Map2dToMap3d(bool[,] map, System.Random rng)
         {
-            int seedX = rng.Next(Int16.MaxValue);
-            int seedY = rng.Next(Int16.MaxValue);
+            //int seedX = rng.Next(Int16.MaxValue);
+            //int seedY = rng.Next(Int16.MaxValue);
 
             bool[,,] result = new bool[width3d, height, depth3d];
 
@@ -291,6 +307,43 @@ namespace Generator.Assets.Scripts
                     }
                 }
             }
+        }
+
+        private float[,,] Map3dToNoiseMap(bool[,,] map, System.Random rng)
+        {
+            int seedX = rng.Next(short.MaxValue);
+            int seedY = rng.Next(short.MaxValue);
+            int seedZ = rng.Next(short.MaxValue);
+
+            float[,,] result = new float[width3d, height3d, depth3d];
+
+            float min = float.MaxValue;
+            float max = float.MinValue;
+
+            for (int x = 0; x < width3d; x++)
+            {
+                for (int y = 0; y < height3d; y++)
+                {
+                    for (int z = 0; z < depth3d; z++)
+                    {
+                        if (map[x, y, z])
+                        {
+                            result[x, y, z] = (PerlinNoise.Get(new Vector3(x + seedX, y + seedY, z + seedZ), terrainFrequency) + 1) / 2;
+                            min = Math.Min(min, result[x, y, z]);
+                            max = Math.Max(max, result[x, y, z]);
+                        }
+                        else
+                        {
+                            result[x, y, z] = -1;
+                        }
+                    }
+                }
+            }
+
+            Debug.Log("Min: " + min);
+            Debug.Log("Max: " + max);
+
+            return result;
         }
 
         private float[,] CreateHeightMap(bool[,] map, System.Random rng)

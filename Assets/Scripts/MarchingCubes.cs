@@ -14,23 +14,26 @@ namespace Generator.Assets.Scripts
         private readonly int[] _windingOrder;
         private readonly Vector3[] _edgeVertex;
         private readonly List<Vector3> _vertices;
+        private readonly Dictionary<Vector3, int> _verticesIndexes;
         private readonly List<int> _triangles;
-
+        private readonly float[] _cube;
 
         private MarchingCubes()
         {
             _windingOrder = new int[] { 2, 1, 0 };
             _edgeVertex = new Vector3[12];
             _vertices = new List<Vector3>();
+            _verticesIndexes = new Dictionary<Vector3, int>();
             _triangles = new List<int>();
+            _cube = new float[8];
         }
 
-        public static Mesh CreateMesh(bool[,,] voxels)
+        public static Mesh CreateMesh(float[,,] voxels, MeshColorer meshColorer)
         {
-            return new MarchingCubes().Generate(voxels);
+            return new MarchingCubes().Generate(voxels, meshColorer);
         }
 
-        public Mesh Generate(bool[,,] voxels)
+        public Mesh Generate(float[,,] voxels, MeshColorer meshColorer)
         {
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);
@@ -49,7 +52,9 @@ namespace Generator.Assets.Scripts
                             int iy = y + VertexOffset[i, 1];
                             int iz = z + VertexOffset[i, 2];
 
-                            if (voxels[ix, iy, iz])
+                            _cube[i] = voxels[ix, iy, iz];
+
+                            if (voxels[ix, iy, iz] >= 0)
                             {
                                 cubeIndex |= 1 << i;
                             }
@@ -74,25 +79,13 @@ namespace Generator.Assets.Scripts
             var normals = mesh.normals;
             var uvs = new Vector2[_vertices.Count];
 
-            int count = 0;
-
             //List<Color> colors = new List<Color>();
             for (int i = 0; i < _vertices.Count; i++)
             {
-                var normal = normals[i];
                 var vertex = _vertices[i];
-                float dot = (Vector3.Dot(new Vector3(0, -1, 0), normal) + 1) / 2f;
+                var normal = normals[i];
 
-
-                if (count < 100 && (dot > 1 || dot < 0))
-                {
-                    Debug.Log($"dot={dot}");
-                    count++;
-                }
-
-                Vector2 uv = new Vector2(0, dot);
-
-                uvs[i] = uv;
+                uvs[i] = meshColorer.GetUV(vertex, normal);
             }
 
             mesh.uv = uvs;
@@ -110,7 +103,7 @@ namespace Generator.Assets.Scripts
             return mesh;
         }
 
-        private void March(float x, float y, float z, int cubeIndex)
+        private void March(int x, int y, int z, int cubeIndex)
         {
             //Find which edges are intersected by the surface
             int edgeFlags = CubeEdgeFlags[cubeIndex];
@@ -127,9 +120,17 @@ namespace Generator.Assets.Scripts
                 //if there is an intersection on this edge
                 if ((edgeFlags & (1 << i)) != 0)
                 {
-                    _edgeVertex[i].x = x + VertexOffset[EdgeConnection[i, 0], 0] + 0.5f * EdgeDirection[i, 0];
-                    _edgeVertex[i].y = y + VertexOffset[EdgeConnection[i, 0], 1] + 0.5f * EdgeDirection[i, 1];
-                    _edgeVertex[i].z = z + VertexOffset[EdgeConnection[i, 0], 2] + 0.5f * EdgeDirection[i, 2];
+                    float offset = GetOffset(_cube[EdgeConnection[i, 0]], _cube[EdgeConnection[i, 1]]);
+                    
+                    //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
+                    //{
+                    //    Debug.Log(offset);
+                    //}
+                    //float offset = 0.5f;
+
+                    _edgeVertex[i].x = x + VertexOffset[EdgeConnection[i, 0], 0] + offset * EdgeDirection[i, 0];
+                    _edgeVertex[i].y = y + VertexOffset[EdgeConnection[i, 0], 1] + offset * EdgeDirection[i, 1];
+                    _edgeVertex[i].z = z + VertexOffset[EdgeConnection[i, 0], 2] + offset * EdgeDirection[i, 2];
                 }
             }
 
@@ -137,15 +138,36 @@ namespace Generator.Assets.Scripts
             {
                 if (TriangleConnectionTable[cubeIndex, 3 * i] < 0) break;
 
-                int idx = _vertices.Count;
+                //int idx = _vertices.Count;
 
-                for (int j = 0; j < 3; j++)
-                {
-                    int vert = TriangleConnectionTable[cubeIndex, 3 * i + j];
-                    _triangles.Add(idx + _windingOrder[j]);
-                    _vertices.Add(_edgeVertex[vert]);
-                }
+                int index1 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 0]]);
+                int index2 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 1]]);
+                int index3 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 2]]);
+
+                _triangles.Add(index3);
+                _triangles.Add(index2);
+                _triangles.Add(index1);
             }
+        }
+
+        private float GetOffset(float v1, float v2)
+        {
+            float delta = v2 - v1;
+            return (delta == 0.0f) ? 0 : -v1 / delta;
+        }
+
+        private int AddVertex(Vector3 vector)
+        {
+            if (_verticesIndexes.TryGetValue(vector, out var index))
+            {
+                return index;
+            }
+
+            index = _vertices.Count;
+            _verticesIndexes[vector] = index;
+            _vertices.Add(vector);
+
+            return index;
         }
 
         /// <summary>
