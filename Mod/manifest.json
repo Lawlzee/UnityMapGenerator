@@ -1,0 +1,12 @@
+﻿{
+  "name": "RandomStageOrder",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/Lawlzee/RandomStageOrder",
+  "displayName": "Random Stage Order",
+  "description": "",
+  "dependencies": [
+    "bbepis-BepInExPack-5.4.2108",
+    "RiskofThunder-HookGenPatcher-1.2.3",
+    "Rune580-Risk_Of_Options-2.7.0"
+  ]
+}

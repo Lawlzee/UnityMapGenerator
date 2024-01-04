@@ -12,9 +12,9 @@ namespace Assets.Scripts
     {
         public int size = 256;
         public int transitionSize = 50;
-        public Palette floor;
-        public Palette walls;
-        public Palette ceilling;
+        public Palette floor = new Palette();
+        public Palette walls = new Palette();
+        public Palette ceilling = new Palette();
         public float noise = 0.02f;
 
         public Texture2D Create(System.Random rng)

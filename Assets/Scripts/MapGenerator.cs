@@ -33,14 +33,20 @@ namespace Generator.Assets.Scripts
         //private float[,] _map;
         //private bool[,,] _map;
 
+        private void Awake()
+        {
+            Debug.Log("Awake");
+        }
+
         private void Start()
         {
+            Debug.Log("Start");
             GenerateMap();
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1))
+            if (Input.GetKeyDown(KeyCode.F2))
             {
                 GenerateMap();
             }
@@ -56,6 +62,7 @@ namespace Generator.Assets.Scripts
 
         private void GenerateMap()
         {
+            Debug.Log("GenerateMap");
             int currentSeed = string.IsNullOrEmpty(seed)
                 ? Time.time.GetHashCode()
                 : seed.GetHashCode();
@@ -78,6 +85,8 @@ namespace Generator.Assets.Scripts
             GetComponent<MeshFilter>().mesh = mesh;
 
             GetComponent<MeshRenderer>().material.mainTexture = colorPatelette.Create(rng);
+
+            GetComponent<MeshCollider>().sharedMesh = mesh;
 
             //_map = smoothMap3d;
         }
