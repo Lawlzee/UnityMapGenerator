@@ -15,6 +15,8 @@ using System;
 using RoR2.ContentManagement;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ProceduralStages
 {
@@ -34,7 +36,7 @@ namespace ProceduralStages
         {
             Log.Init(Logger);
 
-            
+
 
             ModEnabled = Config.Bind("Configuration", "Mod enabled", true, "Mod enabled");
             ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
@@ -50,9 +52,39 @@ namespace ProceduralStages
 
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+
+            On.RoR2.SceneDirector.Start += SceneDirector_Start;
         }
 
+        private void SceneDirector_Start(On.RoR2.SceneDirector.orig_Start orig, SceneDirector self)
+        {
+            if (Run.instance == null)
+            {
+                Log.Info("Run.instance == null");
+            }
 
+            if (Run.instance?.stageRng == null)
+            {
+                Log.Info("Run.instance.stageRng == null");
+            }
+
+            if (SceneInfo.instance == null)
+            {
+                Log.Info("SceneInfo.instance == null");
+            }
+            else
+            {
+                ClassicStageInfo component = SceneInfo.instance.GetComponent<ClassicStageInfo>();
+                if (component == null)
+                {
+                    Log.Info("component == null");
+                }
+            }
+
+
+
+            orig(self);
+        }
 
         private void GiveToRoR2OurContentPackProviders(ContentManager.AddContentPackProviderDelegate addContentPackProvider)
         {
@@ -115,10 +147,10 @@ namespace ProceduralStages
             int i = 0;
 
             Log.Info(i++);
-            
+
 
             Log.Info(scene.IsValid().ToString());
-            
+
             Log.Info(i++);
 
             //RenderSettings.skybox = Material.GetDefaultMaterial();
@@ -159,7 +191,7 @@ namespace ProceduralStages
             generator.colorPatelette.ceilling.saturation = 0.285f;
             generator.colorPatelette.ceilling.value = 0.062f;
             generator.colorPatelette.noise = 0.02f;
-            
+
             Log.Info(i++);
 
             MeshCollider collider = sceneObject.AddComponent<MeshCollider>();
@@ -177,8 +209,11 @@ namespace ProceduralStages
             Log.Info(i++);
             sceneObject.AddComponent<MeshFilter>();
             Log.Info(i++);
-            
+
             SceneInfo sceneInfo = sceneObject.AddComponent<SceneInfo>();
+
+            Stage stage = sceneObject.AddComponent<Stage>();
+
             Log.Info(i++);
             //sceneInfo.groundNodeGroup = new MapNodeGroup();
             //sceneInfo.airNodeGroup = new MapNodeGroup();
@@ -190,9 +225,9 @@ namespace ProceduralStages
             classicSceneInfo.sceneDirectorInteractibleCredits = 200;
             classicSceneInfo.sceneDirectorMonsterCredits = 20;
             classicSceneInfo.bonusInteractibleCreditObjects = new ClassicStageInfo.BonusInteractibleCreditObject[0];
-            
+
             Log.Info(i++);
-            
+
             DirectorCore director = sceneObject.AddComponent<DirectorCore>();
             Log.Info(i++);
             SceneDirector sceneDirector = sceneObject.AddComponent<SceneDirector>();
@@ -200,7 +235,8 @@ namespace ProceduralStages
             sceneDirector.expRewardCoefficient = 0.066666f;
             sceneDirector.eliteBias = 2;
             sceneDirector.spawnDistanceMultiplier = 6;
-            
+
+
             CombatDirector combatDirector = sceneObject.AddComponent<CombatDirector>();
             combatDirector.expRewardCoefficient = 0.2f;
             combatDirector.goldRewardCoefficient = 1;
@@ -219,11 +255,219 @@ namespace ProceduralStages
             combatDirector.resetMonsterCardIfFailed = true;
             combatDirector.maximumNumberToSpawnBeforeSkipping = 6;
             combatDirector.eliteBias = 1;
-            
-            
+            combatDirector.moneyWaveIntervals = new RangeFloat[0];
+            combatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
+
+            generator.onGenerated += (Mesh mesh) =>
+            {
+                var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
+
+                Log.Info("A");
+                
+                Log.Info("A");
+
+                var triangles = mesh.triangles;
+                Log.Info("A");
+                var vertices = mesh.vertices;
+                Log.Info("A");
+                var normals = mesh.normals;
+                Log.Info("A");
+
+                var nodes = new NodeGraph.Node[vertices.Length];
+                Log.Info("A");
+
+                Log.Info("1");
+
+                int index = 0;
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    //Log.Info("2");
+                    var vertex = vertices[i];
+                    var normal = normals[i];
+                    //Log.Info("3");
+
+                    bool valid = Vector3.Dot(Vector3.up, normal) > 0.4f;
+
+
+                    var node = new NodeGraph.Node
+                    {
+                        position = vertex,
+                        linkListIndex = new NodeGraph.LinkListIndex()
+                        {
+                            index = valid ? index : - 1,
+                            size = 0
+                        },
+                        forbiddenHulls = HullMask.None,
+                        gateIndex = 0,
+                        flags = NodeFlags.TeleporterOK
+                    };
+
+                    if (valid)
+                    {
+                        index++;
+                    }
+
+                    nodes[i] = node;
+
+                }
+                Log.Info("A");
+
+                List<NodeGraph.Link>[] links = new List<NodeGraph.Link>[index];
+
+                for (int i = 0; i < index; i++)
+                {
+                    links[i] = new List<NodeGraph.Link>();
+                }
+
+                for (int i = 0; i < triangles.Length; i += 3)
+                {
+                    ref var node1 = ref nodes[triangles[i]];
+                    ref var node2 = ref nodes[triangles[i + 1]];
+                    ref var node3 = ref nodes[triangles[i + 2]];
+
+                    if (node1.linkListIndex.index != -1)
+                    {
+                        if (node2.linkListIndex.index != -1)
+                        {
+                            //node1.linkListIndex.size++;
+
+                            links[node1.linkListIndex.index].Add(new NodeGraph.Link
+                            {
+                                nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
+                                nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
+                                distanceScore = 1,
+                                minJumpHeight = 0,
+                                hullMask = 31,
+                                jumpHullMask = 31,
+                                gateIndex = 0
+                            });
+
+                            //links[node2.linkListIndex.index].Add(new NodeGraph.Link
+                            //{
+                            //    nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
+                            //    nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
+                            //    distanceScore = 1,
+                            //    minJumpHeight = 0,
+                            //    hullMask = 31,
+                            //    jumpHullMask = 31,
+                            //    gateIndex = 0
+                            //});
+                        }
+
+                        if (node3.linkListIndex.index != -1)
+                        {
+                            links[node1.linkListIndex.index].Add(new NodeGraph.Link
+                            {
+                                nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
+                                nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
+                                distanceScore = 1,
+                                minJumpHeight = 0,
+                                hullMask = 31,
+                                jumpHullMask = 31,
+                                gateIndex = 0
+                            });
+
+                            //links[node3.linkListIndex.index].Add(new NodeGraph.Link
+                            //{
+                            //    nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
+                            //    nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
+                            //    distanceScore = 1,
+                            //    minJumpHeight = 0,
+                            //    hullMask = 31,
+                            //    jumpHullMask = 31,
+                            //    gateIndex = 0
+                            //});
+                        }
+                    }
+
+                    if (node2.linkListIndex.index != -1 && node3.linkListIndex.index != -1)
+                    {
+                        links[node2.linkListIndex.index].Add(new NodeGraph.Link
+                        {
+                            nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
+                            nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
+                            distanceScore = 1,
+                            minJumpHeight = 0,
+                            hullMask = 31,
+                            jumpHullMask = 31,
+                            gateIndex = 0
+                        });
+
+                        //links[node3.linkListIndex.index].Add(new NodeGraph.Link
+                        //{
+                        //    nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
+                        //    nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
+                        //    distanceScore = 1,
+                        //    minJumpHeight = 0,
+                        //    hullMask = 31,
+                        //    jumpHullMask = 31,
+                        //    gateIndex = 0
+                        //});
+                    }
+                }
+                Log.Info("A");
+
+                NodeGraph.Node[] allNodes = nodes
+                    .Where(x => x.linkListIndex.index != -1)
+                    .ToArray();
+
+                List<NodeGraph.Link> linkList = new List<NodeGraph.Link>();
+
+                for (int i = 0; i < allNodes.Length; i++)
+                {
+                    var currentLinks = links[i];
+                    int position = linkList.Count;
+                    SerializableBitArray bitArray = new SerializableBitArray(currentLinks.Count);
+
+                    for (int j = 0; j < currentLinks.Count; j++)
+                    {
+                        linkList.Add(currentLinks[j]);
+                        bitArray[j] = true;
+                    }
+
+                    ref NodeGraph.Node node = ref allNodes[i];
+                    node.linkListIndex.index = position;
+                    node.linkListIndex.size = (uint)currentLinks.Count;
+                    node.lineOfSightMask = bitArray;
+                }
+
+                Log.Info("A");
+
+                Log.Info("A");
+                //for (int i = 0; i < allNodes.Length; i++)
+                //{
+                //    var node = allNodes[i];
+                //    SerializableBitArray bitArray = new SerializableBitArray(node.links.Count);
+                //    for (int j = 0; j < node.links.Count; j++)
+                //    {
+                //        bitArray[j] = true;
+                //    }
+                //
+                //    lineOfSightMasks[i] = bitArray;
+                //}
+                //Log.Info("A");
+
+                groundNodes.nodes = allNodes;
+                groundNodes.links = linkList.ToArray();
+
+                groundNodes.Awake();
+
+                //groundNodes.SetNodes(allNodes, lineOfSightMasks.AsReadOnly());
+
+                Log.Info("A");
+                sceneInfo.groundNodes = groundNodes;
+                Log.Info("A");
+                sceneInfo.airNodes = groundNodes;
+                Log.Info("A");
+            };
+
+
+
             Log.Info(i++);
             sceneObject.AddComponent<GlobalEventManager>();
             Log.Info(i++);
+
+            
 
             sceneObject.SetActive(true);
             Log.Info(sceneObject.layer);
@@ -237,7 +481,6 @@ namespace ProceduralStages
             Log.Info(i++);
             Log.Info("Loaded!");
         }
-
 
         private void SceneDirector_PlaceTeleporter(On.RoR2.SceneDirector.orig_PlaceTeleporter orig, RoR2.SceneDirector self)
         {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Generator.Assets.Scripts
 {
+    //[DefaultExecutionOrder(-1)]
     public class MapGenerator : MonoBehaviour
     {
         public int width;
@@ -30,18 +31,21 @@ namespace Generator.Assets.Scripts
 
         public ColorPatelette colorPatelette = new ColorPatelette();
 
+        public event Action<Mesh> onGenerated;
+
         //private float[,] _map;
         //private bool[,,] _map;
 
         private void Awake()
         {
             Debug.Log("Awake");
+            GenerateMap();
         }
 
         private void Start()
         {
             Debug.Log("Start");
-            GenerateMap();
+            
         }
 
         private void Update()
@@ -83,10 +87,13 @@ namespace Generator.Assets.Scripts
             var mesh = MarchingCubes.CreateMesh(noiseMap3d, meshColorer, rng);
 
             GetComponent<MeshFilter>().mesh = mesh;
-
             GetComponent<MeshRenderer>().material.mainTexture = colorPatelette.Create(rng);
-
             GetComponent<MeshCollider>().sharedMesh = mesh;
+
+            if (onGenerated != null)
+            {
+                onGenerated(mesh);
+            }
 
             //_map = smoothMap3d;
         }
