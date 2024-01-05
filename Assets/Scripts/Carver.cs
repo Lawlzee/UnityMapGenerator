@@ -27,25 +27,25 @@ namespace Assets.Scripts
             int height3d = map.GetLength(1);
             int depth3d = map.GetLength(2);
 
-            for (int x = 0; x < width3d; x++)
+            Parallel.For(1, width3d - 1, x =>
             {
-                for (int y = 0; y < height3d; y++)
+                for (int y = 1; y < height3d - 1; y++)
                 {
-                    for (int z = 0; z < depth3d; z++)
+                    for (int z = 1; z < depth3d - 1; z++)
                     {
-                        if (x == 0 || y == 0 || z == 0 || x == width3d - 1 || z == depth3d - 1)
+                        if (!map[x, y, z])
                         {
                             continue;
                         }
 
                         float noise = (PerlinNoise.Get(new Vector3(x + seedX, y * verticalScale + seedY, z + seedZ), frequency) + 1) / 2;
-                        if (map[x, y, z] && noise < maxNoise)
+                        if (noise < maxNoise)
                         {
                             map[x, y, z] = !map[x, y, z];
                         }
                     }
                 }
-            }
+            });
         }
     }
 }

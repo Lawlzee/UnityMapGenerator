@@ -22,7 +22,7 @@ namespace Assets.Scripts
             for (int i = 0; i < smoothingInterations; i++)
             {
                 var newMap = buffer;
-                for (int x = 0; x < width; x++)
+                Parallel.For(0, width, x =>
                 {
                     for (int y = 0; y < height; y++)
                     {
@@ -51,7 +51,7 @@ namespace Assets.Scripts
                             }
                         }
                     }
-                }
+                });
 
                 buffer = map;
                 map = newMap;

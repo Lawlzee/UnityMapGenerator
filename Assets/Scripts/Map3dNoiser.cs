@@ -24,7 +24,7 @@ namespace Assets.Scripts
 
             float[,,] result = new float[width3d, height3d, depth3d];
 
-            for (int x = 0; x < width3d; x++)
+            Parallel.For(0, width3d, x =>
             {
                 for (int y = 0; y < height3d; y++)
                 {
@@ -40,7 +40,7 @@ namespace Assets.Scripts
                         }
                     }
                 }
-            }
+            });
 
             return result;
         }

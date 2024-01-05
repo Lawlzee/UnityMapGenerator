@@ -258,7 +258,7 @@ namespace ProceduralStages
             combatDirector.moneyWaveIntervals = new RangeFloat[0];
             combatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
 
-            generator.onGenerated += (Mesh mesh) =>
+            generator.onGenerated += (MeshResult meshResult) =>
             {
                 var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
 
@@ -266,20 +266,20 @@ namespace ProceduralStages
                 
                 Log.Info("A");
 
-                var triangles = mesh.triangles;
+                var triangles = meshResult.triangles;
                 Log.Info("A");
-                var vertices = mesh.vertices;
+                var vertices = meshResult.vertices;
                 Log.Info("A");
-                var normals = mesh.normals;
+                var normals = meshResult.normals;
                 Log.Info("A");
 
-                var nodes = new NodeGraph.Node[vertices.Length];
+                var nodes = new NodeGraph.Node[vertices.Count];
                 Log.Info("A");
 
                 Log.Info("1");
 
                 int index = 0;
-                for (int i = 0; i < vertices.Length; i++)
+                for (int i = 0; i < vertices.Count; i++)
                 {
                     //Log.Info("2");
                     var vertex = vertices[i];
@@ -319,7 +319,7 @@ namespace ProceduralStages
                     links[i] = new List<NodeGraph.Link>();
                 }
 
-                for (int i = 0; i < triangles.Length; i += 3)
+                for (int i = 0; i < triangles.Count; i += 3)
                 {
                     ref var node1 = ref nodes[triangles[i]];
                     ref var node2 = ref nodes[triangles[i + 1]];

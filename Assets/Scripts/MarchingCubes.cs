@@ -2,42 +2,123 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.WSA;
+
+public class MeshResult
+{
+    public Mesh mesh;
+    public List<Vector3> vertices;
+    public List<int> triangles;
+    public Vector3[] normals;
+}
 
 //https://github.com/Scrawk/Marching-Cubes/tree/master
 namespace Generator.Assets.Scripts
 {
     public class MarchingCubes
     {
-        private readonly Vector3[] _edgeVertex;
         private readonly List<Vector3> _vertices;
         private readonly Dictionary<Vector3, int> _verticesIndexes;
         private readonly List<int> _triangles;
-        private readonly float[] _cube;
 
         private MarchingCubes()
         {
-            _edgeVertex = new Vector3[12];
             _vertices = new List<Vector3>();
             _verticesIndexes = new Dictionary<Vector3, int>();
             _triangles = new List<int>();
-            _cube = new float[8];
         }
 
-        public static Mesh CreateMesh(float[,,] voxels, MeshColorer meshColorer, System.Random rng)
+        public static MeshResult CreateMesh(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
         {
-            return new MarchingCubes().Generate(voxels, meshColorer, rng);
+            return new MarchingCubes().Generate(voxels, scale, meshColorer, rng);
         }
 
-        public Mesh Generate(float[,,] voxels, MeshColorer meshColorer, System.Random rng)
+        private struct Cube
+        {
+            public int cubeIndex;
+
+            public float value0;
+            public float value1;
+            public float value2;
+            public float value3;
+            public float value4;
+            public float value5;
+            public float value6;
+            public float value7;
+
+            public float this[int index]
+            {
+                get
+                {
+                    switch (index)
+                    {
+                        case 0:
+                            return value0;
+                        case 1:
+                            return value1;
+                        case 2:
+                            return value2;
+                        case 3:
+                            return value3;
+                        case 4:
+                            return value4;
+                        case 5:
+                            return value5;
+                        case 6:
+                            return value6;
+                        case 7:
+                            return value7;
+                    }
+
+                    return -1;
+                }
+                set
+                {
+                    switch (index)
+                    {
+                        case 0:
+                            value0 = value;
+                            break;
+                        case 1:
+                            value1 = value;
+                            break;
+                        case 2:
+                            value2 = value;
+                            break;
+                        case 3:
+                            value3 = value;
+                            break;
+                        case 4:
+                            value4 = value;
+                            break;
+                        case 5:
+                            value5 = value;
+                            break;
+                        case 6:
+                            value6 = value;
+                            break;
+                        case 7:
+                            value7 = value;
+                            break;
+                    }
+                }
+            }
+        }
+
+        public MeshResult Generate(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
         {
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);
             int depth = voxels.GetLength(2);
 
-            for (int x = 0; x < width - 1; x++)
+            Cube[,,] cubes = new Cube[width - 1, height - 1, depth - 1];
+
+            Parallel.For(0, width - 1, x =>
             {
                 for (int y = 0; y < height - 1; y++)
                 {
@@ -50,7 +131,8 @@ namespace Generator.Assets.Scripts
                             int iy = y + VertexOffset[i, 1];
                             int iz = z + VertexOffset[i, 2];
 
-                            _cube[i] = voxels[ix, iy, iz];
+
+                            cubes[x, y, z][i] = voxels[ix, iy, iz];
 
                             if (voxels[ix, iy, iz] >= 0)
                             {
@@ -58,14 +140,28 @@ namespace Generator.Assets.Scripts
                             }
                         }
 
-                        if (cubeIndex != 0)
-                        {
-                            March(x, y, z, cubeIndex);
-                        }
+                        cubes[x, y, z].cubeIndex = cubeIndex;
+                    }
+                }
+            });
 
+            //Parallel.For(0, width - 1, x =>
+            for (int x = 0; x < width - 1; x++)
+            {
+                for (int y = 0; y < height - 1; y++)
+                {
+                    for (int z = 0; z < depth - 1; z++)
+                    {
+                        ref Cube cube = ref cubes[x, y, z];
+
+                        if (cube.cubeIndex != 0)
+                        {
+                            March(x, y, z, scale, ref cube);
+                        }
                     }
                 }
             }
+            //});
 
             Mesh mesh = new Mesh();
             mesh.indexFormat = IndexFormat.UInt32;
@@ -78,17 +174,20 @@ namespace Generator.Assets.Scripts
             var uvs = new Vector2[_vertices.Count];
 
             //List<Color> colors = new List<Color>();
-            for (int i = 0; i < _vertices.Count; i++)
+
+            Parallel.For(0, _vertices.Count, i =>
             {
                 var vertex = _vertices[i];
                 var normal = normals[i];
 
                 uvs[i] = meshColorer.GetUV(vertex, normal, rng);
-            }
+            });
 
             mesh.uv = uvs;
 
             mesh.RecalculateTangents();
+
+            Debug.Log($"Reuse: {reuse}");
 
             //Color[] colors = new Color[_vertices.Count];
             //
@@ -98,13 +197,19 @@ namespace Generator.Assets.Scripts
             //// assign the array of colors to the Mesh.
             //mesh.colors = colors;
 
-            return mesh;
+            return new MeshResult
+            {
+                mesh = mesh,
+                normals = normals,
+                triangles = _triangles,
+                vertices = _vertices
+            };
         }
 
-        private void March(int x, int y, int z, int cubeIndex)
+        private unsafe void March(int x, int y, int z, float scale, ref Cube cube)
         {
             //Find which edges are intersected by the surface
-            int edgeFlags = CubeEdgeFlags[cubeIndex];
+            int edgeFlags = CubeEdgeFlags[cube.cubeIndex];
 
             //If the cube is entirely inside or outside of the surface, then there will be no intersections
             if (edgeFlags == 0)
@@ -112,40 +217,45 @@ namespace Generator.Assets.Scripts
                 return;
             }
 
+            Vector3* _edgeVertex = stackalloc Vector3[12];
+
             //Find the point of intersection of the surface with each edge
             for (int i = 0; i < 12; i++)
             {
                 //if there is an intersection on this edge
                 if ((edgeFlags & (1 << i)) != 0)
                 {
-                    float offset = GetOffset(_cube[EdgeConnection[i, 0]], _cube[EdgeConnection[i, 1]]);
-                    
+                    float offset = GetOffset(cube[EdgeConnection[i, 0]], cube[EdgeConnection[i, 1]]);
+
                     //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
                     //{
                     //    Debug.Log(offset);
                     //}
                     //float offset = 0.5f;
 
-                    _edgeVertex[i].x = x + VertexOffset[EdgeConnection[i, 0], 0] + offset * EdgeDirection[i, 0];
-                    _edgeVertex[i].y = y + VertexOffset[EdgeConnection[i, 0], 1] + offset * EdgeDirection[i, 1];
-                    _edgeVertex[i].z = z + VertexOffset[EdgeConnection[i, 0], 2] + offset * EdgeDirection[i, 2];
+                    _edgeVertex[i].x = scale * (x + VertexOffset[EdgeConnection[i, 0], 0] + offset * EdgeDirection[i, 0]);
+                    _edgeVertex[i].y = scale * (y + VertexOffset[EdgeConnection[i, 0], 1] + offset * EdgeDirection[i, 1]);
+                    _edgeVertex[i].z = scale * (z + VertexOffset[EdgeConnection[i, 0], 2] + offset * EdgeDirection[i, 2]);
                 }
             }
 
+            //_triangleLock.Wait();
             for (int i = 0; i < 5; i++)
             {
-                if (TriangleConnectionTable[cubeIndex, 3 * i] < 0) break;
+                if (TriangleConnectionTable[cube.cubeIndex, 3 * i] < 0) break;
 
                 //int idx = _vertices.Count;
+                
+                int index1 = AddVertex(_edgeVertex[TriangleConnectionTable[cube.cubeIndex, 3 * i + 0]]);
+                int index2 = AddVertex(_edgeVertex[TriangleConnectionTable[cube.cubeIndex, 3 * i + 1]]);
+                int index3 = AddVertex(_edgeVertex[TriangleConnectionTable[cube.cubeIndex, 3 * i + 2]]);
 
-                int index1 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 0]]);
-                int index2 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 1]]);
-                int index3 = AddVertex(_edgeVertex[TriangleConnectionTable[cubeIndex, 3 * i + 2]]);
-
+                
                 _triangles.Add(index3);
                 _triangles.Add(index2);
                 _triangles.Add(index1);
             }
+            //_triangleLock.Release();
         }
 
         private float GetOffset(float v1, float v2)
@@ -154,15 +264,20 @@ namespace Generator.Assets.Scripts
             return (delta == 0.0f) ? 0 : -v1 / delta;
         }
 
+        int reuse;
         private int AddVertex(Vector3 vector)
         {
-            if (_verticesIndexes.TryGetValue(vector, out var index))
+            //Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 100), Mathf.Round(vector.y * 100), Mathf.Round(vector.z * 100));
+            Vector3 roundedVector = vector;
+
+            if (_verticesIndexes.TryGetValue(roundedVector, out var index))
             {
+                reuse++;
                 return index;
             }
 
             index = _vertices.Count;
-            _verticesIndexes[vector] = index;
+            _verticesIndexes[roundedVector] = index;
             _vertices.Add(vector);
 
             return index;

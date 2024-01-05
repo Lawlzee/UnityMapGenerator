@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 namespace Generator.Assets.Scripts
 {
@@ -14,7 +15,7 @@ namespace Generator.Assets.Scripts
 
         public string seed;
 
-        [Range(0, 100)]
+        [Range(0, 10)]
         public float mapScale = 1f;
 
         public CellularAutomata2d cave2d = new CellularAutomata2d();
@@ -31,20 +32,20 @@ namespace Generator.Assets.Scripts
 
         public ColorPatelette colorPatelette = new ColorPatelette();
 
-        public event Action<Mesh> onGenerated;
+        public event Action<MeshResult> onGenerated;
 
         //private float[,] _map;
         //private bool[,,] _map;
 
         private void Awake()
         {
-            Debug.Log("Awake");
+            UnityEngine.Debug.Log("Awake");
             GenerateMap();
         }
 
         private void Start()
         {
-            Debug.Log("Start");
+            UnityEngine.Debug.Log("Start");
             
         }
 
@@ -66,33 +67,65 @@ namespace Generator.Assets.Scripts
 
         private void GenerateMap()
         {
-            Debug.Log("GenerateMap");
+            UnityEngine.Debug.Log("GenerateMap");
             int currentSeed = string.IsNullOrEmpty(seed)
                 ? Time.time.GetHashCode()
                 : seed.GetHashCode();
             System.Random rng = new System.Random(currentSeed);
 
+            Stopwatch totalStopwatch = Stopwatch.StartNew();
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             var map2D = cave2d.Create(width, depth, rng);
+            UnityEngine.Debug.Log($"cave2d: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
 
             bool[,,] map3d = map2dToMap3d.Convert(map2D, height);
+            UnityEngine.Debug.Log($"map2dToMap3d: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
             carver.CarveWalls(map3d, rng);
+            UnityEngine.Debug.Log($"carver: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
             waller.AddFloorAndCeilling(map3d, rng);
+            UnityEngine.Debug.Log($"waller.AddFloorAndCeilling: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
             waller.AddWalls(map3d, rng);
+            UnityEngine.Debug.Log($"waller.AddWalls: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
 
             bool[,,] smoothMap3d = cave3d.SmoothMap(map3d);
+            UnityEngine.Debug.Log($"cave3d: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
             float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
+            UnityEngine.Debug.Log($"map3dNoiser: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
 
+            var meshResult = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
+            UnityEngine.Debug.Log($"mesh: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
 
+            GetComponent<MeshFilter>().mesh = meshResult.mesh;
+            UnityEngine.Debug.Log($"MeshFilter: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
 
-            var mesh = MarchingCubes.CreateMesh(noiseMap3d, meshColorer, rng);
-
-            GetComponent<MeshFilter>().mesh = mesh;
             GetComponent<MeshRenderer>().material.mainTexture = colorPatelette.Create(rng);
-            GetComponent<MeshCollider>().sharedMesh = mesh;
+            UnityEngine.Debug.Log($"MeshRenderer: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
+            GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
+            UnityEngine.Debug.Log($"MeshCollider: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
+            UnityEngine.Debug.Log($"total: " + totalStopwatch.Elapsed.ToString());
 
             if (onGenerated != null)
             {
-                onGenerated(mesh);
+                onGenerated(meshResult);
             }
 
             //_map = smoothMap3d;
