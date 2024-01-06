@@ -226,6 +226,7 @@ namespace Generator.Assets.Scripts
                 if ((edgeFlags & (1 << i)) != 0)
                 {
                     float offset = GetOffset(cube[EdgeConnection[i, 0]], cube[EdgeConnection[i, 1]]);
+                    //float offset = 0.5f;
 
                     //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
                     //{
@@ -267,7 +268,7 @@ namespace Generator.Assets.Scripts
         int reuse;
         private int AddVertex(Vector3 vector)
         {
-            //Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 100), Mathf.Round(vector.y * 100), Mathf.Round(vector.z * 100));
+            //Vector3 roundedVector = new Vector3(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
             Vector3 roundedVector = vector;
 
             if (_verticesIndexes.TryGetValue(roundedVector, out var index))

@@ -1,9 +1,12 @@
 ﻿using Assets.Scripts;
+using RoR2;
+using RoR2.Navigation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+
 namespace Generator.Assets.Scripts
 {
     //[DefaultExecutionOrder(-1)]
@@ -32,6 +35,8 @@ namespace Generator.Assets.Scripts
 
         public ColorPatelette colorPatelette = new ColorPatelette();
 
+        public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
+
         public event Action<MeshResult> onGenerated;
 
         //private float[,] _map;
@@ -46,7 +51,7 @@ namespace Generator.Assets.Scripts
         private void Start()
         {
             UnityEngine.Debug.Log("Start");
-            
+            //GenerateMap();
         }
 
         private void Update()
@@ -121,7 +126,23 @@ namespace Generator.Assets.Scripts
             UnityEngine.Debug.Log($"MeshCollider: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
 
+            (NodeGraph groundNodes, HashSet<int> mainIsland) = nodeGraphCreator.CreateGroundNodes(meshResult);
+            UnityEngine.Debug.Log($"groundNodes: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
+            NodeGraph airNodes = nodeGraphCreator.CreateAirNodes(groundNodes, mainIsland, map3d, mapScale);
+            UnityEngine.Debug.Log($"airNodes: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
+            SceneInfo sceneInfo = GetComponent<SceneInfo>();
+            sceneInfo.groundNodes = groundNodes;
+            sceneInfo.airNodes = airNodes;
+
+
+
             UnityEngine.Debug.Log($"total: " + totalStopwatch.Elapsed.ToString());
+
+
 
             if (onGenerated != null)
             {
