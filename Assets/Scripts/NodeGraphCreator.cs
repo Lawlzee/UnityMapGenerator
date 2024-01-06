@@ -77,11 +77,13 @@ namespace Assets.Scripts
                     {
                         //node1.linkListIndex.size++;
 
+                        float distance = (node1.position - node2.position).magnitude;
+
                         links[node1.linkListIndex.index].Add(new NodeGraph.Link
                         {
                             nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
                             nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                            distanceScore = 1,
+                            distanceScore = distance,
                             minJumpHeight = 0,
                             hullMask = 31,
                             jumpHullMask = 31,
@@ -92,7 +94,7 @@ namespace Assets.Scripts
                         {
                             nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
                             nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            distanceScore = 1,
+                            distanceScore = distance,
                             minJumpHeight = 0,
                             hullMask = 31,
                             jumpHullMask = 31,
@@ -102,11 +104,13 @@ namespace Assets.Scripts
 
                     if (node3.linkListIndex.index != -1)
                     {
+                        float distance = (node2.position - node3.position).magnitude;
+
                         links[node1.linkListIndex.index].Add(new NodeGraph.Link
                         {
                             nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
                             nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                            distanceScore = 1,
+                            distanceScore = distance,
                             minJumpHeight = 0,
                             hullMask = 31,
                             jumpHullMask = 31,
@@ -117,7 +121,7 @@ namespace Assets.Scripts
                         {
                             nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
                             nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            distanceScore = 1,
+                            distanceScore = distance,
                             minJumpHeight = 0,
                             hullMask = 31,
                             jumpHullMask = 31,
@@ -128,11 +132,13 @@ namespace Assets.Scripts
 
                 if (node2.linkListIndex.index != -1 && node3.linkListIndex.index != -1)
                 {
+                    float distance = (node2.position - node3.position).magnitude;
+
                     links[node2.linkListIndex.index].Add(new NodeGraph.Link
                     {
                         nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
                         nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                        distanceScore = 1,
+                        distanceScore = distance,
                         minJumpHeight = 0,
                         hullMask = 31,
                         jumpHullMask = 31,
@@ -143,7 +149,7 @@ namespace Assets.Scripts
                     {
                         nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
                         nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                        distanceScore = 1,
+                        distanceScore = distance,
                         minJumpHeight = 0,
                         hullMask = 31,
                         jumpHullMask = 31,
@@ -199,7 +205,7 @@ namespace Assets.Scripts
 
                 if (isFlat)
                 {
-                    node.flags = NodeFlags.TeleporterOK;
+                    node.flags = NodeFlags.TeleporterOK | NodeFlags.NoCeiling;
                 }
             }
 

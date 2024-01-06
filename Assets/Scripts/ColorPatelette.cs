@@ -15,7 +15,7 @@ namespace Assets.Scripts
         public Palette floor = new Palette();
         public Palette walls = new Palette();
         public Palette ceilling = new Palette();
-        public float noise = 0.02f;
+        public float noise = 0.50f;
 
         public Texture2D Create(System.Random rng)
         {
@@ -44,7 +44,8 @@ namespace Assets.Scripts
                 colors[i * 4] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
 
                 //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
-                hue = (hue + noise) % 1;
+                //hue = (hue + noise) % 1;
+                hue = (float)rng.NextDouble();
                 colors[i * 4 + 2] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
 
 
@@ -53,11 +54,12 @@ namespace Assets.Scripts
                 Palette palette2 = i / 2 == 0
                     ? walls
                     : ceilling;
-                //hue = (float)rng.NextDouble();
+                hue = (float)rng.NextDouble();
                 //hue = (hue + goldenRatio) % 1;
                 colors[i * 4 + 1] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
 
-                hue = (hue + noise) % 1;
+                //hue = (hue + noise) % 1;
+                hue = (float)rng.NextDouble();
                 //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
                 colors[i * 4 + 3] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
             }
@@ -100,6 +102,23 @@ namespace Assets.Scripts
             texture.wrapMode = TextureWrapMode.Clamp;
 
             return texture;
+        }
+
+        public Color AverageColor(Texture2D texture)
+        {
+            Color32[] colors = texture.GetPixels32();
+            int total = colors.Length;
+            var r = 0; 
+            var g = 0; 
+            var b = 0;
+            for (var i = 0; i < total; i++)
+            {
+                r += colors[i].r;
+                g += colors[i].g;
+                b += colors[i].b;
+            }
+
+            return new Color32((byte)(r / total), (byte)(g / total), (byte)(b / total), 0);
         }
 
         [Serializable]

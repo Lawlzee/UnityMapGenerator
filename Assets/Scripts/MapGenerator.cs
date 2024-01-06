@@ -1,10 +1,12 @@
 ﻿using Assets.Scripts;
+using ProceduralStages;
 using RoR2;
 using RoR2.Navigation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 
 namespace Generator.Assets.Scripts
@@ -16,7 +18,7 @@ namespace Generator.Assets.Scripts
         public int height;
         public int depth;
 
-        public string seed;
+        public int seed;
 
         [Range(0, 10)]
         public float mapScale = 1f;
@@ -36,8 +38,6 @@ namespace Generator.Assets.Scripts
         public ColorPatelette colorPatelette = new ColorPatelette();
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
-
-        public event Action<MeshResult> onGenerated;
 
         //private float[,] _map;
         //private bool[,,] _map;
@@ -73,9 +73,9 @@ namespace Generator.Assets.Scripts
         private void GenerateMap()
         {
             UnityEngine.Debug.Log("GenerateMap");
-            int currentSeed = string.IsNullOrEmpty(seed)
+            int currentSeed = seed == 0
                 ? Time.time.GetHashCode()
-                : seed.GetHashCode();
+                : seed;
             System.Random rng = new System.Random(currentSeed);
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
@@ -118,10 +118,20 @@ namespace Generator.Assets.Scripts
             UnityEngine.Debug.Log($"MeshFilter: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
 
-            GetComponent<MeshRenderer>().material.mainTexture = colorPatelette.Create(rng);
+            Texture2D texture = colorPatelette.Create(rng);
+            GetComponent<MeshRenderer>().material.mainTexture = texture;
             UnityEngine.Debug.Log($"MeshRenderer: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
 
+            var surface = ScriptableObject.CreateInstance<SurfaceDef>();
+            surface.approximateColor = colorPatelette.AverageColor(texture);
+            surface.materialSwitchString = "stone";
+
+            GetComponent<SurfaceDefProvider>().surfaceDef = surface;
+            UnityEngine.Debug.Log($"surfaceDef: " + stopwatch.Elapsed.ToString());
+            stopwatch.Restart();
+
+            //RoR2/Base/Common/VFX/StoneImpact.prefab
             GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
             UnityEngine.Debug.Log($"MeshCollider: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
@@ -129,6 +139,20 @@ namespace Generator.Assets.Scripts
             (NodeGraph groundNodes, HashSet<int> mainIsland) = nodeGraphCreator.CreateGroundNodes(meshResult);
             UnityEngine.Debug.Log($"groundNodes: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
+
+            for (int i = 0; i < 50; i++)
+            {
+                var newtIndex = mainIsland.ElementAt(rng.Next(mainIsland.Count));
+                var node = groundNodes.nodes[newtIndex];
+                if ((node.flags & NodeFlags.NoChestSpawn) == 0)
+                {
+                    NewtPlacer newtPlacer = GetComponent<NewtPlacer>();
+                    newtPlacer.position = node.position;
+                    newtPlacer.rotation = Quaternion.Euler(0, rng.Next(-180, 180), 0);
+                    break;
+                }
+            }
+
 
             NodeGraph airNodes = nodeGraphCreator.CreateAirNodes(groundNodes, mainIsland, map3d, mapScale);
             UnityEngine.Debug.Log($"airNodes: " + stopwatch.Elapsed.ToString());
@@ -143,19 +167,13 @@ namespace Generator.Assets.Scripts
             UnityEngine.Debug.Log($"total: " + totalStopwatch.Elapsed.ToString());
 
 
-
-            if (onGenerated != null)
-            {
-                onGenerated(meshResult);
-            }
-
             //_map = smoothMap3d;
         }
 
-        
 
-        
 
-        
+
+
+
     }
 }

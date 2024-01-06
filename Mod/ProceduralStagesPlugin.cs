@@ -17,6 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
@@ -36,8 +37,6 @@ namespace ProceduralStages
         {
             Log.Init(Logger);
 
-
-
             ModEnabled = Config.Bind("Configuration", "Mod enabled", true, "Mod enabled");
             ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
 
@@ -54,6 +53,64 @@ namespace ProceduralStages
             SceneManager.sceneLoaded += SceneManager_sceneLoaded;
 
             On.RoR2.WireMeshBuilder.GenerateMesh_Mesh += WireMeshBuilder_GenerateMesh_Mesh;
+            SceneCatalog.onMostRecentSceneDefChanged += SceneCatalog_onMostRecentSceneDefChanged;
+
+            On.RoR2.Run.PickNextStageScene += Run_PickNextStageScene;
+            On.RoR2.SceneDirector.DefaultPlayerSpawnPointGenerator += SceneDirector_DefaultPlayerSpawnPointGenerator;
+            On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
+        }
+
+        private void SceneDirector_PlacePlayerSpawnsViaNodegraph(On.RoR2.SceneDirector.orig_PlacePlayerSpawnsViaNodegraph orig, SceneDirector self)
+        {
+            if (Run.instance.spawnWithPod && SceneCatalog.currentSceneDef.cachedName == "random")
+            {
+                bool oldValue = Stage.instance.usePod;
+                try
+                {
+                    Stage.instance.usePod = false;
+                    orig(self);
+
+                }
+                finally
+                {
+                    Stage.instance.usePod = oldValue;
+                }
+                                
+                return;
+            }
+
+            orig(self);
+
+
+        }
+
+        private void SceneDirector_DefaultPlayerSpawnPointGenerator(On.RoR2.SceneDirector.orig_DefaultPlayerSpawnPointGenerator orig, SceneDirector self)
+        {
+            if (Run.instance.spawnWithPod && SceneCatalog.currentSceneDef.cachedName == "random")
+            {
+                self.RemoveAllExistingSpawnPoints();
+                self.PlacePlayerSpawnsViaNodegraph();
+                return;
+            }
+
+            orig(self);
+        }
+        private void Run_PickNextStageScene(On.RoR2.Run.orig_PickNextStageScene orig, Run self, WeightedSelection<SceneDef> choices)
+        {
+            SceneDef scene = choices.choices
+                .Select(x => x.value)
+                .Where(x => x.cachedName == "random")
+                .FirstOrDefault();
+
+            //todo: add config
+            if (scene != null)
+            {
+                self.nextStageScene = scene;
+            }
+            else
+            {
+                orig(self, choices);
+            }
         }
 
         private void WireMeshBuilder_GenerateMesh_Mesh(On.RoR2.WireMeshBuilder.orig_GenerateMesh_Mesh orig, WireMeshBuilder self, Mesh dest)
@@ -76,12 +133,11 @@ namespace ProceduralStages
 
         private void InitSceneDef()
         {
-            MusicTrackDef mainTrack = Addressables.LoadAssetAsync<MusicTrackDef>("RoR2/Base/Common/muSong13.asset").WaitForCompletion();
-            MusicTrackDef bossTrack = Addressables.LoadAssetAsync<MusicTrackDef>("RoR2/Base/Common/muSong05.asset").WaitForCompletion();
-            
-            for (int i = 1; i <=5 ; i++)
+
+            for (int i = 1; i <= 5; i++)
             {
-                SceneCollection stageSceneCollectionRequest = Addressables.LoadAssetAsync<SceneCollection>("RoR2/Base/SceneGroups/sgStage1.asset").WaitForCompletion();
+                int destinationIndex = (i % 5) + 1;
+                SceneCollection stageSceneCollectionRequest = Addressables.LoadAssetAsync<SceneCollection>($"RoR2/Base/SceneGroups/sgStage{destinationIndex}.asset").WaitForCompletion();
 
                 SceneDef sceneDef = ScriptableObject.CreateInstance<SceneDef>();
                 sceneDef.cachedName = "random";
@@ -96,8 +152,7 @@ namespace ProceduralStages
                 sceneDef.shouldIncludeInLogbook = false;
                 sceneDef.loreToken = "MAP_DAMPCAVE_LORE";
                 sceneDef.dioramaPrefab = null;
-                sceneDef.mainTrack = mainTrack;
-                sceneDef.bossTrack = bossTrack;
+
                 sceneDef.suppressPlayerEntry = false;
                 sceneDef.suppressNpcEntry = false;
                 sceneDef.blockOrbitalSkills = false;
@@ -111,6 +166,19 @@ namespace ProceduralStages
             Log.Info("SceneDef inited");
         }
 
+        private void SceneCatalog_onMostRecentSceneDefChanged(SceneDef scene)
+        {
+            if (scene.cachedName == "random")
+            {
+                //todo: only take stage track
+                scene.mainTrack = MusicTrackCatalog.musicTrackDefs[Run.instance.stageRng.RangeInt(0, MusicTrackCatalog.musicTrackDefs.Length)];
+                //todo: only take boss track
+                scene.bossTrack = MusicTrackCatalog.musicTrackDefs[Run.instance.stageRng.RangeInt(0, MusicTrackCatalog.musicTrackDefs.Length)];
+
+                //todo: randomize tokens
+            }
+        }
+
         private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name == "random")
@@ -121,21 +189,17 @@ namespace ProceduralStages
 
         public void InitScene(Scene scene)
         {
-            int i = 0;
+            var currentScene = SceneCatalog.mostRecentSceneDef;
 
-            Log.Info(i++);
-
-
-            Log.Info(scene.IsValid().ToString());
-
-            Log.Info(i++);
-
-            //RenderSettings.skybox = Material.GetDefaultMaterial();
+            int stageInLoop = (Run.instance.stageClearCount % 5) + 1;
 
             GameObject sceneObject = new GameObject();
             sceneObject.SetActive(false);
-            sceneObject.layer = 11;
+            sceneObject.name = "random";
+            sceneObject.layer = 11;//World
+
             MapGenerator generator = sceneObject.AddComponent<MapGenerator>();
+            generator.seed = Run.instance.stageRng.nextInt;
             generator.width = 50;
             generator.height = 80;
             generator.depth = 40;
@@ -169,97 +233,141 @@ namespace ProceduralStages
             generator.colorPatelette.ceilling.value = 0.062f;
             generator.colorPatelette.noise = 0.02f;
 
-            Log.Info(i++);
+            SurfaceDefProvider surfaceProvider = sceneObject.AddComponent<SurfaceDefProvider>();
+            surfaceProvider.surfaceDef = ScriptableObject.CreateInstance<SurfaceDef>();
+            surfaceProvider.surfaceDef.impactEffectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/StoneImpact.prefab").WaitForCompletion();
 
             MeshCollider collider = sceneObject.AddComponent<MeshCollider>();
-            for (int j = 0; j < 31; j++)
-            {
-                string name = LayerMask.LayerToName(j);
-                Log.Info(j);
-                Log.Info(name ?? "null");
-            }
 
-            Log.Info(i++);
             MeshRenderer renderer = sceneObject.AddComponent<MeshRenderer>();
-            Log.Info(i++);
             renderer.material = Material.GetDefaultMaterial();
-            Log.Info(i++);
             sceneObject.AddComponent<MeshFilter>();
-            Log.Info(i++);
 
             SceneInfo sceneInfo = sceneObject.AddComponent<SceneInfo>();
 
             Stage stage = sceneObject.AddComponent<Stage>();
 
-            Log.Info(i++);
-            //sceneInfo.groundNodeGroup = new MapNodeGroup();
-            //sceneInfo.airNodeGroup = new MapNodeGroup();
-            //sceneInfo.groundNodesAsset = ScriptableObject.CreateInstance<NodeGraph>();
-            //sceneInfo.airNodesAsset = ScriptableObject.CreateInstance<NodeGraph>();
+            List<string> dpMonsters = new List<string>()
+            {
+                "RoR2/DLC1/ancientloft/dpAncientLoftMonsters.asset",
+                "RoR2/Base/blackbeach/dpBlackBeachMonsters.asset",
+                "RoR2/Base/dampcave/dpDampCaveMonsters.asset",
+                "RoR2/Base/foggyswamp/dpFoggySwampMonsters.asset",
+                "RoR2/Base/frozenwall/dpFrozenWallMonsters.asset",
+                "RoR2/Base/golemplains/dpGolemplainsMonsters.asset",
+                "RoR2/Base/goolake/dpGooLakeMonsters.asset",
+                "RoR2/Base/rootjungle/dpRootJungleMonsters.asset",
+                "RoR2/Base/shipgraveyard/dpShipgraveyardMonsters.asset",
+                "RoR2/Base/skymeadow/dpSkyMeadowMonsters.asset",
+                "RoR2/DLC1/snowyforest/dpSnowyForestMonsters.asset",
+                "RoR2/DLC1/sulfurpools/dpSulfurPoolsMonsters.asset",
+                "RoR2/Base/wispgraveyard/dpWispGraveyardMonsters.asset"
+            };
+
+            List<string> dpInteratables = new List<string>()
+            {
+                "RoR2/DLC1/ancientloft/dpAncientLoftInteractables.asset",
+                "RoR2/Base/blackbeach/dpBlackBeachInteractables.asset",
+                "RoR2/Base/dampcave/dpDampCaveInteractables.asset",
+                "RoR2/Base/foggyswamp/dpFoggySwampInteractables.asset",
+                "RoR2/Base/frozenwall/dpFrozenWallInteractables.asset",
+                "RoR2/Base/golemplains/dpGolemplainsInteractables.asset",
+                "RoR2/Base/goolake/dpGooLakeInteractables.asset",
+                "RoR2/Base/rootjungle/dpRootJungleInteractables.asset",
+                "RoR2/Base/shipgraveyard/dpShipgraveyardInteractables.asset",
+                "RoR2/Base/skymeadow/dpSkyMeadowInteractables.asset",
+                "RoR2/DLC1/snowyforest/dpSnowyForestInteractables.asset",
+                "RoR2/DLC1/sulfurpools/dpSulfurPoolsInteractables.asset",
+                "RoR2/Base/wispgraveyard/dpWispGraveyardInteractables.asset"
+            };
+
+            string dpMonster = dpMonsters[Run.instance.stageRng.RangeInt(0, dpMonsters.Count)];
+            string dpInteratable = dpInteratables[Run.instance.stageRng.RangeInt(0, dpInteratables.Count)];
+
             ClassicStageInfo classicSceneInfo = sceneObject.AddComponent<ClassicStageInfo>();
-            classicSceneInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/rootjungle/dpRootJungleMonsters.asset").WaitForCompletion();
-            classicSceneInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/rootjungle/dpRootJungleInteractables.asset").WaitForCompletion();
-            classicSceneInfo.sceneDirectorInteractibleCredits = 200;
-            classicSceneInfo.sceneDirectorMonsterCredits = 20;
+            classicSceneInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
+            classicSceneInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
+            classicSceneInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
+            classicSceneInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
             classicSceneInfo.bonusInteractibleCreditObjects = new ClassicStageInfo.BonusInteractibleCreditObject[0];
 
-            Log.Info(i++);
-
             DirectorCore director = sceneObject.AddComponent<DirectorCore>();
-            Log.Info(i++);
             SceneDirector sceneDirector = sceneObject.AddComponent<SceneDirector>();
 
-            bool useLunarPortal = (Run.instance.stageClearCount + 1) % Run.stagesPerLoop == 0;
+            bool useLunarPortal = stageInLoop == Run.stagesPerLoop;
             string portalPath = useLunarPortal
                 ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                 : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
             sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
-            sceneDirector.expRewardCoefficient = 0.066666f;
+            sceneDirector.expRewardCoefficient = 0.06666667f;
             sceneDirector.eliteBias = 2;
             sceneDirector.spawnDistanceMultiplier = 6;
 
+            CombatDirector slowCombatDirector = sceneObject.AddComponent<CombatDirector>();
+            slowCombatDirector.expRewardCoefficient = 0.2f;
+            slowCombatDirector.goldRewardCoefficient = 1;
+            slowCombatDirector.minSeriesSpawnInterval = 0.1f;
+            slowCombatDirector.maxSeriesSpawnInterval = 1f;
+            slowCombatDirector.minRerollSpawnInterval = 22.5f;
+            slowCombatDirector.maxRerollSpawnInterval = 30f;
+            slowCombatDirector.teamIndex = TeamIndex.Monster;
+            slowCombatDirector.creditMultiplier = 0.75f;
+            slowCombatDirector.spawnDistanceMultiplier = 1f;
+            slowCombatDirector.maxSpawnDistance = float.PositiveInfinity;
+            slowCombatDirector.minSpawnRange = 0;
+            slowCombatDirector.targetPlayers = true;
+            slowCombatDirector.skipSpawnIfTooCheap = true;
+            slowCombatDirector.maxConsecutiveCheapSkips = int.MaxValue;
+            slowCombatDirector.resetMonsterCardIfFailed = true;
+            slowCombatDirector.maximumNumberToSpawnBeforeSkipping = 6;
+            slowCombatDirector.eliteBias = 1;
+            slowCombatDirector.moneyWaveIntervals = new RangeFloat[]
+            {
+                new RangeFloat
+                {
+                    min = 1,
+                    max = 1
+                }
+            };
+            slowCombatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
+            slowCombatDirector.fallBackToStageMonsterCards = true;
 
-            CombatDirector combatDirector = sceneObject.AddComponent<CombatDirector>();
-            combatDirector.expRewardCoefficient = 0.2f;
-            combatDirector.goldRewardCoefficient = 1;
-            combatDirector.minSeriesSpawnInterval = 0.1f;
-            combatDirector.maxSeriesSpawnInterval = 1f;
-            combatDirector.minRerollSpawnInterval = 4.5f;
-            combatDirector.maxRerollSpawnInterval = 9.0f;
-            combatDirector.teamIndex = TeamIndex.Monster;
-            combatDirector.creditMultiplier = 0.75f;
-            combatDirector.spawnDistanceMultiplier = 1f;
-            combatDirector.maxSpawnDistance = float.PositiveInfinity;
-            combatDirector.minSpawnRange = 0;
-            combatDirector.targetPlayers = true;
-            combatDirector.skipSpawnIfTooCheap = true;
-            combatDirector.maxConsecutiveCheapSkips = int.MaxValue;
-            combatDirector.resetMonsterCardIfFailed = true;
-            combatDirector.maximumNumberToSpawnBeforeSkipping = 6;
-            combatDirector.eliteBias = 1;
-            combatDirector.moneyWaveIntervals = new RangeFloat[0];
-            combatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
+            CombatDirector fastCombatDirector = sceneObject.AddComponent<CombatDirector>();
+            fastCombatDirector.expRewardCoefficient = 0.2f;
+            fastCombatDirector.goldRewardCoefficient = 1;
+            fastCombatDirector.minSeriesSpawnInterval = 0.1f;
+            fastCombatDirector.maxSeriesSpawnInterval = 1f;
+            fastCombatDirector.minRerollSpawnInterval = 4.5f;
+            fastCombatDirector.maxRerollSpawnInterval = 9.0f;
+            fastCombatDirector.teamIndex = TeamIndex.Monster;
+            fastCombatDirector.creditMultiplier = 0.75f;
+            fastCombatDirector.spawnDistanceMultiplier = 1f;
+            fastCombatDirector.maxSpawnDistance = float.PositiveInfinity;
+            fastCombatDirector.minSpawnRange = 0;
+            fastCombatDirector.targetPlayers = true;
+            fastCombatDirector.skipSpawnIfTooCheap = true;
+            fastCombatDirector.maxConsecutiveCheapSkips = int.MaxValue;
+            fastCombatDirector.resetMonsterCardIfFailed = true;
+            fastCombatDirector.maximumNumberToSpawnBeforeSkipping = 6;
+            fastCombatDirector.eliteBias = 1;
+            fastCombatDirector.moneyWaveIntervals = new RangeFloat[]
+            {
+                new RangeFloat
+                {
+                    min = 1,
+                    max = 1
+                }
+            };
+            fastCombatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
+            fastCombatDirector.fallBackToStageMonsterCards = true;
 
-            
-
-            Log.Info(i++);
+            sceneObject.AddComponent<NetworkIdentity>();
             sceneObject.AddComponent<GlobalEventManager>();
-            Log.Info(i++);
-
-            
+            sceneObject.AddComponent<NewtPlacer>();
 
             sceneObject.SetActive(true);
-            Log.Info(sceneObject.layer);
-
-
-            //SceneManager.MoveGameObjectToScene(sceneObject, scene);
-
-
-            //SceneManager.LoadSceneAsync(stageName);
-
-            Log.Info(i++);
-            Log.Info("Loaded!");
+            Log.Info("Scene loaded!");
         }
 
         private Texture2D LoadTexture(string name)
