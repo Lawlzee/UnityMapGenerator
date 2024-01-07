@@ -7,12 +7,12 @@ todo
 
 ## Screenshots
 
-![Image1](Images/Image1.png)
-![Image2](Images/Image2.png)
-![Image3](Images/Image3.png)
-![Image4](Images/Image4.png)
-![Image5](Images/Image5.png)
-![Image6](Images/Image6.png)
+![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image1.png)
+![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image2.png)
+![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image3.png)
+![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image4.png)
+![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image5.png)
+![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/Image6.png)
 
 ## Todo list
 - [ ] Support multiplayer
@@ -29,6 +29,7 @@ todo
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
 - [ ] Improve music selection
 - [ ] Replace the moon with a procedurally generated stage
+- [ ] Randomize stage names
 
 ## Algorithms used
 - [2D / 3D Cellular Automata](https://www.youtube.com/watch?v=v7yyZZjF1z4&list=PLFt_AvWsXl0eZgMK_DT5_biRkWXftAOf9)

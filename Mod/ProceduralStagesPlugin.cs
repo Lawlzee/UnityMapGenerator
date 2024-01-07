@@ -24,13 +24,14 @@ namespace ProceduralStages
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInDependency("com.bepis.r2api.stages")]
     [BepInDependency("com.bepis.r2api.language")]
+    [BepInDependency("com.bepis.r2api.content_management")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class ProceduralStagesPlugin : BaseUnityPlugin
     {
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
 
         public static ConfigEntry<bool> ReplaceAllStages;
         public static ConfigEntry<float> FloorSaturation;
