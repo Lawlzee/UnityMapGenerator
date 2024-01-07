@@ -1,0 +1,17 @@
+ManifestFileVersion: 0
+CRC: 421922758
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: dc4322540add4b0f64accecef9c9d876
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7859cd501ea75098bcf7e53f1b477c26
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Images/texScenePreview.png
+Dependencies: []

@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,8 @@ namespace ProceduralStages
 
         public static String assetDirectory;
 
+        public static Texture texScenePreview;
+
         private ProceduralStagesPlugin _plugin;
 
         public ContentProvider(ProceduralStagesPlugin plugin)
@@ -26,12 +29,8 @@ namespace ProceduralStages
 
         public IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
         {
-            Log.Info("LoadStaticContentAsync");
-            //_contentPack.identifier = identifier;
-
             var assetsFolderFullPath = Path.GetDirectoryName(typeof(ContentProvider).Assembly.Location);
             assetDirectory = assetsFolderFullPath;
-
 
             AssetBundle scenesAssetBundle = null;
             yield return LoadAssetBundle(
@@ -39,24 +38,16 @@ namespace ProceduralStages
                 args.progressReceiver,
                 (assetBundle) => scenesAssetBundle = assetBundle);
 
-            //var scene = SceneManager.LoadScene("random", new LoadSceneParameters
-            //{
-            //    loadSceneMode = LoadSceneMode.Additive
-            //});
-            //
-            //_plugin.InitScene(scene);
+            AssetBundle assetsBundle = null;
+            yield return LoadAssetBundle(
+                Path.Combine(assetsFolderFullPath, "assets"),
+                args.progressReceiver,
+                (assetBundle) => assetsBundle = assetBundle);
 
-            Log.Info("LoadStaticContentAsync done");
-            //AssetBundle assetsAssetBundle = null;
-            //yield return LoadAssetBundle(
-            //    Path.Combine(assetsFolderFullPath, WaffleHouseContent.AssetsAssetBundleFileName),
-            //    args.progressReceiver,
-            //    (assetBundle) => assetsAssetBundle = assetBundle);
-            //
-            //yield return WaffleHouseContent.LoadAssetBundlesAsync(
-            //    scenesAssetBundle, assetsAssetBundle,
-            //    args.progressReceiver,
-            //    _contentPack);
+            yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<Texture[]>)((assets) =>
+            {
+                texScenePreview = assets.First(a => a.name == "texScenePreview");
+            }));
 
             yield break;
         }
@@ -75,10 +66,22 @@ namespace ProceduralStages
             yield break;
         }
 
+        private static IEnumerator LoadAllAssetsAsync<T>(AssetBundle assetBundle, IProgress<float> progress, Action<T[]> onAssetsLoaded) where T : UnityEngine.Object
+        {
+            var sceneDefsRequest = assetBundle.LoadAllAssetsAsync<T>();
+            while (!sceneDefsRequest.isDone)
+            {
+                progress.Report(sceneDefsRequest.progress);
+                yield return null;
+            }
+
+            onAssetsLoaded(sceneDefsRequest.allAssets.Cast<T>().ToArray());
+
+            yield break;
+        }
+
         public IEnumerator GenerateContentPackAsync(GetContentPackAsyncArgs args)
         {
-            //ContentPack.Copy(_contentPack, args.output);
-
             args.ReportProgress(1f);
             yield break;
         }

@@ -175,12 +175,14 @@ namespace Generator.Assets.Scripts
 
             //List<Color> colors = new List<Color>();
 
+
+            Vector3Int seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
             Parallel.For(0, _vertices.Count, i =>
             {
                 var vertex = _vertices[i];
                 var normal = normals[i];
 
-                uvs[i] = meshColorer.GetUV(vertex, normal, rng);
+                uvs[i] = meshColorer.GetUV(vertex, normal, seed);
             });
 
             mesh.uv = uvs;

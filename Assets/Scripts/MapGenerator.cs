@@ -76,6 +76,7 @@ namespace Generator.Assets.Scripts
             int currentSeed = seed == 0
                 ? Time.time.GetHashCode()
                 : seed;
+
             System.Random rng = new System.Random(currentSeed);
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
@@ -148,6 +149,7 @@ namespace Generator.Assets.Scripts
                 {
                     NewtPlacer newtPlacer = GetComponent<NewtPlacer>();
                     newtPlacer.position = node.position;
+                    newtPlacer.position.y = newtPlacer.position.y + 0.5f;
                     newtPlacer.rotation = Quaternion.Euler(0, rng.Next(-180, 180), 0);
                     break;
                 }

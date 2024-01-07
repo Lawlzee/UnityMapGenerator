@@ -60,6 +60,13 @@ namespace ProceduralStages
             On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
         }
 
+        private Texture2D LoadTexture(string name)
+        {
+            Texture2D texture = new Texture2D(2, 2);
+            texture.LoadImage(File.ReadAllBytes(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Info.Location), name)));
+            return texture;
+        }
+
         private void SceneDirector_PlacePlayerSpawnsViaNodegraph(On.RoR2.SceneDirector.orig_PlacePlayerSpawnsViaNodegraph orig, SceneDirector self)
         {
             if (Run.instance.spawnWithPod && SceneCatalog.currentSceneDef.cachedName == "random")
@@ -144,13 +151,18 @@ namespace ProceduralStages
                 sceneDef.sceneType = SceneType.Stage;
                 sceneDef.isOfflineScene = false;
                 sceneDef.stageOrder = i;
-                sceneDef.nameToken = "MAP_DAMPCAVE_TITLE";
-                sceneDef.subtitleToken = "MAP_DAMPCAVE_TITLE";
-                sceneDef.previewTexture = null;
-                sceneDef.portalMaterial = Material.GetDefaultMaterial();
-                sceneDef.portalSelectionMessageString = "BAZAAR_SEER_DAMPCAVESIMPLE";
+                sceneDef.nameToken = "MAP_RANDOM_TITLE";
+                sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
+
+                RoR2Application.onLoad += () =>
+                {
+                    sceneDef.previewTexture = ContentProvider.texScenePreview;
+                    sceneDef.portalMaterial = StageRegistration.MakeBazaarSeerMaterial(sceneDef);
+                };
+
+                sceneDef.portalSelectionMessageString = "BAZAAR_SEER_RANDOM";
                 sceneDef.shouldIncludeInLogbook = false;
-                sceneDef.loreToken = "MAP_DAMPCAVE_LORE";
+                sceneDef.loreToken = null;
                 sceneDef.dioramaPrefab = null;
 
                 sceneDef.suppressPlayerEntry = false;
@@ -163,7 +175,11 @@ namespace ProceduralStages
                 StageRegistration.RegisterSceneDefToLoop(sceneDef);
             }
 
-            Log.Info("SceneDef inited");
+            LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
+            LanguageAPI.Add("MAP_RANDOM_SUBTITLE", "Chaotic Landscape");
+            LanguageAPI.Add("BAZAAR_SEER_RANDOM", "<style=cWorldEvent>You dream of dices.</style>");
+
+            Log.Info("SceneDef initialised");
         }
 
         private void SceneCatalog_onMostRecentSceneDefChanged(SceneDef scene)
@@ -200,7 +216,8 @@ namespace ProceduralStages
 
             MapGenerator generator = sceneObject.AddComponent<MapGenerator>();
             generator.seed = Run.instance.stageRng.nextInt;
-            generator.width = 50;
+            Log.Info($"seed: {generator.seed}");
+            generator.width = 35;
             generator.height = 80;
             generator.depth = 40;
             generator.mapScale = 2.5f;
@@ -240,7 +257,9 @@ namespace ProceduralStages
             MeshCollider collider = sceneObject.AddComponent<MeshCollider>();
 
             MeshRenderer renderer = sceneObject.AddComponent<MeshRenderer>();
-            renderer.material = Material.GetDefaultMaterial();
+            renderer.material = new Material(Material.GetDefaultMaterial());
+            renderer.material.SetFloat("_Glossiness", 0.2f);
+            //renderer.material.SetFloat("_Metallic", 0.2f);
             sceneObject.AddComponent<MeshFilter>();
 
             SceneInfo sceneInfo = sceneObject.AddComponent<SceneInfo>();
@@ -283,6 +302,9 @@ namespace ProceduralStages
 
             string dpMonster = dpMonsters[Run.instance.stageRng.RangeInt(0, dpMonsters.Count)];
             string dpInteratable = dpInteratables[Run.instance.stageRng.RangeInt(0, dpInteratables.Count)];
+
+            Log.Info(dpMonster);
+            Log.Info(dpInteratable);
 
             ClassicStageInfo classicSceneInfo = sceneObject.AddComponent<ClassicStageInfo>();
             classicSceneInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
@@ -368,13 +390,6 @@ namespace ProceduralStages
 
             sceneObject.SetActive(true);
             Log.Info("Scene loaded!");
-        }
-
-        private Texture2D LoadTexture(string name)
-        {
-            Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(File.ReadAllBytes(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Info.Location), name)));
-            return texture;
         }
     }
 }

@@ -86,10 +86,10 @@ Material:
     - _Exposure: 1
     - _FlipbookMode: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.348
+    - _Glossiness: 0.2
     - _GlossyReflections: 0
     - _LightingEnabled: 0
-    - _Metallic: 0
+    - _Metallic: 0.2
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.0423

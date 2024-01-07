@@ -22,8 +22,7 @@ namespace Assets.Scripts
             const float goldenRatio = 0.618033988749895f;
 
 
-            float rootHue = 0;
-            float hue = (float)rng.NextDouble();
+            //float rootHue = 0;
             Color[] colors = new Color[8];
             for (int i = 0; i < 2; i++)
             {
@@ -32,34 +31,34 @@ namespace Assets.Scripts
                     : walls; 
 
  
-
-                hue = (float)rng.NextDouble();
+                float hue = (float)rng.NextDouble();
                 //if (i > 0)
                 //{
                 //    hue = (((rootHue + 0.25f) % 1) + hue * 0.5f) % 1;
                 //}
-                rootHue = hue;
+                //rootHue = hue;
 
                 //hue = (hue + goldenRatio) % 1;
                 colors[i * 4] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
 
                 //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
                 //hue = (hue + noise) % 1;
-                hue = (float)rng.NextDouble();
+                //hue = (float)rng.NextDouble();
                 colors[i * 4 + 2] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
+                
 
-
-                hue = (hue + 0.2f * ((float)rng.NextDouble() - 0.5f)) % 1;
+                //hue = (hue + 0.2f * ((float)rng.NextDouble() - 0.5f)) % 1;
 
                 Palette palette2 = i / 2 == 0
                     ? walls
                     : ceilling;
+
                 hue = (float)rng.NextDouble();
                 //hue = (hue + goldenRatio) % 1;
                 colors[i * 4 + 1] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
 
                 //hue = (hue + noise) % 1;
-                hue = (float)rng.NextDouble();
+                //hue = (float)rng.NextDouble();
                 //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
                 colors[i * 4 + 3] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
             }

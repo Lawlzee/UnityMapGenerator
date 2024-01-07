@@ -20,10 +20,8 @@ namespace Assets.Scripts
         [Range(0, 1)]
         public float amplitude;
 
-        public Vector2 GetUV(Vector3 vertex, Vector3 normal, System.Random rng)
+        public Vector2 GetUV(Vector3 vertex, Vector3 normal, Vector3Int seed)
         {
-            Vector3Int _seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
-
             float dot = Vector3.Dot(new Vector3(0, -1, 0), normal);
             float angle;
             if (dot < grassAngle)
@@ -46,8 +44,8 @@ namespace Assets.Scripts
 
             //float dot = ( + 1) / 2f;
             //float dot = Mathf.Lerp(Vector3.Dot(new Vector3(0, 1, 0), normal), 0 , 1);
-            float noise = (PerlinNoise.Get((vertex + _seed), baseFrequency) + 1) / 2f;
-            noise += amplitude * PerlinNoise.Get(vertex + _seed, frequency);
+            float noise = (PerlinNoise.Get((vertex + seed), baseFrequency) + 1) / 2f;
+            noise += amplitude * PerlinNoise.Get(vertex + seed, frequency);
 
             Vector2 uv = new Vector2(angle, noise);
 

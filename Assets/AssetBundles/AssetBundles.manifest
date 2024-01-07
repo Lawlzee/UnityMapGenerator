@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 4287729057
+CRC: 3952098830
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: procedural
+      Dependencies: {}
+    Info_1:
+      Name: assets
       Dependencies: {}
