@@ -31,14 +31,39 @@ namespace ProceduralStages
         public const string PluginVersion = "1.0.0";
 
         public static ConfigEntry<bool> ModEnabled;
-        public static ConfigEntry<float> ItemLuck;
+        public static ConfigEntry<float> FloorSaturation;
+        public static ConfigEntry<float> FloorValue;
+        public static ConfigEntry<float> WallsSaturation;
+        public static ConfigEntry<float> WallsValue;
+        public static ConfigEntry<float> CeillingSaturation;
+        public static ConfigEntry<float> CeillingValue;
+        public static ConfigEntry<float> LightSaturation;
+        public static ConfigEntry<float> LightValue;
 
         public void Awake()
         {
             Log.Init(Logger);
 
             ModEnabled = Config.Bind("Configuration", "Mod enabled", true, "Mod enabled");
-            ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
+            //ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
+
+            FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.3f);
+            FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.3f);
+            WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.23f);
+            WallsValue = Config.Bind("Advanced", nameof(WallsValue), 0.27f);
+            CeillingSaturation = Config.Bind("Advanced", nameof(CeillingSaturation), 0.3f);
+            CeillingValue = Config.Bind("Advanced", nameof(CeillingValue), 0.15f);
+            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.75f);
+            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.75f);
+
+            ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(WallsValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(CeillingSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(CeillingValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(LightSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(LightValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
 
 
             On.RoR2.RoR2Application.LoadGameContent += RoR2Application_LoadGameContent;
@@ -58,6 +83,34 @@ namespace ProceduralStages
             On.RoR2.Run.PickNextStageScene += Run_PickNextStageScene;
             On.RoR2.SceneDirector.DefaultPlayerSpawnPointGenerator += SceneDirector_DefaultPlayerSpawnPointGenerator;
             On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
+            
+        }
+
+        public void Start()
+        {
+            //This should be after DirectorPlugin.Awake();
+            On.RoR2.ClassicStageInfo.Start += ClassicStageInfo_Start;
+        }
+
+        private void ClassicStageInfo_Start(On.RoR2.ClassicStageInfo.orig_Start orig, ClassicStageInfo self)
+        {
+            if (SceneCatalog.currentSceneDef.cachedName == "random")
+            {
+                //Ungly hack to workaround the caching of R2API.DirectorAPI
+                SceneCatalog.currentSceneDef.cachedName = Guid.NewGuid().ToString(); 
+                try
+                {
+                    orig(self);
+                }
+                finally
+                {
+                    SceneCatalog.currentSceneDef.cachedName = "random";
+                }
+
+                return;
+            }
+
+            orig(self);
         }
 
         private Texture2D LoadTexture(string name)
@@ -82,7 +135,7 @@ namespace ProceduralStages
                 {
                     Stage.instance.usePod = oldValue;
                 }
-                                
+
                 return;
             }
 
@@ -205,8 +258,6 @@ namespace ProceduralStages
 
         public void InitScene(Scene scene)
         {
-            var currentScene = SceneCatalog.mostRecentSceneDef;
-
             int stageInLoop = (Run.instance.stageClearCount % 5) + 1;
 
             GameObject sceneObject = new GameObject();
@@ -241,14 +292,17 @@ namespace ProceduralStages
             generator.meshColorer.frequency = 0.7f;
             generator.meshColorer.amplitude = 0.3f;
             generator.colorPatelette.size = 256;
-            generator.colorPatelette.transitionSize = 50;
-            generator.colorPatelette.floor.saturation = 0.836f;
-            generator.colorPatelette.floor.value = 0.659f;
-            generator.colorPatelette.walls.saturation = 0.795f;
-            generator.colorPatelette.walls.value = 0.372f;
-            generator.colorPatelette.ceilling.saturation = 0.285f;
-            generator.colorPatelette.ceilling.value = 0.062f;
-            generator.colorPatelette.noise = 0.02f;
+            generator.colorPatelette.transitionSize = 0;
+            generator.colorPatelette.floor.saturation = FloorSaturation.Value;
+            generator.colorPatelette.floor.value = FloorValue.Value;
+            generator.colorPatelette.walls.saturation = WallsSaturation.Value;
+            generator.colorPatelette.walls.value = WallsValue.Value;
+            generator.colorPatelette.ceilling.saturation = CeillingSaturation.Value;
+            generator.colorPatelette.ceilling.value = CeillingValue.Value;
+            generator.colorPatelette.light.saturation = LightSaturation.Value;
+            generator.colorPatelette.light.value = LightValue.Value;
+            generator.colorPatelette.minNoise = 0.1f;
+            generator.colorPatelette.maxNoise = 0.25f;
 
             SurfaceDefProvider surfaceProvider = sceneObject.AddComponent<SurfaceDefProvider>();
             surfaceProvider.surfaceDef = ScriptableObject.CreateInstance<SurfaceDef>();
@@ -259,12 +313,14 @@ namespace ProceduralStages
             MeshRenderer renderer = sceneObject.AddComponent<MeshRenderer>();
             renderer.material = new Material(Material.GetDefaultMaterial());
             renderer.material.SetFloat("_Glossiness", 0.2f);
-            //renderer.material.SetFloat("_Metallic", 0.2f);
+            renderer.material.SetFloat("_Metallic", 0f);
             sceneObject.AddComponent<MeshFilter>();
 
             SceneInfo sceneInfo = sceneObject.AddComponent<SceneInfo>();
 
-            Stage stage = sceneObject.AddComponent<Stage>();
+            //Log.Info($"stage: {Stage.instance != null}");
+
+            sceneObject.AddComponent<Stage>();
 
             List<string> dpMonsters = new List<string>()
             {
@@ -312,6 +368,10 @@ namespace ProceduralStages
             classicSceneInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
             classicSceneInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
             classicSceneInfo.bonusInteractibleCreditObjects = new ClassicStageInfo.BonusInteractibleCreditObject[0];
+            classicSceneInfo.modifiableMonsterCategories = null;
+            classicSceneInfo.interactableCategories = null;
+            classicSceneInfo.monsterSelection = null;
+            classicSceneInfo.monsterCategories = null;
 
             DirectorCore director = sceneObject.AddComponent<DirectorCore>();
             SceneDirector sceneDirector = sceneObject.AddComponent<SceneDirector>();
@@ -384,7 +444,7 @@ namespace ProceduralStages
             fastCombatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
             fastCombatDirector.fallBackToStageMonsterCards = true;
 
-            sceneObject.AddComponent<NetworkIdentity>();
+            //sceneObject.AddComponent<NetworkIdentity>();
             sceneObject.AddComponent<GlobalEventManager>();
             sceneObject.AddComponent<NewtPlacer>();
 

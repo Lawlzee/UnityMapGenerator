@@ -15,52 +15,36 @@ namespace Assets.Scripts
         public Palette floor = new Palette();
         public Palette walls = new Palette();
         public Palette ceilling = new Palette();
-        public float noise = 0.50f;
+
+        public Palette light = new Palette();
+
+        [Range(0, 1)]
+        public float minNoise = 0.1f;
+        [Range(0, 1)]
+        public float maxNoise = 0.25f;
 
         public Texture2D Create(System.Random rng)
         {
-            const float goldenRatio = 0.618033988749895f;
-
-
-            //float rootHue = 0;
             Color[] colors = new Color[8];
-            for (int i = 0; i < 2; i++)
+
+            var palettes = new Palette[]
             {
-                Palette palette1 = i / 2 == 0
-                    ? floor
-                    : walls; 
+                floor,
+                walls,
+                ceilling
+            };
 
- 
-                float hue = (float)rng.NextDouble();
-                //if (i > 0)
-                //{
-                //    hue = (((rootHue + 0.25f) % 1) + hue * 0.5f) % 1;
-                //}
-                //rootHue = hue;
+            for (int i = 0; i < 3; i++)
+            {
+                Palette palette = palettes[i];
 
-                //hue = (hue + goldenRatio) % 1;
-                colors[i * 4] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
+                float hue1 = (float)rng.NextDouble();
+                colors[i * 2] = Color.HSVToRGB(hue1, palette.saturation, palette.value);
 
-                //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
-                //hue = (hue + noise) % 1;
-                //hue = (float)rng.NextDouble();
-                colors[i * 4 + 2] = Color.HSVToRGB(hue, palette1.saturation, palette1.value);
-                
+                float noise = (float)rng.NextDouble() * (maxNoise - minNoise) + minNoise;
 
-                //hue = (hue + 0.2f * ((float)rng.NextDouble() - 0.5f)) % 1;
-
-                Palette palette2 = i / 2 == 0
-                    ? walls
-                    : ceilling;
-
-                hue = (float)rng.NextDouble();
-                //hue = (hue + goldenRatio) % 1;
-                colors[i * 4 + 1] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
-
-                //hue = (hue + noise) % 1;
-                //hue = (float)rng.NextDouble();
-                //hue = (hue + ((float)rng.NextDouble() - 0.5f) * 0.2f) % 1;
-                colors[i * 4 + 3] = Color.HSVToRGB(hue, palette2.saturation, palette2.value);
+                float hue2 = (hue1 + noise + 1) % 1;
+                colors[i * 2 + 1] = Color.HSVToRGB(hue2, palette.saturation, palette.value);
             }
 
             Texture2D texture = new Texture2D(size * 2 + transitionSize, size);
@@ -74,8 +58,8 @@ namespace Assets.Scripts
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        Color a = Color.Lerp(colors[i * 4 + 0], colors[i * 4 + 1], x * factor);
-                        Color b = Color.Lerp(colors[i * 4 + 2], colors[i * 4 + 3], x * factor);
+                        Color a = Color.Lerp(colors[i * 2 + 0], colors[i * 2 + 2], x * factor);
+                        Color b = Color.Lerp(colors[i * 2 + 1], colors[i * 2 + 3], x * factor);
 
                         Color color = Color.Lerp(a, b, y * factor);
 

@@ -15,7 +15,9 @@ namespace ProceduralStages
         public void Start()
         {
             GameObject newt = Instantiate(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/NewtStatue/NewtStatue.prefab").WaitForCompletion());
-            newt.transform.position = position;
+            var newPosition = position;
+            newPosition.y++;
+            newt.transform.position = newPosition;
             newt.transform.rotation = rotation;
         }
     }

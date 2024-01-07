@@ -120,7 +120,14 @@ namespace Generator.Assets.Scripts
             stopwatch.Restart();
 
             Texture2D texture = colorPatelette.Create(rng);
-            GetComponent<MeshRenderer>().material.mainTexture = texture;
+            var material = GetComponent<MeshRenderer>().material;
+            material.mainTexture = texture;
+            material.color = new Color(1.3f, 1.3f, 1.3f);
+
+            RenderSettings.ambientIntensity = 1.4f;
+            RenderSettings.sun.intensity = 0.75f;
+            RenderSettings.sun.color = Color.HSVToRGB(rng.Next(), colorPatelette.light.saturation, colorPatelette.light.value);
+
             UnityEngine.Debug.Log($"MeshRenderer: " + stopwatch.Elapsed.ToString());
             stopwatch.Restart();
 
@@ -149,7 +156,6 @@ namespace Generator.Assets.Scripts
                 {
                     NewtPlacer newtPlacer = GetComponent<NewtPlacer>();
                     newtPlacer.position = node.position;
-                    newtPlacer.position.y = newtPlacer.position.y + 0.5f;
                     newtPlacer.rotation = Quaternion.Euler(0, rng.Next(-180, 180), 0);
                     break;
                 }
