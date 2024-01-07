@@ -22,6 +22,8 @@ using UnityEngine.Networking;
 namespace ProceduralStages
 {
     [BepInDependency("com.rune580.riskofoptions")]
+    [BepInDependency("com.bepis.r2api.stages")]
+    [BepInDependency("com.bepis.r2api.language")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class ProceduralStagesPlugin : BaseUnityPlugin
     {
@@ -30,7 +32,7 @@ namespace ProceduralStages
         public const string PluginName = "ProceduralStages";
         public const string PluginVersion = "1.0.0";
 
-        public static ConfigEntry<bool> ModEnabled;
+        public static ConfigEntry<bool> ReplaceAllStages;
         public static ConfigEntry<float> FloorSaturation;
         public static ConfigEntry<float> FloorValue;
         public static ConfigEntry<float> WallsSaturation;
@@ -44,17 +46,17 @@ namespace ProceduralStages
         {
             Log.Init(Logger);
 
-            ModEnabled = Config.Bind("Configuration", "Mod enabled", true, "Mod enabled");
-            //ModSettingsManager.AddOption(new CheckBoxOption(ModEnabled));
+            ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
+            ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
-            FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.3f);
-            FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.3f);
+            FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.5f);
+            FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.36f);
             WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.23f);
             WallsValue = Config.Bind("Advanced", nameof(WallsValue), 0.27f);
             CeillingSaturation = Config.Bind("Advanced", nameof(CeillingSaturation), 0.3f);
             CeillingValue = Config.Bind("Advanced", nameof(CeillingValue), 0.15f);
-            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.75f);
-            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.75f);
+            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.5f);
+            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.8f);
 
             ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
@@ -162,8 +164,7 @@ namespace ProceduralStages
                 .Where(x => x.cachedName == "random")
                 .FirstOrDefault();
 
-            //todo: add config
-            if (scene != null)
+            if (ReplaceAllStages.Value && scene != null)
             {
                 self.nextStageScene = scene;
             }

@@ -56,18 +56,18 @@ namespace Generator.Assets.Scripts
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F2))
-            {
-                GenerateMap();
-            }
+            //if (Input.GetKeyDown(KeyCode.F2))
+            //{
+            //    GenerateMap();
+            //}
         }
 
         private void OnValidate()
         {
-            if (Application.IsPlaying(this))
-            {
-                GenerateMap();
-            }
+            //if (Application.IsPlaying(this))
+            //{
+            //    GenerateMap();
+            //}
         }
 
         private void GenerateMap()
