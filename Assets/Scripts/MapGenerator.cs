@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using UnityMeshSimplifier;
 
 namespace Generator.Assets.Scripts
 {
@@ -21,6 +22,9 @@ namespace Generator.Assets.Scripts
 
         [Range(0, 10)]
         public float mapScale = 1f;
+
+        [Range(0, 1)]
+        public float meshQuality = 0.1f;
 
         public CellularAutomata2d cave2d = new CellularAutomata2d();
 
@@ -109,6 +113,16 @@ namespace Generator.Assets.Scripts
 
             var meshResult = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
             LogStats("marchingCubes");
+
+            MeshSimplifier simplifier = new MeshSimplifier(meshResult.mesh);
+            simplifier.SimplifyMesh(meshQuality);
+            meshResult.mesh = simplifier.ToMesh();
+
+            LogStats("MeshSimplifier");
+            meshResult.vertices = simplifier.Vertices.ToList();
+            meshResult.triangles = meshResult.mesh.triangles.ToList();
+            meshResult.normals = simplifier.Normals;
+            LogStats("bidon");
 
             GetComponent<MeshFilter>().mesh = meshResult.mesh;
             LogStats("MeshFilter");

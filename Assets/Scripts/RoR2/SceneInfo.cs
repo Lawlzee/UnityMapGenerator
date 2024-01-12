@@ -34,7 +34,10 @@ namespace RoR2
 
         public void OnValidate()
         {
-            UpdateMesh();
+            if (Application.IsPlaying(this))
+            {
+                UpdateMesh();
+            }
         }
 
         private void UpdateMesh()

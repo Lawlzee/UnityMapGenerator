@@ -270,8 +270,8 @@ namespace Generator.Assets.Scripts
         int reuse;
         private int AddVertex(Vector3 vector)
         {
-            //Vector3 roundedVector = new Vector3(Mathf.Round(vector.x), Mathf.Round(vector.y), Mathf.Round(vector.z));
-            Vector3 roundedVector = vector;
+            Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 10), Mathf.Round(vector.y * 10), Mathf.Round(vector.z * 10));
+            //Vector3 roundedVector = vector;
 
             if (_verticesIndexes.TryGetValue(roundedVector, out var index))
             {
