@@ -12,8 +12,6 @@ namespace ProceduralStages
 {
     public class NewtPlacer : MonoBehaviour
     {
-        public Vector3 position;
-        public Quaternion rotation;
         public Xoroshiro128Plus rng;
 
         public void Start()
@@ -32,7 +30,11 @@ namespace ProceduralStages
             {
                 placementMode = DirectorPlacementRule.PlacementMode.Random
             };
-            DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
+            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
+            if (gameObject)
+            {
+                gameObject.transform.position = gameObject.transform.position + Vector3.up;
+            }
         }
     }
 }

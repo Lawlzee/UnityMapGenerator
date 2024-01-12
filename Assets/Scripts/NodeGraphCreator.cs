@@ -18,7 +18,7 @@ namespace Assets.Scripts
         public float flatMaxSlope = 1f;
         public float airNodeheight = 20f;
 
-        public int maxGroundheight = 20;
+        public int maxGroundheight = 30;
         public DensityMap densityMap = new DensityMap();
         public FlatMap flatMap = new FlatMap();
 

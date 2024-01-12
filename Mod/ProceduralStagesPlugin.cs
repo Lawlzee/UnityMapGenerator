@@ -241,10 +241,12 @@ namespace ProceduralStages
         {
             if (scene.cachedName == "random")
             {
-                //todo: only take stage track
-                scene.mainTrack = MusicTrackCatalog.musicTrackDefs[Run.instance.stageRng.RangeInt(0, MusicTrackCatalog.musicTrackDefs.Length)];
-                //todo: only take boss track
-                scene.bossTrack = MusicTrackCatalog.musicTrackDefs[Run.instance.stageRng.RangeInt(0, MusicTrackCatalog.musicTrackDefs.Length)];
+                var stages = SceneCatalog.allStageSceneDefs
+                    .Where(x => x.cachedName != "random")
+                    .ToList();
+
+                scene.mainTrack = stages[Run.instance.stageRng.RangeInt(0, stages.Count)].mainTrack;
+                scene.bossTrack = stages[Run.instance.stageRng.RangeInt(0, stages.Count)].bossTrack;
 
                 //todo: randomize tokens
             }
@@ -254,12 +256,14 @@ namespace ProceduralStages
         {
             if (scene.name == "random")
             {
-                InitScene(scene);
+                InitScene();
             }
         }
 
-        public void InitScene(Scene scene)
+        public void InitScene()
         {
+            var rng = new Xoroshiro128Plus(Run.instance.stageRng.nextUint);
+
             int stageInLoop = (Run.instance.stageClearCount % 5) + 1;
 
             GameObject sceneObject = new GameObject();
@@ -268,7 +272,7 @@ namespace ProceduralStages
             sceneObject.layer = 11;//World
 
             MapGenerator generator = sceneObject.AddComponent<MapGenerator>();
-            generator.seed = Run.instance.stageRng.nextInt;
+            generator.seed = rng.nextInt;
             Log.Info($"seed: {generator.seed}");
             generator.width = 35;
             generator.height = 80;
@@ -293,7 +297,7 @@ namespace ProceduralStages
             generator.meshColorer.baseFrequency = 0.1f;
             generator.meshColorer.frequency = 0.7f;
             generator.meshColorer.amplitude = 0.3f;
-            generator.colorPatelette.size = 256;
+            generator.colorPatelette.size = 2048;
             generator.colorPatelette.transitionSize = 0;
             generator.colorPatelette.floor.saturation = FloorSaturation.Value;
             generator.colorPatelette.floor.value = FloorValue.Value;
@@ -358,8 +362,8 @@ namespace ProceduralStages
                 "RoR2/Base/wispgraveyard/dpWispGraveyardInteractables.asset"
             };
 
-            string dpMonster = dpMonsters[Run.instance.stageRng.RangeInt(0, dpMonsters.Count)];
-            string dpInteratable = dpInteratables[Run.instance.stageRng.RangeInt(0, dpInteratables.Count)];
+            string dpMonster = dpMonsters[rng.RangeInt(0, dpMonsters.Count)];
+            string dpInteratable = dpInteratables[rng.RangeInt(0, dpInteratables.Count)];
 
             Log.Info(dpMonster);
             Log.Info(dpInteratable);
@@ -448,7 +452,8 @@ namespace ProceduralStages
 
             //sceneObject.AddComponent<NetworkIdentity>();
             sceneObject.AddComponent<GlobalEventManager>();
-            sceneObject.AddComponent<NewtPlacer>();
+            NewtPlacer newtPlacer = sceneObject.AddComponent<NewtPlacer>();
+            newtPlacer.rng = rng;
 
             sceneObject.SetActive(true);
             Log.Info("Scene loaded!");

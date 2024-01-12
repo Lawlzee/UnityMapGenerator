@@ -20,6 +20,12 @@
   <ItemGroup>
     <Compile Remove="ItemModelFactory.cs" />
     <Compile Include="..\Assets\Scripts\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\Components\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\Exceptions\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\Internal\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\Math\*.cs" />
+    <Compile Include="..\Assets\Scripts\MeshSimplification\Utility\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
