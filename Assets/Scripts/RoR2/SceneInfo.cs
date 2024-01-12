@@ -39,6 +39,7 @@ namespace RoR2
 
         private void UpdateMesh()
         {
+            Debug.Log("UpdateMesh");
             if (showGroundMesh)
             {
                 var mesh = groundNodes.GenerateLinkDebugMesh(hullMask, nodeFlags);
@@ -49,7 +50,7 @@ namespace RoR2
                 groundMeshObject.GetComponent<MeshFilter>().mesh = null;
             }
 
-            if (showGroundMesh)
+            if (showAirMesh)
             {
                 var mesh = airNodes.GenerateLinkDebugMesh(hullMask, nodeFlags);
                 airMeshObject.GetComponent<MeshFilter>().mesh = mesh;

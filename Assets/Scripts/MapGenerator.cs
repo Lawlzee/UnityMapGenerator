@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts;
-using ProceduralStages;
 using RoR2;
 using RoR2.Navigation;
 using System;
@@ -44,13 +43,13 @@ namespace Generator.Assets.Scripts
 
         private void Awake()
         {
-            UnityEngine.Debug.Log("Awake");
+            //UnityEngine.Debug.Log("Awake");
             GenerateMap();
         }
 
         private void Start()
         {
-            UnityEngine.Debug.Log("Start");
+            //UnityEngine.Debug.Log("Start");
             //GenerateMap();
         }
 
@@ -64,10 +63,14 @@ namespace Generator.Assets.Scripts
 
         private void OnValidate()
         {
-            //if (Application.IsPlaying(this))
-            //{
-            //    GenerateMap();
-            //}
+#if UNITY_2019_4
+            if (Application.IsPlaying(this))
+            {
+                GenerateMap();
+                GetComponent<SceneInfo>().OnValidate();
+            }
+#endif
+
         }
 
         private void GenerateMap()
@@ -84,40 +87,31 @@ namespace Generator.Assets.Scripts
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             var map2D = cave2d.Create(width, depth, rng);
-            UnityEngine.Debug.Log($"cave2d: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("cave2d");
 
             bool[,,] map3d = map2dToMap3d.Convert(map2D, height);
-            UnityEngine.Debug.Log($"map2dToMap3d: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("map2dToMap3d");
 
             carver.CarveWalls(map3d, rng);
-            UnityEngine.Debug.Log($"carver: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("carver");
 
             waller.AddFloorAndCeilling(map3d, rng);
-            UnityEngine.Debug.Log($"waller.AddFloorAndCeilling: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("waller.AddFloorAndCeilling");
 
             waller.AddWalls(map3d, rng);
-            UnityEngine.Debug.Log($"waller.AddWalls: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("waller.AddWalls");
 
             bool[,,] smoothMap3d = cave3d.SmoothMap(map3d);
-            UnityEngine.Debug.Log($"cave3d: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("cave3d");
 
             float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
-            UnityEngine.Debug.Log($"map3dNoiser: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("map3dNoiser");
 
             var meshResult = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
-            UnityEngine.Debug.Log($"mesh: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("marchingCubes");
 
             GetComponent<MeshFilter>().mesh = meshResult.mesh;
-            UnityEngine.Debug.Log($"MeshFilter: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("MeshFilter");
 
             Texture2D texture = colorPatelette.Create(rng);
             var material = GetComponent<MeshRenderer>().material;
@@ -128,60 +122,32 @@ namespace Generator.Assets.Scripts
             RenderSettings.sun.intensity = 0.75f;
             RenderSettings.sun.color = Color.HSVToRGB(rng.Next(), colorPatelette.light.saturation, colorPatelette.light.value);
 
-            UnityEngine.Debug.Log($"MeshRenderer: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("MeshRenderer");
 
             var surface = ScriptableObject.CreateInstance<SurfaceDef>();
             surface.approximateColor = colorPatelette.AverageColor(texture);
             surface.materialSwitchString = "stone";
 
             GetComponent<SurfaceDefProvider>().surfaceDef = surface;
-            UnityEngine.Debug.Log($"surfaceDef: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("surfaceDef");
 
-            //RoR2/Base/Common/VFX/StoneImpact.prefab
             GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
-            UnityEngine.Debug.Log($"MeshCollider: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            LogStats("MeshCollider");
 
-            (NodeGraph groundNodes, HashSet<int> mainIsland) = nodeGraphCreator.CreateGroundNodes(meshResult);
-            UnityEngine.Debug.Log($"groundNodes: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
-
-            for (int i = 0; i < 50; i++)
-            {
-                var newtIndex = mainIsland.ElementAt(rng.Next(mainIsland.Count));
-                var node = groundNodes.nodes[newtIndex];
-                if ((node.flags & NodeFlags.NoChestSpawn) == 0)
-                {
-                    NewtPlacer newtPlacer = GetComponent<NewtPlacer>();
-                    newtPlacer.position = node.position;
-                    newtPlacer.rotation = Quaternion.Euler(0, rng.Next(-180, 180), 0);
-                    break;
-                }
-            }
-
-
-            NodeGraph airNodes = nodeGraphCreator.CreateAirNodes(groundNodes, mainIsland, map3d, mapScale);
-            UnityEngine.Debug.Log($"airNodes: " + stopwatch.Elapsed.ToString());
-            stopwatch.Restart();
+            (NodeGraph groundNodes, NodeGraph airNodes) = nodeGraphCreator.CreateGraphs(meshResult, map3d, mapScale);
+            LogStats("nodeGraphs");
 
             SceneInfo sceneInfo = GetComponent<SceneInfo>();
             sceneInfo.groundNodes = groundNodes;
             sceneInfo.airNodes = airNodes;
 
-
-
             UnityEngine.Debug.Log($"total: " + totalStopwatch.Elapsed.ToString());
 
-
-            //_map = smoothMap3d;
+            void LogStats(string name)
+            {
+                UnityEngine.Debug.Log($"{name}: {stopwatch.Elapsed}");
+                stopwatch.Restart();
+            }
         }
-
-
-
-
-
-
     }
 }

@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace RoR2.Navigation
 {
-
     [Flags]
     public enum NodeFlags : byte
     {
@@ -17,7 +16,8 @@ namespace RoR2.Navigation
         TeleporterOK = 2,
         NoCharacterSpawn = 4,
         NoChestSpawn = 8,
-        NoShrineSpawn = 0x10
+        NoShrineSpawn = 16,
+        Newt = 32
     }
 
     public class NodeGraph : ScriptableObject
@@ -31,10 +31,10 @@ namespace RoR2.Navigation
         }
 
         public Vector3 GetQuadraticCoordinates(
-          float t,
-          Vector3 startPos,
-          Vector3 apexPos,
-          Vector3 endPos)
+            float t,
+            Vector3 startPos,
+            Vector3 apexPos,
+            Vector3 endPos)
         {
             return Mathf.Pow(1f - t, 2f) * startPos + (float)(2.0 * (double)t * (1.0 - (double)t)) * apexPos + Mathf.Pow(t, 2f) * endPos;
         }
@@ -51,7 +51,9 @@ namespace RoR2.Navigation
                         var nodeB = this.nodes[link.nodeIndexB.nodeIndex];
 
                         if ((nodeA.flags & nodeFlags) != NodeFlags.None
-                            && (nodeB.flags & nodeFlags) != NodeFlags.None)
+                            && (nodeB.flags & nodeFlags) != NodeFlags.None
+                            && (nodeA.forbiddenHulls & hullMask) == HullMask.None
+                            && (nodeB.forbiddenHulls & hullMask) == HullMask.None)
                         {
                             Vector3 position1 = this.nodes[link.nodeIndexA.nodeIndex].position;
                             Vector3 position2 = this.nodes[link.nodeIndexB.nodeIndex].position;

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UIElements;
+using System.Diagnostics;
 
 namespace Assets.Scripts
 {
@@ -16,7 +18,41 @@ namespace Assets.Scripts
         public float flatMaxSlope = 1f;
         public float airNodeheight = 20f;
 
-        public (NodeGraph NodeGraph, HashSet<int> MainIsland) CreateGroundNodes(MeshResult meshResult)
+        public int maxGroundheight = 20;
+        public DensityMap densityMap = new DensityMap();
+        public FlatMap flatMap = new FlatMap();
+
+        public (NodeGraph ground, NodeGraph air) CreateGraphs(MeshResult meshResult, bool[,,] map, float mapScale)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            MapDensity mapDensity = densityMap.Create(map);
+            LogStats("mapDensity");
+
+            NodeGraph groundNodes = CreateGroundNodes(meshResult, mapDensity, mapScale);
+            LogStats("groundNodes");
+
+            HashSet<int> mainIsland = GetMainIsland(groundNodes);
+            LogStats("mainIsland");
+
+            SetMainIslandFlags(groundNodes, mainIsland, map, mapDensity, mapScale);
+            LogStats("SetMainIslandFlags");
+
+            groundNodes.Awake();
+
+            NodeGraph airNodes = CreateAirNodes(groundNodes, mainIsland, map, mapDensity, mapScale);
+            LogStats("CreateAirNodes");
+
+            return (groundNodes, airNodes);
+
+            void LogStats(string name)
+            {
+                UnityEngine.Debug.Log($"{name}: {stopwatch.Elapsed}");
+                stopwatch.Restart();
+            }
+        }
+
+        private NodeGraph CreateGroundNodes(MeshResult meshResult, MapDensity mapDensity, float mapScale)
         {
             var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
 
@@ -29,13 +65,10 @@ namespace Assets.Scripts
             int index = 0;
             for (int i = 0; i < vertices.Count; i++)
             {
-                //Log.Info("2");
                 var vertex = vertices[i];
                 var normal = normals[i];
-                //Log.Info("3");
 
                 bool valid = Vector3.Dot(Vector3.up, normal) > minFloorAngle;
-
 
                 var node = new NodeGraph.Node
                 {
@@ -52,10 +85,30 @@ namespace Assets.Scripts
                 if (valid)
                 {
                     index++;
+
+                    float density = mapDensity.GetDensity(vertex / mapScale, isGround: true);
+
+                    HullMask forbiddenHulls = HullMask.None;
+
+                    if (density > densityMap.ground.maxHumanDensity)
+                    {
+                        forbiddenHulls |= HullMask.Human;
+                    }
+
+                    if (density > densityMap.ground.maxGolemDensity)
+                    {
+                        forbiddenHulls |= HullMask.Golem;
+                    }
+
+                    if (density > densityMap.ground.maxBeetleQueenDensity)
+                    {
+                        forbiddenHulls |= HullMask.BeetleQueen;
+                    }
+
+                    node.forbiddenHulls = forbiddenHulls;
                 }
 
                 nodes[i] = node;
-
             }
 
             List<NodeGraph.Link>[] links = new List<NodeGraph.Link>[index];
@@ -75,8 +128,6 @@ namespace Assets.Scripts
                 {
                     if (node2.linkListIndex.index != -1)
                     {
-                        //node1.linkListIndex.size++;
-
                         float distance = (node1.position - node2.position).magnitude;
 
                         links[node1.linkListIndex.index].Add(new NodeGraph.Link
@@ -85,8 +136,8 @@ namespace Assets.Scripts
                             nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
                             distanceScore = distance,
                             minJumpHeight = 0,
-                            hullMask = 31,
-                            jumpHullMask = 31,
+                            hullMask = 0xFFFFFFF,
+                            jumpHullMask = 0xFFFFFFF,
                             gateIndex = 0
                         });
 
@@ -96,8 +147,8 @@ namespace Assets.Scripts
                             nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
                             distanceScore = distance,
                             minJumpHeight = 0,
-                            hullMask = 31,
-                            jumpHullMask = 31,
+                            hullMask = 0xFFFFFFF,
+                            jumpHullMask = 0xFFFFFFF,
                             gateIndex = 0
                         });
                     }
@@ -112,8 +163,8 @@ namespace Assets.Scripts
                             nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
                             distanceScore = distance,
                             minJumpHeight = 0,
-                            hullMask = 31,
-                            jumpHullMask = 31,
+                            hullMask = 0xFFFFFFF,
+                            jumpHullMask = 0xFFFFFFF,
                             gateIndex = 0
                         });
 
@@ -123,8 +174,8 @@ namespace Assets.Scripts
                             nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
                             distanceScore = distance,
                             minJumpHeight = 0,
-                            hullMask = 31,
-                            jumpHullMask = 31,
+                            hullMask = 0xFFFFFFF,
+                            jumpHullMask = 0xFFFFFFF,
                             gateIndex = 0
                         });
                     }
@@ -140,8 +191,8 @@ namespace Assets.Scripts
                         nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
                         distanceScore = distance,
                         minJumpHeight = 0,
-                        hullMask = 31,
-                        jumpHullMask = 31,
+                        hullMask = 0xFFFFFFF,
+                        jumpHullMask = 0xFFFFFFF,
                         gateIndex = 0
                     });
 
@@ -151,8 +202,8 @@ namespace Assets.Scripts
                         nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
                         distanceScore = distance,
                         minJumpHeight = 0,
-                        hullMask = 31,
-                        jumpHullMask = 31,
+                        hullMask = 0xFFFFFFF,
+                        jumpHullMask = 0xFFFFFFF,
                         gateIndex = 0
                     });
                 }
@@ -179,44 +230,22 @@ namespace Assets.Scripts
                 node.linkListIndex.size = (uint)currentLinks.Count;
             }
 
-            //Log.Info("A");
+            groundNodes.nodes = allNodes;
+            groundNodes.links = linkList.ToArray();
 
-            var islands = GetNodeIslands(allNodes, linkList)
+            return groundNodes;
+        }
+
+        private HashSet<int> GetMainIsland(NodeGraph groundGraph)
+        {
+            var islands = GetNodeIslands(groundGraph.nodes, groundGraph.links)
                 .OrderByDescending(x => x.Count)
                 .ToList();
 
-            var mainIsland = islands[0];
-
-            foreach (int nodeIndex in mainIsland)
-            {
-                ref NodeGraph.Node node = ref allNodes[nodeIndex];
-
-                bool isFlat = true;
-                for (int i = node.linkListIndex.index; i < node.linkListIndex.index + node.linkListIndex.size; i++)
-                {
-                    var link = linkList[i];
-                    var otherNode = allNodes[link.nodeIndexB.nodeIndex];
-                    if (Math.Abs(node.position.y - otherNode.position.y) > flatMaxSlope)
-                    {
-                        isFlat = false;
-                        break;
-                    }
-                }
-
-                if (isFlat)
-                {
-                    node.flags = NodeFlags.TeleporterOK | NodeFlags.NoCeiling;
-                }
-            }
-
-            groundNodes.nodes = allNodes;
-            groundNodes.links = linkList.ToArray();
-            groundNodes.Awake();
-
-            return (groundNodes, mainIsland);
+            return islands[0];
         }
 
-        private List<HashSet<int>> GetNodeIslands(NodeGraph.Node[] allNodes, List<NodeGraph.Link> links)
+        private List<HashSet<int>> GetNodeIslands(NodeGraph.Node[] allNodes, NodeGraph.Link[] links)
         {
             HashSet<int> nodesNotUsed = new HashSet<int>(Enumerable.Range(0, allNodes.Length));
 
@@ -256,7 +285,68 @@ namespace Assets.Scripts
             return islands;
         }
 
-        public NodeGraph CreateAirNodes(NodeGraph groundNodes, HashSet<int> mainIsland, bool[,,] map3d, float mapScale)
+        private void SetMainIslandFlags(NodeGraph groundGraph, HashSet<int> mainIsland, bool[,,] map, MapDensity mapDensity, float mapScale)
+        {
+            var mapFlatness = flatMap.Create(map);
+
+            int count = 0;
+            foreach (int nodeIndex in mainIsland)
+            {
+                ref NodeGraph.Node node = ref groundGraph.nodes[nodeIndex];
+
+                NodeFlags flags = NodeFlags.NoCeiling | NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
+
+                Vector3 scaledPosition = node.position / mapScale;
+                int x = Mathf.RoundToInt(scaledPosition.x);
+                int y = Mathf.RoundToInt(scaledPosition.y);
+                int z = Mathf.RoundToInt(scaledPosition.z);
+
+                float density = mapDensity.GetDensity(scaledPosition, isGround: true);
+                float flatness = mapFlatness[x, y + 1, z];
+
+                if (node.position.y <= maxGroundheight)
+                {
+                    if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
+                    {
+                        count++;
+                        if (flatMap.minTeleporterFlatness <= flatness)
+                        {
+                          flags |= NodeFlags.TeleporterOK;
+                        }
+                    }
+
+                    if (flatMap.minInteractableFlatness <= flatness)
+                    {
+                        if (density < densityMap.maxChestDensity)
+                        {
+                            flags &= ~NodeFlags.NoChestSpawn;
+                        }
+
+                        if (density < densityMap.maxChestDensity)
+                        {
+                            flags &= ~NodeFlags.NoShrineSpawn;
+                        }
+
+                        if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
+                        {
+                            flags |= NodeFlagsExt.Newt;
+                        }
+                    }
+
+                    if (flatMap.minCharacterFlatness <= flatness)
+                    {
+                        flags &= ~NodeFlags.NoCharacterSpawn;
+                    }
+                }
+
+                node.flags = flags;
+            }
+
+            UnityEngine.Debug.Log("count");
+            UnityEngine.Debug.Log(count);
+        }
+
+        private NodeGraph CreateAirNodes(NodeGraph groundNodes, HashSet<int> mainIsland, bool[,,] map3d, MapDensity mapDensity, float mapScale)
         {
             Dictionary<int, int> newNodeIndex = new Dictionary<int, int>();
 
@@ -330,10 +420,33 @@ namespace Assets.Scripts
                     continue;
                 }
 
-                NodeGraph.Node groundNode = groundNodes.nodes[i];
+                NodeGraph.Node airNode = groundNodes.nodes[i];
 
-                airNodes[index] = groundNode;
-                airNodes[index].position.y += airNodeheight;
+                airNode.flags = NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoCeiling;
+                airNode.position.y += airNodeheight;
+
+                float density = mapDensity.GetDensity(airNode.position / mapScale, isGround: false);
+
+                HullMask forbiddenHulls = HullMask.None;
+
+                if (density > densityMap.air.maxHumanDensity)
+                {
+                    forbiddenHulls |= HullMask.Human;
+                }
+
+                if (density > densityMap.air.maxGolemDensity)
+                {
+                    forbiddenHulls |= HullMask.Golem;
+                }
+
+                if (density > densityMap.air.maxBeetleQueenDensity)
+                {
+                    forbiddenHulls |= HullMask.BeetleQueen;
+                }
+
+                airNode.forbiddenHulls = forbiddenHulls;
+
+                airNodes[index] = airNode;
             }
 
             List<NodeGraph.Link> airLinks = new List<NodeGraph.Link>();
