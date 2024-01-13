@@ -67,7 +67,7 @@ namespace ProceduralStages
             Seed = Config.Bind("Advanced", nameof(Seed), "");
             FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.5f);
             FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.36f);
-            WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.23f);
+            WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.3f);
             WallsValue = Config.Bind("Advanced", nameof(WallsValue), 0.27f);
             CeillingSaturation = Config.Bind("Advanced", nameof(CeillingSaturation), 0.3f);
             CeillingValue = Config.Bind("Advanced", nameof(CeillingValue), 0.15f);
@@ -343,12 +343,15 @@ namespace ProceduralStages
             generator.colorPatelette.floor.saturation = FloorSaturation.Value;
             generator.colorPatelette.floor.value = FloorValue.Value;
             generator.colorPatelette.floor.perlinAmplitude = 0.2f;
+            generator.colorPatelette.floor.detailPerlinAmplitude = 0.1f;
             generator.colorPatelette.walls.saturation = WallsSaturation.Value;
             generator.colorPatelette.walls.value = WallsValue.Value;
-            generator.colorPatelette.walls.perlinAmplitude = 0.6f;
+            generator.colorPatelette.walls.perlinAmplitude = 0.5f;
+            generator.colorPatelette.walls.detailPerlinAmplitude = 0.25f;
             generator.colorPatelette.ceilling.saturation = CeillingSaturation.Value;
             generator.colorPatelette.ceilling.value = CeillingValue.Value;
             generator.colorPatelette.ceilling.perlinAmplitude = 0.4f;
+            generator.colorPatelette.ceilling.detailPerlinAmplitude = 0.2f;
             generator.colorPatelette.light.saturation = LightSaturation.Value;
             generator.colorPatelette.light.value = LightValue.Value;
             generator.colorPatelette.fog.saturation = FogSaturation.Value;

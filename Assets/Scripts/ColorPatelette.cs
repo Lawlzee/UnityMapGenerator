@@ -81,7 +81,7 @@ namespace Assets.Scripts
 
                         //float amplitude = i == 0 ? floorPerlinAmplitude : this.amplitude;
                         //float noise = (1 - amplitude) + heightColor * amplitude;
-                        
+
                         color = new Color(noise, noise, noise) * color;
                         pixels[pixelIndex] = color;
                     }
@@ -110,19 +110,25 @@ namespace Assets.Scripts
             Texture2D texture = new Texture2D(size * 2, size);
             Color[] pixels = new Color[2 * size * size];
 
-            Vector2Int seed = new Vector2Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
+            int baseSeed = rng.Next() % short.MaxValue;
+            int detailSeed = rng.Next() % short.MaxValue;
             Parallel.For(0, size, y =>
             {
                 for (int x = 0; x < size; x++)
                 {
                     for (int i = 0; i < 2; i++)
                     {
-                        float amplitude = Mathf.Lerp(palettes[i].perlinAmplitude, palettes[i + 1].perlinAmplitude, x * factor);
 
-                        int dx = (i * size + x + seed.x) / xSquareSize;
-                        int dy = (y + seed.y) / ySquareSize;
+                        float baseAmplitude = Mathf.Lerp(palettes[i].perlinAmplitude, palettes[i + 1].perlinAmplitude, x * factor);
+                        int baseNoiseY = (y + baseSeed) / ySquareSize;
+                        float baseNoise = (1 - baseAmplitude) + ((Mathf.PerlinNoise(0, baseNoiseY / perlinFrequency) + 1) / 2) * baseAmplitude;
 
-                        float noise = (1 - amplitude) + ((Mathf.PerlinNoise(dx / perlinFrequency, dy / perlinFrequency) + 1) / 2) * amplitude;
+                        float detailAmplitude = Mathf.Lerp(palettes[i].detailPerlinAmplitude, palettes[i + 1].detailPerlinAmplitude, x * factor);
+                        int noiseDetailY = y + detailSeed;
+                        float detailNoise = detailAmplitude * Mathf.PerlinNoise(0, noiseDetailY / perlinFrequency) / 2;
+
+                        float noise = Mathf.Clamp01(baseNoise + detailNoise);
+
                         pixels[y * 2 * size + i * size + x] = new Color(noise, noise, noise);
                     }
 
@@ -140,8 +146,8 @@ namespace Assets.Scripts
         {
             Color32[] colors = texture.GetPixels32();
             int total = colors.Length;
-            var r = 0; 
-            var g = 0; 
+            var r = 0;
+            var g = 0;
             var b = 0;
             for (var i = 0; i < total; i++)
             {
@@ -156,12 +162,14 @@ namespace Assets.Scripts
         [Serializable]
         public class Palette
         {
-            [Range(0,1 )]
+            [Range(0, 1)]
             public float saturation;
             [Range(0, 1)]
             public float value;
             [Range(0, 1)]
             public float perlinAmplitude;
+            [Range(0, 1)]
+            public float detailPerlinAmplitude;
         }
 
         [Serializable]
