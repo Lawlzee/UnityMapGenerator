@@ -56,8 +56,8 @@ namespace ProceduralStages
             WallsValue = Config.Bind("Advanced", nameof(WallsValue), 0.27f);
             CeillingSaturation = Config.Bind("Advanced", nameof(CeillingSaturation), 0.3f);
             CeillingValue = Config.Bind("Advanced", nameof(CeillingValue), 0.15f);
-            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.5f);
-            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.8f);
+            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.7f);
+            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.7f);
 
             ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
@@ -294,20 +294,25 @@ namespace ProceduralStages
             generator.cave3d.smoothingInterations = 2;
             generator.map3dNoiser.frequency = 0.5f;
             generator.meshColorer.grassAngle = -0.15f;
-            generator.meshColorer.baseFrequency = 0.1f;
-            generator.meshColorer.frequency = 0.7f;
-            generator.meshColorer.amplitude = 0.3f;
-            generator.colorPatelette.size = 2048;
-            generator.colorPatelette.transitionSize = 0;
+            generator.meshColorer.baseFrequency = 0.005f;
+            generator.meshColorer.frequency = 0.03f;
+            generator.meshColorer.amplitude = 0.2f;
+            generator.colorPatelette.size = 256;
+            generator.colorPatelette.xSquareSize = 1000;
+            generator.colorPatelette.ySquareSize = 6;
+            generator.colorPatelette.perlinFrequency = 0.588f;
             generator.colorPatelette.floor.saturation = FloorSaturation.Value;
             generator.colorPatelette.floor.value = FloorValue.Value;
+            generator.colorPatelette.floor.perlinAmplitude = 0.2f;
             generator.colorPatelette.walls.saturation = WallsSaturation.Value;
             generator.colorPatelette.walls.value = WallsValue.Value;
+            generator.colorPatelette.walls.perlinAmplitude = 0.6f;
             generator.colorPatelette.ceilling.saturation = CeillingSaturation.Value;
             generator.colorPatelette.ceilling.value = CeillingValue.Value;
+            generator.colorPatelette.ceilling.perlinAmplitude = 0.4f;
             generator.colorPatelette.light.saturation = LightSaturation.Value;
             generator.colorPatelette.light.value = LightValue.Value;
-            generator.colorPatelette.minNoise = 0.1f;
+            generator.colorPatelette.minNoise = 0.2f;
             generator.colorPatelette.maxNoise = 0.25f;
 
             SurfaceDefProvider surfaceProvider = sceneObject.AddComponent<SurfaceDefProvider>();
@@ -318,6 +323,7 @@ namespace ProceduralStages
 
             MeshRenderer renderer = sceneObject.AddComponent<MeshRenderer>();
             renderer.material = new Material(Material.GetDefaultMaterial());
+            renderer.material.color = new Color(0.8f, 0.8f, 0.8f);
             renderer.material.SetFloat("_Glossiness", 0.2f);
             renderer.material.SetFloat("_Metallic", 0f);
             sceneObject.AddComponent<MeshFilter>();
@@ -450,7 +456,7 @@ namespace ProceduralStages
             fastCombatDirector.onSpawnedServer = new CombatDirector.OnSpawnedServer();
             fastCombatDirector.fallBackToStageMonsterCards = true;
 
-            //sceneObject.AddComponent<NetworkIdentity>();
+            sceneObject.AddComponent<NetworkIdentity>();
             sceneObject.AddComponent<GlobalEventManager>();
             NewtPlacer newtPlacer = sceneObject.AddComponent<NewtPlacer>();
             newtPlacer.rng = rng;

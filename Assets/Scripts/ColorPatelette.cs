@@ -11,7 +11,6 @@ namespace Assets.Scripts
     public class ColorPatelette
     {
         public int size = 256;
-        public int transitionSize = 50;
         public Palette floor = new Palette();
         public Palette walls = new Palette();
         public Palette ceilling = new Palette();
@@ -19,11 +18,20 @@ namespace Assets.Scripts
         public Palette light = new Palette();
 
         [Range(0, 1)]
+        public float perlinFrequency;
+
+        [Range(0, 1000)]
+        public int xSquareSize = 10;
+        [Range(0, 1000)]
+        public int ySquareSize = 10;
+
+
+        [Range(0, 1)]
         public float minNoise = 0.1f;
         [Range(0, 1)]
         public float maxNoise = 0.25f;
 
-        public Texture2D Create(System.Random rng)
+        public Texture2D CreateTexture(System.Random rng, Texture2D heightMap)
         {
             Color[] colors = new Color[8];
 
@@ -47,12 +55,15 @@ namespace Assets.Scripts
                 colors[i * 2 + 1] = Color.HSVToRGB(hue2, palette.saturation, palette.value);
             }
 
-            Texture2D texture = new Texture2D(size * 2 + transitionSize, size);
+            Texture2D texture = new Texture2D(size * 2, size);
 
             float factor = 1f / (size - 1);
-            float transitionFactor = 1f / (transitionSize - 1);
 
-            for (int y = 0; y < size; y++)
+            Color[] pixels = new Color[2 * size * size];
+            Color[] heightMapPixels = heightMap.GetPixels();
+
+            Vector2Int seed = new Vector2Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
+            Parallel.For(0, size, y =>
             {
                 for (int x = 0; x < size; x++)
                 {
@@ -63,24 +74,61 @@ namespace Assets.Scripts
 
                         Color color = Color.Lerp(a, b, y * factor);
 
-                        texture.SetPixel(i * (size + transitionSize) + x, y, color);
+                        int posX = i * size + x;
+                        int pixelIndex = y * 2 * size + posX;
+                        float noise = heightMapPixels[pixelIndex].r;
+
+                        //float amplitude = i == 0 ? floorPerlinAmplitude : this.amplitude;
+                        //float noise = (1 - amplitude) + heightColor * amplitude;
+                        
+                        color = new Color(noise, noise, noise) * color;
+                        pixels[pixelIndex] = color;
                     }
 
                 }
+            });
 
-                for (int i = 0; i < transitionSize; i++)
+            texture.SetPixels(pixels);
+            texture.Apply();
+            texture.wrapMode = TextureWrapMode.Clamp;
+
+            return texture;
+        }
+
+        public Texture2D CreateHeightMap(System.Random rng)
+        {
+            var palettes = new Palette[]
+            {
+                floor,
+                walls,
+                ceilling
+            };
+
+            float factor = 1f / (size - 1);
+
+            Texture2D texture = new Texture2D(size * 2, size);
+            Color[] pixels = new Color[2 * size * size];
+
+            Vector2Int seed = new Vector2Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
+            Parallel.For(0, size, y =>
+            {
+                for (int x = 0; x < size; x++)
                 {
-                    int x = i + size;
+                    for (int i = 0; i < 2; i++)
+                    {
+                        float amplitude = Mathf.Lerp(palettes[i].perlinAmplitude, palettes[i + 1].perlinAmplitude, x * factor);
 
-                    Color a = Color.Lerp(colors[1], colors[4], i * transitionFactor);
-                    Color b = Color.Lerp(colors[3], colors[6], i * transitionFactor);
+                        int dx = (i * size + x + seed.x) / xSquareSize;
+                        int dy = (y + seed.y) / ySquareSize;
 
-                    Color color = Color.Lerp(a, b, y * factor);
+                        float noise = (1 - amplitude) + ((Mathf.PerlinNoise(dx / perlinFrequency, dy / perlinFrequency) + 1) / 2) * amplitude;
+                        pixels[y * 2 * size + i * size + x] = new Color(noise, noise, noise);
+                    }
 
-                    texture.SetPixel(x, y, color);
                 }
-            }
+            });
 
+            texture.SetPixels(pixels);
             texture.Apply();
             texture.wrapMode = TextureWrapMode.Clamp;
 
@@ -111,6 +159,8 @@ namespace Assets.Scripts
             public float saturation;
             [Range(0, 1)]
             public float value;
+            [Range(0, 1)]
+            public float perlinAmplitude;
         }
     }
 }

@@ -41,40 +41,25 @@ namespace Assets.Scripts
             int z1 = Math.Min(_map.GetLength(2) - 1, Mathf.CeilToInt(scaledPos.z));
             float dz = scaledPos.z - z0;
 
-            try
-            {
-                float sample0 = _map[x0, y0, z0];
-                float sample1 = _map[x0, y0, z1];
-                float sample2 = _map[x0, y1, z0];
-                float sample3 = _map[x0, y1, z1];
-                float sample4 = _map[x1, y0, z0];
-                float sample5 = _map[x1, y0, z1];
-                float sample6 = _map[x1, y1, z0];
-                float sample7 = _map[x1, y1, z1];
+            float sample0 = _map[x0, y0, z0];
+            float sample1 = _map[x0, y0, z1];
+            float sample2 = _map[x0, y1, z0];
+            float sample3 = _map[x0, y1, z1];
+            float sample4 = _map[x1, y0, z0];
+            float sample5 = _map[x1, y0, z1];
+            float sample6 = _map[x1, y1, z0];
+            float sample7 = _map[x1, y1, z1];
 
-                float lerpz0 = Mathf.Lerp(sample0, sample1, dz);
-                float lerpz1 = Mathf.Lerp(sample2, sample3, dz);
-                float lerpz2 = Mathf.Lerp(sample4, sample5, dz);
-                float lerpz3 = Mathf.Lerp(sample6, sample7, dz);
+            float lerpz0 = Mathf.Lerp(sample0, sample1, dz);
+            float lerpz1 = Mathf.Lerp(sample2, sample3, dz);
+            float lerpz2 = Mathf.Lerp(sample4, sample5, dz);
+            float lerpz3 = Mathf.Lerp(sample6, sample7, dz);
 
-                float lerpy0 = Mathf.Lerp(lerpz0, lerpz1, dy);
-                float lerpy1 = Mathf.Lerp(lerpz2, lerpz3, dy);
+            float lerpy0 = Mathf.Lerp(lerpz0, lerpz1, dy);
+            float lerpy1 = Mathf.Lerp(lerpz2, lerpz3, dy);
 
-                float density = Mathf.Lerp(lerpy0, lerpy1, dx);
-                return density;
-            }
-            catch
-            {
-                Debug.Log(scaledPos);
-                Debug.Log(_map.GetLength(0));
-                Debug.Log(_map.GetLength(1));
-                Debug.Log(_map.GetLength(2));
-
-
-                throw;
-            }
-
-            
+            float density = Mathf.Lerp(lerpy0, lerpy1, dx);
+            return density;
         }
     }
 
@@ -83,7 +68,7 @@ namespace Assets.Scripts
     {
         [Range(0, 25)]
         public int sampleWidth = 7;
-        
+
         [Range(0, 5)]
         public float groundYOffset = 2;
 

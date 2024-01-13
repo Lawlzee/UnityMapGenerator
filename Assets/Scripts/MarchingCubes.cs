@@ -12,8 +12,8 @@ using UnityEngine.XR.WSA;
 public class MeshResult
 {
     public Mesh mesh;
-    public List<Vector3> vertices;
-    public List<int> triangles;
+    public Vector3[] vertices;
+    public int[] triangles;
     public Vector3[] normals;
 }
 
@@ -33,7 +33,7 @@ namespace Generator.Assets.Scripts
             _triangles = new List<int>();
         }
 
-        public static MeshResult CreateMesh(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
+        public static Mesh CreateMesh(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
         {
             return new MarchingCubes().Generate(voxels, scale, meshColorer, rng);
         }
@@ -110,7 +110,7 @@ namespace Generator.Assets.Scripts
             }
         }
 
-        public MeshResult Generate(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
+        public Mesh Generate(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
         {
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);
@@ -170,42 +170,7 @@ namespace Generator.Assets.Scripts
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
-            var normals = mesh.normals;
-            var uvs = new Vector2[_vertices.Count];
-
-            //List<Color> colors = new List<Color>();
-
-
-            Vector3Int seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
-            Parallel.For(0, _vertices.Count, i =>
-            {
-                var vertex = _vertices[i];
-                var normal = normals[i];
-
-                uvs[i] = meshColorer.GetUV(vertex, normal, seed);
-            });
-
-            mesh.uv = uvs;
-
-            mesh.RecalculateTangents();
-
-            Debug.Log($"Reuse: {reuse}");
-
-            //Color[] colors = new Color[_vertices.Count];
-            //
-            //for (int i = 0; i < _vertices.Count; i++)
-            //    colors[i] = Color.Lerp(Color.red, Color.green, _vertices[i].y);
-            //
-            //// assign the array of colors to the Mesh.
-            //mesh.colors = colors;
-
-            return new MeshResult
-            {
-                mesh = mesh,
-                normals = normals,
-                triangles = _triangles,
-                vertices = _vertices
-            };
+            return mesh;
         }
 
         private unsafe void March(int x, int y, int z, float scale, ref Cube cube)
@@ -267,7 +232,6 @@ namespace Generator.Assets.Scripts
             return (delta == 0.0f) ? 0 : -v1 / delta;
         }
 
-        int reuse;
         private int AddVertex(Vector3 vector)
         {
             Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 10), Mathf.Round(vector.y * 10), Mathf.Round(vector.z * 10));
@@ -275,7 +239,6 @@ namespace Generator.Assets.Scripts
 
             if (_verticesIndexes.TryGetValue(roundedVector, out var index))
             {
-                reuse++;
                 return index;
             }
 

@@ -37,9 +37,6 @@ namespace Assets.Scripts
                 }
             }
 
-            float min = float.MaxValue;
-            float max = float.MinValue;
-
             Parallel.For(0, width, posX =>
             {
                 for (int posY = 1; posY < height; posY++)
@@ -78,16 +75,10 @@ namespace Assets.Scripts
 
                             float value = 1 - (wallNess / totalDistance);
                             flatMap[posX, posY, posZ] = value;
-
-                            min = Mathf.Min(min, value);
-                            max = Mathf.Max(max, value);
                         }
                     }
                 }
             });
-
-            Debug.Log(min);
-            Debug.Log(max);
 
             return flatMap;
         }

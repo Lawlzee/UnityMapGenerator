@@ -111,31 +111,41 @@ namespace Generator.Assets.Scripts
             float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
             LogStats("map3dNoiser");
 
-            var meshResult = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
+            var unOptimisedMesh = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
             LogStats("marchingCubes");
 
-            MeshSimplifier simplifier = new MeshSimplifier(meshResult.mesh);
+            MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             simplifier.SimplifyMesh(meshQuality);
-            meshResult.mesh = simplifier.ToMesh();
-
+            var optimisedMesh = simplifier.ToMesh();
             LogStats("MeshSimplifier");
-            meshResult.vertices = simplifier.Vertices.ToList();
-            meshResult.triangles = meshResult.mesh.triangles.ToList();
-            meshResult.normals = simplifier.Normals;
-            LogStats("bidon");
+
+            var meshResult = new MeshResult
+            {
+                mesh = optimisedMesh,
+                normals = optimisedMesh.normals,
+                triangles = optimisedMesh.triangles,
+                vertices = optimisedMesh.vertices
+            };
+
+            meshColorer.ColorMesh(meshResult, rng);
+            LogStats("meshColorer");
 
             GetComponent<MeshFilter>().mesh = meshResult.mesh;
             LogStats("MeshFilter");
 
-            Texture2D texture = colorPatelette.Create(rng);
+            Texture2D heightMap = colorPatelette.CreateHeightMap(rng);
+            Texture2D texture = colorPatelette.CreateTexture(rng, heightMap);
+            LogStats("colorPatelette");
+
             var material = GetComponent<MeshRenderer>().material;
             material.mainTexture = texture;
+            material.SetTexture("_ParallaxMap", heightMap);
+            //material.SetTexture("_DetailAlbedoMap", texture);
             material.color = new Color(1.3f, 1.3f, 1.3f);
 
             RenderSettings.ambientIntensity = 1.4f;
             RenderSettings.sun.intensity = 0.75f;
-            RenderSettings.sun.color = Color.HSVToRGB(rng.Next(), colorPatelette.light.saturation, colorPatelette.light.value);
-
+            RenderSettings.sun.color = Color.HSVToRGB((float)rng.NextDouble(), colorPatelette.light.saturation, colorPatelette.light.value);
             LogStats("MeshRenderer");
 
             var surface = ScriptableObject.CreateInstance<SurfaceDef>();

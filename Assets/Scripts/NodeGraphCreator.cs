@@ -60,10 +60,10 @@ namespace Assets.Scripts
             var vertices = meshResult.vertices;
             var normals = meshResult.normals;
 
-            var nodes = new NodeGraph.Node[vertices.Count];
+            var nodes = new NodeGraph.Node[vertices.Length];
 
             int index = 0;
-            for (int i = 0; i < vertices.Count; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
                 var vertex = vertices[i];
                 var normal = normals[i];
@@ -118,7 +118,7 @@ namespace Assets.Scripts
                 links[i] = new List<NodeGraph.Link>();
             }
 
-            for (int i = 0; i < triangles.Count; i += 3)
+            for (int i = 0; i < triangles.Length; i += 3)
             {
                 ref var node1 = ref nodes[triangles[i]];
                 ref var node2 = ref nodes[triangles[i + 1]];
