@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine.Networking;
+using UnityEngine.Rendering.PostProcessing;
 
 namespace ProceduralStages
 {
@@ -34,6 +35,8 @@ namespace ProceduralStages
         public const string PluginVersion = "1.0.1";
 
         public static ConfigEntry<bool> ReplaceAllStages;
+
+        public static ConfigEntry<string> Seed;
         public static ConfigEntry<float> FloorSaturation;
         public static ConfigEntry<float> FloorValue;
         public static ConfigEntry<float> WallsSaturation;
@@ -43,6 +46,16 @@ namespace ProceduralStages
         public static ConfigEntry<float> LightSaturation;
         public static ConfigEntry<float> LightValue;
 
+        public static ConfigEntry<float> FogSaturation;
+        public static ConfigEntry<float> FogValue;
+        public static ConfigEntry<float> FogColorStartAlpha;
+        public static ConfigEntry<float> FogColorMidAlpha;
+        public static ConfigEntry<float> FogColorEndAlpha;
+        public static ConfigEntry<float> FogZero;
+        public static ConfigEntry<float> FogOne;
+        public static ConfigEntry<float> FogIntensity;
+        public static ConfigEntry<float> FogPower;
+
         public void Awake()
         {
             Log.Init(Logger);
@@ -50,6 +63,8 @@ namespace ProceduralStages
             ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
             ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
+
+            Seed = Config.Bind("Advanced", nameof(Seed), "");
             FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.5f);
             FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.36f);
             WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.23f);
@@ -59,6 +74,17 @@ namespace ProceduralStages
             LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.7f);
             LightValue = Config.Bind("Advanced", nameof(LightValue), 0.7f);
 
+            FogSaturation = Config.Bind("Advanced", nameof(FogSaturation), 0.7f);
+            FogValue = Config.Bind("Advanced", nameof(FogValue), 0.7f);
+            FogColorStartAlpha = Config.Bind("Advanced", nameof(FogColorStartAlpha), 0f);
+            FogColorMidAlpha = Config.Bind("Advanced", nameof(FogColorMidAlpha), 0.175f);
+            FogColorEndAlpha = Config.Bind("Advanced", nameof(FogColorEndAlpha), 0.35f);
+            FogZero = Config.Bind("Advanced", nameof(FogZero), 0f);
+            FogOne = Config.Bind("Advanced", nameof(FogOne), 0.1f);
+            FogIntensity = Config.Bind("Advanced", nameof(FogIntensity), 0.25f);
+            FogPower = Config.Bind("Advanced", nameof(FogPower), 0.75f);
+
+            ModSettingsManager.AddOption(new StringInputFieldOption(Seed));
             ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
@@ -68,6 +94,15 @@ namespace ProceduralStages
             ModSettingsManager.AddOption(new SliderOption(LightSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(LightValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
 
+            ModSettingsManager.AddOption(new SliderOption(FogSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogColorStartAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogColorMidAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogColorEndAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogZero, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogOne, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogIntensity, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModSettingsManager.AddOption(new SliderOption(FogPower, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
 
             On.RoR2.RoR2Application.LoadGameContent += RoR2Application_LoadGameContent;
 
@@ -273,6 +308,10 @@ namespace ProceduralStages
 
             MapGenerator generator = sceneObject.AddComponent<MapGenerator>();
             generator.seed = rng.nextInt;
+            if (Seed.Value.Length > 0)
+            {
+                generator.seed = Seed.Value.GetHashCode();
+            }
             Log.Info($"seed: {generator.seed}");
             generator.width = 35;
             generator.height = 80;
@@ -312,6 +351,15 @@ namespace ProceduralStages
             generator.colorPatelette.ceilling.perlinAmplitude = 0.4f;
             generator.colorPatelette.light.saturation = LightSaturation.Value;
             generator.colorPatelette.light.value = LightValue.Value;
+            generator.colorPatelette.fog.saturation = FogSaturation.Value;
+            generator.colorPatelette.fog.value = FogValue.Value;
+            generator.colorPatelette.fog.colorStartAlpha = FogColorStartAlpha.Value;
+            generator.colorPatelette.fog.colorMidAlpha = FogColorMidAlpha.Value;
+            generator.colorPatelette.fog.colorEndAlpha = FogColorEndAlpha.Value;
+            generator.colorPatelette.fog.zero = FogZero.Value;
+            generator.colorPatelette.fog.one = FogOne.Value;
+            generator.colorPatelette.fog.intensity = FogIntensity.Value;
+            generator.colorPatelette.fog.power = FogPower.Value;
             generator.colorPatelette.minNoise = 0.2f;
             generator.colorPatelette.maxNoise = 0.25f;
 
@@ -460,6 +508,48 @@ namespace ProceduralStages
             sceneObject.AddComponent<GlobalEventManager>();
             NewtPlacer newtPlacer = sceneObject.AddComponent<NewtPlacer>();
             newtPlacer.rng = rng;
+
+            GameObject postProcessingObject = new GameObject();
+            postProcessingObject.name = "Post Processing";
+            postProcessingObject.layer = 20;//Post Processing
+
+            PostProcessVolume volume = postProcessingObject.AddComponent<PostProcessVolume>();
+
+            volume.enabled = true;
+            volume.isGlobal = true;
+            volume.priority = 9999f;
+            volume.blendDistance = 60f;
+            volume.weight = 1.0f;
+
+            generator.onSunHueSelected += sunHue =>
+            {
+                RampFog fog = volume.profile.AddSettings<RampFog>();
+
+                var fogSettings = generator.colorPatelette.fog;
+
+                var color = Color.HSVToRGB(sunHue, fogSettings.saturation, fogSettings.value);
+
+                fog.SetAllOverridesTo(true);
+                fog.fogColorStart.value = color;
+                fog.fogColorStart.value.a = fogSettings.colorStartAlpha;
+                fog.fogColorMid.value = color;
+                fog.fogColorMid.value.a = fogSettings.colorMidAlpha;
+                fog.fogColorEnd.value = color;
+                fog.fogColorEnd.value.a = fogSettings.colorEndAlpha;
+                //fog.skyboxStrength.value = 0.13f;
+                fog.fogZero.value = fogSettings.zero;
+                fog.fogOne.value = fogSettings.one;
+
+                fog.fogIntensity.value = fogSettings.intensity;
+                fog.fogPower.value = fogSettings.power;
+                //fog.fogHeightStart.value = 0;
+                //fog.fogHeightEnd.value = generator.height * generator.mapScale;
+                //fog.fogHeightIntensity.value = 0.0f;
+
+                //ColorGrading cgrade = volume.profile.AddSettings<ColorGrading>();
+                //cgrade.colorFilter.value = new Color32(255, 234, 194, 255);
+                //cgrade.colorFilter.overrideState = true;
+            };
 
             sceneObject.SetActive(true);
             Log.Info("Scene loaded!");

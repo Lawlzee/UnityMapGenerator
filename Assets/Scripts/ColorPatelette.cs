@@ -16,6 +16,7 @@ namespace Assets.Scripts
         public Palette ceilling = new Palette();
 
         public Palette light = new Palette();
+        public Fog fog = new Fog();
 
         [Range(0, 1)]
         public float perlinFrequency;
@@ -161,6 +162,32 @@ namespace Assets.Scripts
             public float value;
             [Range(0, 1)]
             public float perlinAmplitude;
+        }
+
+        [Serializable]
+        public class Fog
+        {
+            [Range(0, 1)]
+            public float saturation;
+            [Range(0, 1)]
+            public float value;
+
+            [Range(0, 1)]
+            public float colorStartAlpha;
+            [Range(0, 1)]
+            public float colorMidAlpha;
+            [Range(0, 1)]
+            public float colorEndAlpha;
+
+            [Range(0, 1)]
+            public float zero;
+            [Range(0, 1)]
+            public float one;
+
+            [Range(0, 1)]
+            public float intensity;
+            [Range(0, 1)]
+            public float power;
         }
     }
 }

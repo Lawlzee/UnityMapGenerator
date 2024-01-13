@@ -42,6 +42,7 @@ namespace Generator.Assets.Scripts
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
 
+        public event Action<float> onSunHueSelected;
         //private float[,] _map;
         //private bool[,,] _map;
 
@@ -145,7 +146,13 @@ namespace Generator.Assets.Scripts
 
             RenderSettings.ambientIntensity = 1.4f;
             RenderSettings.sun.intensity = 0.75f;
-            RenderSettings.sun.color = Color.HSVToRGB((float)rng.NextDouble(), colorPatelette.light.saturation, colorPatelette.light.value);
+            float sunHue = (float)rng.NextDouble();
+            RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPatelette.light.saturation, colorPatelette.light.value);
+
+            if (onSunHueSelected != null)
+            {
+                onSunHueSelected(sunHue);
+            }
             LogStats("MeshRenderer");
 
             var surface = ScriptableObject.CreateInstance<SurfaceDef>();
