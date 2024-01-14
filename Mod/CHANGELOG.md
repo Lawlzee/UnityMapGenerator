@@ -9,6 +9,7 @@
   - Newt altars are more hidden 
   - Teleporters now spawn in flatter and more open areas
   - Capped the height where interactables can spawn
+- Added a guaranteed legendary chest on stage 4.
 - Improved music selection
 - Performance improvements
   - Optimized the stage mesh

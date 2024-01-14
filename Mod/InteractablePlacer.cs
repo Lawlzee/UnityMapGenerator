@@ -10,17 +10,20 @@ using UnityEngine.UIElements;
 
 namespace ProceduralStages
 {
-    public class NewtPlacer : MonoBehaviour
+    public class InteractablePlacer : MonoBehaviour
     {
         public Xoroshiro128Plus rng;
+        public string prefab;
+        public Vector3 offset;
+        public NodeFlags requiredFlags;
 
         public void Start()
         {
             var card = ScriptableObject.CreateInstance<SpawnCard>();
-            card.prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/NewtStatue/NewtStatue.prefab").WaitForCompletion();
+            card.prefab = Addressables.LoadAssetAsync<GameObject>(prefab).WaitForCompletion();
             card.hullSize = HullClassification.Human;
             card.nodeGraphType = MapNodeGroup.GraphType.Ground;
-            card.requiredFlags = NodeFlagsExt.Newt;
+            card.requiredFlags = requiredFlags;
             card.forbiddenFlags = NodeFlags.None;
             card.directorCreditCost = 0;
             card.occupyPosition = true;
@@ -33,7 +36,7 @@ namespace ProceduralStages
             GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
             if (gameObject)
             {
-                gameObject.transform.position = gameObject.transform.position + Vector3.up;
+                gameObject.transform.position = gameObject.transform.position + offset;
             }
         }
     }

@@ -56,6 +56,14 @@ todo: add more configurations
 - [ ] Optimize stage performance.
 - [ ] Enhance the uniqueness of stages.
 - [ ] Prevent interactables from spawning on slopes.
+- [ ] Fix the bug where the player sometime gets stuck in the drop pod.
+- [ ] Remove the ability to dream for normal stages
+- [ ] Improve the orientation of Newt altars.
+
+
+## Report an issue
+
+If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) or create a [GitHub issue](https://github.com/Lawlzee/UnityMapGenerator/issues/new).
 
 ## Algorithms used
 

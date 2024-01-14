@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
+using Assets.Scripts;
 
 namespace ProceduralStages
 {
@@ -513,8 +514,20 @@ namespace ProceduralStages
 
             sceneObject.AddComponent<NetworkIdentity>();
             sceneObject.AddComponent<GlobalEventManager>();
-            NewtPlacer newtPlacer = sceneObject.AddComponent<NewtPlacer>();
+
+            InteractablePlacer newtPlacer = sceneObject.AddComponent<InteractablePlacer>();
             newtPlacer.rng = rng;
+            newtPlacer.prefab = "RoR2/Base/NewtStatue/NewtStatue.prefab";
+            newtPlacer.offset = Vector3.up;
+            newtPlacer.requiredFlags = NodeFlagsExt.Newt;
+
+            if (stageInLoop == 4)
+            {
+                InteractablePlacer legendaryChestPlacer = sceneObject.AddComponent<InteractablePlacer>();
+                legendaryChestPlacer.rng = rng;
+                legendaryChestPlacer.prefab = "RoR2/Base/GoldChest/GoldChest.prefab";
+                legendaryChestPlacer.requiredFlags = NodeFlagsExt.Newt;
+            }
 
             GameObject postProcessingObject = new GameObject();
             postProcessingObject.name = "Post Processing";
