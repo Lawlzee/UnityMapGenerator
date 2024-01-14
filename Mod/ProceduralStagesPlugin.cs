@@ -32,7 +32,7 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.0.1";
+        public const string PluginVersion = "1.1.0";
 
         public static ConfigEntry<bool> ReplaceAllStages;
 
@@ -63,26 +63,27 @@ namespace ProceduralStages
             ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
             ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
+            string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
 
-            Seed = Config.Bind("Advanced", nameof(Seed), "");
-            FloorSaturation = Config.Bind("Advanced", nameof(FloorSaturation), 0.5f);
-            FloorValue = Config.Bind("Advanced", nameof(FloorValue), 0.36f);
-            WallsSaturation = Config.Bind("Advanced", nameof(WallsSaturation), 0.3f);
-            WallsValue = Config.Bind("Advanced", nameof(WallsValue), 0.27f);
-            CeillingSaturation = Config.Bind("Advanced", nameof(CeillingSaturation), 0.3f);
-            CeillingValue = Config.Bind("Advanced", nameof(CeillingValue), 0.15f);
-            LightSaturation = Config.Bind("Advanced", nameof(LightSaturation), 0.7f);
-            LightValue = Config.Bind("Advanced", nameof(LightValue), 0.7f);
+            Seed = Config.Bind("Debug", nameof(Seed), "", debugDescrption);
+            FloorSaturation = Config.Bind("Debug", nameof(FloorSaturation), 0.5f, debugDescrption);
+            FloorValue = Config.Bind("Debug", nameof(FloorValue), 0.36f, debugDescrption);
+            WallsSaturation = Config.Bind("Debug", nameof(WallsSaturation), 0.3f, debugDescrption);
+            WallsValue = Config.Bind("Debug", nameof(WallsValue), 0.27f, debugDescrption);
+            CeillingSaturation = Config.Bind("Debug", nameof(CeillingSaturation), 0.3f, debugDescrption);
+            CeillingValue = Config.Bind("Debug", nameof(CeillingValue), 0.15f, debugDescrption);
+            LightSaturation = Config.Bind("Debug", nameof(LightSaturation), 0.7f, debugDescrption);
+            LightValue = Config.Bind("Debug", nameof(LightValue), 0.7f, debugDescrption);
 
-            FogSaturation = Config.Bind("Advanced", nameof(FogSaturation), 0.7f);
-            FogValue = Config.Bind("Advanced", nameof(FogValue), 0.7f);
-            FogColorStartAlpha = Config.Bind("Advanced", nameof(FogColorStartAlpha), 0f);
-            FogColorMidAlpha = Config.Bind("Advanced", nameof(FogColorMidAlpha), 0.175f);
-            FogColorEndAlpha = Config.Bind("Advanced", nameof(FogColorEndAlpha), 0.35f);
-            FogZero = Config.Bind("Advanced", nameof(FogZero), 0f);
-            FogOne = Config.Bind("Advanced", nameof(FogOne), 0.1f);
-            FogIntensity = Config.Bind("Advanced", nameof(FogIntensity), 0.25f);
-            FogPower = Config.Bind("Advanced", nameof(FogPower), 0.75f);
+            FogSaturation = Config.Bind("Debug", nameof(FogSaturation), 0.7f, debugDescrption);
+            FogValue = Config.Bind("Debug", nameof(FogValue), 0.7f, debugDescrption);
+            FogColorStartAlpha = Config.Bind("Debug", nameof(FogColorStartAlpha), 0f, debugDescrption);
+            FogColorMidAlpha = Config.Bind("Debug", nameof(FogColorMidAlpha), 0.175f, debugDescrption);
+            FogColorEndAlpha = Config.Bind("Debug", nameof(FogColorEndAlpha), 0.35f, debugDescrption);
+            FogZero = Config.Bind("Debug", nameof(FogZero), 0f, debugDescrption);
+            FogOne = Config.Bind("Debug", nameof(FogOne), 0.1f, debugDescrption);
+            FogIntensity = Config.Bind("Debug", nameof(FogIntensity), 0.25f, debugDescrption);
+            FogPower = Config.Bind("Debug", nameof(FogPower), 0.75f, debugDescrption);
 
             ModSettingsManager.AddOption(new StringInputFieldOption(Seed));
             ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
@@ -297,7 +298,14 @@ namespace ProceduralStages
 
         public void InitScene()
         {
-            var rng = new Xoroshiro128Plus(Run.instance.stageRng.nextUint);
+            ulong seed = Run.instance.stageRng.nextUlong;
+            if (Seed.Value.Length > 0)
+            {
+                seed = ulong.TryParse(Seed.Value, out ulong value) ? value : (ulong)Seed.Value.GetHashCode();
+            }
+            Log.Info($"seed: {seed}");
+
+            var rng = new Xoroshiro128Plus(seed);
 
             int stageInLoop = (Run.instance.stageClearCount % 5) + 1;
 
@@ -308,11 +316,7 @@ namespace ProceduralStages
 
             MapGenerator generator = sceneObject.AddComponent<MapGenerator>();
             generator.seed = rng.nextInt;
-            if (Seed.Value.Length > 0)
-            {
-                generator.seed = Seed.Value.GetHashCode();
-            }
-            Log.Info($"seed: {generator.seed}");
+            Log.Info($"map seed: {generator.seed}");
             generator.width = 35;
             generator.height = 80;
             generator.depth = 40;
