@@ -197,7 +197,7 @@ namespace ProceduralStages
         {
             SceneDef scene = choices.choices
                 .Select(x => x.value)
-                .Where(x => x.cachedName == "random")
+                .Where(x => x?.cachedName == "random")
                 .FirstOrDefault();
 
             if (ReplaceAllStages.Value && scene != null)
