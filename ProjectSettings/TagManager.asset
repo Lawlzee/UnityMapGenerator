@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Colored
+  - BulletCollide
+  - InitialBurst
+  - Chest
+  - CamAttachPoint
   layers:
   - Default
   - TransparentFX
@@ -13,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
+  - 
   - 
   - 
   - World
@@ -25,7 +30,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Post Processing
   - 
   - 
   - 
