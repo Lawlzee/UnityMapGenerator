@@ -8,12 +8,14 @@ using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
+    [DefaultExecutionOrder(-100)]
     public class ServerStarter : MonoBehaviour
     {
         public void Awake()
         {
             Log.Debug("Starting server");
-            GetComponent<NetworkManager>().StartServer();
+            GetComponent<NetworkManager>().StartHost();
+            Log.Debug(NetworkServer.active);
         }
     }
 }

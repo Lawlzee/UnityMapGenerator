@@ -133,7 +133,7 @@ namespace ProceduralStages
 
                             cubes[x, y, z][i] = voxels[ix, iy, iz];
 
-                            if (voxels[ix, iy, iz] >= 0)
+                            if (voxels[ix, iy, iz] > 0)
                             {
                                 cubeIndex |= 1 << i;
                             }

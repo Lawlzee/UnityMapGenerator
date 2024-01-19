@@ -20,8 +20,6 @@ namespace ProceduralStages
         public int height;
         public int depth;
 
-        public int seed;
-
         [Range(0, 10)]
         public float mapScale = 1f;
 
@@ -74,26 +72,18 @@ namespace ProceduralStages
 
         private void OnValidate()
         {
-            if (Application.isEditor && Application.IsPlaying(this))
-            {
-                GenerateMap();
-                sceneInfoObject.GetComponent<SceneInfo>().OnValidate();
-            }
+            //if (Application.isEditor && Application.IsPlaying(this))
+            //{
+            //    GenerateMap();
+            //}
         }
 
         private void GenerateMap()
         {
-            if (!Application.isEditor && !NetworkServer.active)
-            {
-                return;
-            }
-
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % 5) + 1;
 
             Log.Debug("GenerateMap");
-            int currentSeed = seed == 0
-                ? Time.time.GetHashCode()
-                : seed;
+            int currentSeed = 0;// SeedSyncer.randomStageRng.nextInt;
 
             System.Random rng = new System.Random(currentSeed);
 
@@ -248,22 +238,25 @@ namespace ProceduralStages
 
             sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
 
-            Action<SceneDirector> placeInteractables = null;
-            placeInteractables = _ =>
+            if (NetworkServer.active)
             {
-                SceneDirector.onPostPopulateSceneServer -= placeInteractables;
-                Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
-
-                InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
-
-                if (stageInLoop == 4)
+                Action<SceneDirector> placeInteractables = null;
+                placeInteractables = _ =>
                 {
-                    InteractablePlacer.Place(r, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
-                }
-            };
+                    SceneDirector.onPostPopulateSceneServer -= placeInteractables;
+                    Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
 
-            SceneDirector.onPostPopulateSceneServer += placeInteractables;
+                    InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
 
+                    if (stageInLoop == 4)
+                    {
+                        InteractablePlacer.Place(r, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
+                    }
+                };
+
+                SceneDirector.onPostPopulateSceneServer += placeInteractables;
+            }
+            
             Log.Debug($"total: " + totalStopwatch.Elapsed.ToString());
 
             void LogStats(string name)
@@ -271,11 +264,6 @@ namespace ProceduralStages
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
             }
-        }
-
-        private void SceneDirector_onPostPopulateSceneServer(SceneDirector obj)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 namespace ProceduralStages
@@ -19,7 +20,7 @@ namespace ProceduralStages
         public static string assetDirectory;
 
         public static Texture texScenePreview;
-        public static GameObject mapGeneratorPrefab;
+        public static GameObject seedSyncerPrefab;
 
         public ContentProvider()
         {
@@ -48,15 +49,11 @@ namespace ProceduralStages
                 texScenePreview = assets.First(a => a.name == "texScenePreview");
             }));
 
-            //yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
-            //{
-            //    Debug.Log("AAAAAAAAAAAAAAAAA");
-            //    foreach (var a in assets)
-            //    {
-            //        Debug.Log(a.name);
-            //    }
-            //    mapGeneratorPrefab = assets.First(a => a.name == "Map Generator");
-            //}));
+            yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
+            {
+                seedSyncerPrefab = assets.First(a => a.name == "Seed Syncer");
+                ClientScene.RegisterPrefab(seedSyncerPrefab);
+            }));
 
             yield break;
         }

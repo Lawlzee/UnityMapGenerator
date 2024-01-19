@@ -206,7 +206,6 @@ GameObject:
   m_Component:
   - component: {fileID: 377542557}
   - component: {fileID: 377542556}
-  - component: {fileID: 377542558}
   - component: {fileID: 377542559}
   m_Layer: 0
   m_Name: Network Manager
@@ -236,7 +235,8 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
+  m_PlayerPrefab: {fileID: 6169409464238075913, guid: 14e3968ff5804dc46b36191898288fc1,
+    type: 3}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
@@ -309,24 +309,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &377542558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377542555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4394a3eef724546f896557197e2d6c44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &377542559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -368,7 +352,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &447697557
 MonoBehaviour:
@@ -520,7 +504,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &771693769
 GameObject:
@@ -723,6 +707,238 @@ Texture2D:
     offset: 0
     size: 0
     path: 
+--- !u!1 &934897083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 934897084}
+  - component: {fileID: 934897085}
+  - component: {fileID: 934897086}
+  m_Layer: 0
+  m_Name: Run Initializer
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &934897084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934897083}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 74.83423, y: 11.304877, z: 89.18587}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &934897085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934897083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c6f0bc472bc84c449db5bef28a33270, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 1466132691}
+--- !u!114 &934897086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 934897083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!1 &1153555973
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1153555977}
+  - component: {fileID: 1153555976}
+  - component: {fileID: 1153555975}
+  - component: {fileID: 1153555974}
+  m_Layer: 0
+  m_Name: Combat Director
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1153555974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153555973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &1153555975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153555973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 4.5
+  maxRerollSpawnInterval: 9
+  moneyWaveIntervals:
+  - min: 1
+    max: 1
+  teamIndex: 2
+  creditMultiplier: 0.75
+  spawnDistanceMultiplier: 1
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 1
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 6
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
+--- !u!114 &1153555976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153555973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 22.5
+  maxRerollSpawnInterval: 30
+  moneyWaveIntervals:
+  - min: 1
+    max: 1
+  teamIndex: 2
+  creditMultiplier: 0.75
+  spawnDistanceMultiplier: 1
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 1
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 6
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
+--- !u!4 &1153555977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153555973}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 74.83423, y: 11.304877, z: 89.18587}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1466132691
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,8 +951,6 @@ GameObject:
   - component: {fileID: 1466132693}
   - component: {fileID: 1466132692}
   - component: {fileID: 1466132697}
-  - component: {fileID: 1466132696}
-  - component: {fileID: 1466132695}
   m_Layer: 0
   m_Name: Director
   m_TagString: Untagged
@@ -787,94 +1001,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1466132695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466132691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customName: 
-  monsterCredit: 0
-  expRewardCoefficient: 0.2
-  goldRewardCoefficient: 1
-  minSeriesSpawnInterval: 0.1
-  maxSeriesSpawnInterval: 1
-  minRerollSpawnInterval: 4.5
-  maxRerollSpawnInterval: 9
-  moneyWaveIntervals:
-  - min: 1
-    max: 1
-  teamIndex: 2
-  creditMultiplier: 0.75
-  spawnDistanceMultiplier: 1
-  maxSpawnDistance: Infinity
-  minSpawnRange: 0
-  shouldSpawnOneWave: 0
-  targetPlayers: 1
-  skipSpawnIfTooCheap: 1
-  maxConsecutiveCheapSkips: 2147483647
-  resetMonsterCardIfFailed: 1
-  maximumNumberToSpawnBeforeSkipping: 6
-  eliteBias: 1
-  onSpawnedServer:
-    m_PersistentCalls:
-      m_Calls: []
-  combatSquad: {fileID: 0}
-  spawnEffectPrefab: {fileID: 0}
-  ignoreTeamSizeLimit: 0
-  _monsterCards: {fileID: 0}
-  fallBackToStageMonsterCards: 1
-  currentSpawnTarget: {fileID: 0}
---- !u!114 &1466132696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1466132691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customName: 
-  monsterCredit: 0
-  expRewardCoefficient: 0.2
-  goldRewardCoefficient: 1
-  minSeriesSpawnInterval: 0.1
-  maxSeriesSpawnInterval: 1
-  minRerollSpawnInterval: 22.5
-  maxRerollSpawnInterval: 30
-  moneyWaveIntervals:
-  - min: 1
-    max: 1
-  teamIndex: 2
-  creditMultiplier: 0.75
-  spawnDistanceMultiplier: 1
-  maxSpawnDistance: Infinity
-  minSpawnRange: 0
-  shouldSpawnOneWave: 0
-  targetPlayers: 1
-  skipSpawnIfTooCheap: 1
-  maxConsecutiveCheapSkips: 2147483647
-  resetMonsterCardIfFailed: 1
-  maximumNumberToSpawnBeforeSkipping: 6
-  eliteBias: 1
-  onSpawnedServer:
-    m_PersistentCalls:
-      m_Calls: []
-  combatSquad: {fileID: 0}
-  spawnEffectPrefab: {fileID: 0}
-  ignoreTeamSizeLimit: 0
-  _monsterCards: {fileID: 0}
-  fallBackToStageMonsterCards: 1
-  currentSpawnTarget: {fileID: 0}
 --- !u!114 &1466132697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,7 +1198,6 @@ MonoBehaviour:
   width: 35
   height: 80
   depth: 40
-  seed: 0
   mapScale: 2.5
   meshQuality: 0.54
   cave2d:
@@ -1246,3 +1371,77 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!1001 &2144299175
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165395, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165406, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_Name
+      value: Seed Syncer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7406066706967165406, guid: a0d326cb2b2bdf34d8274181587b2613,
+        type: 3}
+      propertyPath: m_TagString
+      value: EditorOnly
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a0d326cb2b2bdf34d8274181587b2613, type: 3}

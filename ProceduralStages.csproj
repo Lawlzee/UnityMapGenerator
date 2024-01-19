@@ -97,7 +97,9 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\NodeGraphCreator.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\PerlinNoise.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Waller.cs" />
+     <Compile Include="Assets\ProceduralStages\SeedSyncer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\FlyCamera.cs" />
+     <Compile Include="Assets\ProceduralStages\Tools\RunInitializer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\ServerStarter.cs" />
      <None Include="Assets\ProceduralStages\ProceduralStages.asmdef" />
      <None Include="Assets\ProceduralStages\LICENSE.txt" />

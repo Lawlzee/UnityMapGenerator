@@ -36,7 +36,7 @@ namespace ProceduralStages
                         }
                         else
                         {
-                            result[x, y, z] = -1;
+                            result[x, y, z] = 0;
                         }
                     }
                 }

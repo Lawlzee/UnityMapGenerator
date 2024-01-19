@@ -29,7 +29,7 @@ MonoBehaviour:
   active: 1
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   fogIntensity:
     overrideState: 1
     value: 0.5

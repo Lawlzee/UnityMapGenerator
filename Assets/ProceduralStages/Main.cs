@@ -121,7 +121,20 @@ namespace ProceduralStages
 
             On.RoR2.DirectorCore.OnEnable += DirectorCore_OnEnable;
 
-            //On.RoR2.PreGameController.Awake += PreGameController_Awake;
+            On.RoR2.PreGameController.Awake += PreGameController_Awake;
+            //On.RoR2.PreGameController.OnPostNetworkUserStartCallback += PreGameController_OnPostNetworkUserStartCallback; ;
+        }
+
+        private void PreGameController_OnPostNetworkUserStartCallback(On.RoR2.PreGameController.orig_OnPostNetworkUserStartCallback orig, PreGameController self, NetworkUser networkUser)
+        {
+            Log.Debug("PreGameController_OnPostNetworkUserStartCallback");
+            if (NetworkServer.active)
+            {
+                Log.Debug("NetworkServer.active");
+                var seedSyncerObject = Instantiate(ContentProvider.seedSyncerPrefab);
+                seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
+                NetworkServer.Spawn(seedSyncerObject);
+            }
         }
 
         private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -130,37 +143,46 @@ namespace ProceduralStages
             orig(self);
         }
 
-        //private void PreGameController_Awake(On.RoR2.PreGameController.orig_Awake orig, PreGameController self)
-        //{
-        //    SyncSeedBehavior syncSeedBehavior;
-        //    if (!NetworkServer.active)
-        //    {
-        //        syncSeedBehavior = self.GetComponent<SyncSeedBehavior>();
-        //        if (syncSeedBehavior)
-        //        {
-        //            Debug.Log("Seed already synced to client: " + syncSeedBehavior.seed);
-        //        }
-        //        else
-        //        {
-        //            syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
-        //            Debug.Log("Seed was not syned");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
-        //    }
-        //    orig(self);
-        //    if (NetworkServer.active)
-        //    {
-        //        syncSeedBehavior.seed = self.runSeed;
-        //        Debug.Log("server seed: " + self.runSeed);
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("Client seed: " + syncSeedBehavior.seed);
-        //    }
-        //}
+        private void PreGameController_Awake(On.RoR2.PreGameController.orig_Awake orig, PreGameController self)
+        {
+            orig(self);
+
+            if (NetworkServer.active)
+            {
+
+                var seedSyncerObject = Instantiate(ContentProvider.seedSyncerPrefab);
+                seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
+                NetworkServer.Spawn(seedSyncerObject);
+            }
+            //SyncSeedBehavior syncSeedBehavior;
+            //if (!NetworkServer.active)
+            //{
+            //    syncSeedBehavior = self.GetComponent<SyncSeedBehavior>();
+            //    if (syncSeedBehavior)
+            //    {
+            //        Debug.Log("Seed already synced to client: " + syncSeedBehavior.seed);
+            //    }
+            //    else
+            //    {
+            //        syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
+            //        Debug.Log("Seed was not syned");
+            //    }
+            //}
+            //else
+            //{
+            //    syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
+            //}
+            //orig(self);
+            //if (NetworkServer.active)
+            //{
+            //    syncSeedBehavior.seed = self.runSeed;
+            //    Debug.Log("server seed: " + self.runSeed);
+            //}
+            //else
+            //{
+            //    Debug.Log("Client seed: " + syncSeedBehavior.seed);
+            //}
+        }
 
         public void Start()
         {
