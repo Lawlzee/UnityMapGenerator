@@ -252,7 +252,7 @@ namespace ProceduralStages
             Log.Debug(dpMonster);
             Log.Debug(dpInteratable);
 
-            if (loadResourcesInEditor && Application.isEditor)
+            if (!Application.isEditor || loadResourcesInEditor)
             {
                 stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
                 stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
@@ -269,7 +269,7 @@ namespace ProceduralStages
                 ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                 : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
-            if (loadResourcesInEditor && Application.isEditor)
+            if (!Application.isEditor || loadResourcesInEditor)
             {
                 sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
 
@@ -293,6 +293,30 @@ namespace ProceduralStages
                 }
             }
             
+            if (!Application.isEditor)
+            {
+                var stages = SceneCatalog.allStageSceneDefs
+                    .Where(x => x.cachedName != "random")
+                    .ToList();
+
+                var mainTrack = stages[rng.Next(0, stages.Count)].mainTrack;
+                var bossTrack = stages[rng.Next(0, stages.Count)].bossTrack;
+
+                Action<SceneDef> onSceneChanged = null;
+                onSceneChanged = scene =>
+                {
+                    SceneCatalog.onMostRecentSceneDefChanged -= onSceneChanged;
+                    if (scene.cachedName == "random")
+                    {
+                        scene.mainTrack = mainTrack;
+                        scene.bossTrack = bossTrack;
+                    }
+                };
+
+                SceneCatalog.onMostRecentSceneDefChanged += onSceneChanged;
+                LogStats("music");
+            }
+
             Log.Debug($"total: " + totalStopwatch.Elapsed.ToString());
 
             void LogStats(string name)

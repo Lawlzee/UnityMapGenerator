@@ -103,17 +103,12 @@ namespace ProceduralStages
 
             On.RoR2.RoR2Application.LoadGameContent += RoR2Application_LoadGameContent;
 
-            //On.RoR2.SceneDirector.PlaceTeleporter += SceneDirector_PlaceTeleporter;
-
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
             ModSettingsManager.SetModIcon(sprite);
 
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
-            SceneManager.sceneLoaded += SceneManager_sceneLoaded;
-
             On.RoR2.WireMeshBuilder.GenerateMesh_Mesh += WireMeshBuilder_GenerateMesh_Mesh;
-            SceneCatalog.onMostRecentSceneDefChanged += SceneCatalog_onMostRecentSceneDefChanged;
 
             On.RoR2.Run.PickNextStageScene += Run_PickNextStageScene;
             On.RoR2.SceneDirector.DefaultPlayerSpawnPointGenerator += SceneDirector_DefaultPlayerSpawnPointGenerator;
@@ -122,19 +117,6 @@ namespace ProceduralStages
             On.RoR2.DirectorCore.OnEnable += DirectorCore_OnEnable;
 
             On.RoR2.PreGameController.Awake += PreGameController_Awake;
-            //On.RoR2.PreGameController.OnPostNetworkUserStartCallback += PreGameController_OnPostNetworkUserStartCallback; ;
-        }
-
-        private void PreGameController_OnPostNetworkUserStartCallback(On.RoR2.PreGameController.orig_OnPostNetworkUserStartCallback orig, PreGameController self, NetworkUser networkUser)
-        {
-            Log.Debug("PreGameController_OnPostNetworkUserStartCallback");
-            if (NetworkServer.active)
-            {
-                Log.Debug("NetworkServer.active");
-                var seedSyncerObject = Instantiate(ContentProvider.seedSyncerPrefab);
-                seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
-                NetworkServer.Spawn(seedSyncerObject);
-            }
         }
 
         private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -154,34 +136,6 @@ namespace ProceduralStages
                 seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
                 NetworkServer.Spawn(seedSyncerObject);
             }
-            //SyncSeedBehavior syncSeedBehavior;
-            //if (!NetworkServer.active)
-            //{
-            //    syncSeedBehavior = self.GetComponent<SyncSeedBehavior>();
-            //    if (syncSeedBehavior)
-            //    {
-            //        Debug.Log("Seed already synced to client: " + syncSeedBehavior.seed);
-            //    }
-            //    else
-            //    {
-            //        syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
-            //        Debug.Log("Seed was not syned");
-            //    }
-            //}
-            //else
-            //{
-            //    syncSeedBehavior = self.gameObject.AddComponent<SyncSeedBehavior>();
-            //}
-            //orig(self);
-            //if (NetworkServer.active)
-            //{
-            //    syncSeedBehavior.seed = self.runSeed;
-            //    Debug.Log("server seed: " + self.runSeed);
-            //}
-            //else
-            //{
-            //    Debug.Log("Client seed: " + syncSeedBehavior.seed);
-            //}
         }
 
         public void Start()
@@ -329,35 +283,6 @@ namespace ProceduralStages
             LanguageAPI.Add("BAZAAR_SEER_RANDOM", "<style=cWorldEvent>You dream of dices.</style>");
 
             Log.Info("SceneDef initialised");
-        }
-
-        private void SceneCatalog_onMostRecentSceneDefChanged(SceneDef scene)
-        {
-            if (scene.cachedName == "random" && NetworkServer.active)
-            {
-                var stages = SceneCatalog.allStageSceneDefs
-                    .Where(x => x.cachedName != "random")
-                    .ToList();
-
-                //todo: use map rng
-                scene.mainTrack = stages[Run.instance.stageRng.RangeInt(0, stages.Count)].mainTrack;
-                scene.bossTrack = stages[Run.instance.stageRng.RangeInt(0, stages.Count)].bossTrack;
-
-                //todo: randomize tokens
-            }
-        }
-
-        private void SceneManager_sceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            if (scene.name == "random")
-            {
-                InitScene(scene);
-            }
-        }
-
-        public void InitScene(Scene scene)
-        {
-            
         }
     }
 }
