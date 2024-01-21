@@ -1,3 +1,15 @@
+## 1.2.0
+- Implemented multiplayer support
+- Enhanced map generation
+  - Improved map smoothness
+  - Optimized placement of interactables
+  - Upgraded node graph generation
+  - Simplified mesh for better performance
+- Addressed various bugs
+  - Fixed the problem where legendary chests on stage 4 consistently cost 400 gold
+  - Resolved screen flashing during the loading of stage 1
+  - Fixed the pings not working
+
 ## 1.1.0
 
 - Visual improvements

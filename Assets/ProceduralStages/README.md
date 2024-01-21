@@ -27,23 +27,23 @@ todo: add more configurations
 
 ## Screenshots
 
-![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image1.png)
-![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image2.png)
-![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image4.png)
-![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image5.png)
-![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image6.png)
-![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.1/Image8.png)
+![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image1.png)
+![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image2.png)
+![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image4.png)
+![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image5.png)
+![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image6.png)
+![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.2/Image8.png)
 
 ## Todo list
-- [ ] Support multiplayer
-- [ ] Be compatible with the Risk of Resources Gauntlet mod
-- [ ] Make the color palette less blue
+- [X] Support multiplayer
+- [X] Be compatible with the Risk of Resources Gauntlet mod
+- [X] Make the color palette less blue
 - [ ] Add decorations to the map (grass, trees, rocks, pillars, etc.)
 - [ ] Add more configurations
 - [ ] Add stage unique interactables. For example, add a red chest on stage 4
 - [x] Optimize the NodeGraphs
 - [x] Optimize the map mesh
-- [ ] Fix the bug where the screen flashes white when entering the first stage
+- [X] Fix the bug where the screen flashes white when entering the first stage
 - [x] Fix the bug where the screen flashes white when entering a void seed
 - [ ] Add a dead barrier if the player clips through the map
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
@@ -54,13 +54,13 @@ todo: add more configurations
 - [ ] Address the issue of getting stuck in holes in the map.
 - [ ] Implement Simulacrum support.
 - [ ] Enhance stage creation performance.
-- [ ] Optimize stage performance.
+- [X] Optimize stage performance.
 - [ ] Enhance the uniqueness of stages.
-- [ ] Prevent interactables from spawning on slopes.
+- [X] Prevent interactables from spawning on slopes.
 - [ ] Fix the bug where the player sometime gets stuck in the drop pod.
 - [ ] Remove the ability to dream for normal stages
 - [ ] Improve the orientation of Newt altars.
-- [ ] Legendary chest on stage 4 always cost 400
+- [X] Legendary chest on stage 4 always cost 400
 - [ ] Fix drones spawning out of the map
 
 

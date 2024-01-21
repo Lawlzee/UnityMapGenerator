@@ -844,7 +844,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &934897084
 Transform:
   m_ObjectHideFlags: 0
@@ -1375,8 +1375,8 @@ MonoBehaviour:
   loadResourcesInEditor: 0
   editorSeed: 0
   wallGenerator:
-    frequency: 40
-    wallSurface: 0.36
+    frequency: 28
+    wallSurface: 0.3
     curveFrequency: 0.042
     curveVerticalScale: 0.8
     curveMinNoise: 0.6
