@@ -27,6 +27,7 @@ namespace ProceduralStages
             card.directorCreditCost = 0;
             card.occupyPosition = true;
             card.eliteRules = SpawnCard.EliteRules.Default;
+            //card.sendOverNetwork = true;
 
             DirectorPlacementRule placementRule = new DirectorPlacementRule()
             {
@@ -37,6 +38,13 @@ namespace ProceduralStages
             if (gameObject)
             {
                 gameObject.transform.position = gameObject.transform.position + offset;
+
+                PurchaseInteraction purchaseInteraction = gameObject.GetComponent<PurchaseInteraction>();
+                if (purchaseInteraction && purchaseInteraction.costType == CostTypeIndex.Money)
+                {
+                    purchaseInteraction.Networkcost = Run.instance.GetDifficultyScaledCost(purchaseInteraction.cost);
+                }
+
                 NetworkServer.Spawn(gameObject);
             }
 
