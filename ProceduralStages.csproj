@@ -60,13 +60,11 @@
      <Compile Include="Assets\ProceduralStages\Log.cs" />
      <Compile Include="Assets\ProceduralStages\Main.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Carver.cs" />
-     <Compile Include="Assets\ProceduralStages\MapGeneration\CellularAutomata2d.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\CellularAutomata3d.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\ColorPatelette.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\DensityMap.cs" />
-     <Compile Include="Assets\ProceduralStages\MapGeneration\FlatMap.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\InteractablePlacer.cs" />
-     <Compile Include="Assets\ProceduralStages\MapGeneration\Map2dToMap3d.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\Map2dGenerator.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Map3dNoiser.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MapGenerator.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MarchingCubes.cs" />
@@ -99,6 +97,7 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\Waller.cs" />
      <Compile Include="Assets\ProceduralStages\SeedSyncer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\FlyCamera.cs" />
+     <Compile Include="Assets\ProceduralStages\Tools\NodeGraphRenderer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\RunInitializer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\ServerStarter.cs" />
      <None Include="Assets\ProceduralStages\ProceduralStages.asmdef" />

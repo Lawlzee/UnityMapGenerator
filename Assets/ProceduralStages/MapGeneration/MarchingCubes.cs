@@ -133,7 +133,7 @@ namespace ProceduralStages
 
                             cubes[x, y, z][i] = voxels[ix, iy, iz];
 
-                            if (voxels[ix, iy, iz] > 0)
+                            if (voxels[ix, iy, iz] > 0.5f)
                             {
                                 cubeIndex |= 1 << i;
                             }
@@ -310,7 +310,7 @@ namespace ProceduralStages
         private float GetOffset(float v1, float v2)
         {
             float delta = v2 - v1;
-            return (delta == 0.0f) ? 0 : -v1 / delta;
+            return (delta == 0.0f) ? 0 : (0.5f -v1) / delta;
         }
 
         private int AddVertex(Vector3 vector)

@@ -26,9 +26,11 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float meshQuality = 0.1f;
 
-        public CellularAutomata2d cave2d = new CellularAutomata2d();
+        public bool loadResourcesInEditor = false;
+        public int editorSeed;
 
-        public Map2dToMap3d map2dToMap3d = new Map2dToMap3d();
+        public Map2dGenerator wallGenerator = new Map2dGenerator();
+
         public Carver carver = new Carver();
         public Waller waller = new Waller();
 
@@ -64,10 +66,10 @@ namespace ProceduralStages
 
         private void Update()
         {
-            //if (Input.GetKeyDown(KeyCode.F2))
-            //{
-            //    GenerateMap();
-            //}
+            if (Application.isEditor && Input.GetKeyDown(KeyCode.F2))
+            {
+                GenerateMap();
+            }
         }
 
         private void OnValidate()
@@ -82,8 +84,28 @@ namespace ProceduralStages
         {
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % 5) + 1;
 
+            int currentSeed;
             Log.Debug("GenerateMap");
-            int currentSeed = 0;// SeedSyncer.randomStageRng.nextInt;
+            if (Application.isEditor)
+            {
+                if (editorSeed != 0)
+                {
+                    currentSeed = editorSeed;
+                }
+                else if (SeedSyncer.randomStageRng != null)
+                {
+                    currentSeed = SeedSyncer.randomStageRng.nextInt;
+                }
+                else
+                {
+                    currentSeed = new System.Random().Next();
+                }
+            }
+            else
+            {
+                currentSeed = SeedSyncer.randomStageRng.nextInt;
+            }
+            
 
             System.Random rng = new System.Random(currentSeed);
 
@@ -91,28 +113,34 @@ namespace ProceduralStages
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            var map2D = cave2d.Create(width, depth, rng);
-            LogStats("cave2d");
+            float[,,] map3d = wallGenerator.Create(width, height, depth, rng);
+            LogStats("wallGenerator");
 
-            bool[,,] map3d = map2dToMap3d.Convert(map2D, height);
-            LogStats("map2dToMap3d");
+            //float[,,] map3d = map2dToMap3d.Convert(map2d, height);
+            //LogStats("map2dToMap3d");
 
             carver.CarveWalls(map3d, rng);
             LogStats("carver");
 
-            waller.AddFloorAndCeilling(map3d, rng);
-            LogStats("waller.AddFloorAndCeilling");
+            waller.AddCeilling(map3d, rng);
+            LogStats("waller.AddCeilling");
 
             waller.AddWalls(map3d, rng);
             LogStats("waller.AddWalls");
 
-            bool[,,] smoothMap3d = cave3d.SmoothMap(map3d);
-            LogStats("cave3d");
+            var floorMap = map3d;
+            map3d = waller.AddFloor(map3d, rng);
+            LogStats("waller.AddFloor");
 
-            float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
+            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d, rng);
+            //float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
             LogStats("map3dNoiser");
 
-            var unOptimisedMesh = MarchingCubes.CreateMesh(noiseMap3d, mapScale, meshColorer, rng);
+            float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
+            LogStats("cave3d");
+
+            
+            var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, mapScale, meshColorer, rng);
             LogStats("marchingCubes");
 
             MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
@@ -175,7 +203,7 @@ namespace ProceduralStages
             GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
             LogStats("MeshCollider");
 
-            (NodeGraph groundNodes, NodeGraph airNodes) = nodeGraphCreator.CreateGraphs(meshResult, map3d, mapScale);
+            (NodeGraph groundNodes, NodeGraph airNodes) = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
             LogStats("nodeGraphs");
 
             SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
@@ -224,8 +252,13 @@ namespace ProceduralStages
             Log.Debug(dpMonster);
             Log.Debug(dpInteratable);
 
-            stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
-            stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
+            if (loadResourcesInEditor && Application.isEditor)
+            {
+                stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
+                stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
+            }
+
+            
             stageInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
             stageInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
 
@@ -236,25 +269,28 @@ namespace ProceduralStages
                 ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                 : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
-            sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
-
-            if (NetworkServer.active)
+            if (loadResourcesInEditor && Application.isEditor)
             {
-                Action<SceneDirector> placeInteractables = null;
-                placeInteractables = _ =>
+                sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+
+                if (NetworkServer.active)
                 {
-                    SceneDirector.onPostPopulateSceneServer -= placeInteractables;
-                    Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
-
-                    InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
-
-                    if (stageInLoop == 4)
+                    Action<SceneDirector> placeInteractables = null;
+                    placeInteractables = _ =>
                     {
-                        InteractablePlacer.Place(r, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
-                    }
-                };
+                        SceneDirector.onPostPopulateSceneServer -= placeInteractables;
+                        Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
 
-                SceneDirector.onPostPopulateSceneServer += placeInteractables;
+                        InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
+
+                        if (stageInLoop == 4)
+                        {
+                            InteractablePlacer.Place(r, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
+                        }
+                    };
+
+                    SceneDirector.onPostPopulateSceneServer += placeInteractables;
+                }
             }
             
             Log.Debug($"total: " + totalStopwatch.Elapsed.ToString());

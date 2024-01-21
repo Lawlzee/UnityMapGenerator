@@ -10,15 +10,20 @@ namespace ProceduralStages
     [Serializable]
     public class Carver
     {
+        public bool enabled = true;
+
         [Range(0f, 1f)]
         public float frequency = 0.03f;
         [Range(0f, 5f)]
         public float verticalScale = 0.5f;
-        [Range(0f, 1f)]
-        public float maxNoise;
-
-        public void CarveWalls(bool[,,] map, System.Random rng)
+        
+        public void CarveWalls(float[,,] map, System.Random rng)
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             int seedX = rng.Next(short.MaxValue);
             int seedY = rng.Next(short.MaxValue);
             int seedZ = rng.Next(short.MaxValue);
@@ -33,16 +38,10 @@ namespace ProceduralStages
                 {
                     for (int z = 1; z < depth3d - 1; z++)
                     {
-                        if (!map[x, y, z])
-                        {
-                            continue;
-                        }
-
+                        float mapNoise = map[x, y, z];
                         float noise = (PerlinNoise.Get(new Vector3(x + seedX, y * verticalScale + seedY, z + seedZ), frequency) + 1) / 2;
-                        if (noise < maxNoise)
-                        {
-                            map[x, y, z] = !map[x, y, z];
-                        }
+
+                        map[x, y, z] = Mathf.Min(mapNoise, noise);
                     }
                 }
             });
