@@ -299,8 +299,18 @@ namespace ProceduralStages
                     .Where(x => x.cachedName != "random")
                     .ToList();
 
-                var mainTrack = stages[rng.Next(0, stages.Count)].mainTrack;
-                var bossTrack = stages[rng.Next(0, stages.Count)].bossTrack;
+                var mainTracks = stages
+                    .Select(x => x.mainTrack)
+                    .Where(x => x != null)
+                    .ToList();
+
+                var bossTracks = stages
+                    .Select(x => x.bossTrack)
+                    .Where(x => x != null)
+                    .ToList();
+
+                var mainTrack = mainTracks[rng.Next(0, mainTracks.Count)];
+                var bossTrack = bossTracks[rng.Next(0, bossTracks.Count)];
 
                 Action<SceneDef> onSceneChanged = null;
                 onSceneChanged = scene =>

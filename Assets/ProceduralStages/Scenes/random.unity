@@ -914,8 +914,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1153555977}
-  - component: {fileID: 1153555976}
-  - component: {fileID: 1153555975}
   - component: {fileID: 1153555974}
   m_Layer: 0
   m_Name: Combat Director
@@ -923,7 +921,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1153555974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -957,94 +955,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!114 &1153555975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1153555973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customName: 
-  monsterCredit: 0
-  expRewardCoefficient: 0.2
-  goldRewardCoefficient: 1
-  minSeriesSpawnInterval: 0.1
-  maxSeriesSpawnInterval: 1
-  minRerollSpawnInterval: 4.5
-  maxRerollSpawnInterval: 9
-  moneyWaveIntervals:
-  - min: 1
-    max: 1
-  teamIndex: 2
-  creditMultiplier: 0.75
-  spawnDistanceMultiplier: 1
-  maxSpawnDistance: Infinity
-  minSpawnRange: 0
-  shouldSpawnOneWave: 0
-  targetPlayers: 1
-  skipSpawnIfTooCheap: 1
-  maxConsecutiveCheapSkips: 2147483647
-  resetMonsterCardIfFailed: 1
-  maximumNumberToSpawnBeforeSkipping: 6
-  eliteBias: 1
-  onSpawnedServer:
-    m_PersistentCalls:
-      m_Calls: []
-  combatSquad: {fileID: 0}
-  spawnEffectPrefab: {fileID: 0}
-  ignoreTeamSizeLimit: 0
-  _monsterCards: {fileID: 0}
-  fallBackToStageMonsterCards: 1
-  currentSpawnTarget: {fileID: 0}
---- !u!114 &1153555976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1153555973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  customName: 
-  monsterCredit: 0
-  expRewardCoefficient: 0.2
-  goldRewardCoefficient: 1
-  minSeriesSpawnInterval: 0.1
-  maxSeriesSpawnInterval: 1
-  minRerollSpawnInterval: 22.5
-  maxRerollSpawnInterval: 30
-  moneyWaveIntervals:
-  - min: 1
-    max: 1
-  teamIndex: 2
-  creditMultiplier: 0.75
-  spawnDistanceMultiplier: 1
-  maxSpawnDistance: Infinity
-  minSpawnRange: 0
-  shouldSpawnOneWave: 0
-  targetPlayers: 1
-  skipSpawnIfTooCheap: 1
-  maxConsecutiveCheapSkips: 2147483647
-  resetMonsterCardIfFailed: 1
-  maximumNumberToSpawnBeforeSkipping: 6
-  eliteBias: 1
-  onSpawnedServer:
-    m_PersistentCalls:
-      m_Calls: []
-  combatSquad: {fileID: 0}
-  spawnEffectPrefab: {fileID: 0}
-  ignoreTeamSizeLimit: 0
-  _monsterCards: {fileID: 0}
-  fallBackToStageMonsterCards: 1
-  currentSpawnTarget: {fileID: 0}
 --- !u!4 &1153555977
 Transform:
   m_ObjectHideFlags: 0
@@ -1123,6 +1033,8 @@ GameObject:
   - component: {fileID: 1466132693}
   - component: {fileID: 1466132692}
   - component: {fileID: 1466132697}
+  - component: {fileID: 1466132696}
+  - component: {fileID: 1466132695}
   m_Layer: 0
   m_Name: Director
   m_TagString: Untagged
@@ -1173,6 +1085,94 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1466132695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466132691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 22.5
+  maxRerollSpawnInterval: 30
+  moneyWaveIntervals:
+  - min: 1
+    max: 1
+  teamIndex: 2
+  creditMultiplier: 0.75
+  spawnDistanceMultiplier: 1
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 1
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 6
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
+--- !u!114 &1466132696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466132691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 4.5
+  maxRerollSpawnInterval: 9
+  moneyWaveIntervals:
+  - min: 1
+    max: 1
+  teamIndex: 2
+  creditMultiplier: 0.75
+  spawnDistanceMultiplier: 1
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 1
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 6
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
 --- !u!114 &1466132697
 MonoBehaviour:
   m_ObjectHideFlags: 0
