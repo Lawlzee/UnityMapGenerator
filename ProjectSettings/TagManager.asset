@@ -18,23 +18,23 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - FakeActor
+  - NoCollision
+  - Pickups
   - World
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - Post Processing
-  - 
-  - 
-  - 
-  - 
+  - EntityPrecise
+  - Debris
+  - Projectile
+  - CollideWithCharacterHullOnly
+  - ManualRender
+  - Ragdoll
+  - NoDraw
+  - PrefabBrush
+  - PostProcess
+  - UI, WorldSpace
+  - PlayerBody
+  - EnemyBody
+  - TriggerZone
   - 
   - 
   - 
