@@ -1,3 +1,8 @@
+## 1.2.1
+- Fixed an issue where monsters would continue to spawn after the teleporter finished charging.
+- Fixed an issue where music would sometimes not play.
+- Players and enemies are now teleported when they clip out of the map.
+
 ## 1.2.0
 - Implemented multiplayer support
 - Enhanced map generation

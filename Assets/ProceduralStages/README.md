@@ -41,13 +41,13 @@ todo: add more configurations
 - [ ] Add decorations to the map (grass, trees, rocks, pillars, etc.)
 - [ ] Add more configurations
 - [ ] Add stage unique interactables. For example, add a red chest on stage 4
-- [x] Optimize the NodeGraphs
-- [x] Optimize the map mesh
+- [X] Optimize the NodeGraphs
+- [X] Optimize the map mesh
 - [X] Fix the bug where the screen flashes white when entering the first stage
-- [x] Fix the bug where the screen flashes white when entering a void seed
-- [ ] Add a dead barrier if the player clips through the map
+- [X] Fix the bug where the screen flashes white when entering a void seed
+- [X] Add a dead barrier if the player clips through the map
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
-- [x] Improve music selection
+- [X] Improve music selection
 - [ ] Replace the moon with a procedurally generated stage
 - [ ] Randomize stage names
 - [ ] Add more post-processing effects.
