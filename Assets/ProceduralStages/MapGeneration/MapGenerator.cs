@@ -57,6 +57,11 @@ namespace ProceduralStages
             if (Application.IsPlaying(this))
             {
                 GenerateMap();
+                if (!Application.isEditor && Run.instance is InfiniteTowerRun)
+                {
+                    sceneInfoObject.GetComponent<ClassicStageInfo>().sceneDirectorInteractibleCredits = 0;
+                    sceneInfoObject.GetComponent<ClassicStageInfo>().sceneDirectorMonsterCredits = 0;
+                }
             }
         }
 
@@ -285,7 +290,10 @@ namespace ProceduralStages
 
             if (!Application.isEditor || loadResourcesInEditor)
             {
-                sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+                if (!Application.isEditor && !(Run.instance is InfiniteTowerRun))
+                {
+                    sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+                }
 
                 if (NetworkServer.active)
                 {

@@ -52,7 +52,8 @@ namespace ProceduralStages
         public static ConfigEntry<float> FogIntensity;
         public static ConfigEntry<float> FogPower;
 
-        public SceneDef[] _sceneDefs = new SceneDef[5];
+        private SceneDef[] _sceneDefs = new SceneDef[5];
+        private SceneDef _itSceneDef;
 
         public void Awake()
         {
@@ -128,6 +129,11 @@ namespace ProceduralStages
             if (sceneName != "random")
             {
                 return orig(sceneName);
+            }
+
+            if (Run.instance is InfiniteTowerRun)
+            {
+                return _itSceneDef.sceneDefIndex;
             }
 
             return _sceneDefs[Run.instance.stageClearCount % 5].sceneDefIndex;
@@ -221,19 +227,30 @@ namespace ProceduralStages
 
             orig(self);
         }
+
         private void Run_PickNextStageScene(On.RoR2.Run.orig_PickNextStageScene orig, Run self, WeightedSelection<SceneDef> choices)
         {
-            SceneDef scene = choices.choices
-                .Select(x => x.value)
-                .Where(x => x?.cachedName == "random")
-                .FirstOrDefault();
-
-            if (ReplaceAllStages.Value && scene != null)
+            if (ReplaceAllStages.Value)
             {
-                self.nextStageScene = scene;
+                if (self is InfiniteTowerRun)
+                {
+                    self.nextStageScene = _itSceneDef;
+                }
+                else
+                {
+                    self.nextStageScene = choices.choices
+                        .Select(x => x.value)
+                        .Where(x => x?.cachedName == "random")
+                        .First();
+                }
             }
             else
             {
+                if (self is InfiniteTowerRun)
+                {
+                    choices.AddChoice(_itSceneDef, 1f);
+                }
+
                 orig(self, choices);
             }
         }
@@ -258,16 +275,12 @@ namespace ProceduralStages
 
         private void InitSceneDef()
         {
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= 6; i++)
             {
-                int destinationIndex = (i % 5) + 1;
-                SceneCollection stageSceneCollectionRequest = Addressables.LoadAssetAsync<SceneCollection>($"RoR2/Base/SceneGroups/sgStage{destinationIndex}.asset").WaitForCompletion();
-
                 SceneDef sceneDef = ScriptableObject.CreateInstance<SceneDef>();
                 sceneDef.cachedName = "random";
                 sceneDef.sceneType = SceneType.Stage;
                 sceneDef.isOfflineScene = false;
-                sceneDef.stageOrder = i;
                 sceneDef.nameToken = "MAP_RANDOM_TITLE";
                 sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
 
@@ -286,12 +299,21 @@ namespace ProceduralStages
                 sceneDef.suppressNpcEntry = false;
                 sceneDef.blockOrbitalSkills = false;
                 sceneDef.validForRandomSelection = false;
-                sceneDef.destinationsGroup = stageSceneCollectionRequest;
+                //sceneDef.destinationsGroup = stageSceneCollectionRequest;
 
                 StageRegistration.AddSceneDef(sceneDef, Info);
-                StageRegistration.RegisterSceneDefToLoop(sceneDef);
-
-                _sceneDefs[i - 1] = sceneDef;
+                if (i < 6)
+                {
+                    sceneDef.stageOrder = i;
+                    StageRegistration.RegisterSceneDefToLoop(sceneDef);
+                    _sceneDefs[i - 1] = sceneDef;
+                }
+                else
+                {
+                    sceneDef.stageOrder = 99;
+                    sceneDef.destinationsGroup = Addressables.LoadAssetAsync<SceneCollection>("RoR2/DLC1/GameModes/InfiniteTowerRun/SceneGroups/sgInfiniteTowerStageX.asset").WaitForCompletion();
+                    _itSceneDef = sceneDef;
+                }
             }
 
             LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
