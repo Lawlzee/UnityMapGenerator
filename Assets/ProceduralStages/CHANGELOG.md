@@ -1,3 +1,7 @@
+## 1.3
+- Added textures
+- Added simulacrum support
+
 ## 1.2.1
 - Fixed an issue where monsters would continue to spawn after the teleporter finished charging.
 - Fixed an issue where music would sometimes not play.
