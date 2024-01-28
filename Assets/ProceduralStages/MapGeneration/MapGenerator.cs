@@ -41,14 +41,16 @@ namespace ProceduralStages
         public MeshColorer meshColorer = new MeshColorer();
 
         public ColorPatelette colorPatelette = new ColorPatelette();
+        public MapTextures textures = new MapTextures();
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
 
         public GameObject sceneInfoObject;
         public GameObject postProcessingObject;
         public GameObject directorObject;
-        //private float[,] _map;
-        //private bool[,,] _map;
+
+        public int editorFloorIndex;
+        public int editorWallIndex;
 
         private void Awake()
         {
@@ -74,10 +76,10 @@ namespace ProceduralStages
 
         private void OnValidate()
         {
-            //if (Application.isEditor && Application.IsPlaying(this))
-            //{
-            //    GenerateMap();
-            //}
+            if (Application.IsPlaying(this) && editorFloorIndex >= 0 && editorWallIndex >= 0)
+            {
+                SetTextures(editorFloorIndex, editorWallIndex);
+            }
         }
 
         private void GenerateMap()
@@ -162,15 +164,27 @@ namespace ProceduralStages
             GetComponent<MeshFilter>().mesh = meshResult.mesh;
             LogStats("MeshFilter");
 
-            Texture2D heightMap = colorPatelette.CreateHeightMap(rng);
-            Texture2D texture = colorPatelette.CreateTexture(rng, heightMap);
+            Texture2D texture = colorPatelette.CreateTexture(rng);
             LogStats("colorPatelette");
 
             var material = GetComponent<MeshRenderer>().material;
-            material.mainTexture = texture;
-            material.SetTexture("_ParallaxMap", heightMap);
-            //material.SetTexture("_DetailAlbedoMap", texture);
-            material.color = new Color(1.3f, 1.3f, 1.3f);
+            material.SetTexture("_ColorTex", texture);
+
+            int floorIndex = rng.Next(textures.floor.Length);
+            int wallIndex = rng.Next(textures.walls.Length);
+            if (Application.isEditor)
+            {
+                if (editorFloorIndex >= 0)
+                {
+                    floorIndex = editorFloorIndex;
+                }
+
+                if (editorWallIndex >= 0)
+                {
+                    wallIndex = editorWallIndex;
+                }
+            }
+            SetTextures(floorIndex, wallIndex);
             LogStats("MeshRenderer");
 
             float sunHue = (float)rng.NextDouble();
@@ -334,6 +348,48 @@ namespace ProceduralStages
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
             }
+        }
+
+        private void SetTextures(int floorIndex, int wallIndex)
+        {
+            var wall = textures.walls[wallIndex];
+            var floor = textures.floor[floorIndex];
+
+            var material = GetComponent<MeshRenderer>().material;
+
+            material.mainTexture = Addressables.LoadAssetAsync<Texture2D>(wall.textureAsset).WaitForCompletion();
+            if (string.IsNullOrEmpty(wall.normalAsset))
+            {
+                material.SetTexture("_WallNormalTex", null);
+            }
+            else
+            {
+                material.SetTexture("_WallNormalTex", Addressables.LoadAssetAsync<Texture2D>(wall.normalAsset).WaitForCompletion());
+            }
+            material.SetFloat("_WallBias", wall.bias);
+            material.SetColor("_WallColor", wall.averageColor);
+            material.SetFloat("_WallScale", wall.scale);
+            material.SetFloat("_WallBumpScale", wall.bumpScale);
+            material.SetFloat("_WallContrast", wall.constrast);
+            material.SetFloat("_WallGlossiness", wall.glossiness);
+            material.SetFloat("_WallMetallic", wall.metallic);
+
+            material.SetTexture("_FloorTex", Addressables.LoadAssetAsync<Texture2D>(floor.textureAsset).WaitForCompletion());
+            if (string.IsNullOrEmpty(floor.normalAsset))
+            {
+                material.SetTexture("_FloorNormalTex", null);
+            }
+            else
+            {
+                material.SetTexture("_FloorNormalTex", Addressables.LoadAssetAsync<Texture2D>(floor.normalAsset).WaitForCompletion());
+            }
+            material.SetFloat("_FloorBias", floor.bias);
+            material.SetColor("_FloorColor", floor.averageColor);
+            material.SetFloat("_FloorScale", floor.scale);
+            material.SetFloat("_FloorBumpScale", floor.bumpScale);
+            material.SetFloat("_FloorContrast", floor.constrast);
+            material.SetFloat("_FloorGlossiness", floor.glossiness);
+            material.SetFloat("_FloorMetallic", floor.metallic);
         }
     }
 }

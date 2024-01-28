@@ -28,46 +28,15 @@ namespace ProceduralStages
             Vector3Int seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
 
             var uvs = new Vector2[meshResult.vertices.Length];
-            var uvs2 = new Vector2[meshResult.vertices.Length];
             Parallel.For(0, meshResult.vertices.Length, i =>
             {
                 var vertex = meshResult.vertices[i];
                 var normal = meshResult.normals[i];
 
                 uvs[i] = GetUV(vertex, normal, seed);
-
-                //todo: better uv mapping
-                double upDot = Vector3.Dot(Vector3.up, meshResult.normals[i]);
-
-                float x = vertex.x;
-                float y = vertex.z + vertex.y;
-                if (upDot > 0.5f || upDot < -0.5f)
-                {
-                    x = (vertex.x / detailSize) % 1;
-                    y = (vertex.z / detailSize) % 1;
-                }
-                else
-                {
-                    double sideDot = Vector3.Dot(Vector3.right, meshResult.normals[i]);
-
-                    if (sideDot > 0.5f || sideDot < -0.5f)
-                    {
-                        x = (vertex.z/ detailSize) % 1;
-                        y = (vertex.y/ detailSize) % 1;
-                    }
-                    else
-                    {
-                        x = (vertex.x/ detailSize) % 1;
-                        y = (vertex.y / detailSize) % 1;
-                    }
-                    
-                }
-                
-                uvs2[i] = new Vector2(x, y);
             });
 
             meshResult.mesh.uv = uvs;
-            meshResult.mesh.uv2 = uvs2;
             meshResult.mesh.RecalculateTangents();
         }
 

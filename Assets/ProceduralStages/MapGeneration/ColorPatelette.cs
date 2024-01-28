@@ -32,7 +32,7 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float maxNoise = 0.25f;
 
-        public Texture2D CreateTexture(System.Random rng, Texture2D heightMap)
+        public Texture2D CreateTexture(System.Random rng)
         {
             Color[] colors = new Color[8];
 
@@ -61,7 +61,6 @@ namespace ProceduralStages
             float factor = 1f / (size - 1);
 
             Color[] pixels = new Color[2 * size * size];
-            Color[] heightMapPixels = heightMap.GetPixels();
 
             Vector2Int seed = new Vector2Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
             Parallel.For(0, size, y =>
@@ -77,59 +76,12 @@ namespace ProceduralStages
 
                         int posX = i * size + x;
                         int pixelIndex = y * 2 * size + posX;
-                        float noise = heightMapPixels[pixelIndex].r;
+                        //float noise = heightMapPixels[pixelIndex].r;
 
                         //float amplitude = i == 0 ? floorPerlinAmplitude : this.amplitude;
                         //float noise = (1 - amplitude) + heightColor * amplitude;
 
-                        color = new Color(noise, noise, noise) * color;
                         pixels[pixelIndex] = color;
-                    }
-
-                }
-            });
-
-            texture.SetPixels(pixels);
-            texture.Apply();
-            texture.wrapMode = TextureWrapMode.Clamp;
-
-            return texture;
-        }
-
-        public Texture2D CreateHeightMap(System.Random rng)
-        {
-            var palettes = new Palette[]
-            {
-                floor,
-                walls,
-                ceilling
-            };
-
-            float factor = 1f / (size - 1);
-
-            Texture2D texture = new Texture2D(size * 2, size);
-            Color[] pixels = new Color[2 * size * size];
-
-            int baseSeed = rng.Next() % short.MaxValue;
-            int detailSeed = rng.Next() % short.MaxValue;
-            Parallel.For(0, size, y =>
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-
-                        float baseAmplitude = Mathf.Lerp(palettes[i].perlinAmplitude, palettes[i + 1].perlinAmplitude, x * factor);
-                        int baseNoiseY = (y + baseSeed) / ySquareSize;
-                        float baseNoise = (1 - baseAmplitude) + ((Mathf.PerlinNoise(0, baseNoiseY / perlinFrequency) + 1) / 2) * baseAmplitude;
-
-                        float detailAmplitude = Mathf.Lerp(palettes[i].detailPerlinAmplitude, palettes[i + 1].detailPerlinAmplitude, x * factor);
-                        int noiseDetailY = y + detailSeed;
-                        float detailNoise = detailAmplitude * Mathf.PerlinNoise(0, noiseDetailY / perlinFrequency) / 2;
-
-                        float noise = Mathf.Clamp01(baseNoise + detailNoise);
-
-                        pixels[y * 2 * size + i * size + x] = new Color(noise, noise, noise);
                     }
 
                 }

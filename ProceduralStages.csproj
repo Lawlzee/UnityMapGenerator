@@ -67,6 +67,7 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\Map2dGenerator.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Map3dNoiser.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MapGenerator.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\MapTextures.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MarchingCubes.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MeshColorer.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\MeshSimplification\BlendShape.cs" />
