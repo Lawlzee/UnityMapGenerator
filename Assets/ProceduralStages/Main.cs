@@ -52,6 +52,8 @@ namespace ProceduralStages
         public static ConfigEntry<float> FogIntensity;
         public static ConfigEntry<float> FogPower;
 
+        public SceneDef[] _sceneDefs = new SceneDef[5];
+
         public void Awake()
         {
             Log.Init(Logger);
@@ -114,9 +116,21 @@ namespace ProceduralStages
             On.RoR2.SceneDirector.DefaultPlayerSpawnPointGenerator += SceneDirector_DefaultPlayerSpawnPointGenerator;
             On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
 
+            On.RoR2.SceneCatalog.FindSceneIndex += SceneCatalog_FindSceneIndex;
+
             On.RoR2.DirectorCore.OnEnable += DirectorCore_OnEnable;
 
             On.RoR2.PreGameController.Awake += PreGameController_Awake;
+        }
+
+        private SceneIndex SceneCatalog_FindSceneIndex(On.RoR2.SceneCatalog.orig_FindSceneIndex orig, string sceneName)
+        {
+            if (sceneName != "random")
+            {
+                return orig(sceneName);
+            }
+
+            return _sceneDefs[Run.instance.stageClearCount % 5].sceneDefIndex;
         }
 
         private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -276,6 +290,8 @@ namespace ProceduralStages
 
                 StageRegistration.AddSceneDef(sceneDef, Info);
                 StageRegistration.RegisterSceneDefToLoop(sceneDef);
+
+                _sceneDefs[i - 1] = sceneDef;
             }
 
             LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
