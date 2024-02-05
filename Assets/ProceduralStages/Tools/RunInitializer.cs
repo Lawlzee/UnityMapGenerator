@@ -18,6 +18,17 @@ namespace ProceduralStages
         public void Awake()
         {
             SceneDirector.onPreGeneratePlayerSpawnPointsServer += SceneDirector_onPreGeneratePlayerSpawnPointsServer;
+            CombatDirector.eliteTiers = new CombatDirector.EliteTierDef[]
+            {
+                new CombatDirector.EliteTierDef()
+                {
+                    isAvailable = _ => true,
+                    availableDefs = new List<EliteDef>(),
+                    costMultiplier = 0,
+                    eliteTypes = new EliteDef[0],
+                    canSelectWithoutAvailableEliteDef = true
+                }
+            };
 
             //On.RoR2.RuleBook.ctor += RuleBook_ctor;
             RuleBook.defaultValues = new byte[1000];

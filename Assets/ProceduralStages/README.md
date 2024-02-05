@@ -1,6 +1,6 @@
 # Procedural Stages
 
-Adds procedurally generated stages to Risk of Rain 2. Not multiplayer compatible yet.
+Adds procedurally generated stages to Risk of Rain 2.
 
 ## How does the generation works ?
 At the beginning of each stage, a newly procedurally generated environment is created. The spawn pools for monsters and interactables, as well as the music selection, are randomly chosen from various stages.
@@ -52,12 +52,12 @@ todo: add more configurations
 - [ ] Randomize stage names
 - [ ] Add more post-processing effects.
 - [ ] Address the issue of getting stuck in holes in the map.
-- [ ] Implement Simulacrum support.
+- [X] Implement Simulacrum support.
 - [ ] Enhance stage creation performance.
 - [X] Optimize stage performance.
 - [ ] Enhance the uniqueness of stages.
 - [X] Prevent interactables from spawning on slopes.
-- [ ] Fix the bug where the player sometime gets stuck in the drop pod.
+- [X] Fix the bug where the player sometime gets stuck in the drop pod.
 - [ ] Remove the ability to dream for normal stages
 - [ ] Improve the orientation of Newt altars.
 - [X] Legendary chest on stage 4 always cost 400

@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using R2API;
 using RiskOfOptions;
 using RiskOfOptions.OptionConfigs;
 using RiskOfOptions.Options;
@@ -19,16 +18,14 @@ using UnityEngine.SceneManagement;
 namespace ProceduralStages
 {
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInDependency("com.bepis.r2api.stages")]
     [BepInDependency("com.bepis.r2api.language")]
-    [BepInDependency("com.bepis.r2api.content_management")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Main : BaseUnityPlugin
     {
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.3.0";
+        public const string PluginVersion = "1.4.0";
 
         public static ConfigEntry<bool> ReplaceAllStages;
 
@@ -51,9 +48,6 @@ namespace ProceduralStages
         public static ConfigEntry<float> FogOne;
         public static ConfigEntry<float> FogIntensity;
         public static ConfigEntry<float> FogPower;
-
-        private SceneDef[] _sceneDefs = new SceneDef[5];
-        private SceneDef _itSceneDef;
 
         public void Awake()
         {
@@ -104,8 +98,6 @@ namespace ProceduralStages
             ModSettingsManager.AddOption(new SliderOption(FogIntensity, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             ModSettingsManager.AddOption(new SliderOption(FogPower, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
 
-            On.RoR2.RoR2Application.LoadGameContent += RoR2Application_LoadGameContent;
-
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
             ModSettingsManager.SetModIcon(sprite);
@@ -133,10 +125,10 @@ namespace ProceduralStages
 
             if (Run.instance is InfiniteTowerRun)
             {
-                return _itSceneDef.sceneDefIndex;
+                return ContentProvider.ItSceneDef.sceneDefIndex;
             }
 
-            return _sceneDefs[Run.instance.stageClearCount % 5].sceneDefIndex;
+            return ContentProvider.LoopSceneDefs[Run.instance.stageClearCount % 5].sceneDefIndex;
         }
 
         private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -230,27 +222,17 @@ namespace ProceduralStages
 
         private void Run_PickNextStageScene(On.RoR2.Run.orig_PickNextStageScene orig, Run self, WeightedSelection<SceneDef> choices)
         {
+            SceneDef sceneDef = self is InfiniteTowerRun
+                ? ContentProvider.ItSceneDef
+                : ContentProvider.LoopSceneDefs[(Run.instance.stageClearCount + 1) % 5];
+
             if (ReplaceAllStages.Value)
             {
-                if (self is InfiniteTowerRun)
-                {
-                    self.nextStageScene = _itSceneDef;
-                }
-                else
-                {
-                    self.nextStageScene = choices.choices
-                        .Select(x => x.value)
-                        .Where(x => x?.cachedName == "random")
-                        .First();
-                }
+                self.nextStageScene = sceneDef;
             }
             else
             {
-                if (self is InfiniteTowerRun)
-                {
-                    choices.AddChoice(_itSceneDef, 1f);
-                }
-
+                choices.AddChoice(sceneDef, 1f);
                 orig(self, choices);
             }
         }
@@ -264,63 +246,6 @@ namespace ProceduralStages
         private void GiveToRoR2OurContentPackProviders(ContentManager.AddContentPackProviderDelegate addContentPackProvider)
         {
             addContentPackProvider(new ContentProvider());
-        }
-
-        private System.Collections.IEnumerator RoR2Application_LoadGameContent(On.RoR2.RoR2Application.orig_LoadGameContent orig, RoR2Application self)
-        {
-            InitSceneDef();
-
-            return orig(self);
-        }
-
-        private void InitSceneDef()
-        {
-            for (int i = 1; i <= 6; i++)
-            {
-                SceneDef sceneDef = ScriptableObject.CreateInstance<SceneDef>();
-                sceneDef.cachedName = "random";
-                sceneDef.sceneType = SceneType.Stage;
-                sceneDef.isOfflineScene = false;
-                sceneDef.nameToken = "MAP_RANDOM_TITLE";
-                sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
-
-                RoR2Application.onLoad += () =>
-                {
-                    sceneDef.previewTexture = ContentProvider.texScenePreview;
-                    sceneDef.portalMaterial = StageRegistration.MakeBazaarSeerMaterial(sceneDef);
-                };
-
-                sceneDef.portalSelectionMessageString = "BAZAAR_SEER_RANDOM";
-                sceneDef.shouldIncludeInLogbook = false;
-                sceneDef.loreToken = null;
-                sceneDef.dioramaPrefab = null;
-
-                sceneDef.suppressPlayerEntry = false;
-                sceneDef.suppressNpcEntry = false;
-                sceneDef.blockOrbitalSkills = false;
-                sceneDef.validForRandomSelection = false;
-                //sceneDef.destinationsGroup = stageSceneCollectionRequest;
-
-                StageRegistration.AddSceneDef(sceneDef, Info);
-                if (i < 6)
-                {
-                    sceneDef.stageOrder = i;
-                    StageRegistration.RegisterSceneDefToLoop(sceneDef);
-                    _sceneDefs[i - 1] = sceneDef;
-                }
-                else
-                {
-                    sceneDef.stageOrder = 99;
-                    sceneDef.destinationsGroup = Addressables.LoadAssetAsync<SceneCollection>("RoR2/DLC1/GameModes/InfiniteTowerRun/SceneGroups/sgInfiniteTowerStageX.asset").WaitForCompletion();
-                    _itSceneDef = sceneDef;
-                }
-            }
-
-            LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
-            LanguageAPI.Add("MAP_RANDOM_SUBTITLE", "Chaotic Landscape");
-            LanguageAPI.Add("BAZAAR_SEER_RANDOM", "<style=cWorldEvent>You dream of dices.</style>");
-
-            Log.Info("SceneDef initialised");
         }
     }
 }

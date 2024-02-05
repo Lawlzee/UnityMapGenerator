@@ -22,7 +22,6 @@
         "Unity.TextMeshPro.dll",
         "RoR2.dll",
         "Unity.ResourceManager.dll",
-        "R2API.Stages.dll",
         "R2API.Addressables.dll",
         "R2API.Director.dll",
         "RiskOfOptions.dll",

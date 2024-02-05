@@ -1,4 +1,6 @@
-﻿using RoR2.ContentManagement;
+﻿using R2API;
+using RoR2;
+using RoR2.ContentManagement;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
@@ -15,32 +18,37 @@ namespace ProceduralStages
     {
         public string identifier => Main.PluginGUID + "." + nameof(ContentProvider);
 
-        //private readonly ContentPack _contentPack = new ContentPack();
-
         public static string assetDirectory;
 
+        public static ContentPack ContentPack = new ContentPack();
+
+        public static Material SeerMaterial;
         public static Texture texScenePreview;
         public static GameObject seedSyncerPrefab;
 
+        public static SceneDef[] LoopSceneDefs = new SceneDef[5];
+        public static SceneDef ItSceneDef;
+
         public ContentProvider()
         {
-
         }
 
         public IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
         {
-            var assetsFolderFullPath = Path.GetDirectoryName(typeof(ContentProvider).Assembly.Location);
+            ContentPack.identifier = identifier;
+
+            var assetsFolderFullPath = System.IO.Path.GetDirectoryName(typeof(ContentProvider).Assembly.Location);
             assetDirectory = assetsFolderFullPath;
 
             AssetBundle scenesAssetBundle = null;
             yield return LoadAssetBundle(
-                Path.Combine(assetsFolderFullPath, "proceduralStage"),
+                System.IO.Path.Combine(assetsFolderFullPath, "proceduralStage"),
                 args.progressReceiver,
                 (assetBundle) => scenesAssetBundle = assetBundle);
 
             AssetBundle assetsBundle = null;
             yield return LoadAssetBundle(
-                Path.Combine(assetsFolderFullPath, "proceduralAssets"),
+                System.IO.Path.Combine(assetsFolderFullPath, "proceduralAssets"),
                 args.progressReceiver,
                 (assetBundle) => assetsBundle = assetBundle);
 
@@ -55,6 +63,73 @@ namespace ProceduralStages
                 ClientScene.RegisterPrefab(seedSyncerPrefab);
             }));
 
+            var seerRequest = Addressables.LoadAssetAsync<Material>("RoR2/Base/bazaar/matBazaarSeerWispgraveyard.mat");
+            while (!seerRequest.IsDone)
+            {
+                yield return null;
+            }
+
+            SeerMaterial = UnityEngine.Object.Instantiate(seerRequest.Result);
+            SeerMaterial.mainTexture = texScenePreview;
+
+            SceneDef[] sceneDefs = new SceneDef[6];
+
+            for (int i = 1; i <= 6; i++)
+            {
+                SceneDef sceneDef = ScriptableObject.CreateInstance<SceneDef>();
+                sceneDef.cachedName = "random";
+                sceneDef.sceneType = SceneType.Stage;
+                sceneDef.isOfflineScene = false;
+                sceneDef.nameToken = "MAP_RANDOM_TITLE";
+                sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
+                sceneDef.previewTexture = texScenePreview;
+                sceneDef.portalMaterial = SeerMaterial;
+                sceneDef.portalSelectionMessageString = "BAZAAR_SEER_RANDOM";
+                sceneDef.shouldIncludeInLogbook = false;
+                sceneDef.loreToken = null;
+                sceneDef.dioramaPrefab = null;
+                sceneDef.suppressPlayerEntry = false;
+                sceneDef.suppressNpcEntry = false;
+                sceneDef.blockOrbitalSkills = false;
+                sceneDef.validForRandomSelection = false;
+
+                if (i < 6)
+                {
+                    sceneDef.stageOrder = i;
+
+                    int nextStage = (i % 5) + 1;
+                    var sceneCollectionRequest = Addressables.LoadAssetAsync<SceneCollection>($"RoR2/Base/SceneGroups/sgStage{nextStage}.asset");
+                    while (!sceneCollectionRequest.IsDone)
+                    {
+                        yield return null;
+                    }
+
+                    sceneDef.destinationsGroup = sceneCollectionRequest.Result;
+                    LoopSceneDefs[i - 1] = sceneDef;
+                }
+                else
+                {
+                    sceneDef.stageOrder = 99;
+                    var sceneCollectionRequest = Addressables.LoadAssetAsync<SceneCollection>("RoR2/DLC1/GameModes/InfiniteTowerRun/SceneGroups/sgInfiniteTowerStageX.asset");
+                    while (!sceneCollectionRequest.IsDone)
+                    {
+                        yield return null;
+                    }
+
+                    sceneDef.destinationsGroup = sceneCollectionRequest.Result;
+                    ItSceneDef = sceneDef;
+                }
+
+                sceneDefs[i - 1] = sceneDef;
+            }
+
+            ContentPack.sceneDefs.Add(sceneDefs);
+
+            LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
+            LanguageAPI.Add("MAP_RANDOM_SUBTITLE", "Chaotic Landscape");
+            LanguageAPI.Add("BAZAAR_SEER_RANDOM", "<style=cWorldEvent>You dream of dices.</style>");
+
+            Log.Info("SceneDef initialised");
             yield break;
         }
 
@@ -88,6 +163,8 @@ namespace ProceduralStages
 
         public IEnumerator GenerateContentPackAsync(GetContentPackAsyncArgs args)
         {
+            ContentPack.Copy(ContentPack, args.output);
+
             args.ReportProgress(1f);
             yield break;
         }

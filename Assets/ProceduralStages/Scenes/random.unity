@@ -789,7 +789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &934897084
 Transform:
   m_ObjectHideFlags: 0
@@ -811,7 +811,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 934897083}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c6f0bc472bc84c449db5bef28a33270, type: 3}
   m_Name: 
@@ -1151,8 +1151,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterDccsPool: {fileID: 0}
   interactableDccsPool: {fileID: 0}
-  sceneDirectorInteractibleCredits: 200
-  sceneDirectorMonsterCredits: 20
+  sceneDirectorInteractibleCredits: 0
+  sceneDirectorMonsterCredits: 0
   bonusInteractibleCreditObjects: []
   monsterCards: []
   interactableCards: []
@@ -1211,7 +1211,7 @@ MonoBehaviour:
   depth: 200
   mapScale: 2.5
   meshQuality: 0.2
-  loadResourcesInEditor: 0
+  loadResourcesInEditor: 1
   editorSeed: 0
   wallGenerator:
     frequency: 28

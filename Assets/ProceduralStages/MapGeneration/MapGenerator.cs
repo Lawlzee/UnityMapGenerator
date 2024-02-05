@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System;
 using System.Collections;
@@ -45,6 +46,8 @@ namespace ProceduralStages
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
 
+        public DccsPoolGenerator dccsPoolGenerator = new DccsPoolGenerator();
+
         public GameObject sceneInfoObject;
         public GameObject postProcessingObject;
         public GameObject directorObject;
@@ -57,11 +60,6 @@ namespace ProceduralStages
             if (Application.IsPlaying(this))
             {
                 GenerateMap();
-                if (!Application.isEditor && Run.instance is InfiniteTowerRun)
-                {
-                    sceneInfoObject.GetComponent<ClassicStageInfo>().sceneDirectorInteractibleCredits = 0;
-                    sceneInfoObject.GetComponent<ClassicStageInfo>().sceneDirectorMonsterCredits = 0;
-                }
             }
         }
 
@@ -231,55 +229,28 @@ namespace ProceduralStages
 
             ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
 
-            List<string> dpMonsters = new List<string>()
+            SetDCCS(stageInfo, rng);
+
+            var combatDirectors = directorObject.GetComponents<CombatDirector>();
+            if (IsSimulacrum() || Application.isEditor)
             {
-                "RoR2/DLC1/ancientloft/dpAncientLoftMonsters.asset",
-                "RoR2/Base/blackbeach/dpBlackBeachMonsters.asset",
-                "RoR2/Base/dampcave/dpDampCaveMonsters.asset",
-                "RoR2/Base/foggyswamp/dpFoggySwampMonsters.asset",
-                "RoR2/Base/frozenwall/dpFrozenWallMonsters.asset",
-                "RoR2/Base/golemplains/dpGolemplainsMonsters.asset",
-                "RoR2/Base/goolake/dpGooLakeMonsters.asset",
-                "RoR2/Base/rootjungle/dpRootJungleMonsters.asset",
-                "RoR2/Base/shipgraveyard/dpShipgraveyardMonsters.asset",
-                "RoR2/Base/skymeadow/dpSkyMeadowMonsters.asset",
-                "RoR2/DLC1/snowyforest/dpSnowyForestMonsters.asset",
-                "RoR2/DLC1/sulfurpools/dpSulfurPoolsMonsters.asset",
-                "RoR2/Base/wispgraveyard/dpWispGraveyardMonsters.asset"
-            };
-
-            List<string> dpInteratables = new List<string>()
-            {
-                "RoR2/DLC1/ancientloft/dpAncientLoftInteractables.asset",
-                "RoR2/Base/blackbeach/dpBlackBeachInteractables.asset",
-                "RoR2/Base/dampcave/dpDampCaveInteractables.asset",
-                "RoR2/Base/foggyswamp/dpFoggySwampInteractables.asset",
-                "RoR2/Base/frozenwall/dpFrozenWallInteractables.asset",
-                "RoR2/Base/golemplains/dpGolemplainsInteractables.asset",
-                "RoR2/Base/goolake/dpGooLakeInteractables.asset",
-                "RoR2/Base/rootjungle/dpRootJungleInteractables.asset",
-                "RoR2/Base/shipgraveyard/dpShipgraveyardInteractables.asset",
-                "RoR2/Base/skymeadow/dpSkyMeadowInteractables.asset",
-                "RoR2/DLC1/snowyforest/dpSnowyForestInteractables.asset",
-                "RoR2/DLC1/sulfurpools/dpSulfurPoolsInteractables.asset",
-                "RoR2/Base/wispgraveyard/dpWispGraveyardInteractables.asset"
-            };
-
-            string dpMonster = dpMonsters[rng.Next(0, dpMonsters.Count)];
-            string dpInteratable = dpInteratables[rng.Next(0, dpInteratables.Count)];
-
-            Log.Debug(dpMonster);
-            Log.Debug(dpInteratable);
-
-            if (!Application.isEditor || loadResourcesInEditor)
-            {
-                stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
-                stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
+                foreach (var combatDirector in combatDirectors)
+                {
+                    combatDirector.monsterCredit = float.MinValue;
+                    combatDirector.moneyWaveIntervals = new RangeFloat[0];
+                    combatDirector.moneyWaves = new CombatDirector.DirectorMoneyWave[0];
+                }
             }
 
-            
-            stageInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
-            stageInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
+            if (!IsSimulacrum())
+            {
+                stageInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
+            }
+
+            if (!IsSimulacrum() || Application.isEditor)
+            {
+                stageInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
+            }
 
             SceneDirector sceneDirector = directorObject.GetComponent<SceneDirector>();
 
@@ -290,7 +261,7 @@ namespace ProceduralStages
 
             if (!Application.isEditor || loadResourcesInEditor)
             {
-                if (!Application.isEditor && !(Run.instance is InfiniteTowerRun))
+                if (!IsSimulacrum())
                 {
                     sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
                 }
@@ -303,7 +274,10 @@ namespace ProceduralStages
                         SceneDirector.onPostPopulateSceneServer -= placeInteractables;
                         Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
 
-                        InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
+                        if (!IsSimulacrum())
+                        {
+                            InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
+                        }
 
                         if (stageInLoop == 4)
                         {
@@ -356,6 +330,60 @@ namespace ProceduralStages
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
             }
+        }
+
+        private void SetDCCS(ClassicStageInfo stageInfo, System.Random rng)
+        {
+            if (Application.isEditor && !loadResourcesInEditor)
+            {
+                return;
+            }
+
+            ExpansionDef expansionDef = ExpansionCatalog.expansionDefs.FirstOrDefault(x => x.name == "DLC1");
+
+            bool hasDLC1 = expansionDef && Run.instance.IsExpansionEnabled(expansionDef);
+            Log.Debug(hasDLC1);
+            Log.Debug(IsSimulacrum());
+
+            var validPools = DccsPoolItem.All
+                .Where(x => IsSimulacrum()
+                    ? x.StageType == StageType.Simulacrum
+                    : x.StageType == StageType.Regular)
+                .Where(x => hasDLC1 || !x.DLC1)
+                .ToList();
+
+            if (IsSimulacrum())
+            {
+                var dpMonsters = validPools
+                    .Where(x => x.Type == DccsPoolItemType.Monsters)
+                    .Select(x => x.Asset)
+                    .ToList();
+
+                string dpMonster = dpMonsters[rng.Next(0, dpMonsters.Count)];
+                Log.Debug(dpMonster);
+
+                stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
+            }
+            else
+            {
+                Log.Debug("dpCustomProceduralStages");
+                stageInfo.monsterDccsPool = dccsPoolGenerator.GenerateMonstersDccs(rng, hasDLC1);
+            }
+
+            var dpInteratables = validPools
+                .Where(x => x.Type == DccsPoolItemType.Interactables)
+                .Select(x => x.Asset)
+                .ToList();
+
+            string dpInteratable = dpInteratables[rng.Next(0, dpInteratables.Count)];
+            Log.Debug(dpInteratable);
+
+            stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
+        }
+
+        private bool IsSimulacrum()
+        {
+            return !Application.isEditor && Run.instance is InfiniteTowerRun;
         }
 
         private void SetTextures(int floorIndex, int wallIndex)

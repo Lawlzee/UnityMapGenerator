@@ -1,3 +1,17 @@
+## 1.4
+
+- Fixed compatibility issue with the BetterLoadingScreen mod
+  - Resolved an issue that was causing compatibility problems with the BetterLoadingScreen mod. This fix ensures that both mods can work together smoothly.
+- Improved simulacrum support
+   - Addressed an issue where too many monsters were spawning in the simulacrum.
+   - Modified the monster and interactable pool selection to come from a random simulacrum stage.
+   - Removed Newt Altar
+- Improved monster selection algorithm for normal stages
+   - Enhanced the algorithm for selecting monsters.
+   - Monsters from similar stage counts are now more likely to be selected, providing a more balanced experience.
+- Removed dependencies
+   - Eliminated the dependencies on `RiskofThunder-R2API_Stages` and `RiskofThunder-R2API_ContentManagement`.
+
 ## 1.3
 - Added textures
 - Added simulacrum support

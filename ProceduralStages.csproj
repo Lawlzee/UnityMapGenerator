@@ -57,11 +57,13 @@
   <ItemGroup>
      <Compile Include="Assets\ProceduralStages\AssemblyInfo.cs" />
      <Compile Include="Assets\ProceduralStages\ContentProvider.cs" />
+     <Compile Include="Assets\ProceduralStages\DccsPoolGenerator.cs" />
      <Compile Include="Assets\ProceduralStages\Log.cs" />
      <Compile Include="Assets\ProceduralStages\Main.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Carver.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\CellularAutomata3d.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\ColorPatelette.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\DccsPoolItem.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\DensityMap.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\InteractablePlacer.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Map2dGenerator.cs" />
@@ -97,6 +99,7 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\PerlinNoise.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Waller.cs" />
      <Compile Include="Assets\ProceduralStages\SeedSyncer.cs" />
+     <Compile Include="Assets\ProceduralStages\Tools\AssetExtracter.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\FlyCamera.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\NodeGraphRenderer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\RunInitializer.cs" />
@@ -333,9 +336,6 @@
  </Reference>
  <Reference Include="Unity.ResourceManager">
  <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/Unity.ResourceManager.dll</HintPath>
- </Reference>
- <Reference Include="R2API.Stages">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/R2API_Stages/plugins/R2API.Stages/R2API.Stages.dll</HintPath>
  </Reference>
  <Reference Include="R2API.Addressables">
  <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/R2API_Addressables/plugins/R2API.Addressables/R2API.Addressables.dll</HintPath>
