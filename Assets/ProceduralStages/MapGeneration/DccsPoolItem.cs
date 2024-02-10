@@ -27,6 +27,7 @@ namespace ProceduralStages
         public StageType StageType;
         public bool DLC1;
 
+        //todo: put in scene
         public static readonly List<DccsPoolItem> All = new List<DccsPoolItem>()
         {
             new DccsPoolItem

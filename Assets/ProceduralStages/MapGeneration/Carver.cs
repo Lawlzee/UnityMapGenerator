@@ -17,16 +17,16 @@ namespace ProceduralStages
         [Range(0f, 5f)]
         public float verticalScale = 0.5f;
         
-        public void CarveWalls(float[,,] map, System.Random rng)
+        public void CarveWalls(float[,,] map)
         {
             if (!enabled)
             {
                 return;
             }
 
-            int seedX = rng.Next(short.MaxValue);
-            int seedY = rng.Next(short.MaxValue);
-            int seedZ = rng.Next(short.MaxValue);
+            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             int width3d = map.GetLength(0);
             int height3d = map.GetLength(1);

@@ -32,9 +32,9 @@ namespace ProceduralStages
             _triangles = new List<int>();
         }
 
-        public static Mesh CreateMesh(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
+        public static Mesh CreateMesh(float[,,] voxels, float scale)
         {
-            return new MarchingCubes().Generate(voxels, scale, meshColorer, rng);
+            return new MarchingCubes().Generate(voxels, scale);
         }
 
         private struct Cube
@@ -109,7 +109,7 @@ namespace ProceduralStages
             }
         }
 
-        public Mesh Generate(float[,,] voxels, float scale, MeshColorer meshColorer, System.Random rng)
+        public Mesh Generate(float[,,] voxels, float scale)
         {
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);

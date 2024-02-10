@@ -28,7 +28,8 @@ namespace ProceduralStages
         public float meshQuality = 0.1f;
 
         public bool loadResourcesInEditor = false;
-        public int editorSeed;
+        public bool loadPropsInEditor = false;
+        public ulong editorSeed;
 
         public Map2dGenerator wallGenerator = new Map2dGenerator();
 
@@ -48,12 +49,16 @@ namespace ProceduralStages
 
         public DccsPoolGenerator dccsPoolGenerator = new DccsPoolGenerator();
 
+        public PropsPlacer propsPlacer = new PropsPlacer();
+
         public GameObject sceneInfoObject;
         public GameObject postProcessingObject;
         public GameObject directorObject;
 
         public int editorFloorIndex;
         public int editorWallIndex;
+
+        public static Xoroshiro128Plus rng;
 
         private void Awake()
         {
@@ -69,10 +74,21 @@ namespace ProceduralStages
             //GenerateMap();
         }
 
+        private void OnDestroy()
+        {
+            rng = null;
+
+        }
+
         private void Update()
         {
             if (Application.isEditor && Input.GetKeyDown(KeyCode.F2))
             {
+                for (int i = 0; i < propsPlacer.instances.Count; i++)
+                {
+                    Destroy(propsPlacer.instances[i]);
+                }
+                propsPlacer.instances.Clear();
                 GenerateMap();
             }
         }
@@ -81,15 +97,18 @@ namespace ProceduralStages
         {
             if (Application.IsPlaying(this) && editorFloorIndex >= 0 && editorWallIndex >= 0)
             {
-                SetTextures(editorFloorIndex, editorWallIndex);
+                MapTextures.SurfaceTexture wall = textures.walls[editorWallIndex];
+                MapTextures.SurfaceTexture floor = textures.floor[editorFloorIndex];
+
+                SetTextures(floor, wall);
             }
         }
 
         private void GenerateMap()
         {
-            int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % 5) + 1;
+            int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
 
-            int currentSeed;
+            ulong currentSeed;
             Log.Debug("GenerateMap");
             if (Application.isEditor)
             {
@@ -99,45 +118,45 @@ namespace ProceduralStages
                 }
                 else if (SeedSyncer.randomStageRng != null)
                 {
-                    currentSeed = SeedSyncer.randomStageRng.nextInt;
+                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
                 }
                 else
                 {
-                    currentSeed = new System.Random().Next();
+                    currentSeed = (ulong)DateTime.Now.Ticks;
                 }
             }
             else
             {
-                currentSeed = SeedSyncer.randomStageRng.nextInt;
+                currentSeed = SeedSyncer.randomStageRng.nextUlong;
             }
             
 
-            System.Random rng = new System.Random(currentSeed);
+            rng = new Xoroshiro128Plus(currentSeed);
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            float[,,] map3d = wallGenerator.Create(width, height, depth, rng);
+            float[,,] map3d = wallGenerator.Create(width, height, depth);
             LogStats("wallGenerator");
 
             //float[,,] map3d = map2dToMap3d.Convert(map2d, height);
             //LogStats("map2dToMap3d");
 
-            carver.CarveWalls(map3d, rng);
+            carver.CarveWalls(map3d);
             LogStats("carver");
 
-            waller.AddCeilling(map3d, rng);
+            waller.AddCeilling(map3d);
             LogStats("waller.AddCeilling");
 
-            waller.AddWalls(map3d, rng);
+            waller.AddWalls(map3d);
             LogStats("waller.AddWalls");
 
             var floorMap = map3d;
-            map3d = waller.AddFloor(map3d, rng);
+            map3d = waller.AddFloor(map3d);
             LogStats("waller.AddFloor");
 
-            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d, rng);
+            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
             //float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
             LogStats("map3dNoiser");
 
@@ -145,7 +164,7 @@ namespace ProceduralStages
             LogStats("cave3d");
 
             
-            var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, mapScale, meshColorer, rng);
+            var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, mapScale);
             LogStats("marchingCubes");
 
             MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
@@ -161,20 +180,20 @@ namespace ProceduralStages
                 vertices = optimisedMesh.vertices
             };
 
-            meshColorer.ColorMesh(meshResult, rng);
+            meshColorer.ColorMesh(meshResult);
             LogStats("meshColorer");
 
             GetComponent<MeshFilter>().mesh = meshResult.mesh;
             LogStats("MeshFilter");
 
-            Texture2D texture = colorPatelette.CreateTexture(rng);
+            Texture2D texture = colorPatelette.CreateTexture();
             LogStats("colorPatelette");
 
             var material = GetComponent<MeshRenderer>().material;
             material.SetTexture("_ColorTex", texture);
 
-            int floorIndex = rng.Next(textures.floor.Length);
-            int wallIndex = rng.Next(textures.walls.Length);
+            int floorIndex = rng.RangeInt(0, textures.floor.Length);
+            int wallIndex = rng.RangeInt(0, textures.walls.Length);
             if (Application.isEditor)
             {
                 if (editorFloorIndex >= 0)
@@ -187,10 +206,14 @@ namespace ProceduralStages
                     wallIndex = editorWallIndex;
                 }
             }
-            SetTextures(floorIndex, wallIndex);
+
+            MapTextures.SurfaceTexture wall = textures.walls[wallIndex];
+            MapTextures.SurfaceTexture floor = textures.floor[floorIndex];
+
+            Material terrainMaterial = SetTextures(floor, wall);
             LogStats("MeshRenderer");
 
-            float sunHue = (float)rng.NextDouble();
+            float sunHue = rng.nextNormalizedFloat;
             RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPatelette.light.saturation, colorPatelette.light.value);
             LogStats("RenderSettings");
 
@@ -220,16 +243,17 @@ namespace ProceduralStages
             GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
             LogStats("MeshCollider");
 
-            (NodeGraph groundNodes, NodeGraph airNodes) = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
+            Graphs graphs = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
             LogStats("nodeGraphs");
 
             SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
-            sceneInfo.groundNodes = groundNodes;
-            sceneInfo.airNodes = airNodes;
+            sceneInfo.groundNodes = graphs.ground;
+            sceneInfo.airNodes = graphs.air;
 
             ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
 
-            SetDCCS(stageInfo, rng);
+            SetDCCS(stageInfo);
+            LogStats("SetDCCS");
 
             var combatDirectors = directorObject.GetComponents<CombatDirector>();
             if (IsSimulacrum() || Application.isEditor)
@@ -272,16 +296,15 @@ namespace ProceduralStages
                     placeInteractables = _ =>
                     {
                         SceneDirector.onPostPopulateSceneServer -= placeInteractables;
-                        Xoroshiro128Plus r = new Xoroshiro128Plus((ulong)rng.Next());
 
                         if (!IsSimulacrum())
                         {
-                            InteractablePlacer.Place(r, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
+                            InteractablePlacer.Place("RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
                         }
 
                         if (stageInLoop == 4)
                         {
-                            InteractablePlacer.Place(r, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
+                            InteractablePlacer.Place("RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
                         }
                     };
 
@@ -289,6 +312,12 @@ namespace ProceduralStages
                 }
             }
             
+            if (!Application.isEditor || loadPropsInEditor)
+            {
+                propsPlacer.PlaceAll(graphs, meshColorer, texture, terrainMaterial);
+                LogStats("propsPlacer");
+            }
+
             if (!Application.isEditor)
             {
                 var stages = SceneCatalog.allStageSceneDefs
@@ -305,8 +334,8 @@ namespace ProceduralStages
                     .Where(x => x != null)
                     .ToList();
 
-                var mainTrack = mainTracks[rng.Next(0, mainTracks.Count)];
-                var bossTrack = bossTracks[rng.Next(0, bossTracks.Count)];
+                var mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
+                var bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
 
                 Action<SceneDef> onSceneChanged = null;
                 onSceneChanged = scene =>
@@ -332,7 +361,7 @@ namespace ProceduralStages
             }
         }
 
-        private void SetDCCS(ClassicStageInfo stageInfo, System.Random rng)
+        private void SetDCCS(ClassicStageInfo stageInfo)
         {
             if (Application.isEditor && !loadResourcesInEditor)
             {
@@ -342,8 +371,6 @@ namespace ProceduralStages
             ExpansionDef expansionDef = ExpansionCatalog.expansionDefs.FirstOrDefault(x => x.name == "DLC1");
 
             bool hasDLC1 = expansionDef && Run.instance.IsExpansionEnabled(expansionDef);
-            Log.Debug(hasDLC1);
-            Log.Debug(IsSimulacrum());
 
             var validPools = DccsPoolItem.All
                 .Where(x => IsSimulacrum()
@@ -359,7 +386,7 @@ namespace ProceduralStages
                     .Select(x => x.Asset)
                     .ToList();
 
-                string dpMonster = dpMonsters[rng.Next(0, dpMonsters.Count)];
+                string dpMonster = dpMonsters[rng.RangeInt(0, dpMonsters.Count)];
                 Log.Debug(dpMonster);
 
                 stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpMonster).WaitForCompletion();
@@ -367,7 +394,7 @@ namespace ProceduralStages
             else
             {
                 Log.Debug("dpCustomProceduralStages");
-                stageInfo.monsterDccsPool = dccsPoolGenerator.GenerateMonstersDccs(rng, hasDLC1);
+                stageInfo.monsterDccsPool = dccsPoolGenerator.GenerateMonstersDccs(hasDLC1);
             }
 
             var dpInteratables = validPools
@@ -375,7 +402,7 @@ namespace ProceduralStages
                 .Select(x => x.Asset)
                 .ToList();
 
-            string dpInteratable = dpInteratables[rng.Next(0, dpInteratables.Count)];
+            string dpInteratable = dpInteratables[rng.RangeInt(0, dpInteratables.Count)];
             Log.Debug(dpInteratable);
 
             stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
@@ -386,11 +413,8 @@ namespace ProceduralStages
             return !Application.isEditor && Run.instance is InfiniteTowerRun;
         }
 
-        private void SetTextures(int floorIndex, int wallIndex)
+        private Material SetTextures(MapTextures.SurfaceTexture floor, MapTextures.SurfaceTexture wall)
         {
-            var wall = textures.walls[wallIndex];
-            var floor = textures.floor[floorIndex];
-
             var material = GetComponent<MeshRenderer>().material;
 
             material.mainTexture = Addressables.LoadAssetAsync<Texture2D>(wall.textureAsset).WaitForCompletion();
@@ -426,6 +450,8 @@ namespace ProceduralStages
             material.SetFloat("_FloorContrast", floor.constrast);
             material.SetFloat("_FloorGlossiness", floor.glossiness);
             material.SetFloat("_FloorMetallic", floor.metallic);
+
+            return material;
         }
     }
 }

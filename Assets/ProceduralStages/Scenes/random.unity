@@ -414,7 +414,7 @@ Transform:
   - {fileID: 377542557}
   - {fileID: 1318512244}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &464249044
 GameObject:
@@ -789,7 +789,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &934897084
 Transform:
   m_ObjectHideFlags: 0
@@ -850,6 +850,36 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!1 &1189524057
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1189524058}
+  m_Layer: 0
+  m_Name: Props Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1189524058
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189524057}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.903225, y: -210.72765, z: -305.3307}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1318512243
 GameObject:
   m_ObjectHideFlags: 0
@@ -1212,6 +1242,7 @@ MonoBehaviour:
   mapScale: 2.5
   meshQuality: 0.2
   loadResourcesInEditor: 1
+  loadPropsInEditor: 1
   editorSeed: 0
   wallGenerator:
     frequency: 28
@@ -1482,6 +1513,301 @@ MonoBehaviour:
         maxHumanDensity: 0.48
         maxGolemDensity: 0.46
         maxBeetleQueenDensity: 0.44
+  dccsPoolGenerator:
+    blendFactor: 0.5
+  propsPlacer:
+    props:
+    - asset: RoR2/DLC1/ancientloft/AncientLoftGrass.spm
+      scale: 1
+      ground: 1
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/frozenwall/FWSimpleGrass.prefab
+      scale: 1
+      ground: 1
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.005
+    - asset: RoR2/Base/artifactworld/spmAWGrass.spm
+      scale: 1
+      ground: 1
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/moon/spmMoonGrass1.spm
+      scale: 1
+      ground: 1
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/Common/Props/mdlIcoRockM.fbx
+      scale: 1
+      ground: 1
+      count: 60
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/spmFern1.spm
+      scale: 1
+      ground: 1
+      count: 150
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/mdlRockModular1.fbx
+      scale: 1
+      ground: 1
+      count: 50
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/spmFern2.spm
+      scale: 1
+      ground: 1
+      count: 150
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/mdlRock3.fbx
+      scale: 1
+      ground: 1
+      count: 25
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/mdlRockModular3.fbx
+      scale: 1
+      ground: 1
+      count: 100
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/spmBonsai1V1.spm
+      scale: 1
+      ground: 1
+      count: 15
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/spmBonsai1V2.spm
+      scale: 1
+      ground: 1
+      count: 15
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/spmBonsai1V3.spm
+      scale: 1
+      ground: 1
+      count: 15
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/Common/Props/mdlColossusHead1.fbx
+      scale: 2
+      ground: 1
+      count: 5
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/skymeadow/spmSMFruitPlant.spm
+      scale: 1
+      ground: 1
+      count: 25
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/skymeadow/spmSMFruitPlantDuo.spm
+      scale: 1
+      ground: 1
+      count: 25
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/skymeadow/spmSMGrass.spm
+      scale: 1
+      ground: 1
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/skymeadow/spmSMHangingVinesCluster.spm
+      scale: 3
+      ground: 0
+      count: 300
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: 0.01
+    - asset: RoR2/Base/skymeadow/flower.fbx
+      scale: 1
+      ground: 1
+      count: 100
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/blackbeach/spmBbBirch.spm
+      scale: 0.5
+      ground: 1
+      count: 15
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/blackbeach/spmBbConif.spm
+      scale: 0.5
+      ground: 1
+      count: 15
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/skymeadow/SMVine1.prefab
+      scale: 1
+      ground: 0
+      count: 50
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: 0
+    - asset: RoR2/Base/skymeadow/SMVine2.prefab
+      scale: 1
+      ground: 0
+      count: 50
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: 0
+    - asset: RoR2/Base/skymeadow/SMVine3.prefab
+      scale: 1
+      ground: 0
+      count: 50
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: 0
+    - asset: RoR2/Base/golemplains/spmGPFlower.spm
+      scale: 2
+      ground: 1
+      count: 100
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Cluster.spm
+      scale: 1
+      ground: 1
+      count: 70
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Tight.spm
+      scale: 1
+      ground: 1
+      count: 70
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/shipgraveyard/spmSGMushroom2Cluster.spm
+      scale: 1
+      ground: 1
+      count: 70
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/DLC1/sulfurpools/SPPebble.prefab
+      scale: 1
+      ground: 1
+      count: 100
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/DLC1/sulfurpools/SPCoralMDLit.prefab
+      scale: 1
+      ground: 1
+      count: 50
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/shipgraveyard/SGSmallGroundStalagmite.prefab
+      scale: 2
+      ground: 1
+      count: 20
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/DLC1/ancientloft/mdlAncientLoft_Rubble.fbx
+      scale: 1
+      ground: 1
+      count: 50
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/DLC1/ancientloft/AncientLoft_LightStatue.prefab
+      scale: 1
+      ground: 1
+      count: 10
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/blackbeach/spmBbIvy1.spm
+      scale: 10
+      ground: 0
+      count: 200
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: -1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/dampcave/DCHangingLightSmallLongChain.prefab
+      scale: 1
+      ground: 0
+      count: 5
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    - asset: RoR2/Base/dampcave/DCHangingLightSmallShortChain Variant.prefab
+      scale: 1
+      ground: 0
+      count: 5
+      changeColor: 0
+      isRock: 0
+      normal: {x: 0, y: 1, z: 0}
+      lod: -1
+    propsCount: 1000
+    propsObject: {fileID: 1189524057}
+    instances: []
   sceneInfoObject: {fileID: 1798483139}
   postProcessingObject: {fileID: 447697554}
   directorObject: {fileID: 1466132691}

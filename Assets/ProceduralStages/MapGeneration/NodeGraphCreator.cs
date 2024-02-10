@@ -8,9 +8,80 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Diagnostics;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
+    public class Graphs
+    {
+        public NodeGraph ground;
+        public NodeGraph air;
+        public List<PropsNode> floorProps;
+        public List<PropsNode> ceilingProps;
+    }
+
+    public struct PropsNode
+    {
+        public Vector3 position;
+        public Vector3 normal;
+
+        public GameObject Place(
+            GameObject prefab, 
+            GameObject parent, 
+            Material material, 
+            Color? color,
+            Vector3? normal,
+            float scale)
+        {
+            var rotation = Quaternion.FromToRotation(Vector3.up, normal ?? this.normal) 
+                * prefab.transform.rotation
+                * Quaternion.FromToRotation(Vector3.up, new Vector3(0, MapGenerator.rng.nextNormalizedFloat * 360f, 0));
+
+            GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
+
+            //Quaternion rotation = Quaternion.Euler(0.0f, MapGenerator.rng.nextNormalizedFloat * 360f, 0.0f);
+            //gameObject.transform.up = normal ?? this.normal;
+            gameObject.transform.localScale = new Vector3(scale, scale, scale);
+
+            if (Application.isEditor)
+            {
+                LODGroup[] lodGroups = gameObject.GetComponentsInChildren<LODGroup>();
+                foreach (LODGroup lodGroup in lodGroups)
+                {
+                    var lods = lodGroup.GetLODs();
+            
+                    lods[lods.Length - 1].screenRelativeTransitionHeight = 0;
+                    lodGroup.SetLODs(lods);
+                }
+            }
+
+            if (material != null)
+            {
+                var meshRenderers = gameObject.transform.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    meshRenderers[i].material = material;
+                }
+            }
+
+            if (color.HasValue)
+            {
+                var meshRenderers = gameObject.transform.GetComponentsInChildren<MeshRenderer>();
+                for (int i = 0; i < meshRenderers.Length; i++)
+                {
+                    foreach (var m in meshRenderers[i].materials)
+                    {
+                        m.SetColor("_Color", color.Value);
+                    }
+                }
+            }
+
+            //gameObject.transform.Rotate(Vector3.up, MapGenerator.rng.RangeFloat(0.0f, 360f), Space.Self);
+            return gameObject;
+        }
+    }
+
     [Serializable]
     public class NodeGraphCreator
     {
@@ -20,14 +91,14 @@ namespace ProceduralStages
         public int maxGroundheight = 30;
         public DensityMap densityMap = new DensityMap();
 
-        public (NodeGraph ground, NodeGraph air) CreateGraphs(MeshResult meshResult, float[,,] map, float[,,] floorMap, float mapScale)
+        public Graphs CreateGraphs(MeshResult meshResult, float[,,] map, float[,,] floorMap, float mapScale)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             //MapDensity mapDensity = densityMap.Create(map);
             ///LogStats("mapDensity");
 
-            NodeGraph groundNodes = CreateGroundNodes(meshResult, floorMap, mapScale);
+            (NodeGraph groundNodes, List<PropsNode> floorProps, List<PropsNode> ceilingProps) = CreateGroundNodes(meshResult, floorMap, mapScale);
             LogStats("groundNodes");
 
             HashSet<int> mainIsland = GetMainIsland(groundNodes);
@@ -42,7 +113,13 @@ namespace ProceduralStages
             NodeGraph airNodes = CreateAirNodes(groundNodes, mainIsland, map, mapScale);
             LogStats("CreateAirNodes");
 
-            return (groundNodes, airNodes);
+            return new Graphs
+            {
+                ground = groundNodes,
+                air = airNodes,
+                floorProps = floorProps,
+                ceilingProps = ceilingProps
+            };
 
             void LogStats(string name)
             {
@@ -51,13 +128,16 @@ namespace ProceduralStages
             }
         }
 
-        private NodeGraph CreateGroundNodes(MeshResult meshResult, float[,,] floorMap, float mapScale)
+        private (NodeGraph groundGraph, List<PropsNode> floorProps, List<PropsNode> ceilingProps) CreateGroundNodes(MeshResult meshResult, float[,,] floorMap, float mapScale)
         {
             var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
 
-            var triangles = meshResult.triangles; ;
+            var triangles = meshResult.triangles;
             var vertices = meshResult.vertices;
             var normals = meshResult.normals;
+
+            List<PropsNode> floorProps = new List<PropsNode>();
+            List<PropsNode> ceilingProps = new List<PropsNode>();
 
             var nodes = new NodeGraph.Node[vertices.Length];
 
@@ -67,22 +147,31 @@ namespace ProceduralStages
                 var vertex = vertices[i];
                 var normal = normals[i];
 
-                bool valid = Vector3.Dot(Vector3.up, normal) > minFloorAngle;
+                float angle = Vector3.Dot(Vector3.up, normal);
+                
+                bool isFloor = angle > minFloorAngle;
+                bool isCeiling = angle < -minFloorAngle;
 
                 var node = new NodeGraph.Node
                 {
                     position = vertex,
                     linkListIndex = new NodeGraph.LinkListIndex()
                     {
-                        index = valid ? index : -1,
+                        index = isFloor ? index : -1,
                         size = 0
                     },
                     forbiddenHulls = HullMask.None,
                     flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn
                 };
 
-                if (valid)
+                if (isFloor)
                 {
+                    floorProps.Add(new PropsNode
+                    {
+                        normal = normal,
+                        position = vertex
+                    });
+
                     index++;
 
                     float density = densityMap.GetDensity(floorMap, vertex / mapScale);
@@ -105,6 +194,15 @@ namespace ProceduralStages
                     }
 
                     node.forbiddenHulls = forbiddenHulls;
+                }
+
+                if (isCeiling)
+                {
+                    ceilingProps.Add(new PropsNode
+                    {
+                        normal = normal,
+                        position = vertex
+                    });
                 }
 
                 nodes[i] = node;
@@ -232,7 +330,7 @@ namespace ProceduralStages
             groundNodes.nodes = allNodes;
             groundNodes.links = linkList.ToArray();
 
-            return groundNodes;
+            return (groundNodes, floorProps, ceilingProps);
         }
 
         private HashSet<int> GetMainIsland(NodeGraph groundGraph)
@@ -299,7 +397,6 @@ namespace ProceduralStages
                     if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
                     {
                         flags |= NodeFlags.TeleporterOK;
-
                     }
 
                     if (density < densityMap.maxChestDensity)

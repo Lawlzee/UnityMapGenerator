@@ -13,7 +13,6 @@ namespace ProceduralStages
     public static class InteractablePlacer
     {
         public static GameObject Place(
-            Xoroshiro128Plus rng,
             string prefab,
             NodeFlags requiredFlags,
             Vector3 offset = default)
@@ -34,7 +33,7 @@ namespace ProceduralStages
                 placementMode = DirectorPlacementRule.PlacementMode.Random
             };
 
-            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
+            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, MapGenerator.rng));
             if (gameObject)
             {
                 gameObject.transform.position = gameObject.transform.position + offset;

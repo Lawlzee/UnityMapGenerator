@@ -23,9 +23,12 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float amplitude;
 
-        public void ColorMesh(MeshResult meshResult, System.Random rng)
+        public void ColorMesh(MeshResult meshResult)
         {
-            Vector3Int seed = new Vector3Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
+            Vector3Int seed = new Vector3Int(
+                MapGenerator.rng.RangeInt(0, short.MaxValue), 
+                MapGenerator.rng.RangeInt(0, short.MaxValue), 
+                MapGenerator.rng.RangeInt(0, short.MaxValue));
 
             var uvs = new Vector2[meshResult.vertices.Length];
             Parallel.For(0, meshResult.vertices.Length, i =>
@@ -40,7 +43,7 @@ namespace ProceduralStages
             meshResult.mesh.RecalculateTangents();
         }
 
-        private Vector2 GetUV(Vector3 vertex, Vector3 normal, Vector3Int seed)
+        public Vector2 GetUV(Vector3 vertex, Vector3 normal, Vector3Int seed)
         {
             float dot = Vector3.Dot(new Vector3(0, -1, 0), normal);
             float angle;
@@ -68,8 +71,6 @@ namespace ProceduralStages
             noise += amplitude * PerlinNoise.Get(vertex + seed, frequency);
 
             Vector2 uv = new Vector2(angle, noise);
-
-
             return uv;
         }
     }

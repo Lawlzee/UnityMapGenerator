@@ -16,7 +16,7 @@ using RoR2;
 
 public class AssetExtracter : MonoBehaviour
 {
-    [MenuItem("Custom/Find All DirectorCardCategorySelection")]
+    //[MenuItem("Custom/Find All DirectorCardCategorySelection")]
     static void FindAllDirectorCardCategorySelection()
     {
         var keys = new List<string>

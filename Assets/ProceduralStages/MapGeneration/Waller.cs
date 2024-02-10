@@ -13,15 +13,15 @@ namespace ProceduralStages
         public float wallRoundingFactor;
         public float blendFactor = 0.1f;
 
-        public float[,,] AddFloor(float[,,] map, System.Random rng)
+        public float[,,] AddFloor(float[,,] map)
         {
             if (!floor.enabled)
             {
                 return (float[,,])map.Clone();
             }
 
-            int seedX = rng.Next(short.MaxValue);
-            int seedZ = rng.Next(short.MaxValue);
+            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             int width3d = map.GetLength(0);
             int height3d = map.GetLength(1);
@@ -58,15 +58,15 @@ namespace ProceduralStages
             return floorMap;
         }
 
-        public void AddCeilling(float[,,] map, System.Random rng)
+        public void AddCeilling(float[,,] map)
         {
             if (ceilling.enabled)
             {
                 return;
             }
 
-            int seedX = rng.Next(short.MaxValue);
-            int seedZ = rng.Next(short.MaxValue);
+            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             int width3d = map.GetLength(0);
             int height3d = map.GetLength(1);
@@ -103,21 +103,21 @@ namespace ProceduralStages
             public float maxThickness;
         }
 
-        public void AddWalls(float[,,] map, System.Random rng)
+        public void AddWalls(float[,,] map)
         {
             if (!walls.enabled)
             {
                 return;
             }
 
-            int wall1SeedX = rng.Next(short.MaxValue);
-            int wall1SeedY = rng.Next(short.MaxValue);
-            int wall2SeedX = rng.Next(short.MaxValue);
-            int wall2SeedY = rng.Next(short.MaxValue);
-            int wall3SeedY = rng.Next(short.MaxValue);
-            int wall3SeedZ = rng.Next(short.MaxValue);
-            int wall4SeedY = rng.Next(short.MaxValue);
-            int wall4SeedZ = rng.Next(short.MaxValue);
+            int wall1SeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall1SeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall2SeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall2SeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall3SeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall3SeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall4SeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wall4SeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             int width3d = map.GetLength(0);
             int height3d = map.GetLength(1);

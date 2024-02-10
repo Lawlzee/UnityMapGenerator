@@ -28,9 +28,9 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float blendFactor = 0.5f;
 
-        public DccsPool GenerateMonstersDccs(System.Random rng, bool hasDLC1)
+        public DccsPool GenerateMonstersDccs(bool hasDLC1)
         {
-            int currentStageInLoop = (Run.instance.stageClearCount % Run.stagesPerLoop) + 1;
+            int currentStageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
 
             var validPools = DccsPoolItem.All
                 .Where(x => x.StageType == StageType.Regular)
@@ -66,7 +66,7 @@ namespace ProceduralStages
                 stageSelection.AddChoice(stage, stage.Weigth);
             }
 
-            StagePool templateStage = stageSelection.Evaluate((float)rng.NextDouble());
+            StagePool templateStage = stageSelection.Evaluate(MapGenerator.rng.nextNormalizedFloat);
 
             var categories = templateStage.PoolEntry.dccs.categories
                 .Select(x => GenerateDccsCategory(x))
@@ -162,7 +162,7 @@ namespace ProceduralStages
                         ? airCardsSelection 
                         : groundCardsSelection;
 
-                    var card = cardsSelection.Evaluate((float)rng.NextDouble());
+                    var card = cardsSelection.Evaluate(MapGenerator.rng.nextNormalizedFloat);
                     string monster = GetMonsterSpecieName(card);
                     if (!usedMonsters.Contains(monster))
                     {

@@ -32,9 +32,9 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float maxNoise = 0.25f;
 
-        public Texture2D CreateTexture(System.Random rng)
+        public Texture2D CreateTexture()
         {
-            Color[] colors = new Color[8];
+            Color[] colors = new Color[6];
 
             var palettes = new Palette[]
             {
@@ -43,18 +43,22 @@ namespace ProceduralStages
                 ceilling
             };
 
-            for (int i = 0; i < 3; i++)
-            {
-                Palette palette = palettes[i];
+            float hue1 = MapGenerator.rng.nextNormalizedFloat;
+            float noise1 = MapGenerator.rng.nextNormalizedFloat * (maxNoise - minNoise) + minNoise;
+            float hue1Variation = (hue1 + noise1 + 1) % 1;
 
-                float hue1 = (float)rng.NextDouble();
-                colors[i * 2] = Color.HSVToRGB(hue1, palette.saturation, palette.value);
+            float hue2 = MapGenerator.rng.nextNormalizedFloat;
+            float noise2 = MapGenerator.rng.nextNormalizedFloat * (maxNoise - minNoise) + minNoise;
+            float hue2Variation = (hue2 + noise2 + 1) % 1;
 
-                float noise = (float)rng.NextDouble() * (maxNoise - minNoise) + minNoise;
+            colors[0] = Color.HSVToRGB(hue1, floor.saturation, floor.value);
+            colors[1] = Color.HSVToRGB(hue1Variation, floor.saturation, floor.value);
 
-                float hue2 = (hue1 + noise + 1) % 1;
-                colors[i * 2 + 1] = Color.HSVToRGB(hue2, palette.saturation, palette.value);
-            }
+            colors[2] = Color.HSVToRGB(hue2, walls.saturation, walls.value);
+            colors[3] = Color.HSVToRGB(hue2Variation, walls.saturation, walls.value);
+
+            colors[4] = Color.HSVToRGB(hue2, ceilling.saturation, ceilling.value);
+            colors[5] = Color.HSVToRGB(hue2Variation, ceilling.saturation, ceilling.value);
 
             Texture2D texture = new Texture2D(size * 2, size);
 
@@ -62,7 +66,10 @@ namespace ProceduralStages
 
             Color[] pixels = new Color[2 * size * size];
 
-            Vector2Int seed = new Vector2Int(rng.Next() % short.MaxValue, rng.Next() % short.MaxValue);
+            Vector2Int seed = new Vector2Int(
+                MapGenerator.rng.RangeInt(0, short.MaxValue), 
+                MapGenerator.rng.RangeInt(0, short.MaxValue));
+
             Parallel.For(0, size, y =>
             {
                 for (int x = 0; x < size; x++)

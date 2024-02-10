@@ -19,15 +19,15 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float curveMinNoise;
 
-        public float[,,] Create(int width, int height, int depth, System.Random rng)
+        public float[,,] Create(int width, int height, int depth)
         {
-            int wallSeedX = rng.Next(short.MaxValue);
-            int wallSeedY = rng.Next(short.MaxValue);
-            int wallSeedZ = rng.Next(short.MaxValue);
+            int wallSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wallSeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int wallSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
-            int curveSeedX = rng.Next(short.MaxValue);
-            int curveSeedY = rng.Next(short.MaxValue);
-            int curveSeedZ = rng.Next(short.MaxValue);
+            int curveSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int curveSeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int curveSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             float[,,] map = new float[width, height, depth];
 
