@@ -20,7 +20,7 @@ MonoBehaviour:
     - {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
   - assetBundleName: proceduralAssets
     assets:
-    - {fileID: 2800000, guid: e2344e61315b28f459af87dddbdbcb31, type: 3}
+    - {fileID: 2800000, guid: c599b731fccac9347b7425faff8d394a, type: 3}
     - {fileID: 7406066706967165406, guid: a0d326cb2b2bdf34d8274181587b2613, type: 3}
 --- !u!114 &-6844045057250356348
 MonoBehaviour:

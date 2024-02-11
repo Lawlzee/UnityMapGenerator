@@ -25,29 +25,29 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.4.0";
+        public const string PluginVersion = "1.5.0";
 
         public static ConfigEntry<bool> ReplaceAllStages;
 
-        public static ConfigEntry<string> Seed;
-        public static ConfigEntry<float> FloorSaturation;
-        public static ConfigEntry<float> FloorValue;
-        public static ConfigEntry<float> WallsSaturation;
-        public static ConfigEntry<float> WallsValue;
-        public static ConfigEntry<float> CeillingSaturation;
-        public static ConfigEntry<float> CeillingValue;
-        public static ConfigEntry<float> LightSaturation;
-        public static ConfigEntry<float> LightValue;
-
-        public static ConfigEntry<float> FogSaturation;
-        public static ConfigEntry<float> FogValue;
-        public static ConfigEntry<float> FogColorStartAlpha;
-        public static ConfigEntry<float> FogColorMidAlpha;
-        public static ConfigEntry<float> FogColorEndAlpha;
-        public static ConfigEntry<float> FogZero;
-        public static ConfigEntry<float> FogOne;
-        public static ConfigEntry<float> FogIntensity;
-        public static ConfigEntry<float> FogPower;
+        //public static ConfigEntry<string> Seed;
+        //public static ConfigEntry<float> FloorSaturation;
+        //public static ConfigEntry<float> FloorValue;
+        //public static ConfigEntry<float> WallsSaturation;
+        //public static ConfigEntry<float> WallsValue;
+        //public static ConfigEntry<float> CeillingSaturation;
+        //public static ConfigEntry<float> CeillingValue;
+        //public static ConfigEntry<float> LightSaturation;
+        //public static ConfigEntry<float> LightValue;
+        //
+        //public static ConfigEntry<float> FogSaturation;
+        //public static ConfigEntry<float> FogValue;
+        //public static ConfigEntry<float> FogColorStartAlpha;
+        //public static ConfigEntry<float> FogColorMidAlpha;
+        //public static ConfigEntry<float> FogColorEndAlpha;
+        //public static ConfigEntry<float> FogZero;
+        //public static ConfigEntry<float> FogOne;
+        //public static ConfigEntry<float> FogIntensity;
+        //public static ConfigEntry<float> FogPower;
 
         public void Awake()
         {
@@ -56,47 +56,47 @@ namespace ProceduralStages
             ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
             ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
-            string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
+            //string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
 
-            Seed = Config.Bind("Debug", nameof(Seed), "", debugDescrption);
-            FloorSaturation = Config.Bind("Debug", nameof(FloorSaturation), 0.5f, debugDescrption);
-            FloorValue = Config.Bind("Debug", nameof(FloorValue), 0.36f, debugDescrption);
-            WallsSaturation = Config.Bind("Debug", nameof(WallsSaturation), 0.3f, debugDescrption);
-            WallsValue = Config.Bind("Debug", nameof(WallsValue), 0.27f, debugDescrption);
-            CeillingSaturation = Config.Bind("Debug", nameof(CeillingSaturation), 0.3f, debugDescrption);
-            CeillingValue = Config.Bind("Debug", nameof(CeillingValue), 0.15f, debugDescrption);
-            LightSaturation = Config.Bind("Debug", nameof(LightSaturation), 0.7f, debugDescrption);
-            LightValue = Config.Bind("Debug", nameof(LightValue), 0.7f, debugDescrption);
-
-            FogSaturation = Config.Bind("Debug", nameof(FogSaturation), 0.7f, debugDescrption);
-            FogValue = Config.Bind("Debug", nameof(FogValue), 0.7f, debugDescrption);
-            FogColorStartAlpha = Config.Bind("Debug", nameof(FogColorStartAlpha), 0f, debugDescrption);
-            FogColorMidAlpha = Config.Bind("Debug", nameof(FogColorMidAlpha), 0.175f, debugDescrption);
-            FogColorEndAlpha = Config.Bind("Debug", nameof(FogColorEndAlpha), 0.35f, debugDescrption);
-            FogZero = Config.Bind("Debug", nameof(FogZero), 0f, debugDescrption);
-            FogOne = Config.Bind("Debug", nameof(FogOne), 0.1f, debugDescrption);
-            FogIntensity = Config.Bind("Debug", nameof(FogIntensity), 0.25f, debugDescrption);
-            FogPower = Config.Bind("Debug", nameof(FogPower), 0.75f, debugDescrption);
-
-            ModSettingsManager.AddOption(new StringInputFieldOption(Seed));
-            ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(WallsValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(CeillingSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(CeillingValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(LightSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(LightValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-
-            ModSettingsManager.AddOption(new SliderOption(FogSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogColorStartAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogColorMidAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogColorEndAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogZero, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogOne, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogIntensity, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            ModSettingsManager.AddOption(new SliderOption(FogPower, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //Seed = Config.Bind("Debug", nameof(Seed), "", debugDescrption);
+            //FloorSaturation = Config.Bind("Debug", nameof(FloorSaturation), 0.5f, debugDescrption);
+            //FloorValue = Config.Bind("Debug", nameof(FloorValue), 0.36f, debugDescrption);
+            //WallsSaturation = Config.Bind("Debug", nameof(WallsSaturation), 0.3f, debugDescrption);
+            //WallsValue = Config.Bind("Debug", nameof(WallsValue), 0.27f, debugDescrption);
+            //CeillingSaturation = Config.Bind("Debug", nameof(CeillingSaturation), 0.3f, debugDescrption);
+            //CeillingValue = Config.Bind("Debug", nameof(CeillingValue), 0.15f, debugDescrption);
+            //LightSaturation = Config.Bind("Debug", nameof(LightSaturation), 0.7f, debugDescrption);
+            //LightValue = Config.Bind("Debug", nameof(LightValue), 0.7f, debugDescrption);
+            //
+            //FogSaturation = Config.Bind("Debug", nameof(FogSaturation), 0.7f, debugDescrption);
+            //FogValue = Config.Bind("Debug", nameof(FogValue), 0.7f, debugDescrption);
+            //FogColorStartAlpha = Config.Bind("Debug", nameof(FogColorStartAlpha), 0f, debugDescrption);
+            //FogColorMidAlpha = Config.Bind("Debug", nameof(FogColorMidAlpha), 0.175f, debugDescrption);
+            //FogColorEndAlpha = Config.Bind("Debug", nameof(FogColorEndAlpha), 0.35f, debugDescrption);
+            //FogZero = Config.Bind("Debug", nameof(FogZero), 0f, debugDescrption);
+            //FogOne = Config.Bind("Debug", nameof(FogOne), 0.1f, debugDescrption);
+            //FogIntensity = Config.Bind("Debug", nameof(FogIntensity), 0.25f, debugDescrption);
+            //FogPower = Config.Bind("Debug", nameof(FogPower), 0.75f, debugDescrption);
+            //
+            //ModSettingsManager.AddOption(new StringInputFieldOption(Seed));
+            //ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(WallsValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(CeillingSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(CeillingValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(LightSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(LightValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //
+            //ModSettingsManager.AddOption(new SliderOption(FogSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogColorStartAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogColorMidAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogColorEndAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogZero, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogOne, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogIntensity, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            //ModSettingsManager.AddOption(new SliderOption(FogPower, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
 
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
@@ -128,7 +128,7 @@ namespace ProceduralStages
                 return ContentProvider.ItSceneDef.sceneDefIndex;
             }
 
-            return ContentProvider.LoopSceneDefs[Run.instance.stageClearCount % 5].sceneDefIndex;
+            return ContentProvider.LoopSceneDefs[Math.Max(0, Run.instance.stageClearCount) % 5].sceneDefIndex;
         }
 
         private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
@@ -224,7 +224,7 @@ namespace ProceduralStages
         {
             SceneDef sceneDef = self is InfiniteTowerRun
                 ? ContentProvider.ItSceneDef
-                : ContentProvider.LoopSceneDefs[(Run.instance.stageClearCount + 1) % 5];
+                : ContentProvider.LoopSceneDefs[(Math.Max(0, Run.instance.stageClearCount) + 1) % 5];
 
             if (ReplaceAllStages.Value)
             {

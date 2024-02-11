@@ -1,5 +1,10 @@
-## 1.4
+## 1.5
+- Added Decorations
+   - Trees, grass, rocks, vines, etc., have been introduced as decorative elements in the environment.
+- Dynamic Stage Size
+   - The stage size is now scaled based on the current stage count. As the stage count increases, the size of the map also grows accordingly.
 
+## 1.4
 - Fixed compatibility issue with the BetterLoadingScreen mod
   - Resolved an issue that was causing compatibility problems with the BetterLoadingScreen mod. This fix ensures that both mods can work together smoothly.
 - Improved simulacrum support
