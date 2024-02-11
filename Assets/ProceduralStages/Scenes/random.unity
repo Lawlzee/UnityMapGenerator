@@ -622,9 +622,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 771693770}
-  - component: {fileID: 771693772}
   - component: {fileID: 771693771}
-  - component: {fileID: 771693773}
   m_Layer: 0
   m_Name: Fly Camera
   m_TagString: EditorOnly
@@ -640,7 +638,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 771693769}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6189804, y: -25.16322, z: -265.20154}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 454570142}
@@ -659,119 +657,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 300
-  accSprintMultiplier: 8
+  accSprintMultiplier: 4
   lookSensitivity: 2
   dampingCoefficient: 5
   focusOnEnable: 1
---- !u!20 &771693772
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771693769}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
---- !u!114 &771693773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 771693769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeTrigger: {fileID: 771693770}
-  volumeLayer:
-    serializedVersion: 2
-    m_Bits: 1048576
-  stopNaNPropagation: 1
-  finalBlitToCameraTarget: 0
-  antialiasingMode: 0
-  temporalAntialiasing:
-    jitterSpread: 0.75
-    sharpness: 0.25
-    stationaryBlending: 0.95
-    motionBlending: 0.85
-  subpixelMorphologicalAntialiasing:
-    quality: 2
-  fastApproximateAntialiasing:
-    fastMode: 0
-    keepAlpha: 0
-  fog:
-    enabled: 1
-    excludeSkybox: 1
-  debugLayer:
-    lightMeter:
-      width: 512
-      height: 256
-      showCurves: 1
-    histogram:
-      width: 512
-      height: 256
-      channel: 3
-    waveform:
-      exposure: 0.12
-      height: 256
-    vectorscope:
-      size: 256
-      exposure: 0.12
-    overlaySettings:
-      linearDepth: 0
-      motionColorIntensity: 4
-      motionGridSize: 64
-      colorBlindnessType: 0
-      colorBlindnessStrength: 1
-  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
-  m_ShowToolkit: 0
-  m_ShowCustomSorter: 0
-  breakBeforeColorGrading: 0
-  m_BeforeTransparentBundles:
-  - assemblyQualifiedName: RampFog, RoR2, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: SobelOutline, RoR2, Version=0.0.0.0, Culture=neutral,
-      PublicKeyToken=null
-  - assemblyQualifiedName: SobelRain, RoR2, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-  - assemblyQualifiedName: UnityEngine.Rendering.PostProcessing.HopooSSR, RoR2, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
-  m_BeforeStackBundles: []
-  m_AfterStackBundles: []
 --- !u!1 &934897083
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +763,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189524057}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.903225, y: -210.72765, z: -305.3307}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1236,9 +1125,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1120c5072b72f46a4737a166bef762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 175
-  height: 80
-  depth: 200
+  size: {x: 125, y: 75, z: 150}
+  sizeIncreasePerStage: {x: 15, y: 5, z: 25}
+  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   mapScale: 2.5
   meshQuality: 0.2
   loadResourcesInEditor: 1
@@ -1312,7 +1201,7 @@ MonoBehaviour:
       colorEndAlpha: 0.35
       zero: 0
       one: 0.1
-      intensity: 0.25
+      intensity: 0.4
       power: 0.75
     perlinFrequency: 0.588
     xSquareSize: 1000
@@ -1524,6 +1413,7 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/frozenwall/FWSimpleGrass.prefab
       scale: 1
@@ -1532,6 +1422,7 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.005
     - asset: RoR2/Base/artifactworld/spmAWGrass.spm
       scale: 1
@@ -1540,6 +1431,7 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/moon/spmMoonGrass1.spm
       scale: 1
@@ -1548,6 +1440,7 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/Common/Props/mdlIcoRockM.fbx
       scale: 1
@@ -1556,6 +1449,7 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/spmFern1.spm
       scale: 1
@@ -1564,14 +1458,7 @@ MonoBehaviour:
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
-      lod: -1
-    - asset: RoR2/Base/Common/Props/mdlRockModular1.fbx
-      scale: 1
-      ground: 1
-      count: 50
-      changeColor: 1
-      isRock: 0
-      normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/spmFern2.spm
       scale: 1
@@ -1580,6 +1467,7 @@ MonoBehaviour:
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlRock3.fbx
       scale: 1
@@ -1588,62 +1476,70 @@ MonoBehaviour:
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlRockModular3.fbx
       scale: 1
       ground: 1
-      count: 100
+      count: 60
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V1.spm
       scale: 1
       ground: 1
-      count: 15
+      count: 10
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V2.spm
       scale: 1
       ground: 1
-      count: 15
+      count: 10
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V3.spm
       scale: 1
       ground: 1
-      count: 15
+      count: 12
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlColossusHead1.fbx
       scale: 2
       ground: 1
-      count: 5
+      count: 3
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/skymeadow/spmSMFruitPlant.spm
       scale: 1
       ground: 1
-      count: 25
+      count: 50
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMFruitPlantDuo.spm
       scale: 1
       ground: 1
-      count: 25
+      count: 50
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMGrass.spm
       scale: 1
@@ -1652,62 +1548,52 @@ MonoBehaviour:
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMHangingVinesCluster.spm
       scale: 3
       ground: 0
-      count: 300
+      count: 200
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0.01
     - asset: RoR2/Base/skymeadow/flower.fbx
       scale: 1
       ground: 1
-      count: 100
+      count: 50
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
-      lod: -1
-    - asset: RoR2/Base/blackbeach/spmBbBirch.spm
-      scale: 0.5
-      ground: 1
-      count: 15
-      changeColor: 0
-      isRock: 0
-      normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/blackbeach/spmBbConif.spm
       scale: 0.5
       ground: 1
-      count: 15
+      count: 10
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/skymeadow/SMVine1.prefab
       scale: 1
       ground: 0
-      count: 50
+      count: 30
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0
     - asset: RoR2/Base/skymeadow/SMVine2.prefab
       scale: 1
       ground: 0
-      count: 50
+      count: 30
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
-      lod: 0
-    - asset: RoR2/Base/skymeadow/SMVine3.prefab
-      scale: 1
-      ground: 0
-      count: 50
-      changeColor: 0
-      isRock: 0
-      normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: 0
     - asset: RoR2/Base/golemplains/spmGPFlower.spm
       scale: 2
@@ -1716,46 +1602,43 @@ MonoBehaviour:
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Cluster.spm
       scale: 1
       ground: 1
-      count: 70
+      count: 40
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Tight.spm
       scale: 1
       ground: 1
-      count: 70
+      count: 40
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom2Cluster.spm
       scale: 1
       ground: 1
-      count: 70
+      count: 40
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
-      lod: -1
-    - asset: RoR2/DLC1/sulfurpools/SPPebble.prefab
-      scale: 1
-      ground: 1
-      count: 100
-      changeColor: 0
-      isRock: 1
-      normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/DLC1/sulfurpools/SPCoralMDLit.prefab
       scale: 1
       ground: 1
-      count: 50
+      count: 35
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/shipgraveyard/SGSmallGroundStalagmite.prefab
       scale: 2
@@ -1764,14 +1647,16 @@ MonoBehaviour:
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/DLC1/ancientloft/mdlAncientLoft_Rubble.fbx
       scale: 1
       ground: 1
-      count: 50
+      count: 35
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/DLC1/ancientloft/AncientLoft_LightStatue.prefab
       scale: 1
@@ -1780,37 +1665,60 @@ MonoBehaviour:
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/blackbeach/spmBbIvy1.spm
       scale: 10
       ground: 0
-      count: 200
+      count: 180
       changeColor: 1
       isRock: 0
       normal: {x: 0, y: -1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/dampcave/DCHangingLightSmallLongChain.prefab
       scale: 1
       ground: 0
-      count: 5
+      count: 15
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
     - asset: RoR2/Base/dampcave/DCHangingLightSmallShortChain Variant.prefab
       scale: 1
       ground: 0
-      count: 5
+      count: 15
       changeColor: 0
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
+      offset: {x: 0, y: 0, z: 0}
       lod: -1
-    propsCount: 1000
+    - asset: RoR2/Base/skymeadow/SMRockFormationMedium1.fbx
+      scale: 400
+      ground: 1
+      count: 30
+      changeColor: 0
+      isRock: 1
+      normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      lod: -1
+    - asset: RoR2/Base/skymeadow/SMRockOblong.fbx
+      scale: 60
+      ground: 1
+      count: 60
+      changeColor: 1
+      isRock: 0
+      normal: {x: 0, y: 0, z: 0}
+      offset: {x: 0, y: 0, z: 0}
+      lod: -1
+    propsCount: 10
     propsObject: {fileID: 1189524057}
     instances: []
   sceneInfoObject: {fileID: 1798483139}
   postProcessingObject: {fileID: 447697554}
   directorObject: {fileID: 1466132691}
+  oobZoneObject: {fileID: 464249044}
   editorFloorIndex: -1
   editorWallIndex: -1
 --- !u!23 &1906724323

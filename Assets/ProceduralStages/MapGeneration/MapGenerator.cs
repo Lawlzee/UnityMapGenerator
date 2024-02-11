@@ -17,9 +17,9 @@ namespace ProceduralStages
     //[DefaultExecutionOrder(-1)]
     public class MapGenerator : MonoBehaviour
     {
-        public int width;
-        public int height;
-        public int depth;
+        public Vector3Int size;
+        public Vector3Int sizeIncreasePerStage;
+        public Vector3 sizeVariation;
 
         [Range(0, 10)]
         public float mapScale = 1f;
@@ -54,6 +54,7 @@ namespace ProceduralStages
         public GameObject sceneInfoObject;
         public GameObject postProcessingObject;
         public GameObject directorObject;
+        public GameObject oobZoneObject;
 
         public int editorFloorIndex;
         public int editorWallIndex;
@@ -137,7 +138,18 @@ namespace ProceduralStages
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            float[,,] map3d = wallGenerator.Create(width, height, depth);
+            var stageSize = size + stageInLoop * sizeIncreasePerStage;
+            stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * sizeVariation.x);
+            stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * sizeVariation.y);
+            stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * sizeVariation.z);
+
+            BoxCollider oobZone = oobZoneObject.GetComponent<BoxCollider>();
+            var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale, stageSize.z * mapScale);
+
+            oobZone.size = scaledSize;
+            oobZone.center = scaledSize / 2;
+
+            float[,,] map3d = wallGenerator.Create(stageSize);
             LogStats("wallGenerator");
 
             //float[,,] map3d = map2dToMap3d.Convert(map2d, height);

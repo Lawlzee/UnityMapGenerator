@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ProceduralStages
 {
-    [RequireComponent(typeof(Camera))]
     public class FlyCamera : MonoBehaviour
     {
         public float acceleration = 300; // how fast you accelerate
@@ -13,6 +13,8 @@ namespace ProceduralStages
 
         Vector3 velocity; // current velocity
 
+        private GameObject cameraObject;
+
         static bool Focused
         {
             get => Cursor.lockState == CursorLockMode.Locked;
@@ -20,6 +22,15 @@ namespace ProceduralStages
             {
                 Cursor.lockState = value ? CursorLockMode.Locked : CursorLockMode.None;
                 Cursor.visible = value == false;
+            }
+        }
+
+        void Awake()
+        {
+            if (Application.isPlaying)
+            {
+                var cameraPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/Main Camera.prefab").WaitForCompletion();
+                cameraObject = Instantiate(cameraPrefab, transform).transform.GetChild(0).gameObject;
             }
         }
 
@@ -32,6 +43,11 @@ namespace ProceduralStages
 
         void Update()
         {
+            if (Application.isPlaying)
+            {
+                GameObject.Find("HUDSimple(Clone)")?.SetActive(false);
+            }
+
             // Input
             if (Focused)
                 UpdateInput();
@@ -40,7 +56,7 @@ namespace ProceduralStages
 
             // Physics
             velocity = Vector3.Lerp(velocity, Vector3.zero, dampingCoefficient * Time.deltaTime);
-            transform.position += velocity * Time.deltaTime;
+            cameraObject.transform.position += velocity * Time.deltaTime;
         }
 
         void UpdateInput()
@@ -50,10 +66,10 @@ namespace ProceduralStages
 
             // Rotation
             Vector2 mouseDelta = lookSensitivity * new Vector2(Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y"));
-            Quaternion rotation = transform.rotation;
+            Quaternion rotation = cameraObject.transform.rotation;
             Quaternion horiz = Quaternion.AngleAxis(mouseDelta.x, Vector3.up);
             Quaternion vert = Quaternion.AngleAxis(mouseDelta.y, Vector3.right);
-            transform.rotation = horiz * rotation * vert;
+            cameraObject.transform.rotation = horiz * rotation * vert;
 
             // Leave cursor lock
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -78,7 +94,7 @@ namespace ProceduralStages
             AddMovement(KeyCode.A, Vector3.left);
             AddMovement(KeyCode.LeftShift, Vector3.down);
             AddMovement(KeyCode.Space, Vector3.up);
-            Vector3 direction = transform.TransformVector(moveInput.normalized);
+            Vector3 direction = cameraObject.transform.TransformVector(moveInput.normalized);
 
             if (Input.GetKey(KeyCode.LeftControl))
             {

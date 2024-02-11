@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,12 @@ namespace ProceduralStages
     [Serializable]
     public class PropsPlacer
     {
+        //todo:
+        //RoR2/DLC1/SulfurPod/SulfurPodBody.prefab
+        //RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab
+        //RoR2/Base/FusionCellDestructible/FusionCellDestructibleBody.prefab
+        //RoR2/Base/goolake/GLPressurePlate.prefab
+
         public PropsDefinition[] props = new PropsDefinition[0];
         public int propsCount = 10;
 
@@ -22,11 +29,35 @@ namespace ProceduralStages
 
         public void PlaceAll(Graphs graphs, MeshColorer meshColorer, Texture2D colorGradiant, Material terrainMaterial)
         {
+            if (Application.isEditor)
+            {
+                var rows = props
+                    .Select(x => new
+                    {
+                        Prop = x,
+                        TriangleCount = Addressables.LoadAssetAsync<GameObject>(x.asset).WaitForCompletion().GetComponentsInChildren<MeshFilter>()
+                            .Select(y => y.sharedMesh.triangles.Length)
+                            .Sum()
+                    })
+                    .OrderByDescending(x => x.TriangleCount * x.Prop.count)
+                    .ToList();
+
+                StringBuilder sb = new StringBuilder();
+                foreach (var x in rows)
+                {
+                    sb.AppendLine($"{x.Prop.asset}: {x.TriangleCount} * {x.Prop.count} = {x.TriangleCount * x.Prop.count}");
+                }
+
+                Log.Debug(sb.ToString());
+            }
+
+            int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
+
             HashSet<int> choosenPropsIndex = new HashSet<int>();
 
-            propsCount = Math.Min(props.Length, propsCount);
+            int stagePropCount = Math.Min(props.Length, propsCount + stageInLoop);
 
-            while (choosenPropsIndex.Count < propsCount)
+            while (choosenPropsIndex.Count < stagePropCount)
             {
                 choosenPropsIndex.Add(MapGenerator.rng.RangeInt(0, props.Length));
             }
@@ -100,6 +131,8 @@ namespace ProceduralStages
                             : default(Vector3?),
                         prop.scale);
 
+                    instance.transform.position += prop.offset;
+
                     instances.Add(instance);
                 }
             }
@@ -116,6 +149,7 @@ namespace ProceduralStages
             public bool changeColor;
             public bool isRock;
             public Vector3 normal;
+            public Vector3 offset;
 
             [Range(-1f, 1f)]
             public float lod = -1;

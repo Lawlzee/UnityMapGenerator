@@ -34,11 +34,12 @@ namespace ProceduralStages
             Vector3? normal,
             float scale)
         {
-            var rotation = Quaternion.FromToRotation(Vector3.up, normal ?? this.normal) 
-                * prefab.transform.rotation
-                * Quaternion.FromToRotation(Vector3.up, new Vector3(0, MapGenerator.rng.nextNormalizedFloat * 360f, 0));
+            var rotation = Quaternion.FromToRotation(Vector3.up, normal ?? this.normal)
+                * prefab.transform.rotation; ;
 
             GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
+
+            gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
 
             //Quaternion rotation = Quaternion.Euler(0.0f, MapGenerator.rng.nextNormalizedFloat * 360f, 0.0f);
             //gameObject.transform.up = normal ?? this.normal;
