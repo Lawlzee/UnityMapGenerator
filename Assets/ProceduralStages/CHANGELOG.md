@@ -1,3 +1,6 @@
+## 1.6
+- Added Judgement compatibility
+
 ## 1.5
 - Added Decorations
    - Trees, grass, rocks, vines, etc., have been introduced as decorative elements in the environment.

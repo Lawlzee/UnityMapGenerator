@@ -25,7 +25,7 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.5.0";
+        public const string PluginVersion = "1.6.0";
 
         public static ConfigEntry<bool> ReplaceAllStages;
 
@@ -109,9 +109,9 @@ namespace ProceduralStages
             On.RoR2.SceneDirector.DefaultPlayerSpawnPointGenerator += SceneDirector_DefaultPlayerSpawnPointGenerator;
             On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
 
-            On.RoR2.SceneCatalog.FindSceneIndex += SceneCatalog_FindSceneIndex;
+            On.RoR2.SceneExitController.SetState += SceneExitController_SetState;
 
-            On.RoR2.DirectorCore.OnEnable += DirectorCore_OnEnable;
+            On.RoR2.SceneCatalog.FindSceneIndex += SceneCatalog_FindSceneIndex;
 
             On.RoR2.PreGameController.Awake += PreGameController_Awake;
         }
@@ -131,11 +131,6 @@ namespace ProceduralStages
             return ContentProvider.LoopSceneDefs[Math.Max(0, Run.instance.stageClearCount) % 5].sceneDefIndex;
         }
 
-        private void DirectorCore_OnEnable(On.RoR2.DirectorCore.orig_OnEnable orig, DirectorCore self)
-        {
-            Log.Debug("DirectorCore_OnEnable");
-            orig(self);
-        }
 
         private void PreGameController_Awake(On.RoR2.PreGameController.orig_Awake orig, PreGameController self)
         {
@@ -143,7 +138,6 @@ namespace ProceduralStages
 
             if (NetworkServer.active)
             {
-
                 var seedSyncerObject = Instantiate(ContentProvider.seedSyncerPrefab);
                 seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
                 NetworkServer.Spawn(seedSyncerObject);
@@ -204,8 +198,26 @@ namespace ProceduralStages
             }
 
             orig(self);
+        }
 
+        private void SceneExitController_SetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
+        {
+            if (!NetworkServer.active
+                || !Run.instance.name.Contains("Judgement") 
+                || newState != SceneExitController.ExitState.Finished
+                || SceneCatalog.currentSceneDef.cachedName != "bazaar"
+                || Run.instance.stageClearCount >= 11)
+            {
+                orig(self, newState);
+                return;
+            }
 
+            if (ReplaceAllStages.Value || Run.instance.stageRngGenerator.nextNormalizedFloat > 0.5f)
+            {
+                Run.instance.nextStageScene = ContentProvider.ItSceneDef;
+            }
+
+            orig(self, newState);
         }
 
         private void SceneDirector_DefaultPlayerSpawnPointGenerator(On.RoR2.SceneDirector.orig_DefaultPlayerSpawnPointGenerator orig, SceneDirector self)
@@ -222,6 +234,12 @@ namespace ProceduralStages
 
         private void Run_PickNextStageScene(On.RoR2.Run.orig_PickNextStageScene orig, Run self, WeightedSelection<SceneDef> choices)
         {
+            if (Run.instance.stageClearCount == 0 && self.name.Contains("Judgement"))
+            {
+                orig(self, choices);
+                return;
+            }
+
             SceneDef sceneDef = self is InfiniteTowerRun
                 ? ContentProvider.ItSceneDef
                 : ContentProvider.LoopSceneDefs[(Math.Max(0, Run.instance.stageClearCount) + 1) % 5];
