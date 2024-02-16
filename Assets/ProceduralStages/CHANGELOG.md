@@ -1,5 +1,7 @@
 ## 1.6
 - Added Judgement compatibility
+- Interactables can not longer spawn inside of rocks
+- Added ring event
 
 ## 1.5
 - Added Decorations

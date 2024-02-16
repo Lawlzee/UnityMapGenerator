@@ -678,7 +678,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &934897084
 Transform:
   m_ObjectHideFlags: 0
@@ -1414,6 +1414,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/frozenwall/FWSimpleGrass.prefab
       scale: 1
@@ -1423,6 +1424,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.005
     - asset: RoR2/Base/artifactworld/spmAWGrass.spm
       scale: 1
@@ -1432,6 +1434,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/moon/spmMoonGrass1.spm
       scale: 1
@@ -1441,6 +1444,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/Common/Props/mdlIcoRockM.fbx
       scale: 1
@@ -1450,6 +1454,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/spmFern1.spm
       scale: 1
@@ -1459,6 +1464,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/Common/Props/spmFern2.spm
       scale: 1
@@ -1468,6 +1474,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlRock3.fbx
       scale: 1
@@ -1477,6 +1484,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlRockModular3.fbx
       scale: 1
@@ -1486,6 +1494,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V1.spm
       scale: 1
@@ -1495,6 +1504,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V2.spm
       scale: 1
@@ -1504,6 +1514,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/spmBonsai1V3.spm
       scale: 1
@@ -1513,15 +1524,17 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/Common/Props/mdlColossusHead1.fbx
-      scale: 2
+      scale: 1
       ground: 1
       count: 3
       changeColor: 0
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/skymeadow/spmSMFruitPlant.spm
       scale: 1
@@ -1531,6 +1544,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMFruitPlantDuo.spm
       scale: 1
@@ -1540,6 +1554,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMGrass.spm
       scale: 1
@@ -1549,6 +1564,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/skymeadow/spmSMHangingVinesCluster.spm
       scale: 3
@@ -1558,6 +1574,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0.01
     - asset: RoR2/Base/skymeadow/flower.fbx
       scale: 1
@@ -1567,6 +1584,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/blackbeach/spmBbConif.spm
       scale: 0.5
@@ -1576,6 +1594,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/skymeadow/SMVine1.prefab
       scale: 1
@@ -1585,6 +1604,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0
     - asset: RoR2/Base/skymeadow/SMVine2.prefab
       scale: 1
@@ -1594,6 +1614,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: 0
     - asset: RoR2/Base/golemplains/spmGPFlower.spm
       scale: 2
@@ -1603,6 +1624,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Cluster.spm
       scale: 1
@@ -1612,6 +1634,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom1Tight.spm
       scale: 1
@@ -1621,6 +1644,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/shipgraveyard/spmSGMushroom2Cluster.spm
       scale: 1
@@ -1630,6 +1654,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/DLC1/sulfurpools/SPCoralMDLit.prefab
       scale: 1
@@ -1639,6 +1664,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/shipgraveyard/SGSmallGroundStalagmite.prefab
       scale: 2
@@ -1648,6 +1674,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/DLC1/ancientloft/mdlAncientLoft_Rubble.fbx
       scale: 1
@@ -1657,6 +1684,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/DLC1/ancientloft/AncientLoft_LightStatue.prefab
       scale: 1
@@ -1666,6 +1694,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/blackbeach/spmBbIvy1.spm
       scale: 10
@@ -1675,6 +1704,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: -1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/dampcave/DCHangingLightSmallLongChain.prefab
       scale: 1
@@ -1684,6 +1714,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/dampcave/DCHangingLightSmallShortChain Variant.prefab
       scale: 1
@@ -1693,6 +1724,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 1, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 0
       lod: -1
     - asset: RoR2/Base/skymeadow/SMRockFormationMedium1.fbx
       scale: 400
@@ -1702,6 +1734,7 @@ MonoBehaviour:
       isRock: 1
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     - asset: RoR2/Base/skymeadow/SMRockOblong.fbx
       scale: 60
@@ -1711,6 +1744,7 @@ MonoBehaviour:
       isRock: 0
       normal: {x: 0, y: 0, z: 0}
       offset: {x: 0, y: 0, z: 0}
+      occupySpace: 1
       lod: -1
     propsCount: 10
     propsObject: {fileID: 1189524057}

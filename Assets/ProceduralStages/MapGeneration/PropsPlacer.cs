@@ -108,6 +108,11 @@ namespace ProceduralStages
 
                     var propsNode = graph[index];
 
+                    if (prop.occupySpace && prop.ground)
+                    {
+                        graphs.OccupySpace(propsNode.position);
+                    }
+
                     Color? color = null;
                     if (prop.changeColor)
                     {
@@ -150,6 +155,7 @@ namespace ProceduralStages
             public bool isRock;
             public Vector3 normal;
             public Vector3 offset;
+            public bool occupySpace;
 
             [Range(-1f, 1f)]
             public float lod = -1;

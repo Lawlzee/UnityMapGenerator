@@ -19,6 +19,20 @@ namespace ProceduralStages
         public NodeGraph air;
         public List<PropsNode> floorProps;
         public List<PropsNode> ceilingProps;
+
+        public Dictionary<Vector3, PropsNode> nodeInfoByPosition;
+        public Dictionary<Vector3, int> groundNodeIndexByPosition;
+
+        public void OccupySpace(Vector3 position)
+        {
+            if (groundNodeIndexByPosition.TryGetValue(position, out int index))
+            {
+                ref var node = ref ground.nodes[index];
+
+                node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoChestSpawn;
+                node.forbiddenHulls = HullMask.Human | HullMask.Golem | HullMask.BeetleQueen;
+            }
+        }
     }
 
     public struct PropsNode
@@ -35,14 +49,11 @@ namespace ProceduralStages
             float scale)
         {
             var rotation = Quaternion.FromToRotation(Vector3.up, normal ?? this.normal)
-                * prefab.transform.rotation; ;
+                * prefab.transform.rotation;
 
             GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
 
             gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
-
-            //Quaternion rotation = Quaternion.Euler(0.0f, MapGenerator.rng.nextNormalizedFloat * 360f, 0.0f);
-            //gameObject.transform.up = normal ?? this.normal;
             gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
             if (Application.isEditor)
@@ -99,28 +110,22 @@ namespace ProceduralStages
             //MapDensity mapDensity = densityMap.Create(map);
             ///LogStats("mapDensity");
 
-            (NodeGraph groundNodes, List<PropsNode> floorProps, List<PropsNode> ceilingProps) = CreateGroundNodes(meshResult, floorMap, mapScale);
+            Graphs graphs = CreateGroundNodes(meshResult, floorMap, mapScale);
             LogStats("groundNodes");
 
-            HashSet<int> mainIsland = GetMainIsland(groundNodes);
+            HashSet<int> mainIsland = GetMainIsland(graphs.ground);
             //HashSet<int> mainIsland = new HashSet<int>();
             LogStats("mainIsland");
 
-            SetMainIslandFlags(groundNodes, mainIsland, floorMap, mapScale);
+            SetMainIslandFlags(graphs.ground, mainIsland, floorMap, mapScale);
             LogStats("SetMainIslandFlags");
 
-            groundNodes.Awake();
+            graphs.ground.Awake();
 
-            NodeGraph airNodes = CreateAirNodes(groundNodes, mainIsland, map, mapScale);
+            graphs.air = CreateAirNodes(graphs.ground, mainIsland, map, mapScale);
             LogStats("CreateAirNodes");
 
-            return new Graphs
-            {
-                ground = groundNodes,
-                air = airNodes,
-                floorProps = floorProps,
-                ceilingProps = ceilingProps
-            };
+            return graphs;
 
             void LogStats(string name)
             {
@@ -129,7 +134,7 @@ namespace ProceduralStages
             }
         }
 
-        private (NodeGraph groundGraph, List<PropsNode> floorProps, List<PropsNode> ceilingProps) CreateGroundNodes(MeshResult meshResult, float[,,] floorMap, float mapScale)
+        private Graphs CreateGroundNodes(MeshResult meshResult, float[,,] floorMap, float mapScale)
         {
             var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
 
@@ -137,6 +142,7 @@ namespace ProceduralStages
             var vertices = meshResult.vertices;
             var normals = meshResult.normals;
 
+            Dictionary<Vector3, PropsNode> nodeInfoByPosition = new Dictionary<Vector3, PropsNode>();
             List<PropsNode> floorProps = new List<PropsNode>();
             List<PropsNode> ceilingProps = new List<PropsNode>();
 
@@ -165,13 +171,17 @@ namespace ProceduralStages
                     flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn
                 };
 
+                var propsNode = new PropsNode
+                {
+                    normal = normal,
+                    position = vertex
+                };
+
+                nodeInfoByPosition[vertex] = propsNode;
+
                 if (isFloor)
                 {
-                    floorProps.Add(new PropsNode
-                    {
-                        normal = normal,
-                        position = vertex
-                    });
+                    floorProps.Add(propsNode);
 
                     index++;
 
@@ -199,11 +209,7 @@ namespace ProceduralStages
 
                 if (isCeiling)
                 {
-                    ceilingProps.Add(new PropsNode
-                    {
-                        normal = normal,
-                        position = vertex
-                    });
+                    ceilingProps.Add(propsNode);
                 }
 
                 nodes[i] = node;
@@ -311,6 +317,11 @@ namespace ProceduralStages
                 .Where(x => x.linkListIndex.index != -1)
                 .ToArray();
 
+            var nodeByPosition = allNodes
+                .ToDictionary(
+                    x => x.position,
+                    x => x.linkListIndex.index);
+
             List<NodeGraph.Link> linkList = new List<NodeGraph.Link>();
 
             for (int i = 0; i < allNodes.Length; i++)
@@ -331,7 +342,14 @@ namespace ProceduralStages
             groundNodes.nodes = allNodes;
             groundNodes.links = linkList.ToArray();
 
-            return (groundNodes, floorProps, ceilingProps);
+            return new Graphs
+            {
+                ground = groundNodes,
+                floorProps = floorProps,
+                ceilingProps = ceilingProps,
+                groundNodeIndexByPosition = nodeByPosition,
+                nodeInfoByPosition = nodeInfoByPosition
+            };
         }
 
         private HashSet<int> GetMainIsland(NodeGraph groundGraph)

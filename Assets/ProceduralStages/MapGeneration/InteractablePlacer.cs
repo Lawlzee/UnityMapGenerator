@@ -13,10 +13,17 @@ namespace ProceduralStages
     public static class InteractablePlacer
     {
         public static GameObject Place(
+            Graphs graphs, 
             string prefab,
             NodeFlags requiredFlags,
-            Vector3 offset = default)
+            Vector3 offset = default,
+            Vector3? normal = null,
+            bool skipSpawnWhenSacrificeArtifactEnabled = false,
+            bool orientToFloor = true)
         {
+            if (skipSpawnWhenSacrificeArtifactEnabled && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.sacrificeArtifactDef))
+                return null;
+
             var card = ScriptableObject.CreateInstance<SpawnCard>();
             card.prefab = Addressables.LoadAssetAsync<GameObject>(prefab).WaitForCompletion();
             card.hullSize = HullClassification.Human;
@@ -36,6 +43,16 @@ namespace ProceduralStages
             GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, MapGenerator.rng));
             if (gameObject)
             {
+                if (orientToFloor)
+                {
+                    var floorNormal = normal ?? graphs.nodeInfoByPosition[gameObject.transform.position].normal;
+
+                    gameObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, floorNormal)
+                        * card.prefab.transform.rotation;
+
+                    gameObject.transform.Rotate(floorNormal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
+                }
+
                 gameObject.transform.position = gameObject.transform.position + offset;
 
                 PurchaseInteraction purchaseInteraction = gameObject.GetComponent<PurchaseInteraction>();

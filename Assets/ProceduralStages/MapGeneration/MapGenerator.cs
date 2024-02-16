@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.EntityLogic;
 using RoR2.ExpansionManagement;
 using RoR2.Navigation;
 using System;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 using UnityEngine.Rendering.PostProcessing;
 using UnityMeshSimplifier;
@@ -110,7 +112,6 @@ namespace ProceduralStages
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
 
             ulong currentSeed;
-            Log.Debug("GenerateMap");
             if (Application.isEditor)
             {
                 if (editorSeed != 0)
@@ -130,7 +131,7 @@ namespace ProceduralStages
             {
                 currentSeed = SeedSyncer.randomStageRng.nextUlong;
             }
-            
+
 
             rng = new Xoroshiro128Plus(currentSeed);
 
@@ -175,7 +176,7 @@ namespace ProceduralStages
             float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
             LogStats("cave3d");
 
-            
+
             var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, mapScale);
             LogStats("marchingCubes");
 
@@ -311,19 +312,24 @@ namespace ProceduralStages
 
                         if (!IsSimulacrum())
                         {
-                            InteractablePlacer.Place("RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, Vector3.up);
+                            InteractablePlacer.Place(graphs, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, offset: Vector3.up, orientToFloor: false);
+
+                            if (stageInLoop == 2 && rng.nextNormalizedFloat < (1 / 3f))
+                            {
+                                AddRingEvent(graphs);
+                            }
                         }
 
                         if (stageInLoop == 4)
                         {
-                            InteractablePlacer.Place("RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt);
+                            InteractablePlacer.Place(graphs, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt, skipSpawnWhenSacrificeArtifactEnabled: true);
                         }
                     };
 
                     SceneDirector.onPostPopulateSceneServer += placeInteractables;
                 }
             }
-            
+
             if (!Application.isEditor || loadPropsInEditor)
             {
                 propsPlacer.PlaceAll(graphs, meshColorer, texture, terrainMaterial);
@@ -370,6 +376,86 @@ namespace ProceduralStages
             {
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
+            }
+        }
+
+        private void AddRingEvent(Graphs graphs)
+        {
+            GameObject ringEventController = new GameObject();
+            ringEventController.name = "RingEventController";
+            Counter counter = ringEventController.AddComponent<Counter>();
+            counter.threshold = 2;
+            counter.onTrigger = new UnityEvent();
+
+            //same amount of pots than goolake
+            int potCount = rng.RangeInt(8, 31);
+
+            for (int i = 0 ; i < potCount; i++)
+            {
+                GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab", NodeFlagsExt.Newt, offset: Vector3.up);
+                plateObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+            }
+
+            List<GameObject> plates = new List<GameObject>();
+
+            for (int i = 0; i < 2; i++)
+            {
+                GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/goolake/GLPressurePlate.prefab", NodeFlagsExt.Newt);
+                if (plateObject)
+                {
+                    PressurePlateController pressurePlateController = plateObject.GetComponent<PressurePlateController>();
+                    pressurePlateController.OnSwitchDown.AddListener(() => counter.Add(1));
+                    pressurePlateController.OnSwitchUp.AddListener(() => counter.Add(-1));
+                    counter.onTrigger.AddListener(() => pressurePlateController.EnableOverlapSphere(false));
+
+                    plates.Add(plateObject);
+                }
+            }
+
+            Xoroshiro128Plus lemurianRng = new Xoroshiro128Plus(rng.nextUlong);
+
+            counter.onTrigger.AddListener(() =>
+            {
+                Chat.SendBroadcastChat(new Chat.SimpleChatMessage()
+                {
+                    baseToken = "STONEGATE_OPEN"
+                });
+
+                var closestPlayerPosition = PlayerCharacterMasterController.instances
+                    .Select(x => x.master.bodyInstanceObject.transform.position)
+                    .OrderBy(position => plates.Select(plate => (plate.transform.position - position).sqrMagnitude).Min())
+                    .First();
+
+                SpawnLemurian(closestPlayerPosition, "RoR2/Base/goolake/LemurianBruiserMasterFire.prefab");
+                SpawnLemurian(closestPlayerPosition, "RoR2/Base/goolake/LemurianBruiserMasterIce.prefab");
+            });
+
+            void SpawnLemurian(Vector3 targetPosition, string assset)
+            {
+                CharacterSpawnCard fire = ScriptableObject.CreateInstance<CharacterSpawnCard>();
+                fire.prefab = Addressables.LoadAssetAsync<GameObject>(assset).WaitForCompletion();
+                fire.sendOverNetwork = true;
+                fire.hullSize = HullClassification.Golem;
+                fire.nodeGraphType = MapNodeGroup.GraphType.Ground;
+                fire.forbiddenFlags = NodeFlags.NoCharacterSpawn;
+
+                var request = new DirectorSpawnRequest(
+                    fire,
+                    new DirectorPlacementRule()
+                    {
+                        placementMode = DirectorPlacementRule.PlacementMode.Approximate,
+                        position = targetPosition,
+                        //MonsterSpawnDistance.Standard
+                        minDistance = 25,
+                        maxDistance = 40
+                    },
+                    lemurianRng)
+                {
+                    teamIndexOverride = TeamIndex.Monster,
+                    ignoreTeamMemberLimit = true
+                };
+
+                DirectorCore.instance.TrySpawnObject(request);
             }
         }
 

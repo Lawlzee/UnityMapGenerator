@@ -33,6 +33,7 @@ namespace ProceduralStages
             //On.RoR2.RuleBook.ctor += RuleBook_ctor;
             RuleBook.defaultValues = new byte[1000];
 
+            BuffCatalog.buffDefs = new BuffDef[0];
             PlayerCharacterMasterController._instancesReadOnly = new List<PlayerCharacterMasterController>() { null }.AsReadOnly();
             RoR2Content.Artifacts.Sacrifice = Addressables.LoadAssetAsync<ArtifactDef>("RoR2/Base/Sacrifice/Sacrifice.asset").WaitForCompletion();
             RoR2Content.Artifacts.SingleMonsterType = RoR2Content.Artifacts.Sacrifice;

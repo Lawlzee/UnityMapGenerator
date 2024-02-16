@@ -56,6 +56,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [X] Fix the bug where the player sometime gets stuck in the drop pod.
 - [X] Legendary chest on stage 4 always cost 400
 - [X] Fix drones spawning out of the map
+- [X] Add compatibility with the `Judgement` mod
 - [ ] Add collision to props
 - [ ] Add more configurations
 - [ ] Add stage unique interactables. For example, add a red chest on stage 4
@@ -68,7 +69,6 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [ ] Enhance the uniqueness of stages.
 - [ ] Remove the ability to dream for normal stages
 - [ ] Improve the orientation of Newt altars.
-- [ ] Add compatibility with the `Judgement` mod
 
 
 ## Algorithms used
