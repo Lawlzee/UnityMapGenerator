@@ -13,13 +13,13 @@ namespace ProceduralStages
     public static class InteractablePlacer
     {
         public static GameObject Place(
-            Graphs graphs, 
+            Graphs graphs,
             string prefab,
             NodeFlags requiredFlags,
             Vector3 offset = default,
             Vector3? normal = null,
             bool skipSpawnWhenSacrificeArtifactEnabled = false,
-            bool orientToFloor = true)
+            bool lookAwayFromWall = false)
         {
             if (skipSpawnWhenSacrificeArtifactEnabled && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.sacrificeArtifactDef))
                 return null;
@@ -43,13 +43,34 @@ namespace ProceduralStages
             GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, MapGenerator.rng));
             if (gameObject)
             {
-                if (orientToFloor)
+                var floorNormal = normal ?? graphs.nodeInfoByPosition[gameObject.transform.position].normal;
+
+                gameObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, floorNormal)
+                    * card.prefab.transform.rotation;
+
+                if (lookAwayFromWall)
                 {
-                    var floorNormal = normal ?? graphs.nodeInfoByPosition[gameObject.transform.position].normal;
+                    RaycastHit? bestRay = null;
+                    int bestAngle = 0;
 
-                    gameObject.transform.rotation = Quaternion.FromToRotation(Vector3.up, floorNormal)
-                        * card.prefab.transform.rotation;
+                    for (int i = 0; i < 12; i++)
+                    {
+                        var lookAngle = Quaternion.AngleAxis(i * 30, Vector3.up) * Vector3.forward;
 
+                        if (Physics.Raycast(new Ray(gameObject.transform.position + Vector3.up * InteractableSpawnCard.floorOffset, lookAngle), out RaycastHit hitInfo, maxDistance: 12, (int)LayerIndex.world.mask))
+                        {
+                            if (bestRay == null || hitInfo.distance < bestRay.Value.distance)
+                            {
+                                bestRay = hitInfo;
+                                bestAngle = i * 30;
+                            }
+                        }
+                    }
+
+                    gameObject.transform.Rotate(floorNormal, (MapGenerator.rng.nextNormalizedFloat - 0.5f) * 30 + bestAngle + 180, Space.World);
+                }
+                else
+                {
                     gameObject.transform.Rotate(floorNormal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
                 }
 

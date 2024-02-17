@@ -312,7 +312,24 @@ namespace ProceduralStages
 
                         if (!IsSimulacrum())
                         {
-                            InteractablePlacer.Place(graphs, "RoR2/Base/NewtStatue/NewtStatue.prefab", NodeFlagsExt.Newt, offset: Vector3.up, orientToFloor: false);
+                            InteractablePlacer.Place(
+                                graphs,
+                                "RoR2/Base/NewtStatue/NewtStatue.prefab",
+                                NodeFlagsExt.Newt,
+                                normal: Vector3.up,
+                                offset: Vector3.up,
+                                lookAwayFromWall: true);
+
+                            if (true || (stageInLoop == 2 && rng.nextNormalizedFloat < (1 / 3f)))
+                            {
+                                InteractablePlacer.Place(
+                                    graphs,
+                                    "RoR2/Base/TimedChest/TimedChest.prefab",
+                                    NodeFlagsExt.Newt,
+                                    normal: Vector3.up,
+                                    offset: new Vector3(0, 0.6f, 0),
+                                    lookAwayFromWall: true);
+                            }
 
                             if (stageInLoop == 2 && rng.nextNormalizedFloat < (1 / 3f))
                             {
@@ -390,11 +407,13 @@ namespace ProceduralStages
             //same amount of pots than goolake
             int potCount = rng.RangeInt(8, 31);
 
-            for (int i = 0 ; i < potCount; i++)
+            for (int i = 0; i < potCount; i++)
             {
                 GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab", NodeFlagsExt.Newt, offset: Vector3.up);
                 plateObject.GetComponentInChildren<MeshRenderer>().enabled = true;
             }
+
+            Vector3 targetPosition = Vector3.zero;
 
             List<GameObject> plates = new List<GameObject>();
 
@@ -404,8 +423,10 @@ namespace ProceduralStages
                 if (plateObject)
                 {
                     PressurePlateController pressurePlateController = plateObject.GetComponent<PressurePlateController>();
+                    pressurePlateController.OnSwitchDown.AddListener(() => targetPosition = plateObject.transform.position);
                     pressurePlateController.OnSwitchDown.AddListener(() => counter.Add(1));
                     pressurePlateController.OnSwitchUp.AddListener(() => counter.Add(-1));
+
                     counter.onTrigger.AddListener(() => pressurePlateController.EnableOverlapSphere(false));
 
                     plates.Add(plateObject);
@@ -421,16 +442,11 @@ namespace ProceduralStages
                     baseToken = "STONEGATE_OPEN"
                 });
 
-                var closestPlayerPosition = PlayerCharacterMasterController.instances
-                    .Select(x => x.master.bodyInstanceObject.transform.position)
-                    .OrderBy(position => plates.Select(plate => (plate.transform.position - position).sqrMagnitude).Min())
-                    .First();
-
-                SpawnLemurian(closestPlayerPosition, "RoR2/Base/goolake/LemurianBruiserMasterFire.prefab");
-                SpawnLemurian(closestPlayerPosition, "RoR2/Base/goolake/LemurianBruiserMasterIce.prefab");
+                SpawnLemurian("RoR2/Base/goolake/LemurianBruiserMasterFire.prefab");
+                SpawnLemurian("RoR2/Base/goolake/LemurianBruiserMasterIce.prefab");
             });
 
-            void SpawnLemurian(Vector3 targetPosition, string assset)
+            void SpawnLemurian(string assset)
             {
                 CharacterSpawnCard fire = ScriptableObject.CreateInstance<CharacterSpawnCard>();
                 fire.prefab = Addressables.LoadAssetAsync<GameObject>(assset).WaitForCompletion();
