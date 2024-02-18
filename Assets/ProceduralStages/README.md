@@ -59,7 +59,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [X] Add compatibility with the `Judgement` mod
 - [X] Improve the orientation of Newt altars.
 - [X] Add stage unique interactables. For example, add a red chest on stage 4
-- [ ] Add collision to props
+- [X] Add collision to props
 - [ ] Add more configurations
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
 - [ ] Replace the moon with a procedurally generated stage

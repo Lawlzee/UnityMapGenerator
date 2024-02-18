@@ -23,14 +23,19 @@ namespace ProceduralStages
         public Dictionary<Vector3, PropsNode> nodeInfoByPosition;
         public Dictionary<Vector3, int> groundNodeIndexByPosition;
 
-        public void OccupySpace(Vector3 position)
+        public void OccupySpace(Vector3 position, bool solid)
         {
             if (groundNodeIndexByPosition.TryGetValue(position, out int index))
             {
                 ref var node = ref ground.nodes[index];
 
                 node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoChestSpawn;
-                node.forbiddenHulls = HullMask.Human | HullMask.Golem | HullMask.BeetleQueen;
+                
+                if (solid)
+                {
+                    node.flags |= NodeFlags.NoCharacterSpawn;
+                    node.forbiddenHulls = HullMask.Human | HullMask.Golem | HullMask.BeetleQueen;
+                }
             }
         }
     }

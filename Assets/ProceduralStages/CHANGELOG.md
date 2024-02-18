@@ -3,6 +3,7 @@
 - Interactables can not longer spawn inside of rocks
 - Added ring event
 - Added AWU event
+- Added missing collisions to decorations
 
 ## 1.5
 - Added Decorations

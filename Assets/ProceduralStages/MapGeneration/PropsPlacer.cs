@@ -16,7 +16,6 @@ namespace ProceduralStages
         //RoR2/DLC1/SulfurPod/SulfurPodBody.prefab
         //RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab
         //RoR2/Base/FusionCellDestructible/FusionCellDestructibleBody.prefab
-        //RoR2/Base/goolake/GLPressurePlate.prefab
 
         public PropsDefinition[] props = new PropsDefinition[0];
         public int propsCount = 10;
@@ -108,9 +107,9 @@ namespace ProceduralStages
 
                     var propsNode = graph[index];
 
-                    if (prop.occupySpace && prop.ground)
+                    if (prop.ground)
                     {
-                        graphs.OccupySpace(propsNode.position);
+                        graphs.OccupySpace(propsNode.position, prop.isSolid);
                     }
 
                     Color? color = null;
@@ -138,6 +137,11 @@ namespace ProceduralStages
 
                     instance.transform.position += prop.offset;
 
+                    if (prop.addCollision)
+                    {
+                        instance.AddComponent<MeshCollider>();
+                    }
+
                     instances.Add(instance);
                 }
             }
@@ -155,7 +159,8 @@ namespace ProceduralStages
             public bool isRock;
             public Vector3 normal;
             public Vector3 offset;
-            public bool occupySpace;
+            public bool isSolid;
+            public bool addCollision;
 
             [Range(-1f, 1f)]
             public float lod = -1;
