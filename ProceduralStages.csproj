@@ -60,6 +60,7 @@
      <Compile Include="Assets\ProceduralStages\DccsPoolGenerator.cs" />
      <Compile Include="Assets\ProceduralStages\Log.cs" />
      <Compile Include="Assets\ProceduralStages\Main.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\AwuEventBehaviour.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Carver.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\CellularAutomata3d.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\ColorPatelette.cs" />
@@ -98,6 +99,7 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\NodeGraphCreator.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\PerlinNoise.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\PropsPlacer.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\SpecialInteractablesPlacer.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Waller.cs" />
      <Compile Include="Assets\ProceduralStages\SeedSyncer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\AssetExtracter.cs" />

@@ -2,6 +2,7 @@
 - Added Judgement compatibility
 - Interactables can not longer spawn inside of rocks
 - Added ring event
+- Added AWU event
 
 ## 1.5
 - Added Decorations

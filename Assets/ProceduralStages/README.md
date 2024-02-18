@@ -57,9 +57,10 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [X] Legendary chest on stage 4 always cost 400
 - [X] Fix drones spawning out of the map
 - [X] Add compatibility with the `Judgement` mod
+- [X] Improve the orientation of Newt altars.
+- [X] Add stage unique interactables. For example, add a red chest on stage 4
 - [ ] Add collision to props
 - [ ] Add more configurations
-- [ ] Add stage unique interactables. For example, add a red chest on stage 4
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
 - [ ] Replace the moon with a procedurally generated stage
 - [ ] Randomize stage names
@@ -68,7 +69,6 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [ ] Enhance stage runtime performance.
 - [ ] Enhance the uniqueness of stages.
 - [ ] Remove the ability to dream for normal stages
-- [ ] Improve the orientation of Newt altars.
 
 
 ## Algorithms used

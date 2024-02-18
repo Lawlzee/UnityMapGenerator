@@ -19,10 +19,16 @@ namespace ProceduralStages
             Vector3 offset = default,
             Vector3? normal = null,
             bool skipSpawnWhenSacrificeArtifactEnabled = false,
-            bool lookAwayFromWall = false)
+            bool lookAwayFromWall = false,
+            bool spawnServer = true,
+            Xoroshiro128Plus rng = null)
         {
             if (skipSpawnWhenSacrificeArtifactEnabled && RunArtifactManager.instance.IsArtifactEnabled(RoR2Content.Artifacts.sacrificeArtifactDef))
+            {
                 return null;
+            }
+
+            rng = rng ?? MapGenerator.rng;
 
             var card = ScriptableObject.CreateInstance<SpawnCard>();
             card.prefab = Addressables.LoadAssetAsync<GameObject>(prefab).WaitForCompletion();
@@ -40,7 +46,7 @@ namespace ProceduralStages
                 placementMode = DirectorPlacementRule.PlacementMode.Random
             };
 
-            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, MapGenerator.rng));
+            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
             if (gameObject)
             {
                 var floorNormal = normal ?? graphs.nodeInfoByPosition[gameObject.transform.position].normal;
@@ -67,11 +73,11 @@ namespace ProceduralStages
                         }
                     }
 
-                    gameObject.transform.Rotate(floorNormal, (MapGenerator.rng.nextNormalizedFloat - 0.5f) * 30 + bestAngle + 180, Space.World);
+                    gameObject.transform.Rotate(floorNormal, (rng.nextNormalizedFloat - 0.5f) * 30 + bestAngle + 180, Space.World);
                 }
                 else
                 {
-                    gameObject.transform.Rotate(floorNormal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
+                    gameObject.transform.Rotate(floorNormal, rng.nextNormalizedFloat * 360f, Space.World);
                 }
 
                 gameObject.transform.position = gameObject.transform.position + offset;
@@ -82,7 +88,10 @@ namespace ProceduralStages
                     purchaseInteraction.Networkcost = Run.instance.GetDifficultyScaledCost(purchaseInteraction.cost);
                 }
 
-                NetworkServer.Spawn(gameObject);
+                if (spawnServer)
+                {
+                    NetworkServer.Spawn(gameObject);
+                }
             }
 
             return gameObject;

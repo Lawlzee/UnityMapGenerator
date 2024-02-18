@@ -57,14 +57,19 @@ namespace ProceduralStages
         public GameObject postProcessingObject;
         public GameObject directorObject;
         public GameObject oobZoneObject;
+        public GameObject awuEventObject;
 
         public int editorFloorIndex;
         public int editorWallIndex;
 
+        public Graphs graphs;
+
+        public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
 
         private void Awake()
         {
+            instance = this;
             if (Application.IsPlaying(this))
             {
                 GenerateMap();
@@ -79,8 +84,8 @@ namespace ProceduralStages
 
         private void OnDestroy()
         {
+            instance = null;
             rng = null;
-
         }
 
         private void Update()
@@ -256,7 +261,7 @@ namespace ProceduralStages
             GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
             LogStats("MeshCollider");
 
-            Graphs graphs = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
+            graphs = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
             LogStats("nodeGraphs");
 
             SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
@@ -310,37 +315,7 @@ namespace ProceduralStages
                     {
                         SceneDirector.onPostPopulateSceneServer -= placeInteractables;
 
-                        if (!IsSimulacrum())
-                        {
-                            InteractablePlacer.Place(
-                                graphs,
-                                "RoR2/Base/NewtStatue/NewtStatue.prefab",
-                                NodeFlagsExt.Newt,
-                                normal: Vector3.up,
-                                offset: Vector3.up,
-                                lookAwayFromWall: true);
-
-                            if (true || (stageInLoop == 2 && rng.nextNormalizedFloat < (1 / 3f)))
-                            {
-                                InteractablePlacer.Place(
-                                    graphs,
-                                    "RoR2/Base/TimedChest/TimedChest.prefab",
-                                    NodeFlagsExt.Newt,
-                                    normal: Vector3.up,
-                                    offset: new Vector3(0, 0.6f, 0),
-                                    lookAwayFromWall: true);
-                            }
-
-                            if (stageInLoop == 2 && rng.nextNormalizedFloat < (1 / 3f))
-                            {
-                                AddRingEvent(graphs);
-                            }
-                        }
-
-                        if (stageInLoop == 4)
-                        {
-                            InteractablePlacer.Place(graphs, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt, skipSpawnWhenSacrificeArtifactEnabled: true);
-                        }
+                        SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum());
                     };
 
                     SceneDirector.onPostPopulateSceneServer += placeInteractables;
