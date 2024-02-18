@@ -100,6 +100,8 @@
      <Compile Include="Assets\ProceduralStages\MapGeneration\PerlinNoise.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\PropsPlacer.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\SpecialInteractablesPlacer.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\Unity-GPU-Based-Occlusion-Culling\HardwareOcclusion.cs" />
+     <Compile Include="Assets\ProceduralStages\MapGeneration\Unity-GPU-Based-Occlusion-Culling\HardwareOcclusionManager.cs" />
      <Compile Include="Assets\ProceduralStages\MapGeneration\Waller.cs" />
      <Compile Include="Assets\ProceduralStages\SeedSyncer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\AssetExtracter.cs" />
@@ -108,7 +110,9 @@
      <Compile Include="Assets\ProceduralStages\Tools\RunInitializer.cs" />
      <Compile Include="Assets\ProceduralStages\Tools\ServerStarter.cs" />
      <None Include="Assets\ProceduralStages\ProceduralStages.asmdef" />
+     <None Include="Assets\ProceduralStages\MapGeneration\Unity-GPU-Based-Occlusion-Culling\HardwareOcclusion.shader" />
      <None Include="Assets\ProceduralStages\LICENSE.txt" />
+     <None Include="Assets\ProceduralStages\MapGeneration\Unity-GPU-Based-Occlusion-Culling\Intersection.compute" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

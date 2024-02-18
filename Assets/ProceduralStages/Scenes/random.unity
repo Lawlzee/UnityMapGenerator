@@ -206,6 +206,63 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &186523806
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 186523809}
+  - component: {fileID: 186523807}
+  m_Layer: 0
+  m_Name: HardwareOcclusion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &186523807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186523806}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4747885d3a3975c49aaa2dee9e6dd436, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Targets: []
+  HardwareOcclusionShader: {fileID: 4800000, guid: e4269a48ee0db134a9908afef2e66e2e,
+    type: 3}
+  IntersectionShader: {fileID: 7200000, guid: 1a9d5c260b3e59148a462a995810e018, type: 3}
+  Intersection: 1
+  Dynamic: 0
+  Delay: 1
+  Debug: 0
+  _Material: {fileID: 0}
+  _Elements: []
+  _Cache: []
+  _Vertices: []
+  _Reset: 
+  _CellIndex: -1
+--- !u!4 &186523809
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186523806}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -109.57638, y: 83.33991, z: -121.170906}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &326371545 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8957093253140908505, guid: 211705b054138ef4189a5416b2f80291,
@@ -1788,6 +1845,7 @@ MonoBehaviour:
       lod: -1
     propsCount: 10
     propsObject: {fileID: 1189524057}
+    hardwareOcclusionObject: {fileID: 186523806}
     instances: []
   sceneInfoObject: {fileID: 1798483139}
   postProcessingObject: {fileID: 447697554}

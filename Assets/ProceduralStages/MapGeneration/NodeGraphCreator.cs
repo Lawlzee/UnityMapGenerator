@@ -61,17 +61,17 @@ namespace ProceduralStages
             gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
             gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
-            if (Application.isEditor)
-            {
-                LODGroup[] lodGroups = gameObject.GetComponentsInChildren<LODGroup>();
-                foreach (LODGroup lodGroup in lodGroups)
-                {
-                    var lods = lodGroup.GetLODs();
-            
-                    lods[lods.Length - 1].screenRelativeTransitionHeight = 0;
-                    lodGroup.SetLODs(lods);
-                }
-            }
+            //if (Application.isEditor)
+            //{
+            //    LODGroup[] lodGroups = gameObject.GetComponentsInChildren<LODGroup>();
+            //    foreach (LODGroup lodGroup in lodGroups)
+            //    {
+            //        var lods = lodGroup.GetLODs();
+            //
+            //        lods[lods.Length - 1].screenRelativeTransitionHeight = 0;
+            //        lodGroup.SetLODs(lods);
+            //    }
+            //}
 
             if (material != null)
             {

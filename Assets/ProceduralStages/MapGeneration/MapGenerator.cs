@@ -92,11 +92,7 @@ namespace ProceduralStages
         {
             if (Application.isEditor && Input.GetKeyDown(KeyCode.F2))
             {
-                for (int i = 0; i < propsPlacer.instances.Count; i++)
-                {
-                    Destroy(propsPlacer.instances[i]);
-                }
-                propsPlacer.instances.Clear();
+                propsPlacer.ClearAll();
                 GenerateMap();
             }
         }

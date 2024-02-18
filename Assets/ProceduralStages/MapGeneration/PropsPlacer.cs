@@ -21,6 +21,7 @@ namespace ProceduralStages
         public int propsCount = 10;
 
         public GameObject propsObject;
+        public GameObject hardwareOcclusionObject;
 
         [HideInInspector]
         public List<GameObject> instances = new List<GameObject>();
@@ -145,6 +146,26 @@ namespace ProceduralStages
                     instances.Add(instance);
                 }
             }
+
+            List<GameObject> targets = instances.ToList();
+            //targets.Add(MapGenerator.instance.gameObject);
+
+            hardwareOcclusionObject.GetComponent<HardwareOcclusion>().Targets = targets.ToArray();
+            hardwareOcclusionObject.GetComponent<HardwareOcclusion>().Init();
+        }
+
+        public void ClearAll()
+        {
+            for (int i = 0; i < instances.Count; i++)
+            {
+                UnityEngine.Object.Destroy(instances[i]);
+            }
+            instances.Clear();
+
+            hardwareOcclusionObject.GetComponent<HardwareOcclusion>().Targets = new GameObject[0];
+            //{
+            //    MapGenerator.instance.gameObject
+            //};
         }
 
 
