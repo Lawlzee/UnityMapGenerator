@@ -4,6 +4,7 @@
 - Added ring event
 - Added AWU event
 - Added missing collisions to decorations
+- Increased map size
 
 ## 1.5
 - Added Decorations

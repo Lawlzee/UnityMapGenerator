@@ -1131,8 +1131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1120c5072b72f46a4737a166bef762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 125, y: 75, z: 150}
-  sizeIncreasePerStage: {x: 15, y: 5, z: 25}
+  size: {x: 150, y: 80, z: 175}
+  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   mapScale: 2.5
   meshQuality: 0.2
