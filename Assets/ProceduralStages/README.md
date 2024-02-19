@@ -14,6 +14,10 @@ At the beginning of each stage, a newly procedurally generated environment is cr
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image1.png)
 ![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image8.png)
 
+## Video
+
+[Here is a video created by LimeLight demonstrating the mod](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
+
 ## Configuration
 
 You can edit the configuration in `Settings > Mod Options > ProceduralStages`.
@@ -60,6 +64,14 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [X] Improve the orientation of Newt altars.
 - [X] Add stage unique interactables. For example, add a red chest on stage 4
 - [X] Add collision to props
+- [ ] Add biomes/map types (snow, grass, desert, etc)
+- [ ] Add non cave maps
+- [ ] Add floating island map?
+- [ ] Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
+- [ ] Add an option for infinite map size scalling ?
+- [ ] Improve compatibility with Ro2API.DirectorAPI
+- [ ] Randomize more terrain settings
+- [ ] Improve air Node Graph
 - [ ] Add more configurations
 - [ ] Create a random DccsPool instead of reusing the DccsPools from the game
 - [ ] Replace the moon with a procedurally generated stage

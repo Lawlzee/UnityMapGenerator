@@ -1,10 +1,12 @@
 ## 1.6
-- Added Judgement compatibility
-- Interactables can not longer spawn inside of rocks
-- Added ring event
-- Added AWU event
-- Added missing collisions to decorations
-- Increased map size
+1. **Stage 2 Pressure Plate Mechanic:** Stage 2 of the game will now have a 33% chance to include a pressure plate mechanic similar to the one found in Abandoned Aqueduct. Activating two pressure plates will spawn two Elite Elder Lemurians, each dropping a Kjaro's Band and a Runald's Band.
+2. **Stage 3 Changes:**: Stage 3 now has a 33% chance to include a Timed Security Chest similar to Rallypoint Delta.
+3. **Stage 4 Alloy Vulture Nests:** Stage 4 now has a 33% chance to include Alloy Vulture Nests, resembling the mechanic in Siren's Call. Destroying six eggs will spawn an Alloy Worship Unit, rewarding players with a legendary item for each player in the game.
+4. **Stage 4 legendary chest chance reduced to 66%:** The likelihood of encountering a legendary chest in Stage 4 has been reduced to 66%.
+5. **Increased Map Size:** The overall size of the game map has been increased, potentially providing a larger and more expansive environment for players to explore.
+6. **Missing Collisions for Decorations:** Addressed missing collisions for decorations within the game.
+7. **Interactables No Longer Spawn Inside Rocks:** A bug or issue where interactable objects were spawning inside rocks has been fixed, preventing inconvenient situations for players.
+8. **Compatibility with [Judgement Mod](https://thunderstore.io/package/Nuxlar/Judgement/):** The mod has been updated to ensure compatibility with the [Judgement mod](https://thunderstore.io/package/Nuxlar/Judgement/).
 
 ## 1.5
 - Added Decorations
