@@ -11,7 +11,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{573A09C6-91CC-95AD-059C-10789F319EC6}</ProjectGuid>
+    <ProjectGuid>{0245DF95-45EA-8B1E-BB99-CC07B67F4F31}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>ProceduralStages</AssemblyName>
@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Temp\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;UNITY_2019_4_26;UNITY_2019_4;UNITY_2019;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;INCLUDE_DYNAMIC_GI;ENABLE_MONO_BDWGC;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_STANDALONE;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;UNITY_POST_PROCESSING_STACK_V2;TK_ADDRESSABLE;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;UNITY_2019_4_26;UNITY_2019_4;UNITY_2019;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_2017_1_OR_NEWER;UNITY_2017_2_OR_NEWER;UNITY_2017_3_OR_NEWER;UNITY_2017_4_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2018_2_OR_NEWER;UNITY_2018_3_OR_NEWER;UNITY_2018_4_OR_NEWER;UNITY_2019_1_OR_NEWER;UNITY_2019_2_OR_NEWER;UNITY_2019_3_OR_NEWER;UNITY_2019_4_OR_NEWER;PLATFORM_ARCH_64;UNITY_64;UNITY_INCLUDE_TESTS;ENABLE_AR;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_EVENT_QUEUE;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_TEXTURE_STREAMING;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_UNITYWEBREQUEST;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_COLLAB_SOFTLOCKS;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_SERVICES_USE_WEBREQUEST;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_HUB_LICENSE;ENABLE_WEBSOCKET_CLIENT;ENABLE_DIRECTOR_AUDIO;ENABLE_DIRECTOR_TEXTURE;ENABLE_MANAGED_JOBS;ENABLE_MANAGED_TRANSFORM_JOBS;ENABLE_MANAGED_ANIMATION_JOBS;ENABLE_MANAGED_AUDIO_JOBS;INCLUDE_DYNAMIC_GI;ENABLE_MONO_BDWGC;ENABLE_SCRIPTING_GC_WBARRIERS;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_VIDEO;PLATFORM_STANDALONE;PLATFORM_STANDALONE_WIN;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_OUT_OF_PROCESS_CRASH_HANDLER;ENABLE_CLUSTER_SYNC;ENABLE_CLUSTERINPUT;GFXDEVICE_WAITFOREVENT_MESSAGEPUMP;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_STANDARD_2_0;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_UNITY_COLLECTIONS_CHECKS;ENABLE_BURST_AOT;UNITY_TEAM_LICENSE;ENABLE_CUSTOM_RENDER_TEXTURE;ENABLE_DIRECTOR;ENABLE_LOCALIZATION;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_TILEMAP;ENABLE_TIMELINE;ENABLE_LEGACY_INPUT_MANAGER;TK_ADDRESSABLE;UNITY_POST_PROCESSING_STACK_V2;RUNE580_RISK_OF_OPTIONS;CSHARP_7_OR_LATER;CSHARP_7_3_OR_NEWER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
@@ -302,55 +302,55 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
  </Reference>
  <Reference Include="BepInEx">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/BepInExPack/BepInExPack/BepInEx/core/BepInEx.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/BepInExPack/BepInExPack/BepInEx/core/BepInEx.dll</HintPath>
  </Reference>
  <Reference Include="MonoMod.Utils">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/BepInExPack/BepInExPack/BepInEx/core/MonoMod.Utils.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/BepInExPack/BepInExPack/BepInEx/core/MonoMod.Utils.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/BepInExPack/BepInExPack/BepInEx/core/Mono.Cecil.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/BepInExPack/BepInExPack/BepInEx/core/Mono.Cecil.dll</HintPath>
  </Reference>
  <Reference Include="HGCSharpUtils">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/HGCSharpUtils.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/HGCSharpUtils.dll</HintPath>
  </Reference>
  <Reference Include="HGUnityUtils">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/HGUnityUtils.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/HGUnityUtils.dll</HintPath>
  </Reference>
  <Reference Include="KinematicCharacterController">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/KinematicCharacterController.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/KinematicCharacterController.dll</HintPath>
  </Reference>
  <Reference Include="MMHOOK_RoR2">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/mmhook-assemblies/MMHOOK_RoR2.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/mmhook-assemblies/MMHOOK_RoR2.dll</HintPath>
  </Reference>
  <Reference Include="LegacyResourcesAPI">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/LegacyResourcesAPI.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/LegacyResourcesAPI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Addressables">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/Unity.Addressables.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/Unity.Addressables.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="RoR2">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/RoR2.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/RoR2.dll</HintPath>
  </Reference>
  <Reference Include="Unity.ResourceManager">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/Risk of Rain 2/Unity.ResourceManager.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk of Rain 2/Unity.ResourceManager.dll</HintPath>
  </Reference>
  <Reference Include="R2API.Addressables">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/R2API_Addressables/plugins/R2API.Addressables/R2API.Addressables.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/R2API_Addressables/plugins/R2API.Addressables/R2API.Addressables.dll</HintPath>
  </Reference>
  <Reference Include="R2API.Director">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/R2API_Director/plugins/R2API.Director/R2API.Director.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/R2API_Director/plugins/R2API.Director/R2API.Director.dll</HintPath>
  </Reference>
  <Reference Include="RiskOfOptions">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Assets/Packages/Rune580-Risk_Of_Options.2.7.1/lib/netstandard2.0/RiskOfOptions.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/Risk_Of_Options/RiskOfOptions/RiskOfOptions.dll</HintPath>
  </Reference>
  <Reference Include="R2API.Language">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Packages/R2API_Language/plugins/R2API.Language/R2API.Language.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Packages/R2API_Language/plugins/R2API.Language/R2API.Language.dll</HintPath>
  </Reference>
  <Reference Include="netstandard">
  <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
@@ -698,12 +698,12 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/NetStandard/compat/2.0.0/shims/netfx/System.Xml.Serialization.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Postprocessing.Runtime">
- <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
+ <HintPath>C:/Users/Lawlzee/Documents/Projects/Lawlzee/ProceduralStages4/UnityMapGenerator/Library/ScriptAssemblies/Unity.Postprocessing.Runtime.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="com.unity.multiplayer-hlapi.Runtime.csproj">
-      <Project>{0C3BE26D-CDE9-E13F-372D-696FD66DD827}</Project>
+      <Project>{6FB5FBA8-830B-3763-A37F-2922DD511A24}</Project>
       <Name>com.unity.multiplayer-hlapi.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
