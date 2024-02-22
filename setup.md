@@ -11,3 +11,5 @@
 11. Open "random" scene
 12. Revert changes to TagManager.asset to fix the layer not found issue
 13. Change Assets/Pipelines/Dev Pipeline/4 - Copy/Destination
+14. Restart Unity
+15. If prompt to upgrade to asset database, click no
