@@ -65,6 +65,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - [X] Add stage unique interactables. For example, add a red chest on stage 4
 - [X] Add collision to props
 - [ ] Add biomes/map types (snow, grass, desert, etc)
+- [ ] Add props clustering
 - [ ] Add non cave maps
 - [ ] Add floating island map?
 - [ ] Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
