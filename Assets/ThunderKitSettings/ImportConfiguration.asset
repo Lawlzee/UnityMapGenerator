@@ -85,7 +85,7 @@ MonoBehaviour:
     description: Core R2API module
     dependedncyID: RiskofThunder-R2API_Core
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack
@@ -93,7 +93,7 @@ MonoBehaviour:
     description: API for adding content to the game
     dependedncyID: RiskofThunder-R2API_ContentManagement
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack
@@ -102,7 +102,7 @@ MonoBehaviour:
     description: R2API Submodule for implementing Addressables functionality
     dependedncyID: RiskofThunder-R2API_Addressables
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack
@@ -111,7 +111,7 @@ MonoBehaviour:
     description: API for making Artifact Codes
     dependedncyID: RiskofThunder-R2API_ArtifactCode
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack
@@ -120,7 +120,7 @@ MonoBehaviour:
     description: API for registering Colors to the game
     dependedncyID: RiskofThunder-R2API_Colors
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack
@@ -129,7 +129,7 @@ MonoBehaviour:
     description: API for registering console commands
     dependedncyID: RiskofThunder-R2API_CommandHelper
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - HookGenPatcher
     - BepInExPack

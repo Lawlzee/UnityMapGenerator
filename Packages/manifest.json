@@ -1,7 +1,8 @@
 {
   "dependencies": {
-    "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
     "com.passivepicasso.thunderkit": "https://github.com/PassivePicasso/ThunderKit.git",
+    "riskofthunder-ror2editorkit": "https://github.com/risk-of-thunder/RoR2EditorKit.git#4.1.0",
+    "riskofthunder-ror2importextensions": "https://github.com/risk-of-thunder/RoR2ImportExtensions.git#1.3.7",
     "com.unity.collab-proxy": "1.2.16",
     "com.unity.ide.rider": "1.2.1",
     "com.unity.ide.vscode": "1.2.3",
