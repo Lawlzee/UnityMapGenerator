@@ -1136,8 +1136,8 @@ MonoBehaviour:
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   mapScale: 2.5
   meshQuality: 0.2
-  loadResourcesInEditor: 1
-  loadPropsInEditor: 1
+  loadResourcesInEditor: 0
+  loadPropsInEditor: 0
   editorSeed: 0
   wallGenerator:
     frequency: 28
@@ -1390,7 +1390,8 @@ MonoBehaviour:
       metallic: 0
   nodeGraphCreator:
     minFloorAngle: 0.5
-    airNodeMinDistance: 20
+    airNodeMinDistance: 10
+    airNodeSample: 6
     maxGroundheight: 30
     densityMap:
       maxChestDensity: 0.45
@@ -1401,7 +1402,7 @@ MonoBehaviour:
       maxNewtDensity: 1
       maxSpawnDensity: 0.45
       air:
-        maxHumanDensity: 0.48
+        maxHumanDensity: 0.47
         maxGolemDensity: 0.46
         maxBeetleQueenDensity: 0.44
       ground:
