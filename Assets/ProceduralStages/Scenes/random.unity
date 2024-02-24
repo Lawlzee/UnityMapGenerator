@@ -823,7 +823,7 @@ MonoBehaviour:
   hullMask: 1
   nodeFlags: 5
   showGroundMesh: 0
-  showAirMesh: 0
+  showAirMesh: 1
   groundMeshObject: {fileID: 68506087}
   airMeshObject: {fileID: 1924290974}
   sceneInfoObject: {fileID: 1798483139}
@@ -1390,7 +1390,7 @@ MonoBehaviour:
       metallic: 0
   nodeGraphCreator:
     minFloorAngle: 0.5
-    airNodeheight: 20
+    airNodeMinDistance: 20
     maxGroundheight: 30
     densityMap:
       maxChestDensity: 0.45
