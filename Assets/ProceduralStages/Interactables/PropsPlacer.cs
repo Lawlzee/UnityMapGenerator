@@ -21,6 +21,7 @@ namespace ProceduralStages
         public int propsCount = 10;
 
         public GameObject propsObject;
+        public GameObject occlusionCullingObject;
 
         [HideInInspector]
         public List<GameObject> instances = new List<GameObject>();
@@ -145,6 +146,8 @@ namespace ProceduralStages
                     instances.Add(instance);
                 }
             }
+
+            occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances);
         }
 
 
