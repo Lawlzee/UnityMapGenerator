@@ -11,6 +11,7 @@ using System.Diagnostics;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using TMPro;
+using static UnityEngine.Experimental.TerrainAPI.TerrainUtility;
 
 namespace ProceduralStages
 {
@@ -25,27 +26,27 @@ namespace ProceduralStages
         public int maxGroundheight = 30;
         public DensityMap densityMap = new DensityMap();
 
-        public Graphs CreateGraphs(MeshResult meshResult, float[,,] map, float[,,] floorMap, float mapScale)
+        public Graphs CreateGraphs(Terrain terrain)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             //MapDensity mapDensity = densityMap.Create(map);
             ///LogStats("mapDensity");
 
-            Graphs graphs = CreateGroundNodes(meshResult, floorMap, mapScale);
+            Graphs graphs = CreateGroundNodes(terrain);
             LogStats("groundNodes");
 
             HashSet<int> mainIsland = GetMainIsland(graphs.ground);
             //HashSet<int> mainIsland = new HashSet<int>();
             LogStats("mainIsland");
 
-            SetMainIslandFlags(graphs.ground, mainIsland, floorMap, mapScale);
+            SetMainIslandFlags(graphs.ground, mainIsland, terrain);
             LogStats("SetMainIslandFlags");
 
             graphs.ground.Awake();
 
             //graphs.air = CreateAirNodes(graphs.ground, mainIsland, map, mapScale);
-            graphs.air = CreateAirGraph(map, mapScale);
+            graphs.air = CreateAirGraph(terrain);
             LogStats("CreateAirNodes");
 
             return graphs;
@@ -57,13 +58,13 @@ namespace ProceduralStages
             }
         }
 
-        private Graphs CreateGroundNodes(MeshResult meshResult, float[,,] floorMap, float mapScale)
+        private Graphs CreateGroundNodes(Terrain terrain)
         {
             var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
 
-            var triangles = meshResult.triangles;
-            var vertices = meshResult.vertices;
-            var normals = meshResult.normals;
+            var triangles = terrain.meshResult.triangles;
+            var vertices = terrain.meshResult.vertices;
+            var normals = terrain.meshResult.normals;
 
             Dictionary<Vector3, PropsNode> nodeInfoByPosition = new Dictionary<Vector3, PropsNode>();
             List<PropsNode> floorProps = new List<PropsNode>();
@@ -108,7 +109,7 @@ namespace ProceduralStages
 
                     index++;
 
-                    float density = densityMap.GetDensity(floorMap, vertex / mapScale);
+                    float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale);
 
                     HullMask forbiddenHulls = HullMask.None;
 
@@ -324,7 +325,7 @@ namespace ProceduralStages
             return islands;
         }
 
-        private void SetMainIslandFlags(NodeGraph groundGraph, HashSet<int> mainIsland, float[,,] floorMap, float mapScale)
+        private void SetMainIslandFlags(NodeGraph groundGraph, HashSet<int> mainIsland, Terrain terrain)
         {
             foreach (int nodeIndex in mainIsland)
             {
@@ -332,7 +333,7 @@ namespace ProceduralStages
 
                 NodeFlags flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
 
-                float density = densityMap.GetDensity(floorMap, node.position / mapScale);
+                float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale);
 
                 if (node.position.y <= maxGroundheight)
                 {
@@ -367,14 +368,16 @@ namespace ProceduralStages
             }
         }
 
-        private NodeGraph CreateAirGraph(float[,,] map3d, float mapScale)
+        private NodeGraph CreateAirGraph(Terrain terrain)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            float mapScale = MapGenerator.instance.mapScale;
+
             Vector3 mapSize = new Vector3(
-                mapScale * map3d.GetLength(0),
-                mapScale * map3d.GetLength(1),
-                mapScale * map3d.GetLength(2));
+                mapScale * terrain.densityMap.GetLength(0),
+                mapScale * terrain.densityMap.GetLength(1),
+                mapScale * terrain.densityMap.GetLength(2));
 
             Octree<int> kdTree = new Octree<int>(new Bounds(mapSize / 2, mapSize), 4);
             List<NodeGraph.Node> airNodes = new List<NodeGraph.Node>();
@@ -384,13 +387,13 @@ namespace ProceduralStages
             int seedCount = 0;
             for (int i = 0; i < 5000 && seedCount < 25; i++)
             {
-                float initialX = MapGenerator.rng.nextNormalizedFloat * map3d.GetLength(0) * mapScale;
-                float initialY = MapGenerator.rng.nextNormalizedFloat * map3d.GetLength(1) * mapScale;
-                float initialZ = MapGenerator.rng.nextNormalizedFloat * map3d.GetLength(2) * mapScale;
+                float initialX = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(0) * mapScale;
+                float initialY = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(1) * mapScale;
+                float initialZ = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(2) * mapScale;
 
                 Vector3 initialPosition = new Vector3(initialX, initialY, initialZ);
 
-                float density = densityMap.GetDensity(map3d, initialPosition / mapScale);
+                float density = densityMap.GetDensity(terrain.densityMap, initialPosition / mapScale);
 
                 if (density < 0.25f)
                 {
@@ -430,7 +433,7 @@ namespace ProceduralStages
 
                     Vector3 targetPosition = seedPosition + direction * distance;
 
-                    if (IsValidAirNodePosition(map3d, mapScale, kdTree, airNodes, targetPosition))
+                    if (IsValidAirNodePosition(terrain.densityMap, mapScale, kdTree, airNodes, targetPosition))
                     {
                         positionsToProcess.Enqueue(targetPosition);
                     }
@@ -438,68 +441,31 @@ namespace ProceduralStages
             }
             LogStats("nodes");
 
-            //kdTree.Save();
-            LogStats("kdTree.Save()");
-
-
             NodeGraph.Node[] airNodesArray = airNodes.ToArray();
             List<NodeGraph.Link> airLinks = new List<NodeGraph.Link>();
 
             Log.Debug("links");
 
-            //for (int i = 0; i < airNodes.Count - 1; i++)
-            //{
-            //    ref NodeGraph.Node airNode = ref airNodesArray[i];
-            //    //var neighbours = kdTree.RadialSearch(airNode.position, airNodeMinDistance * 2);
-            //
-            //    airLinks.Add(new NodeGraph.Link
-            //    {
-            //        nodeIndexA = new NodeGraph.NodeIndex(i),
-            //        nodeIndexB = new NodeGraph.NodeIndex(i + 1),
-            //        distanceScore = 1,
-            //        minJumpHeight = 0,
-            //        hullMask = 0xFFFFFFF,
-            //        jumpHullMask = 0xFFFFFFF,
-            //        gateIndex = 0
-            //    });
-            //
-            //    airNode.linkListIndex = new NodeGraph.LinkListIndex
-            //    {
-            //        index = airLinks.Count - 1,
-            //        size = 1
-            //    };
-            //}
-
             for (int i = 0; i < airNodes.Count; i++)
             {
                 ref NodeGraph.Node airNode = ref airNodesArray[i];
                 var neighbours = kdTree.RadialSearch(airNode.position, airNodeMinDistance * airNodeMinDistance, airNodeMinDistance * airNodeMinDistance * 4);
-            
+
                 uint linkCount = 0;
                 for (int j = 0; j < neighbours.Count; j++)
                 {
                     var neighbor = neighbours[j];
-            
+
                     int neighbourIndex = neighbor.Value;
                     if (neighbourIndex == i)
                     {
                         continue;
                     }
-            
+
                     NodeGraph.Node neighbourAirNode = airNodes[neighbourIndex];
-            
+
                     float distance = (neighbourAirNode.position - airNode.position).magnitude;
-            
-                    if (distance < airNodeMinDistance)
-                    {
-                        Log.Debug(distance);
-                    }
-            
-                    if (distance > airNodeMinDistance * 2)
-                    {
-                        Log.Debug(distance);
-                    }
-            
+
                     airLinks.Add(new NodeGraph.Link
                     {
                         nodeIndexA = new NodeGraph.NodeIndex(i),
@@ -510,10 +476,10 @@ namespace ProceduralStages
                         jumpHullMask = 0xFFFFFFF,
                         gateIndex = 0
                     });
-            
+
                     linkCount++;
                 }
-            
+
                 airNode.linkListIndex = new NodeGraph.LinkListIndex
                 {
                     index = airLinks.Count - (int)linkCount,
@@ -566,26 +532,7 @@ namespace ProceduralStages
                 return false;
             }
 
-            //var min = kdTree.GetNearestNeighbours(targetPosition, kdTree.Count)
-            //    .Min(x => (x.Point - targetPosition).sqrMagnitude);
-            //
-            //var max = kdTree.GetNearestNeighbours(targetPosition, kdTree.Count)
-            //    .Max(x => (x.Point - targetPosition).sqrMagnitude);
-
             float nearestDistanceSqr = kdTree.GetNearestNeighboursDistanceSqr(targetPosition);
-
-            //if (Math.Abs(min - nearestDistanceSqr) > 0.5f)
-            //{
-            //    Log.Debug("Bugged");
-            //    Log.Debug(nearestDistanceSqr);
-            //    Log.Debug(min);
-            //    Log.Debug(max);
-            //    Log.Debug("----");
-            //    Log.Debug(Mathf.Sqrt(nearestDistanceSqr));
-            //    Log.Debug(Mathf.Sqrt(min));
-            //    Log.Debug(Mathf.Sqrt(max));
-            //}
-            //
 
             if (nearestDistanceSqr != float.MaxValue)
             {
@@ -593,7 +540,7 @@ namespace ProceduralStages
                 {
                     return false;
                 }
-            
+
                 if (nearestDistanceSqr > (airNodeMinDistance * airNodeMinDistance * 4))
                 {
                     Log.Debug(data: "More than max!");
@@ -602,7 +549,7 @@ namespace ProceduralStages
                     return false;
                 }
             }
-            
+
             NodeGraph.Node airNode = new NodeGraph.Node();
             airNode.position = targetPosition;
             airNode.forbiddenHulls = forbiddenHulls;
@@ -615,86 +562,6 @@ namespace ProceduralStages
             });
             airNodes.Add(airNode);
             return true;
-        }
-
-        private NodeGraph CreateAirNodes(NodeGraph groundNodes, HashSet<int> mainIsland, float[,,] map3d, float mapScale)
-        {
-            Dictionary<int, int> newNodeIndex = new Dictionary<int, int>();
-            List<NodeGraph.Node> airNodes = new List<NodeGraph.Node>(mainIsland.Count);
-
-            int newIndex = 0;
-            for (int i = 0; i < groundNodes.nodes.Length; i++)
-            {
-                if (!mainIsland.Contains(i))
-                {
-                    continue;
-                }
-
-                NodeGraph.Node airNode = groundNodes.nodes[i];
-
-                float density = densityMap.GetDensity(map3d, airNode.position / mapScale);
-
-                HullMask forbiddenHulls = HullMask.None;
-
-                if (density > densityMap.air.maxHumanDensity)
-                {
-                    forbiddenHulls |= HullMask.Human;
-                }
-
-                if (density > densityMap.air.maxGolemDensity)
-                {
-                    forbiddenHulls |= HullMask.Golem;
-                }
-
-                if (density > densityMap.air.maxBeetleQueenDensity)
-                {
-                    forbiddenHulls |= HullMask.BeetleQueen;
-                }
-
-                airNode.flags = NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoCeiling;
-                airNode.forbiddenHulls = forbiddenHulls;
-
-
-                if (forbiddenHulls != (HullMask)7)
-                {
-                    newNodeIndex[i] = newIndex;
-                    airNodes.Add(airNode);
-                    newIndex++;
-                }
-            }
-
-            NodeGraph.Node[] airNodesArray = airNodes.ToArray();
-
-            List<NodeGraph.Link> airLinks = new List<NodeGraph.Link>();
-            for (int i = 0; i < airNodesArray.Length; i++)
-            {
-                ref NodeGraph.Node node = ref airNodesArray[i];
-
-                int position = airLinks.Count;
-                uint count = 0;
-
-                for (int j = node.linkListIndex.index; j < node.linkListIndex.index + node.linkListIndex.size; j++)
-                {
-                    NodeGraph.Link link = groundNodes.links[j];
-                    if (newNodeIndex.TryGetValue(link.nodeIndexB.nodeIndex, out int index))
-                    {
-                        link.nodeIndexA = new NodeGraph.NodeIndex(i);
-                        link.nodeIndexB = new NodeGraph.NodeIndex(index);
-                        airLinks.Add(link);
-                        count++;
-                    }
-                }
-
-                node.linkListIndex.index = position;
-                node.linkListIndex.size = count;
-            }
-
-            NodeGraph airGraph = ScriptableObject.CreateInstance<NodeGraph>();
-            airGraph.nodes = airNodesArray;
-            airGraph.links = airLinks.ToArray();
-            airGraph.Awake();
-
-            return airGraph;
         }
     }
 }

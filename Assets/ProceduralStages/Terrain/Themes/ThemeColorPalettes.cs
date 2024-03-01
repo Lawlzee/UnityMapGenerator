@@ -7,25 +7,16 @@ using UnityEngine;
 
 namespace ProceduralStages
 {
-    [Serializable]
-    public class ColorPatelette
+    [CreateAssetMenu(fileName = "fog", menuName = "ProceduralStages/ColorPalette", order = 6)]
+    public class ThemeColorPalettes : ScriptableObject
     {
         public int size = 256;
-        public Palette floor = new Palette();
-        public Palette walls = new Palette();
-        public Palette ceilling = new Palette();
+        public SurfaceColor floor;
+        public SurfaceColor walls;
+        public SurfaceColor ceilling;
 
-        public Palette light = new Palette();
-        public Fog fog = new Fog();
-
-        [Range(0, 1)]
-        public float perlinFrequency;
-
-        [Range(0, 1000)]
-        public int xSquareSize = 10;
-        [Range(0, 1000)]
-        public int ySquareSize = 10;
-
+        public SurfaceColor light;
+        public FogColorPalette fog;
 
         [Range(0, 1)]
         public float minNoise = 0.1f;
@@ -36,7 +27,7 @@ namespace ProceduralStages
         {
             Color[] colors = new Color[6];
 
-            var palettes = new Palette[]
+            var palettes = new SurfaceColor[]
             {
                 floor,
                 walls,
@@ -67,7 +58,7 @@ namespace ProceduralStages
             Color[] pixels = new Color[2 * size * size];
 
             Vector2Int seed = new Vector2Int(
-                MapGenerator.rng.RangeInt(0, short.MaxValue), 
+                MapGenerator.rng.RangeInt(0, short.MaxValue),
                 MapGenerator.rng.RangeInt(0, short.MaxValue));
 
             Parallel.For(0, size, y =>
@@ -116,45 +107,6 @@ namespace ProceduralStages
             }
 
             return new Color32((byte)(r / total), (byte)(g / total), (byte)(b / total), 0);
-        }
-
-        [Serializable]
-        public class Palette
-        {
-            [Range(0, 1)]
-            public float saturation;
-            [Range(0, 1)]
-            public float value;
-            [Range(0, 1)]
-            public float perlinAmplitude;
-            [Range(0, 1)]
-            public float detailPerlinAmplitude;
-        }
-
-        [Serializable]
-        public class Fog
-        {
-            [Range(0, 1)]
-            public float saturation;
-            [Range(0, 1)]
-            public float value;
-
-            [Range(0, 1)]
-            public float colorStartAlpha;
-            [Range(0, 1)]
-            public float colorMidAlpha;
-            [Range(0, 1)]
-            public float colorEndAlpha;
-
-            [Range(0, 1)]
-            public float zero;
-            [Range(0, 1)]
-            public float one;
-
-            [Range(0, 1)]
-            public float intensity;
-            [Range(0, 1)]
-            public float power;
         }
     }
 }

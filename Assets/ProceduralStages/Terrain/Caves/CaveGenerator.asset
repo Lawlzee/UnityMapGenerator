@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c41629529ca084e94b1e9b1b0e4ca1, type: 3}
+  m_Name: CaveGenerator
+  m_EditorClassIdentifier: 
+  wallGenerator:
+    frequency: 28
+    wallSurface: 0.3
+    curveFrequency: 0.042
+    curveVerticalScale: 0.8
+    curveMinNoise: 0.6
+  carver:
+    enabled: 1
+    frequency: 0.042
+    verticalScale: 0.7
+  waller:
+    floor:
+      enabled: 1
+      noise: 43.7
+      maxThickness: 10
+    ceilling:
+      enabled: 1
+      noise: 28
+      maxThickness: 18
+    walls:
+      enabled: 1
+      noise: 33.7
+      maxThickness: 20
+    wallRoundingFactor: 8
+    blendFactor: 0.015
+  cave3d:
+    enabled: 1
+    smoothingInterations: 2
+  map3dNoiser:
+    enabled: 1
+    frequency: 0.434
+    amplitude: 0.02
+  meshColorer:
+    grassAngle: -0.15
+    detailSize: 100
+    baseFrequency: 0
+    frequency: 0
+    amplitude: 0

@@ -11,14 +11,6 @@ using UnityEngine.XR.WSA;
 //https://github.com/Scrawk/Marching-Cubes/tree/master
 namespace ProceduralStages
 {
-    public class MeshResult
-    {
-        public Mesh mesh;
-        public Vector3[] vertices;
-        public int[] triangles;
-        public Vector3[] normals;
-    }
-
     public class MarchingCubes
     {
         private readonly List<Vector3> _vertices;

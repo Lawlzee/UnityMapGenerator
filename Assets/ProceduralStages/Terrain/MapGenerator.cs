@@ -23,6 +23,9 @@ namespace ProceduralStages
         public Vector3Int sizeIncreasePerStage;
         public Vector3 sizeVariation;
 
+        [HideInInspector]
+        public Vector3Int stageSize;
+
         [Range(0, 10)]
         public float mapScale = 1f;
 
@@ -33,19 +36,10 @@ namespace ProceduralStages
         public bool loadPropsInEditor = false;
         public ulong editorSeed;
 
-        public Map2dGenerator wallGenerator = new Map2dGenerator();
-
-        public Carver carver = new Carver();
-        public Waller waller = new Waller();
-
-        public CellularAutomata3d cave3d = new CellularAutomata3d();
-
-        public Map3dNoiser map3dNoiser = new Map3dNoiser();
+        public TerrainGenerator[] terrainGenerators;
+        public MapTheme[] themes;
 
         public MeshColorer meshColorer = new MeshColorer();
-
-        public ColorPatelette colorPatelette = new ColorPatelette();
-        public MapTextures textures = new MapTextures();
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
 
@@ -58,9 +52,6 @@ namespace ProceduralStages
         public GameObject directorObject;
         public GameObject oobZoneObject;
         public GameObject awuEventObject;
-
-        public int editorFloorIndex;
-        public int editorWallIndex;
 
         public Graphs graphs;
 
@@ -101,17 +92,6 @@ namespace ProceduralStages
             }
         }
 
-        private void OnValidate()
-        {
-            if (Application.IsPlaying(this) && editorFloorIndex >= 0 && editorWallIndex >= 0)
-            {
-                MapTextures.SurfaceTexture wall = textures.walls[editorWallIndex];
-                MapTextures.SurfaceTexture floor = textures.floor[editorFloorIndex];
-
-                SetTextures(floor, wall);
-            }
-        }
-
         private void GenerateMap()
         {
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
@@ -144,7 +124,7 @@ namespace ProceduralStages
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            var stageSize = size + stageInLoop * sizeIncreasePerStage;
+            stageSize = size + stageInLoop * sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * sizeVariation.x);
             stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * sizeVariation.y);
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * sizeVariation.z);
@@ -155,113 +135,34 @@ namespace ProceduralStages
             oobZone.size = scaledSize;
             oobZone.center = scaledSize / 2;
 
-            float[,,] map3d = wallGenerator.Create(stageSize);
-            LogStats("wallGenerator");
+            TerrainGenerator terrainGenerator = terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)];
+            Terrain terrain = terrainGenerator.Generate();
 
-            //float[,,] map3d = map2dToMap3d.Convert(map2d, height);
-            //LogStats("map2dToMap3d");
+            MapTheme theme = themes[rng.RangeInt(0, themes.Length)];
 
-            carver.CarveWalls(map3d);
-            LogStats("carver");
-
-            waller.AddCeilling(map3d);
-            LogStats("waller.AddCeilling");
-
-            waller.AddWalls(map3d);
-            LogStats("waller.AddWalls");
-
-            var floorMap = map3d;
-            map3d = waller.AddFloor(map3d);
-            LogStats("waller.AddFloor");
-
-            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
-            //float[,,] noiseMap3d = map3dNoiser.ToNoiseMap(smoothMap3d, rng);
-            LogStats("map3dNoiser");
-
-            float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
-            LogStats("cave3d");
-
-
-            var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, mapScale);
-            LogStats("marchingCubes");
-
-            MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            simplifier.SimplifyMesh(meshQuality);
-            var optimisedMesh = simplifier.ToMesh();
-            LogStats("MeshSimplifier");
-
-            var meshResult = new MeshResult
-            {
-                mesh = optimisedMesh,
-                normals = optimisedMesh.normals,
-                triangles = optimisedMesh.triangles,
-                vertices = optimisedMesh.vertices
-            };
-
-            meshColorer.ColorMesh(meshResult);
+            meshColorer.ColorMesh(terrain.meshResult);
             LogStats("meshColorer");
 
-            GetComponent<MeshFilter>().mesh = meshResult.mesh;
+            GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
             LogStats("MeshFilter");
 
-            Texture2D texture = colorPatelette.CreateTexture();
-            LogStats("colorPatelette");
-
-            var material = GetComponent<MeshRenderer>().material;
-            material.SetTexture("_ColorTex", texture);
-
-            int floorIndex = rng.RangeInt(0, textures.floor.Length);
-            int wallIndex = rng.RangeInt(0, textures.walls.Length);
-            if (Application.isEditor)
-            {
-                if (editorFloorIndex >= 0)
-                {
-                    floorIndex = editorFloorIndex;
-                }
-
-                if (editorWallIndex >= 0)
-                {
-                    wallIndex = editorWallIndex;
-                }
-            }
-
-            MapTextures.SurfaceTexture wall = textures.walls[wallIndex];
-            MapTextures.SurfaceTexture floor = textures.floor[floorIndex];
-
-            Material terrainMaterial = SetTextures(floor, wall);
-            LogStats("MeshRenderer");
-
-            float sunHue = rng.nextNormalizedFloat;
-            RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPatelette.light.saturation, colorPatelette.light.value);
-            LogStats("RenderSettings");
-
-            RampFog fog = postProcessingObject.GetComponent<PostProcessVolume>().profile.GetSetting<RampFog>();
-            var fogColor = Color.HSVToRGB(sunHue, colorPatelette.fog.saturation, colorPatelette.fog.value);
-
-            fog.fogColorStart.value = fogColor;
-            fog.fogColorStart.value.a = colorPatelette.fog.colorStartAlpha;
-            fog.fogColorMid.value = fogColor;
-            fog.fogColorMid.value.a = colorPatelette.fog.colorMidAlpha;
-            fog.fogColorEnd.value = fogColor;
-            fog.fogColorEnd.value.a = colorPatelette.fog.colorEndAlpha;
-            fog.fogZero.value = colorPatelette.fog.zero;
-            fog.fogOne.value = colorPatelette.fog.one;
-
-            fog.fogIntensity.value = colorPatelette.fog.intensity;
-            fog.fogPower.value = colorPatelette.fog.power;
-            LogStats("Fog/Light");
+            var terrainMaterial = GetComponent<MeshRenderer>().material;
+            var colorGradiant = theme.SetTexture(terrainMaterial);
 
             var surface = ScriptableObject.CreateInstance<SurfaceDef>();
-            surface.approximateColor = colorPatelette.AverageColor(texture);
+            surface.approximateColor = theme.colorPalette.AverageColor(colorGradiant);
             surface.materialSwitchString = "stone";
+
+            RampFog fog = postProcessingObject.GetComponent<PostProcessVolume>().profile.GetSetting<RampFog>();
+            theme.SetSunAndFog(fog);
 
             GetComponent<SurfaceDefProvider>().surfaceDef = surface;
             LogStats("surfaceDef");
 
-            GetComponent<MeshCollider>().sharedMesh = meshResult.mesh;
+            GetComponent<MeshCollider>().sharedMesh = terrain.meshResult.mesh;
             LogStats("MeshCollider");
 
-            graphs = nodeGraphCreator.CreateGraphs(meshResult, smoothMap3d, floorMap, mapScale);
+            graphs = nodeGraphCreator.CreateGraphs(terrain);
             LogStats("nodeGraphs");
 
             SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
@@ -324,7 +225,7 @@ namespace ProceduralStages
 
             if (!Application.isEditor || loadPropsInEditor)
             {
-                propsPlacer.PlaceAll(graphs, meshColorer, texture, terrainMaterial);
+                propsPlacer.PlaceAll(graphs, meshColorer, colorGradiant, terrainMaterial);
                 LogStats("propsPlacer");
             }
 
@@ -421,47 +322,6 @@ namespace ProceduralStages
         private bool IsSimulacrum()
         {
             return !Application.isEditor && Run.instance is InfiniteTowerRun;
-        }
-
-        private Material SetTextures(MapTextures.SurfaceTexture floor, MapTextures.SurfaceTexture wall)
-        {
-            var material = GetComponent<MeshRenderer>().material;
-
-            material.mainTexture = Addressables.LoadAssetAsync<Texture2D>(wall.textureAsset).WaitForCompletion();
-            if (string.IsNullOrEmpty(wall.normalAsset))
-            {
-                material.SetTexture("_WallNormalTex", null);
-            }
-            else
-            {
-                material.SetTexture("_WallNormalTex", Addressables.LoadAssetAsync<Texture2D>(wall.normalAsset).WaitForCompletion());
-            }
-            material.SetFloat("_WallBias", wall.bias);
-            material.SetColor("_WallColor", wall.averageColor);
-            material.SetFloat("_WallScale", wall.scale);
-            material.SetFloat("_WallBumpScale", wall.bumpScale);
-            material.SetFloat("_WallContrast", wall.constrast);
-            material.SetFloat("_WallGlossiness", wall.glossiness);
-            material.SetFloat("_WallMetallic", wall.metallic);
-
-            material.SetTexture("_FloorTex", Addressables.LoadAssetAsync<Texture2D>(floor.textureAsset).WaitForCompletion());
-            if (string.IsNullOrEmpty(floor.normalAsset))
-            {
-                material.SetTexture("_FloorNormalTex", null);
-            }
-            else
-            {
-                material.SetTexture("_FloorNormalTex", Addressables.LoadAssetAsync<Texture2D>(floor.normalAsset).WaitForCompletion());
-            }
-            material.SetFloat("_FloorBias", floor.bias);
-            material.SetColor("_FloorColor", floor.averageColor);
-            material.SetFloat("_FloorScale", floor.scale);
-            material.SetFloat("_FloorBumpScale", floor.bumpScale);
-            material.SetFloat("_FloorContrast", floor.constrast);
-            material.SetFloat("_FloorGlossiness", floor.glossiness);
-            material.SetFloat("_FloorMetallic", floor.metallic);
-
-            return material;
         }
     }
 }

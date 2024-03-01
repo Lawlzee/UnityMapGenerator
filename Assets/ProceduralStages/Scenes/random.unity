@@ -1230,43 +1230,16 @@ MonoBehaviour:
   size: {x: 150, y: 80, z: 175}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  stageSize: {x: 0, y: 0, z: 0}
   mapScale: 2.5
   meshQuality: 0.2
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
-  editorSeed: 5
-  wallGenerator:
-    frequency: 28
-    wallSurface: 0.3
-    curveFrequency: 0.042
-    curveVerticalScale: 0.8
-    curveMinNoise: 0.6
-  carver:
-    enabled: 1
-    frequency: 0.042
-    verticalScale: 0.7
-  waller:
-    floor:
-      enabled: 1
-      noise: 43.7
-      maxThickness: 10
-    ceilling:
-      enabled: 1
-      noise: 28
-      maxThickness: 18
-    walls:
-      enabled: 1
-      noise: 33.7
-      maxThickness: 20
-    wallRoundingFactor: 8
-    blendFactor: 0.015
-  cave3d:
-    enabled: 1
-    smoothingInterations: 2
-  map3dNoiser:
-    enabled: 1
-    frequency: 0.434
-    amplitude: 0.02
+  editorSeed: 0
+  terrainGenerators:
+  - {fileID: 11400000, guid: a40990f859bb04d46a4db0d0caa01c1f, type: 2}
+  themes:
+  - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
   meshColorer:
     grassAngle: -0.15
     detailSize: 100
@@ -1310,180 +1283,6 @@ MonoBehaviour:
     ySquareSize: 6
     minNoise: 0.2
     maxNoise: 0.25
-  textures:
-    walls:
-    - textureAsset: RoR2/Base/golemplains/texGPRockSide.png
-      normalAsset: RoR2/Base/golemplains/texGPGrassTerrainNormal.png
-      bias: 0
-      averageColor: {r: 0.54901963, g: 0.39607844, b: 0.34901962, a: 0}
-      scale: 0.05
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/moon/texMoonRockSide.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.35686275, g: 0.35686275, b: 0.40784314, a: 0}
-      scale: 0.015
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/moon/texMoonLichen.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.16078432, g: 0.19215687, b: 0.38431373, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 0.3
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/dampcave/texDCRockSide.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.29411766, g: 0.15686275, b: 0.09019608, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 1.5
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/shipgraveyard/texSGWalls.psd
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.48235294, g: 0.5411765, b: 0.5529412, a: 0}
-      scale: 0.03
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/goldshores/texWhiteSandSimple.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.6117647, g: 0.52156866, b: 0.37254903, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1.2
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/skymeadow/texSMRockSide2.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.15294118, g: 0.09803922, b: 0.30588236, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/skymeadow/texSMRockSide.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.15294118, g: 0.098039225, b: 0.30588236, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/bazaar/texBazaarDirt.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.39215687, g: 0.3372549, b: 0.4117647, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/blackbeach/texBbRuinDebrisNormal.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.36078432, g: 0.5176471, b: 0.8784314, a: 0}
-      scale: 0.03
-      bumpScale: 0
-      constrast: 1.5
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/LunarGolem/texLunarGolemDiffuse.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.43137255, g: 0.45882353, b: 0.48235294, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 0.5
-      glossiness: 0.2
-      metallic: 0
-    floor:
-    - textureAsset: RoR2/Base/dampcave/texDCGrass.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.4509804, g: 0.18039216, b: 0.18039216, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.1
-      metallic: 0
-    - textureAsset: RoR2/Base/golemplains/texGPGrassTerrain.png
-      normalAsset: RoR2/Base/golemplains/texGPGrassTerrainNormal.png
-      bias: 0
-      averageColor: {r: 0.36862746, g: 0.34901962, b: 0.1254902, a: 0}
-      scale: 0.05
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.1
-      metallic: 0
-    - textureAsset: RoR2/DLC1/snowyforest/texSFSnow.tga
-      normalAsset: 
-      bias: 0.3
-      averageColor: {r: 0.8962264, g: 0.81590426, b: 0.81590426, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/DLC1/snowyforest/texSFGround.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.52156866, g: 0.45882353, b: 0.39215687, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/arena/texArenaSandDiffuse.png
-      normalAsset: 
-      bias: 0.5
-      averageColor: {r: 0.70980394, g: 0.76862746, b: 0.8666667, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/DLC1/sulfurpools/texSPGroundDIFVein.tga
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.50980395, g: 0.62352943, b: 0, a: 0}
-      scale: 0.03
-      bumpScale: 0
-      constrast: 0.5
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/DLC1/sulfurpools/texSPSpheremoss.tga
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.44313726, g: 0.5019608, b: 0.05490196, a: 0}
-      scale: 0.01
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
-    - textureAsset: RoR2/Base/goolake/texGoolakeGrate.png
-      normalAsset: 
-      bias: 0
-      averageColor: {r: 0.14509805, g: 0.105882354, b: 0.09411765, a: 0}
-      scale: 0.02
-      bumpScale: 0
-      constrast: 1
-      glossiness: 0.2
-      metallic: 0
   nodeGraphCreator:
     minFloorAngle: 0.5
     airNodeMinDistance: 10
@@ -1506,7 +1305,7 @@ MonoBehaviour:
         maxGolemDensity: 0.46
         maxBeetleQueenDensity: 0.44
   dccsPoolGenerator:
-    blendFactor: 0.5
+    blendFactor: 0.4
   propsPlacer:
     props:
     - asset: RoR2/DLC1/ancientloft/AncientLoftGrass.spm
@@ -1892,8 +1691,6 @@ MonoBehaviour:
   directorObject: {fileID: 1466132691}
   oobZoneObject: {fileID: 464249044}
   awuEventObject: {fileID: 326371545}
-  editorFloorIndex: -1
-  editorWallIndex: -1
 --- !u!23 &1906724323
 MeshRenderer:
   m_ObjectHideFlags: 0

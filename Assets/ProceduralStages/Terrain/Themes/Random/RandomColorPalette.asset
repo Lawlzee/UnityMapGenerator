@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021287e9fb8bd343875ef250c1ccb01, type: 3}
+  m_Name: RandomColorPalette
+  m_EditorClassIdentifier: 
+  size: 256
+  floor: {fileID: 11400000, guid: 8ccc18594e578c94c8934739fabcf228, type: 2}
+  walls: {fileID: 11400000, guid: 6b611d31219c67149b88a56cb75df9c0, type: 2}
+  ceilling: {fileID: 11400000, guid: 7f7492adfb054294484eb42400f2741c, type: 2}
+  light: {fileID: 11400000, guid: e785869e2eff6e3469d7b917e5a0f7a2, type: 2}
+  fog: {fileID: 11400000, guid: 635421e7abfd3d64aac5579552c08319, type: 2}
+  minNoise: 0.2
+  maxNoise: 0.25
