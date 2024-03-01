@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UnityEngine;
+
+namespace ProceduralStages
+{
+    [CreateAssetMenu(fileName = "props", menuName = "ProceduralStages/Props", order = 0)]
+    public class PropsDefinition : ScriptableObject
+    {
+        public string asset;
+        public float scale = 1;
+        public bool ground;
+        public int count;
+        public bool changeColor;
+        public bool isRock;
+        public Vector3 normal;
+        public Vector3 offset;
+        public bool isSolid;
+        public bool addCollision;
+    }
+}

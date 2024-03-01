@@ -1246,43 +1246,6 @@ MonoBehaviour:
     baseFrequency: 0.005
     frequency: 0.03
     amplitude: 0.2
-  colorPatelette:
-    size: 256
-    floor:
-      saturation: 0.5
-      value: 0.36
-      perlinAmplitude: 0.2
-      detailPerlinAmplitude: 0.1
-    walls:
-      saturation: 0.3
-      value: 0.27
-      perlinAmplitude: 0.5
-      detailPerlinAmplitude: 0.25
-    ceilling:
-      saturation: 0.3
-      value: 0.15
-      perlinAmplitude: 0.4
-      detailPerlinAmplitude: 0.2
-    light:
-      saturation: 0.7
-      value: 0.7
-      perlinAmplitude: 0
-      detailPerlinAmplitude: 0
-    fog:
-      saturation: 0.7
-      value: 0.7
-      colorStartAlpha: 0
-      colorMidAlpha: 0.175
-      colorEndAlpha: 0.35
-      zero: 0
-      one: 0.1
-      intensity: 0.4
-      power: 0.75
-    perlinFrequency: 0.588
-    xSquareSize: 1000
-    ySquareSize: 6
-    minNoise: 0.2
-    maxNoise: 0.25
   nodeGraphCreator:
     minFloorAngle: 0.5
     airNodeMinDistance: 10

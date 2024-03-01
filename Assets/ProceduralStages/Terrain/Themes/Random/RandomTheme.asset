@@ -33,4 +33,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 716fec3dafb56b844a885631aa563350, type: 2}
   - {fileID: 11400000, guid: eb3df9f4c24b3df468985b2918c283f4, type: 2}
   - {fileID: 11400000, guid: aefb0e0c40842ad4aba326e32d7ba474, type: 2}
-  colorPalette: {fileID: 11400000, guid: 2b845b7db9f6f7242b5a973b584a414f, type: 2}
+  colorPalettes:
+  - {fileID: 11400000, guid: 2b845b7db9f6f7242b5a973b584a414f, type: 2}
+  propCollections:
+  - {fileID: 11400000, guid: c4533fb940ced1745bf9bcb6f97bc836, type: 2}

@@ -17,7 +17,6 @@ namespace ProceduralStages
         //RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab
         //RoR2/Base/FusionCellDestructible/FusionCellDestructibleBody.prefab
 
-        public PropsDefinition[] props = new PropsDefinition[0];
         public int propsCount = 10;
 
         public GameObject propsObject;
@@ -27,8 +26,12 @@ namespace ProceduralStages
         public List<GameObject> instances = new List<GameObject>();
 
 
-        public void PlaceAll(Graphs graphs, MeshColorer meshColorer, Texture2D colorGradiant, Material terrainMaterial)
+        public void PlaceAll(Graphs graphs, PropsDefinitionCollection propsCollection, MeshColorer meshColorer, Texture2D colorGradiant, Material terrainMaterial)
         {
+            List<PropsDefinition> props = propsCollection.categories
+                .SelectMany(x => x.props)
+                .ToList();
+
             if (Application.isEditor)
             {
                 var rows = props
@@ -55,11 +58,11 @@ namespace ProceduralStages
 
             HashSet<int> choosenPropsIndex = new HashSet<int>();
 
-            int stagePropCount = Math.Min(props.Length, propsCount + stageInLoop);
+            int stagePropCount = Math.Min(props.Count, propsCount + stageInLoop);
 
             while (choosenPropsIndex.Count < stagePropCount)
             {
-                choosenPropsIndex.Add(MapGenerator.rng.RangeInt(0, props.Length));
+                choosenPropsIndex.Add(MapGenerator.rng.RangeInt(0, props.Count));
             }
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();
@@ -83,10 +86,6 @@ namespace ProceduralStages
                     : usedCeillingIndexes;
 
                 GameObject prefab = Addressables.LoadAssetAsync<GameObject>(prop.asset).WaitForCompletion();
-
-                float? lod = prop.lod < 0
-                    ? default(float?)
-                    : prop.lod;
 
                 for (int i = 0; i < prop.count; i++)
                 {
@@ -148,25 +147,6 @@ namespace ProceduralStages
             }
 
             occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances);
-        }
-
-
-        [Serializable]
-        public class PropsDefinition
-        {
-            public string asset;
-            public float scale = 1;
-            public bool ground;
-            public int count;
-            public bool changeColor;
-            public bool isRock;
-            public Vector3 normal;
-            public Vector3 offset;
-            public bool isSolid;
-            public bool addCollision;
-
-            [Range(-1f, 1f)]
-            public float lod = -1;
         }
     }
 }

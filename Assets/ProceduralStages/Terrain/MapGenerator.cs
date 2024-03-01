@@ -146,16 +146,13 @@ namespace ProceduralStages
             GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
             LogStats("MeshFilter");
 
-            var terrainMaterial = GetComponent<MeshRenderer>().material;
-            var colorGradiant = theme.SetTexture(terrainMaterial);
-
-            var surface = ScriptableObject.CreateInstance<SurfaceDef>();
-            surface.approximateColor = theme.colorPalette.AverageColor(colorGradiant);
-            surface.materialSwitchString = "stone";
-
+            Material terrainMaterial = GetComponent<MeshRenderer>().material;
             RampFog fog = postProcessingObject.GetComponent<PostProcessVolume>().profile.GetSetting<RampFog>();
-            theme.SetSunAndFog(fog);
+            SurfaceDef surface = ScriptableObject.CreateInstance<SurfaceDef>();
 
+            Texture2D colorGradiant = theme.ApplyTheme(terrainMaterial, fog, surface);
+
+            surface.materialSwitchString = "stone";
             GetComponent<SurfaceDefProvider>().surfaceDef = surface;
             LogStats("surfaceDef");
 
@@ -225,7 +222,8 @@ namespace ProceduralStages
 
             if (!Application.isEditor || loadPropsInEditor)
             {
-                propsPlacer.PlaceAll(graphs, meshColorer, colorGradiant, terrainMaterial);
+                PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
+                propsPlacer.PlaceAll(graphs, propsCollection, meshColorer, colorGradiant, terrainMaterial);
                 LogStats("propsPlacer");
             }
 

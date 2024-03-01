@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,9 +14,24 @@ namespace ProceduralStages
     {
         public SurfaceTexture[] walls = new SurfaceTexture[0];
         public SurfaceTexture[] floor = new SurfaceTexture[0];
-        public ThemeColorPalettes colorPalette;
+        public ThemeColorPalettes[] colorPalettes;
+        public PropsDefinitionCollection[] propCollections = new PropsDefinitionCollection[0];
 
-        public Texture2D SetTexture(Material material)
+        public Texture2D ApplyTheme(Material material, RampFog fog, SurfaceDef surface)
+        {
+            ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
+            Texture2D colorGradiant = SetTexture(material, colorPalette);
+            surface.approximateColor = colorPalette.AverageColor(colorGradiant);
+
+            float sunHue = MapGenerator.rng.nextNormalizedFloat;
+            RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);
+
+            SetFog(fog, sunHue, colorPalette);
+
+            return colorGradiant;
+        }
+
+        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette)
         {
             var rng = MapGenerator.rng;
 
@@ -67,12 +83,9 @@ namespace ProceduralStages
 
 
 
-        public void SetSunAndFog(RampFog fog)
+        private void SetFog(RampFog fog, float sunHue, ThemeColorPalettes colorPalette)
         {
-            var rng = MapGenerator.rng;
-
-            float sunHue = rng.nextNormalizedFloat;
-            RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);
+            
 
             var fogColor = Color.HSVToRGB(sunHue, colorPalette.fog.saturation, colorPalette.fog.value);
 
