@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,12 +10,13 @@ using UnityMeshSimplifier;
 
 namespace ProceduralStages
 {
-    [CreateAssetMenu(fileName = "caveGenerator", menuName = "ProceduralStages/CaveGenerator", order = 2)]
-    public class CaveGenerator : TerrainGenerator
+    [CreateAssetMenu(fileName = "overworldGenerator", menuName = "ProceduralStages/OverworldGenerator", order = 2)]
+    public class OverworldGenerator : TerrainGenerator
     {
         public Map2dGenerator wallGenerator = new Map2dGenerator();
         public Carver carver = new Carver();
         public Waller waller = new Waller();
+        public FloorWallsMixer floorWallsMixer = new FloorWallsMixer();
         public CellularAutomata3d cave3d = new CellularAutomata3d();
         public Map3dNoiser map3dNoiser = new Map3dNoiser();
 
@@ -22,26 +24,29 @@ namespace ProceduralStages
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
+            var stageSize = MapGenerator.instance.stageSize;
+            float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
             LogStats("wallGenerator");
 
-            carver.CarveWalls(map3d);
+            carver.CarveWalls(wallOnlyMap);
             LogStats("carver");
 
-            waller.AddCeilling(map3d);
-            LogStats("waller.AddCeilling");
+            //waller.AddCeilling(map3d);
+            //LogStats("waller.AddCeilling");
 
-            waller.AddWalls(map3d);
+            waller.AddWalls(wallOnlyMap);
             LogStats("waller.AddWalls");
 
-            var floorlessMap = map3d;
-            map3d = waller.AddFloor(map3d);
+            float[,,] floorOnlyMap = new float[stageSize.x, stageSize.y, stageSize.z];
+            floorOnlyMap = waller.AddFloor(floorOnlyMap);
             LogStats("waller.AddFloor");
 
-            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
+            float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
+
+            densityMap = map3dNoiser.AddNoise(densityMap);
             LogStats("map3dNoiser");
 
-            float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
+            float[,,] smoothMap3d = cave3d.SmoothMap(densityMap);
             LogStats("cave3d");
 
             var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
@@ -61,7 +66,7 @@ namespace ProceduralStages
                     triangles = optimisedMesh.triangles,
                     vertices = optimisedMesh.vertices
                 },
-                floorlessDensityMap = floorlessMap,
+                floorlessDensityMap = wallOnlyMap,
                 densityMap = smoothMap3d
             };
 

@@ -85,8 +85,6 @@ namespace ProceduralStages
                     ? usedFloorIndexes
                     : usedCeillingIndexes;
 
-                GameObject prefab = Addressables.LoadAssetAsync<GameObject>(prop.asset).WaitForCompletion();
-
                 for (int i = 0; i < prop.count; i++)
                 {
                     int attempt = 0;
@@ -126,7 +124,7 @@ namespace ProceduralStages
                     }
 
                     GameObject instance = propsNode.Place(
-                        prefab, 
+                        prop.prefab, 
                         propsObject, 
                         material, 
                         color, 

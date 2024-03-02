@@ -19,10 +19,6 @@ namespace ProceduralStages
     //[DefaultExecutionOrder(-1)]
     public class MapGenerator : MonoBehaviour
     {
-        public Vector3Int size;
-        public Vector3Int sizeIncreasePerStage;
-        public Vector3 sizeVariation;
-
         [HideInInspector]
         public Vector3Int stageSize;
 
@@ -124,10 +120,12 @@ namespace ProceduralStages
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            stageSize = size + stageInLoop * sizeIncreasePerStage;
-            stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * sizeVariation.x);
-            stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * sizeVariation.y);
-            stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * sizeVariation.z);
+            TerrainGenerator terrainGenerator = terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)];
+
+            stageSize = terrainGenerator.size + stageInLoop * terrainGenerator.sizeIncreasePerStage;
+            stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
+            stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
+            stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
 
             BoxCollider oobZone = oobZoneObject.GetComponent<BoxCollider>();
             var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale, stageSize.z * mapScale);
@@ -135,7 +133,7 @@ namespace ProceduralStages
             oobZone.size = scaledSize;
             oobZone.center = scaledSize / 2;
 
-            TerrainGenerator terrainGenerator = terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)];
+            
             Terrain terrain = terrainGenerator.Generate();
 
             MapTheme theme = themes[rng.RangeInt(0, themes.Length)];

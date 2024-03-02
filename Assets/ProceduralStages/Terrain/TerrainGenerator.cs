@@ -24,6 +24,10 @@ namespace ProceduralStages
 
     public abstract class TerrainGenerator : ScriptableObject
     {
+        public Vector3Int size;
+        public Vector3Int sizeIncreasePerStage;
+        public Vector3 sizeVariation;
+
         public abstract Terrain Generate();
     }
 }

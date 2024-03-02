@@ -16,6 +16,8 @@ namespace ProceduralStages
         public float frequency = 0.03f;
         [Range(0f, 5f)]
         public float verticalScale = 0.5f;
+        [Range(0f, 1f)]
+        public float surfaceLevel = 0.5f;
         
         public void CarveWalls(float[,,] map)
         {
@@ -41,7 +43,9 @@ namespace ProceduralStages
                         float mapNoise = map[x, y, z];
                         float noise = (PerlinNoise.Get(new Vector3(x + seedX, y * verticalScale + seedY, z + seedZ), frequency) + 1) / 2;
 
-                        map[x, y, z] = Mathf.Min(mapNoise, noise);
+                        float scaledNoise = Mathf.Clamp01(noise - 0.5f + surfaceLevel);
+
+                        map[x, y, z] = Mathf.Min(mapNoise, scaledNoise);
                     }
                 }
             });

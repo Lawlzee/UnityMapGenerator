@@ -9,15 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7c41629529ca084e94b1e9b1b0e4ca1, type: 3}
-  m_Name: CaveGenerator
+  m_Script: {fileID: 11500000, guid: db26add71c53e4342b7987556078bbff, type: 3}
+  m_Name: OverworldGenerator
   m_EditorClassIdentifier: 
-  size: {x: 150, y: 80, z: 175}
-  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
+  size: {x: 200, y: 80, z: 225}
+  sizeIncreasePerStage: {x: 25, y: 0, z: 35}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   wallGenerator:
     frequency: 28
-    wallSurface: 0.3
+    wallSurface: 0.4
     curveFrequency: 0.042
     curveVerticalScale: 0.8
     curveMinNoise: 0.6
@@ -29,25 +29,35 @@ MonoBehaviour:
     floor:
       enabled: 1
       noise: 43.7
-      minThickness: 1
-      maxThickness: 11
+      minThickness: 10
+      maxThickness: 20
     ceilling:
       enabled: 1
       noise: 28
       minThickness: 1
-      maxThickness: 19
+      maxThickness: 18
     walls:
       enabled: 1
       noise: 33.7
-      minThickness: 1
-      maxThickness: 21
+      minThickness: 10
+      maxThickness: 30
     wallRoundingFactor: 8
     blendFactor: 0.015
-    roundWallsToCeilling: 1
+    roundWallsToCeilling: 0
+  floorWallsMixer:
+    roofFrequency: 0.04
+    wallsBlendFrequency: 0.03
+    wallsFrequency: 0.02
+    wallSurface: 0.6
+    wallsBlendVerticalScale: 0.3
+    wallsVerticalScale: 0.3
+    roofVerticalScale: 1
+    roofCarvingRelativeMinHeight: 1
+    wallsCarvingRelativeMinDistance: 0
   cave3d:
     enabled: 1
     smoothingInterations: 2
-    forceWalls: 1
+    forceWalls: 0
   map3dNoiser:
     enabled: 1
     frequency: 0.434

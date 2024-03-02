@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ProceduralStages
 {
@@ -20,5 +21,10 @@ namespace ProceduralStages
         public Vector3 offset;
         public bool isSolid;
         public bool addCollision;
+
+        private GameObject _prefab;
+        public GameObject prefab => _prefab
+            ? _prefab
+            : (_prefab = Addressables.LoadAssetAsync<GameObject>(asset).WaitForCompletion());
     }
 }

@@ -12,6 +12,7 @@ namespace ProceduralStages
         public Wall walls = new Wall();
         public float wallRoundingFactor;
         public float blendFactor = 0.1f;
+        public bool roundWallsToCeilling = false;
 
         public float[,,] AddFloor(float[,,] map)
         {
@@ -35,7 +36,7 @@ namespace ProceduralStages
                 {
                     float floorNoise = Mathf.Clamp01(Mathf.PerlinNoise(x / floor.noise + seedX, z / floor.noise + seedZ));
 
-                    float floorHeight = 1 + floorNoise * floor.maxThickness;
+                    float floorHeight = floor.minThickness + floorNoise * (floor.maxThickness - floor.minThickness);
 
                     int y = 0;
                     for (; y < height3d; y++)
@@ -78,7 +79,7 @@ namespace ProceduralStages
                 {
                     float ceillingNoise = Mathf.Clamp01(Mathf.PerlinNoise(x / ceilling.noise + seedX, z / ceilling.noise + seedZ));
 
-                    float ceillingHeigth = 1 + ceillingNoise * ceilling.maxThickness;
+                    float ceillingHeigth = ceilling.minThickness + ceillingNoise * (ceilling.maxThickness - ceilling.minThickness);
 
                     for (int y = 0; y < height3d; y++)
                     {
@@ -100,6 +101,7 @@ namespace ProceduralStages
         {
             public bool enabled = true;
             public float noise;
+            public float minThickness = 1;
             public float maxThickness;
         }
 
@@ -128,14 +130,18 @@ namespace ProceduralStages
 
             Parallel.For(0, height3d, y =>
             {
+                float wallsToCeillingRoundingBonus = roundWallsToCeilling
+                    ? y * y
+                    : 0;
+
                 for (int x = 0; x < width3d; x++)
                 {
                     float dx = (x - halfWidth);
-                    float bonusTickness = wallRoundingFactor * (dx * dx + y * y) / maxTicknessX;
+                    float bonusTickness = wallRoundingFactor * (dx * dx + wallsToCeillingRoundingBonus) / maxTicknessX;
 
                     float wall1Noise = Mathf.Clamp01(Mathf.PerlinNoise(x / walls.noise + wall1SeedX, y / walls.noise + wall1SeedY));
 
-                    float wall1Tickness = 1 + wall1Noise * walls.maxThickness * bonusTickness;
+                    float wall1Tickness = walls.minThickness + wall1Noise * (walls.maxThickness - walls.minThickness) * bonusTickness;
 
                     for (int z = 0; z < depth3d; z++)
                     {
@@ -150,7 +156,7 @@ namespace ProceduralStages
 
                     float wall2Noise = Mathf.Clamp01(Mathf.PerlinNoise(x / walls.noise + wall2SeedX, y / walls.noise + wall2SeedY));
 
-                    float wall2Tickness = 1 + wall2Noise * walls.maxThickness * bonusTickness;
+                    float wall2Tickness = walls.minThickness + wall2Noise * (walls.maxThickness - walls.minThickness) * bonusTickness;
 
                     for (int z = 0; z < depth3d; z++)
                     {
@@ -168,11 +174,11 @@ namespace ProceduralStages
                 for (int z = 0; z < depth3d; z++)
                 {
                     float dz = (z - halfWidth);
-                    float bonusTickness = wallRoundingFactor * (dz * dz + y * y) / maxTicknessX;
+                    float bonusTickness = wallRoundingFactor * (dz * dz + wallsToCeillingRoundingBonus) / maxTicknessX;
 
                     float wall3Noise = Mathf.Clamp01(Mathf.PerlinNoise(y / walls.noise + wall3SeedY, z / walls.noise + wall3SeedZ));
 
-                    float wall3Tickness = 1 + wall3Noise * walls.maxThickness * bonusTickness;
+                    float wall3Tickness = walls.minThickness + wall3Noise * (walls.maxThickness - walls.minThickness) * bonusTickness;
 
                     for (int x = 0; x < width3d; x++)
                     {
@@ -186,7 +192,7 @@ namespace ProceduralStages
 
                     float wall4Noise = Mathf.Clamp01(Mathf.PerlinNoise(y / walls.noise + wall4SeedY, z / walls.noise + wall4SeedZ));
 
-                    float wall4Tickness = 1 + wall4Noise * walls.maxThickness * bonusTickness;
+                    float wall4Tickness = walls.minThickness + wall4Noise * (walls.maxThickness - walls.minThickness) * bonusTickness;
 
                     for (int x = 0; x < width3d; x++)
                     {

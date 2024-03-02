@@ -38,15 +38,8 @@ namespace ProceduralStages
                 {
                     for (int z = 0; z < depth3d; z++)
                     {
-                        if (x == 0 || y == 0 || z == 0 || x == width3d - 1 || y == height3d - 1 || z == depth3d - 1)
-                        {
-                            result[x, y, z] = map[x, y, z];
-                        }
-                        else
-                        {
-                            float noise = amplitude * PerlinNoise.Get(new Vector3(x + seedX, y + seedY, z + seedZ), frequency);
-                            result[x, y, z] = Mathf.Clamp01(map[x, y, z] + noise);
-                        }
+                        float noise = amplitude * PerlinNoise.Get(new Vector3(x + seedX, y + seedY, z + seedZ), frequency);
+                        result[x, y, z] = Mathf.Clamp01(map[x, y, z] + noise);
                     }
                 }
             });

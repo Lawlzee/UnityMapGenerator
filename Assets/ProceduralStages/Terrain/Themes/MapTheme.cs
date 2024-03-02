@@ -44,15 +44,8 @@ namespace ProceduralStages
             SurfaceTexture floorTexture = floor[floorIndex];
             SurfaceTexture wallTexture = walls[wallIndex];
 
-            material.mainTexture = Addressables.LoadAssetAsync<Texture2D>(wallTexture.textureAsset).WaitForCompletion();
-            if (string.IsNullOrEmpty(wallTexture.normalAsset))
-            {
-                material.SetTexture("_WallNormalTex", null);
-            }
-            else
-            {
-                material.SetTexture("_WallNormalTex", Addressables.LoadAssetAsync<Texture2D>(wallTexture.normalAsset).WaitForCompletion());
-            }
+            material.mainTexture = wallTexture.texture;
+            material.SetTexture("_WallNormalTex", wallTexture.normal);
             material.SetFloat("_WallBias", wallTexture.bias);
             material.SetColor("_WallColor", wallTexture.averageColor);
             material.SetFloat("_WallScale", wallTexture.scale);
@@ -61,15 +54,8 @@ namespace ProceduralStages
             material.SetFloat("_WallGlossiness", wallTexture.glossiness);
             material.SetFloat("_WallMetallic", wallTexture.metallic);
 
-            material.SetTexture("_FloorTex", Addressables.LoadAssetAsync<Texture2D>(floorTexture.textureAsset).WaitForCompletion());
-            if (string.IsNullOrEmpty(floorTexture.normalAsset))
-            {
-                material.SetTexture("_FloorNormalTex", null);
-            }
-            else
-            {
-                material.SetTexture("_FloorNormalTex", Addressables.LoadAssetAsync<Texture2D>(floorTexture.normalAsset).WaitForCompletion());
-            }
+            material.SetTexture("_FloorTex", floorTexture.texture);
+            material.SetTexture("_FloorNormalTex", floorTexture.normal);
             material.SetFloat("_FloorBias", floorTexture.bias);
             material.SetColor("_FloorColor", floorTexture.averageColor);
             material.SetFloat("_FloorScale", floorTexture.scale);
@@ -81,12 +67,8 @@ namespace ProceduralStages
             return colorGradiant;
         }
 
-
-
         private void SetFog(RampFog fog, float sunHue, ThemeColorPalettes colorPalette)
         {
-            
-
             var fogColor = Color.HSVToRGB(sunHue, colorPalette.fog.saturation, colorPalette.fog.value);
 
             fog.fogColorStart.value = fogColor;

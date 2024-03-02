@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ProceduralStages
 {
@@ -27,5 +28,17 @@ namespace ProceduralStages
         public float glossiness;
         [Range(0, 1)]
         public float metallic;
+
+        private Texture2D _texture;
+        public Texture2D texture => _texture 
+            ? _texture
+            : (_texture = Addressables.LoadAssetAsync<Texture2D>(textureAsset).WaitForCompletion());
+
+        private Texture2D _normal;
+        public Texture2D normal => string.IsNullOrEmpty(normalAsset)
+            ? null
+            : _normal
+                ? _normal        
+                : (_normal = Addressables.LoadAssetAsync<Texture2D>(normalAsset).WaitForCompletion());
     }
 }

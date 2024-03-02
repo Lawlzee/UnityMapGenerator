@@ -52,11 +52,12 @@ namespace ProceduralStages
             int height = map.GetLength(1);
             int depth = map.GetLength(2);
 
-            int lerpedX = x < 0 ? 0 : x >= width ? width - 1 : x;
-            int lerpedY = y < 0 ? 0 : y >= height? height - 1 : y;
-            int lerpedZ = z < 0 ? 0 : z >= depth ? depth - 1 : z;
+            if (x < 0 || y < 0 || z < 0 || x >= width || y >= height || z >= depth)
+            {
+                return 1f;
+            }
 
-            return map[lerpedX, lerpedY, lerpedZ];
+            return map[x, y, z];
         }
 
         [Serializable]
