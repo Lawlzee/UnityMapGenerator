@@ -15,6 +15,9 @@ MonoBehaviour:
   size: {x: 150, y: 80, z: 175}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  fogPower: 0.75
+  vignetteInsentity: 0.25
+  ambiantLightIntensity: 0.75
   wallGenerator:
     frequency: 28
     wallSurface: 0.3

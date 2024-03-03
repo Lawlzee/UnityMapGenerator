@@ -23,17 +23,17 @@ namespace ProceduralStages
             TerrainGenerator terrainGenerator, 
             Material material, 
             RampFog fog, 
-            Vignette vignette,
-            SurfaceDef surface)
+            Vignette vignette)
         {
             ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
             Texture2D colorGradiant = SetTexture(material, colorPalette);
-            surface.approximateColor = colorPalette.AverageColor(colorGradiant);
-
+            
             RenderSettings.skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
 
             float sunHue = MapGenerator.rng.nextNormalizedFloat;
             RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);
+
+            RenderSettings.ambientLight = new Color(terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity);
 
             SetFog(fog, sunHue, terrainGenerator.fogPower, colorPalette);
 
