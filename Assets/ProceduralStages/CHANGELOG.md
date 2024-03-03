@@ -1,3 +1,11 @@
+## 1.7
+
+1. **Overworld Map Type**: A new map type, the overworld map, has been added. Now, 50% of the generated maps will be overworld maps.
+
+2. **Performance Enhancement: Occlusion Culling**: Performance has been improved by implementing occlusion culling. This should lead to a significant increase in frames per second (fps), potentially doubling the previous performance.
+
+3. **Improved Air Graph**: Enemies are now capable of flying over obstacles and pursuing the players even on top of walls.
+
 ## 1.6
 1. **Stage 2 Pressure Plate Mechanic:** Stage 2 of the game will now have a 33% chance to include a pressure plate mechanic similar to the one found in Abandoned Aqueduct. Activating two pressure plates will spawn two Elite Elder Lemurians, each dropping a Kjaro's Band and a Runald's Band.
 2. **Stage 3 Changes:**: Stage 3 now has a 33% chance to include a Timed Security Chest similar to Rallypoint Delta.
