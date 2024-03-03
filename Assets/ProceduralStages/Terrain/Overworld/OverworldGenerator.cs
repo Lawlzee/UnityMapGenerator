@@ -67,7 +67,8 @@ namespace ProceduralStages
                     vertices = optimisedMesh.vertices
                 },
                 floorlessDensityMap = wallOnlyMap,
-                densityMap = smoothMap3d
+                densityMap = smoothMap3d,
+                maxGroundheight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
 
             void LogStats(string name)

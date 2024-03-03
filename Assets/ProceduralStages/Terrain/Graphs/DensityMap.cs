@@ -42,7 +42,7 @@ namespace ProceduralStages
             maxBeetleQueenDensity = 0.6f
         };
 
-        public float GetDensity(float[,,] map, Vector3 position)
+        public float GetDensity(float[,,] map, Vector3 position, bool[,] bounds)
         {
             int x = Mathf.RoundToInt(position.x);
             int y = Mathf.RoundToInt(position.y);
@@ -53,6 +53,11 @@ namespace ProceduralStages
             int depth = map.GetLength(2);
 
             if (x < 0 || y < 0 || z < 0 || x >= width || y >= height || z >= depth)
+            {
+                return 1f;
+            }
+
+            if (bounds != null && !bounds[x, z])
             {
                 return 1f;
             }

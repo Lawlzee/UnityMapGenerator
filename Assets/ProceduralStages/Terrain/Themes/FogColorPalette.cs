@@ -29,7 +29,5 @@ namespace ProceduralStages
 
         [Range(0, 1)]
         public float intensity;
-        [Range(0, 1)]
-        public float power;
     }
 }

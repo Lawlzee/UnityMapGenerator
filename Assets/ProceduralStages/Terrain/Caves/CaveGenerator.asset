@@ -19,12 +19,13 @@ MonoBehaviour:
     frequency: 28
     wallSurface: 0.3
     curveFrequency: 0.042
-    curveVerticalScale: 0.8
+    curveVerticalScale: 0.6
     curveMinNoise: 0.6
   carver:
     enabled: 1
     frequency: 0.042
     verticalScale: 0.7
+    surfaceLevel: 0.5
   waller:
     floor:
       enabled: 1

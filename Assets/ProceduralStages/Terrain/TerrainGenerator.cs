@@ -12,6 +12,7 @@ namespace ProceduralStages
         public MeshResult meshResult;
         public float[,,] floorlessDensityMap;
         public float[,,] densityMap;
+        public float maxGroundheight;
     }
 
     public class MeshResult
@@ -27,6 +28,8 @@ namespace ProceduralStages
         public Vector3Int size;
         public Vector3Int sizeIncreasePerStage;
         public Vector3 sizeVariation;
+        public float fogPower = 0.75f;
+        public float vignetteInsentity = 0.25f;
 
         public abstract Terrain Generate();
     }

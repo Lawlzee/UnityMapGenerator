@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1.4
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -513,7 +513,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1227,14 +1227,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee1120c5072b72f46a4737a166bef762, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 150, y: 80, z: 175}
-  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
-  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   stageSize: {x: 0, y: 0, z: 0}
   mapScale: 2.5
   meshQuality: 0.2
-  loadResourcesInEditor: 0
-  loadPropsInEditor: 0
+  loadResourcesInEditor: 1
+  loadPropsInEditor: 1
   editorSeed: 0
   terrainGenerators:
   - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
@@ -1251,7 +1248,6 @@ MonoBehaviour:
     minFloorAngle: 0.5
     airNodeMinDistance: 10
     airNodeSample: 6
-    maxGroundheight: 30
     densityMap:
       maxChestDensity: 0.45
       maxShrineDensity: 0.45

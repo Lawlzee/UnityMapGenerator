@@ -35,5 +35,31 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aefb0e0c40842ad4aba326e32d7ba474, type: 2}
   colorPalettes:
   - {fileID: 11400000, guid: 2b845b7db9f6f7242b5a973b584a414f, type: 2}
+  skyboxes:
+  - {fileID: 11400000, guid: 6a614eeea501fd546b38acc9946f9289, type: 2}
+  - {fileID: 11400000, guid: 1c2ddb8dc9598b9449f7c8c9380e2034, type: 2}
+  - {fileID: 11400000, guid: 6533136a4d70c9448a1f7d11477f6b4a, type: 2}
+  - {fileID: 11400000, guid: ef9c906d5b4a9734a874fff665a535fe, type: 2}
+  - {fileID: 11400000, guid: 8aede114ce8c93f4bab5c59dfe4f7432, type: 2}
+  - {fileID: 11400000, guid: 2da492d2903e9014d82a596989bc9c51, type: 2}
+  - {fileID: 11400000, guid: f03d3d80d8ebe9f4b98c7de1e6d4285c, type: 2}
+  - {fileID: 11400000, guid: e96beb48ef1b1824881822f0840ecd20, type: 2}
+  - {fileID: 11400000, guid: ca43b3ba541410e46b0e7eb56e7d34af, type: 2}
+  - {fileID: 11400000, guid: 3e0a9f0769af7e14b8eaea6f0b7b72a1, type: 2}
+  - {fileID: 11400000, guid: b63f1bbfc376e2b488ebe57fa38f1d04, type: 2}
+  - {fileID: 11400000, guid: 3ddfbdb88968fe2428984e812c45340f, type: 2}
+  - {fileID: 11400000, guid: 0871e889341f31544b3091d8d903c6f7, type: 2}
+  - {fileID: 11400000, guid: 5ac87f36fac3b0f4184812d69b0e0568, type: 2}
+  - {fileID: 11400000, guid: 2571f34b4956e0845aeae50f61e0c72f, type: 2}
+  - {fileID: 11400000, guid: eb61ea71a4700bb45b093af1082bd2e2, type: 2}
+  - {fileID: 11400000, guid: 3582e971ac702894189e623d65c89080, type: 2}
+  - {fileID: 11400000, guid: d347ac30f0f073141ac6ad54e1e2ae94, type: 2}
+  - {fileID: 11400000, guid: 870e3bc71dfe6ba46b3e3c6dc241b425, type: 2}
+  - {fileID: 11400000, guid: 57d76c46aac5d2c439238e0034e58be4, type: 2}
+  - {fileID: 11400000, guid: 377b822612b514c42964757874e372d4, type: 2}
+  - {fileID: 11400000, guid: 6a125dc9027979f4aae895738c8962a4, type: 2}
+  - {fileID: 11400000, guid: 88f47481c121b2f47a9ebb5f3337f90d, type: 2}
+  - {fileID: 11400000, guid: c4bded645c8b1f7469f4c9caab3dfa4e, type: 2}
+  - {fileID: 11400000, guid: 92ad3def7a0dfe54586535d9f47ca9bd, type: 2}
   propCollections:
   - {fileID: 11400000, guid: c4533fb940ced1745bf9bcb6f97bc836, type: 2}

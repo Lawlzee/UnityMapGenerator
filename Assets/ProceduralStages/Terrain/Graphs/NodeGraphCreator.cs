@@ -23,7 +23,6 @@ namespace ProceduralStages
         public int airNodeSample = 20;
         //public float airNodeheight = 20f;
 
-        public int maxGroundheight = 30;
         public DensityMap densityMap = new DensityMap();
 
         public Graphs CreateGraphs(Terrain terrain)
@@ -109,7 +108,7 @@ namespace ProceduralStages
 
                     index++;
 
-                    float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale);
+                    float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale, bounds: null);
 
                     HullMask forbiddenHulls = HullMask.None;
 
@@ -333,9 +332,9 @@ namespace ProceduralStages
 
                 NodeFlags flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
 
-                float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale);
+                float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale, bounds: null);
 
-                if (node.position.y <= maxGroundheight)
+                if (node.position.y <= terrain.maxGroundheight)
                 {
                     if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
                     {
@@ -374,6 +373,23 @@ namespace ProceduralStages
 
             float mapScale = MapGenerator.instance.mapScale;
 
+
+            bool[,] bounds = new bool[terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(2)];
+            Parallel.For(0, terrain.densityMap.GetLength(0), x =>
+            {
+                for (int z = 0; z < terrain.densityMap.GetLength(2); z++)
+                {
+                    for (int y = 0; y < terrain.densityMap.GetLength(1); y++)
+                    {
+                        if (terrain.densityMap[x, y, z] >= 0.5f)
+                        {
+                            bounds[x, z] = true;
+                            break;
+                        }
+                    }
+                }
+            });
+
             Vector3 mapSize = new Vector3(
                 mapScale * terrain.densityMap.GetLength(0),
                 mapScale * terrain.densityMap.GetLength(1),
@@ -393,7 +409,7 @@ namespace ProceduralStages
 
                 Vector3 initialPosition = new Vector3(initialX, initialY, initialZ);
 
-                float density = densityMap.GetDensity(terrain.densityMap, initialPosition / mapScale);
+                float density = densityMap.GetDensity(terrain.densityMap, initialPosition / mapScale, bounds);
 
                 if (density < 0.25f)
                 {
@@ -433,7 +449,7 @@ namespace ProceduralStages
 
                     Vector3 targetPosition = seedPosition + direction * distance;
 
-                    if (IsValidAirNodePosition(terrain.densityMap, mapScale, kdTree, airNodes, targetPosition))
+                    if (IsValidAirNodePosition(terrain.densityMap, mapScale, bounds, kdTree, airNodes, targetPosition))
                     {
                         positionsToProcess.Enqueue(targetPosition);
                     }
@@ -506,9 +522,9 @@ namespace ProceduralStages
             }
         }
 
-        private bool IsValidAirNodePosition(float[,,] map3d, float mapScale, Octree<int> kdTree, List<NodeGraph.Node> airNodes, Vector3 targetPosition)
+        private bool IsValidAirNodePosition(float[,,] map3d, float mapScale, bool[,] bounds, Octree<int> kdTree, List<NodeGraph.Node> airNodes, Vector3 targetPosition)
         {
-            float density = densityMap.GetDensity(map3d, targetPosition / mapScale);
+            float density = densityMap.GetDensity(map3d, targetPosition / mapScale, bounds);
 
             HullMask forbiddenHulls = HullMask.None;
 

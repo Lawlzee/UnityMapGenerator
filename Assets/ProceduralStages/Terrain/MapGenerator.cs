@@ -145,10 +145,12 @@ namespace ProceduralStages
             LogStats("MeshFilter");
 
             Material terrainMaterial = GetComponent<MeshRenderer>().material;
-            RampFog fog = postProcessingObject.GetComponent<PostProcessVolume>().profile.GetSetting<RampFog>();
             SurfaceDef surface = ScriptableObject.CreateInstance<SurfaceDef>();
+            var profile = postProcessingObject.GetComponent<PostProcessVolume>().profile;
+            RampFog fog = profile.GetSetting<RampFog>();
+            Vignette vignette = profile.GetSetting<Vignette>();
 
-            Texture2D colorGradiant = theme.ApplyTheme(terrainMaterial, fog, surface);
+            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette, surface);
 
             surface.materialSwitchString = "stone";
             GetComponent<SurfaceDefProvider>().surfaceDef = surface;

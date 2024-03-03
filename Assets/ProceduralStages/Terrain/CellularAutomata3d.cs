@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace ProceduralStages
 {
@@ -71,33 +72,48 @@ namespace ProceduralStages
 
         private float GetNeighbourCount(float[,,] map, int width, int height, int depth, int posX, int posY, int posZ)
         {
+            const float c = 1f / 27;
+
             float average = 0;
 
             for (int dx = -1; dx <= 1; dx++)
             {
                 int x = posX + dx;
-                if (x < 0 || x >= width)
+
+                if (x < 0)
                 {
-                    continue;
+                    x = 0;
+                }
+                else if (x >= width)
+                {
+                    x = width - 1;
                 }
 
                 for (int dy = -1; dy <= 1; dy++)
                 {
                     int y = posY + dy;
-                    if (y < 0 || y >= height)
+                    if (y < 0)
                     {
-                        continue;
+                        y = 0;
+                    }
+                    else if (y >= height)
+                    {
+                        y = height - 1;
                     }
 
                     for (int dz = -1; dz <= 1; dz++)
                     {
                         int z = posZ + dz;
-                        if (z < 0 || z >= depth)
+                        if (z < 0)
                         {
-                            continue;
+                            z = 0;
+                        }
+                        else if (z >= depth)
+                        {
+                            z = depth - 1;
                         }
 
-                        average += map[x, y, z] / 27f;
+                        average += map[x, y, z] * c;
                     }
                 }
             }

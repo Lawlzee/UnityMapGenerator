@@ -12,25 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db26add71c53e4342b7987556078bbff, type: 3}
   m_Name: OverworldGenerator
   m_EditorClassIdentifier: 
-  size: {x: 200, y: 80, z: 225}
+  size: {x: 225, y: 80, z: 250}
   sizeIncreasePerStage: {x: 25, y: 0, z: 35}
-  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
+  fogPower: 1.75
+  vignetteInsentity: 0.12
   wallGenerator:
-    frequency: 28
-    wallSurface: 0.4
+    frequency: 38
+    wallSurface: 0.45
     curveFrequency: 0.042
     curveVerticalScale: 0.8
     curveMinNoise: 0.6
   carver:
     enabled: 1
     frequency: 0.042
-    verticalScale: 0.7
+    verticalScale: 0.3
+    surfaceLevel: 0.6
   waller:
     floor:
       enabled: 1
       noise: 43.7
-      minThickness: 10
-      maxThickness: 20
+      minThickness: 20
+      maxThickness: 30
     ceilling:
       enabled: 1
       noise: 28
@@ -39,21 +42,22 @@ MonoBehaviour:
     walls:
       enabled: 1
       noise: 33.7
-      minThickness: 10
-      maxThickness: 30
+      minThickness: 20
+      maxThickness: 35
     wallRoundingFactor: 8
     blendFactor: 0.015
     roundWallsToCeilling: 0
   floorWallsMixer:
-    roofFrequency: 0.04
-    wallsBlendFrequency: 0.03
+    wallsBlendFrequency: 0.015
+    wallsBlendVerticalScale: 0.4
+    wallsCarvingRelativeMinDistance: 0.3
+    wallsBlendNoiseBonus: 0.03
     wallsFrequency: 0.02
-    wallSurface: 0.6
-    wallsBlendVerticalScale: 0.3
-    wallsVerticalScale: 0.3
+    wallSurface: 1
+    wallsVerticalScale: 0.5
+    roofFrequency: 30.3434
     roofVerticalScale: 1
-    roofCarvingRelativeMinHeight: 1
-    wallsCarvingRelativeMinDistance: 0
+    roofCarvingRelativeMinHeight: 0.8
   cave3d:
     enabled: 1
     smoothingInterations: 2
