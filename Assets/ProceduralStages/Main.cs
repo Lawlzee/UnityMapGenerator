@@ -25,7 +25,7 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.7.1";
+        public const string PluginVersion = "1.7.2";
 
         public static ConfigEntry<bool> ReplaceAllStages;
 

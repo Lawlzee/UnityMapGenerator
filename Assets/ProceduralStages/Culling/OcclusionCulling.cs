@@ -48,7 +48,7 @@ namespace ProceduralStages
         private ComputeBuffer _visibleClustersBuffer;
 
         private MeshRenderer[][] _meshRenderersByClusterIndex;
-        private int[] _visibleClusters;
+        private uint[] _visibleClusters;
 
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
@@ -170,7 +170,7 @@ namespace ProceduralStages
 
             _meshFilter.mesh = GenerateMesh(boundsByCluster);
 
-            _visibleClusters = new int[clusterCount];
+            _visibleClusters = new uint[clusterCount];
             _visibleClustersBuffer = new ComputeBuffer(clusterCount, 4, ComputeBufferType.Default);
 
             Graphics.ClearRandomWriteTargets();

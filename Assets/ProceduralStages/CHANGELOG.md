@@ -1,3 +1,6 @@
+## 1.7.2
+1. Fixed decoration not rendering/flickering (for real this time).
+
 ## 1.7.1
 1. Fixed decoration not rendering/flickering.
 2. Decreased overworld map size.

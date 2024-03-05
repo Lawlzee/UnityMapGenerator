@@ -13,7 +13,7 @@
 			#pragma fragment PSMain
 			#pragma target 5.0
 
-			RWStructuredBuffer<float4> _VisibleClusters : register(u1);
+			RWStructuredBuffer<uint> _VisibleClusters : register(u1);
 			//StructuredBuffer<float4> _Reader;
 			int _Debug;
 
