@@ -43,6 +43,7 @@ namespace ProceduralStages
         public int clusterMaxIterations = 100;
 
         public bool debug;
+        public Vector3 boundsBuffer;
 
         private ComputeBuffer _visibleClustersBuffer;
 
@@ -67,6 +68,8 @@ namespace ProceduralStages
                 Bounds bound = meshRenderers[i].bounds;
                 bounds.Encapsulate(bound);
             }
+
+            bounds.size += boundsBuffer;
 
             return bounds;
         }

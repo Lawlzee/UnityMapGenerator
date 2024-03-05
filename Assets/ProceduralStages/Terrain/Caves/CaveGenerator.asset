@@ -17,7 +17,7 @@ MonoBehaviour:
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   fogPower: 0.75
   vignetteInsentity: 0.25
-  ambiantLightIntensity: 0.75
+  ambiantLightIntensity: 0.7
   wallGenerator:
     frequency: 28
     wallSurface: 0.3

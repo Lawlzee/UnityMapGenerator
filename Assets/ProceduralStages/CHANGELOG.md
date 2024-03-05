@@ -1,9 +1,13 @@
+## 1.7.1
+1. Fixed decoration not rendering/flickering.
+2. Decreased overworld map size.
+3. Raised the height threshold for teleportation out of the map zone.
+4. Fixed missing collisions.
+
 ## 1.7
 
 1. **Overworld Map Type**: A new map type, the overworld map, has been added. Now, 50% of the generated maps will be overworld maps.
-
 2. **Performance Enhancement: Occlusion Culling**: Performance has been improved by implementing occlusion culling. This should lead to a significant increase in frames per second (fps), potentially doubling the previous performance.
-
 3. **Improved Air Graph**: Enemies are now capable of flying over obstacles and pursuing the players even on top of walls.
 
 ## 1.6

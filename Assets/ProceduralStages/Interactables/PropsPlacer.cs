@@ -138,6 +138,12 @@ namespace ProceduralStages
                     if (prop.addCollision)
                     {
                         instance.AddComponent<MeshCollider>();
+
+                        foreach (var meshRenderer in instance.GetComponentsInChildren<MeshRenderer>(includeInactive: true))
+                        {
+                            meshRenderer.gameObject.AddComponent<MeshCollider>();
+                        }
+                        
                     }
 
                     instances.Add(instance);

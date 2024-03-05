@@ -631,7 +631,7 @@ GameObject:
   - component: {fileID: 739910181}
   - component: {fileID: 739910184}
   - component: {fileID: 739910183}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Occlusion Culling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -654,6 +654,7 @@ MonoBehaviour:
   clusterCount: 500
   clusterMaxIterations: 1000
   debug: 0
+  boundsBuffer: {x: 5, y: 5, z: 5}
 --- !u!4 &739910182
 Transform:
   m_ObjectHideFlags: 0
