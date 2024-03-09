@@ -17,18 +17,50 @@ namespace ProceduralStages
         public SurfaceTexture[] floor = new SurfaceTexture[0];
         public ThemeColorPalettes[] colorPalettes;
         public SkyboxDef[] skyboxes = new SkyboxDef[0];
+        public WaterDef[] waters = new WaterDef[0];
+        public SurfaceTexture[] seaFloors = new SurfaceTexture[0];
         public PropsDefinitionCollection[] propCollections = new PropsDefinitionCollection[0];
 
         public Texture2D ApplyTheme(
             TerrainGenerator terrainGenerator, 
             Material material, 
             RampFog fog, 
-            Vignette vignette)
+            Vignette vignette,
+            MeshRenderer waterMeshRenderer,
+            MeshRenderer seaFloorMeshRenderer)
         {
             ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
             Texture2D colorGradiant = SetTexture(material, colorPalette);
             
-            RenderSettings.skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
+            var skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
+            RenderSettings.skybox = skybox;
+
+            var water = waters[MapGenerator.rng.RangeInt(0, waters.Length)];
+            waterMeshRenderer.material = new Material(water.material);
+            waterMeshRenderer.material.SetTexture("_Cube", skybox.GetTexture("_Tex"));
+
+            var skyTint = skybox.GetColor("_Tint") * skybox.GetFloat("_Exposure"); ;
+            Color.RGBToHSV(skyTint, out float skyHue, out float skySaturation, out float skyValue);
+
+            if (skyHue == 0 && skySaturation == 0)
+            {
+                skyHue = 0.5f;
+                skySaturation = 0.2f;
+            }
+
+            var waterColor = Color.HSVToRGB(
+                skyHue,
+                Mathf.Clamp(skySaturation, water.minSaturation, water.maxSaturation),
+                Mathf.Clamp(skyValue, water.minValue, water.maxValue));
+
+            waterMeshRenderer.material.SetColor("_CubeColor", waterColor);
+            waterMeshRenderer.material.SetColor("_DepthColor", waterColor);
+            waterMeshRenderer.material.SetFloat("_Reflection", water.reflection);
+            waterMeshRenderer.material.SetFloat("_Distortion", water.distortion);
+
+            seaFloorMeshRenderer.material.color = waterColor;
+
+            //seaFloorMeshRenderer.material.mainTexture = seaFloors[MapGenerator.rng.RangeInt(0, seaFloors.Length)].texture;
 
             float sunHue = MapGenerator.rng.nextNormalizedFloat;
             RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);

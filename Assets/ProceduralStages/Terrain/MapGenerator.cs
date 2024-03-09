@@ -43,9 +43,13 @@ namespace ProceduralStages
 
         public PropsPlacer propsPlacer = new PropsPlacer();
 
-        public GameObject sceneInfoObject;
         public GameObject postProcessingObject;
+        public GameObject waterObject;
+        public GameObject seaFloorObject;
+
+        public GameObject sceneInfoObject;
         public GameObject directorObject;
+
         public GameObject oobZoneObject;
         public GameObject awuEventObject;
 
@@ -147,8 +151,10 @@ namespace ProceduralStages
             var profile = postProcessingObject.GetComponent<PostProcessVolume>().profile;
             RampFog fog = profile.GetSetting<RampFog>();
             Vignette vignette = profile.GetSetting<Vignette>();
+            MeshRenderer waterRenderer = waterObject.GetComponent<MeshRenderer>();
+            MeshRenderer seaFloorRenderer = seaFloorObject.GetComponent<MeshRenderer>();
 
-            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette);
+            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette, waterRenderer, seaFloorRenderer);
 
             GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sdStone.asset").WaitForCompletion();
             LogStats("surfaceDef");
