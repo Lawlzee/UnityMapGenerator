@@ -116,7 +116,7 @@ namespace ProceduralStages
             {
                 currentSeed = SeedSyncer.randomStageRng.nextUlong;
             }
-
+            Log.Debug("Stage Seed: " + currentSeed);
 
             rng = new Xoroshiro128Plus(currentSeed);
 

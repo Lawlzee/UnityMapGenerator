@@ -26,8 +26,6 @@ namespace ProceduralStages
 
             GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
 
-            SetLayer(gameObject, LayerIndex.world.intVal);
-
             gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
             gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
@@ -66,16 +64,6 @@ namespace ProceduralStages
 
             //gameObject.transform.Rotate(Vector3.up, MapGenerator.rng.RangeFloat(0.0f, 360f), Space.Self);
             return gameObject;
-        }
-
-        void SetLayer(GameObject gameObject, int layer)
-        {
-            gameObject.layer = layer;
-
-            foreach (Transform transform in gameObject.transform)
-            {
-                SetLayer(transform.gameObject, layer);
-            }
         }
     }
 }

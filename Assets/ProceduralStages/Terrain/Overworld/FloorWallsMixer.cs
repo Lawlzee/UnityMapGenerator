@@ -23,6 +23,10 @@ namespace ProceduralStages
         public float roofFrequency;
         public float roofVerticalScale;
         public float roofCarvingRelativeMinHeight = 0.5f;
+        public float roofCarvingRelativeMaxHeight = 0.95f;
+
+        [Range(0, 1)]
+        public float ellipsisDistancePower = 0.5f;
 
         public float[,,] Mix(float[,,] floor, float[,,] walls)
         {
@@ -45,7 +49,7 @@ namespace ProceduralStages
 
             float[,,] resultMap = new float[size.x, size.y, size.z];
 
-            Vector2 center = new Vector3(0.5f, 0.5f);
+            Vector2 center = new Vector3(size.x / 2f, size.z / 2f);
 
             Parallel.For(0, size.x, x =>
             {
@@ -53,20 +57,26 @@ namespace ProceduralStages
                 {
                     float relativeHeight = (float)y / size.y;
 
-                    for (int z  = 0; z < size.z; z++)
+                    for (int z = 0; z < size.z; z++)
                     {
                         //Vector3 position = new Vector3((float)x / size.x, (float)y / size.y, (float)z / size.z);
 
                         float wallNoise = walls[x, y, z];
-                        
 
-                        
                         float outerWallBlendNoise = (PerlinNoise.Get(new Vector3(x + wallsBlendSeedX, y * wallsBlendVerticalScale + wallsBlendSeedY, z + wallsBlendSeedZ), wallsBlendFrequency) + 1) / 2;
 
+                        var relativePosition = new Vector2((float)x / size.x, (float)z / size.z) - center;
 
-                        var wallDistance = (new Vector2((float)x / size.x, (float)z / size.z) - center).magnitude / Mathf.Sqrt(0.5f);
+                        float dx = x - center.x;
+                        float dz = z - center.y;
 
-                        var minWallNoise = (wallDistance - wallsCarvingRelativeMinDistance) / (1 - wallsCarvingRelativeMinDistance);
+                        float ellipsisDistance = Mathf.Pow((dx * dx) / (center.x * center.x) + (dz * dz) / (center.y * center.y), ellipsisDistancePower);
+
+                        //var cornerDistance = relativePosition.magnitude / Mathf.Sqrt(0.5f);
+                        //
+                        //var minWallDistance = Mathf.Min(relativePosition.x, 1 - relativePosition.x, relativePosition.y, 1 - relativePosition.y);
+
+                        var minWallNoise = (ellipsisDistance - wallsCarvingRelativeMinDistance) / (1 - wallsCarvingRelativeMinDistance);
 
                         if (minWallNoise > 0 && outerWallBlendNoise - wallsBlendNoiseBonus < minWallNoise)
                         {
@@ -89,7 +99,7 @@ namespace ProceduralStages
                             //float roofNoise = (PerlinNoise.Get(new Vector3(x + roofSeedX, y * roofVerticalScale + roofSeedY, z + roofSeedZ), roofFrequency) + 1) / 2;
 
                             float maxHeight = Mathf.PerlinNoise(x / roofFrequency + roofSeedX, z / roofFrequency + roofSeedZ);
-                            var scaledMaxHeight = roofCarvingRelativeMinHeight + maxHeight * (1 - roofCarvingRelativeMinHeight);
+                            var scaledMaxHeight = roofCarvingRelativeMinHeight + maxHeight * (roofCarvingRelativeMaxHeight - roofCarvingRelativeMinHeight);
 
                             if (scaledMaxHeight < relativeHeight)
                             {

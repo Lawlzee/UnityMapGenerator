@@ -79,7 +79,10 @@ namespace ProceduralStages
 
                 float angle = Vector3.Dot(Vector3.up, normal);
 
-                bool isFloor = angle > minFloorAngle;
+                float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale, bounds: null);
+
+                bool isFloor = angle > minFloorAngle
+                    && density < densityMap.ground.maxHumanDensity;
                 bool isCeiling = angle < -minFloorAngle;
 
                 var node = new NodeGraph.Node
@@ -108,14 +111,7 @@ namespace ProceduralStages
 
                     index++;
 
-                    float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale, bounds: null);
-
                     HullMask forbiddenHulls = HullMask.None;
-
-                    if (density > densityMap.ground.maxHumanDensity)
-                    {
-                        forbiddenHulls |= HullMask.Human;
-                    }
 
                     if (density > densityMap.ground.maxGolemDensity)
                     {

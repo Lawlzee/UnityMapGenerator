@@ -143,7 +143,11 @@ namespace ProceduralStages
                         {
                             meshRenderer.gameObject.AddComponent<MeshCollider>();
                         }
-                        
+                    }
+
+                    if (prop.isSolid)
+                    {
+                        SetLayer(instance, LayerIndex.world.intVal);
                     }
 
                     instances.Add(instance);
@@ -151,6 +155,16 @@ namespace ProceduralStages
             }
 
             occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances);
+        }
+
+        void SetLayer(GameObject gameObject, int layer)
+        {
+            gameObject.layer = layer;
+
+            foreach (Transform transform in gameObject.transform)
+            {
+                SetLayer(transform.gameObject, layer);
+            }
         }
     }
 }

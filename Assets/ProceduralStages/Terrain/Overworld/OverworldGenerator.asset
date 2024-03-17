@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db26add71c53e4342b7987556078bbff, type: 3}
   m_Name: OverworldGenerator
   m_EditorClassIdentifier: 
-  size: {x: 175, y: 80, z: 225}
+  size: {x: 175, y: 65, z: 225}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
@@ -32,9 +32,9 @@ MonoBehaviour:
   waller:
     floor:
       enabled: 1
-      noise: 43.7
-      minThickness: 20
-      maxThickness: 30
+      noise: 70
+      minThickness: 5
+      maxThickness: 20
     ceilling:
       enabled: 1
       noise: 28
@@ -49,16 +49,18 @@ MonoBehaviour:
     blendFactor: 0.015
     roundWallsToCeilling: 0
   floorWallsMixer:
-    wallsBlendFrequency: 0.015
-    wallsBlendVerticalScale: 0.4
-    wallsCarvingRelativeMinDistance: 0.3
-    wallsBlendNoiseBonus: 0.03
+    wallsBlendFrequency: 0.03
+    wallsBlendVerticalScale: 0.5
+    wallsCarvingRelativeMinDistance: 0.6
+    wallsBlendNoiseBonus: 0
     wallsFrequency: 0.02
     wallSurface: 1
     wallsVerticalScale: 0.5
-    roofFrequency: 30.3434
+    roofFrequency: 30
     roofVerticalScale: 1
-    roofCarvingRelativeMinHeight: 0.8
+    roofCarvingRelativeMinHeight: 0.4
+    roofCarvingRelativeMaxHeight: 0.99
+    ellipsisDistancePower: 0.35
   cave3d:
     enabled: 1
     smoothingInterations: 2

@@ -1,3 +1,8 @@
+## 1.8
+1. Improved overworld maps. Overworld maps are now islands. 
+1. Added water to cave stages
+1. Fixed a bug where teleporters and interactables would not spawn in island maps
+
 ## 1.7.2
 1. Fixed decoration not rendering/flickering (for real this time).
 

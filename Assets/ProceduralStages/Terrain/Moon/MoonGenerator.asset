@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d97dbc79342e324e857fcc81a3607dc, type: 3}
+  m_Name: MoonGenerator
+  m_EditorClassIdentifier: 
+  size: {x: 175, y: 80, z: 225}
+  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
+  sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
+  fogPower: 1.75
+  vignetteInsentity: 0.12
+  ambiantLightIntensity: 0.8
+  wallGenerator:
+    frequency: 38
+    wallSurface: 0.45
+    curveFrequency: 0.042
+    curveVerticalScale: 0.8
+    curveMinNoise: 0.6
+  carver:
+    enabled: 1
+    frequency: 0.042
+    verticalScale: 0.3
+    surfaceLevel: 0.6
+  waller:
+    floor:
+      enabled: 1
+      noise: 43.7
+      minThickness: 20
+      maxThickness: 30
+    ceilling:
+      enabled: 1
+      noise: 28
+      minThickness: 1
+      maxThickness: 18
+    walls:
+      enabled: 1
+      noise: 33.7
+      minThickness: 20
+      maxThickness: 35
+    wallRoundingFactor: 8
+    blendFactor: 0.015
+    roundWallsToCeilling: 0
+  floorWallsMixer:
+    wallsBlendFrequency: 0.015
+    wallsBlendVerticalScale: 0.4
+    wallsCarvingRelativeMinDistance: 0.3
+    wallsBlendNoiseBonus: 0.03
+    wallsFrequency: 0.02
+    wallSurface: 1
+    wallsVerticalScale: 0.5
+    roofFrequency: 30.3434
+    roofVerticalScale: 1
+    roofCarvingRelativeMinHeight: 0.8
+  cave3d:
+    enabled: 1
+    smoothingInterations: 2
+    forceWalls: 0
+  map3dNoiser:
+    enabled: 1
+    frequency: 0.434
+    amplitude: 0.02
