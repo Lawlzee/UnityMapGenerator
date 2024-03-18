@@ -46,7 +46,13 @@ namespace ProceduralStages
                 placementMode = DirectorPlacementRule.PlacementMode.Random
             };
 
-            GameObject gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
+            GameObject gameObject = null;
+
+            for (int i = 0; gameObject == null && i < 10; i++)
+            {
+                gameObject = DirectorCore.instance.TrySpawnObject(new DirectorSpawnRequest(card, placementRule, rng));
+            }
+
             if (gameObject)
             {
                 var floorNormal = normal ?? graphs.nodeInfoByPosition[gameObject.transform.position].normal;

@@ -59,7 +59,7 @@ MonoBehaviour:
     roofFrequency: 30
     roofVerticalScale: 1
     roofCarvingRelativeMinHeight: 0.4
-    roofCarvingRelativeMaxHeight: 0.99
+    roofCarvingRelativeMaxHeight: 0.975
     ellipsisDistancePower: 0.35
   cave3d:
     enabled: 1

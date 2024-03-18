@@ -29,7 +29,8 @@ namespace ProceduralStages
 
         public static ConfigEntry<bool> ReplaceAllStages;
 
-        //public static ConfigEntry<string> Seed;
+        public static ConfigEntry<string> StageSeed;
+        public static ConfigEntry<bool> InfiniteMapScaling;
         //public static ConfigEntry<float> FloorSaturation;
         //public static ConfigEntry<float> FloorValue;
         //public static ConfigEntry<float> WallsSaturation;
@@ -56,9 +57,13 @@ namespace ProceduralStages
             ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
             ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
-            //string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
+            InfiniteMapScaling = Config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. In multiplayer, all players must set the same value.");
+            ModSettingsManager.AddOption(new CheckBoxOption(InfiniteMapScaling));
 
-            //Seed = Config.Bind("Debug", nameof(Seed), "", debugDescrption);
+            StageSeed = Config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used. In multiplayer, all players must set the same value.");
+            ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
+
+            //string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
             //FloorSaturation = Config.Bind("Debug", nameof(FloorSaturation), 0.5f, debugDescrption);
             //FloorValue = Config.Bind("Debug", nameof(FloorValue), 0.36f, debugDescrption);
             //WallsSaturation = Config.Bind("Debug", nameof(WallsSaturation), 0.3f, debugDescrption);
@@ -78,7 +83,6 @@ namespace ProceduralStages
             //FogIntensity = Config.Bind("Debug", nameof(FogIntensity), 0.25f, debugDescrption);
             //FogPower = Config.Bind("Debug", nameof(FogPower), 0.75f, debugDescrption);
             //
-            //ModSettingsManager.AddOption(new StringInputFieldOption(Seed));
             //ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             //ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
             //ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));

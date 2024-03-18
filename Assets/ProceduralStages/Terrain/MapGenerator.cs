@@ -94,31 +94,14 @@ namespace ProceduralStages
 
         private void GenerateMap()
         {
-            int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
+            int stageClearCount = (Run.instance?.stageClearCount ?? 0);
+            int stageInLoop = (stageClearCount % Run.stagesPerLoop) + 1;
 
-            ulong currentSeed;
-            if (Application.isEditor)
-            {
-                if (editorSeed != 0)
-                {
-                    currentSeed = editorSeed;
-                }
-                else if (SeedSyncer.randomStageRng != null)
-                {
-                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
-                }
-                else
-                {
-                    currentSeed = (ulong)DateTime.Now.Ticks;
-                }
-            }
-            else
-            {
-                currentSeed = SeedSyncer.randomStageRng.nextUlong;
-            }
-            Log.Debug("Stage Seed: " + currentSeed);
+            int stageScaling = !Application.isEditor && Main.InfiniteMapScaling.Value
+                ? stageClearCount + 1
+                : stageInLoop;
 
-            rng = new Xoroshiro128Plus(currentSeed);
+            SetSeed();
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
 
@@ -126,7 +109,7 @@ namespace ProceduralStages
 
             TerrainGenerator terrainGenerator = terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)];
 
-            stageSize = terrainGenerator.size + stageInLoop * terrainGenerator.sizeIncreasePerStage;
+            stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
             stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
@@ -187,12 +170,12 @@ namespace ProceduralStages
 
             if (!IsSimulacrum())
             {
-                stageInfo.sceneDirectorMonsterCredits = 30 * (stageInLoop + 4);
+                stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
             }
 
             if (!IsSimulacrum() || Application.isEditor)
             {
-                stageInfo.sceneDirectorInteractibleCredits = 75 * (stageInLoop + 2);
+                stageInfo.sceneDirectorInteractibleCredits = 75 * (stageScaling + 2);
             }
 
             SceneDirector sceneDirector = directorObject.GetComponent<SceneDirector>();
@@ -271,6 +254,47 @@ namespace ProceduralStages
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
             }
+        }
+
+        private void SetSeed()
+        {
+            ulong currentSeed;
+            if (Application.isEditor)
+            {
+                if (editorSeed != 0)
+                {
+                    currentSeed = editorSeed;
+                }
+                else if (SeedSyncer.randomStageRng != null)
+                {
+                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
+                }
+                else
+                {
+                    currentSeed = (ulong)DateTime.Now.Ticks;
+                }
+            }
+            else
+            {
+                if (Main.StageSeed.Value != "")
+                {
+                    if (ulong.TryParse(Main.StageSeed.Value, out ulong seed))
+                    {
+                        currentSeed = seed;
+                    }
+                    else
+                    {
+                        currentSeed = (ulong)Main.StageSeed.Value.GetHashCode();
+                    }
+                }
+                else
+                {
+                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
+                }
+            }
+            Log.Debug("Stage Seed: " + currentSeed);
+
+            rng = new Xoroshiro128Plus(currentSeed);
         }
 
         private void SetDCCS(ClassicStageInfo stageInfo)

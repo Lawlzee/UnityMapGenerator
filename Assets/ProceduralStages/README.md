@@ -2,8 +2,19 @@
 
 Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.
 
-## How does the generation works ?
-At the beginning of each stage, a newly procedurally generated environment is created. The spawn pools for monsters and interactables, as well as the music selection, are randomly chosen from various stages.
+## Features
+
+- **Diverse Terrain Types:** Explore islands and caves, each dynamically generated for a fresh adventure.
+- **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
+- **Multiplayer Support:** Enjoy the procedural adventure with friends.
+- **Integration with Simulacrum:** Seamlessly compatible with Simulacrum.
+- **Adaptive Map Size:** The map dynamically adjusts in size based on the stage number.
+- **Dynamic Map Themes:** Experience different visual themes with every stage.
+- **Stage-Specific Interactables:** Encounter stage-specific elements such as pressure plates, timed security chests, legendary chests, and the stage 4 alloy vulture nests.
+- **Random Decoration Placement:** Discover unique environments with randomly placed decorations.
+- **Randomized Enemy Pool:** Experience a dynamically curated assortment of enemies.
+- **Varied Music Selection:** Immerse yourself in randomly selected music tracks.
+- **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 
 ## Screenshots
 
@@ -22,9 +33,11 @@ At the beginning of each stage, a newly procedurally generated environment is cr
 
 You can edit the configuration in `Settings > Mod Options > ProceduralStages`.
 
-|Catgeory|Name|Default value|Description|
-|--|--|--|--|
-|Configuration|Replace all stages|Enabled|If enabled, all stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.
+| Category      | Name                 | Default value | Description                                                                                                                                                                      |
+|---------------|----------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Configuration | Replace all stages   | Enabled       | If enabled, all stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.                                             |
+| Configuration | Infinite map scaling | Disabled      | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. In multiplayer, all players must set the same value. |
+| Debug         | Stage seed           |               | Specifies the stage seed. If left blank, a random seed will be used. In multiplayer, all players must set the same value.                                                        |
 
 More configurations coming soon!
 
@@ -43,45 +56,22 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 |5|500|270|
 
 ## Todo list
-- [X] Support multiplayer
-- [X] Be compatible with the Risk of Resources Gauntlet mod
-- [X] Make the color palette less blue
-- [X] Add decorations to the map (grass, trees, rocks, pillars, etc.)
-- [X] Optimize the NodeGraphs
-- [X] Optimize the map mesh
-- [X] Fix the bug where the screen flashes white when entering the first stage
-- [X] Fix the bug where the screen flashes white when entering a void seed
-- [X] Add a dead barrier if the player clips through the map
-- [X] Improve music selection
-- [X] Add more post-processing effects.
-- [X] Implement Simulacrum support.
-- [X] Optimize stage performance.
-- [X] Prevent interactables from spawning on slopes.
-- [X] Fix the bug where the player sometime gets stuck in the drop pod.
-- [X] Legendary chest on stage 4 always cost 400
-- [X] Fix drones spawning out of the map
-- [X] Add compatibility with the `Judgement` mod
-- [X] Improve the orientation of Newt altars.
-- [X] Add stage unique interactables. For example, add a red chest on stage 4
-- [X] Add collision to props
-- [X] Add non cave maps
-- [X] Improve air Node Graph
-- [X] Enhance stage runtime performance.
-- [ ] Add biomes/map types (snow, grass, desert, etc)
-- [ ] Add props clustering
-- [ ] Add floating island map?
-- [ ] Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
-- [ ] Add an option for infinite map size scalling ?
-- [ ] Improve compatibility with Ro2API.DirectorAPI
-- [ ] Randomize more terrain settings
-- [ ] Add more configurations
-- [ ] Create a random DccsPool instead of reusing the DccsPools from the game
-- [ ] Replace the moon with a procedurally generated stage
-- [ ] Randomize stage names
-- [ ] Address the issue of getting stuck in holes in the map.
-- [ ] Enhance stage creation performance.
-- [ ] Enhance the uniqueness of stages.
-- [ ] Remove the ability to dream for normal stages
+
+- Fix the bug where the player sometime gets stuck in the drop pod.
+- Add biomes/map types (snow, grass, desert, etc)
+- Add props clustering
+- Add floating island map?
+- Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
+- Improve compatibility with Ro2API.DirectorAPI
+- Randomize more terrain settings
+- Add more configurations
+- Create a random DccsPool instead of reusing the DccsPools from the game
+- Replace the moon with a procedurally generated stage
+- Randomize stage names
+- Address the issue of getting stuck in holes in the map.
+- Enhance stage creation performance.
+- Enhance the uniqueness of stages.
+- Remove the ability to dream for normal stages
 
 
 ## Algorithms used

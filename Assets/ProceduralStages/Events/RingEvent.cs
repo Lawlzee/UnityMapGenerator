@@ -28,7 +28,10 @@ namespace ProceduralStages
             for (int i = 0; i < potCount; i++)
             {
                 GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab", NodeFlagsExt.Newt, offset: Vector3.up);
-                plateObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+                if (plateObject)
+                {
+                    plateObject.GetComponentInChildren<MeshRenderer>().enabled = true;
+                }
             }
 
             Vector3 targetPosition = Vector3.zero;
