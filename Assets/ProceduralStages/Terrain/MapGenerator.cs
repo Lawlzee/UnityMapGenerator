@@ -221,12 +221,14 @@ namespace ProceduralStages
 
                 var mainTracks = stages
                     .Select(x => x.mainTrack)
-                    .Where(x => x != null)
+                    .Where(x => x)
+                    .Distinct()
                     .ToList();
 
                 var bossTracks = stages
                     .Select(x => x.bossTrack)
-                    .Where(x => x != null)
+                    .Distinct()
+                    .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
                     .ToList();
 
                 var mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
