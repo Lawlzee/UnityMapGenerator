@@ -18,14 +18,28 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 - **Varied Music Selection:** Immerse yourself in randomly selected music tracks.
 - **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 
-## Screenshots
+## Terrain types
 
-![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image3.png)
-![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.8/Image4.png)
-![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
+## Island stages
+Islands stages have a 50% chance to spawn
+
 ![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image5.png)
 ![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7.1/Image5.png)
+![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image3.png)
+
+## Open caves stages
+Open caves stages have a 25% chance to spawn
+
+![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.8/Image4.png)
+![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
+
+## Open caves stages
+Open caves stages have a 25% chance to spawn
+
+![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image5.png)
+![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image7.png)
+![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image9.png)
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
@@ -76,6 +90,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - Enhance stage creation performance.
 - Enhance the uniqueness of stages.
 - Remove the ability to dream for normal stages
+- Add a config that lets you control the spawn rate of terrain types
 
 
 ## Algorithms used
