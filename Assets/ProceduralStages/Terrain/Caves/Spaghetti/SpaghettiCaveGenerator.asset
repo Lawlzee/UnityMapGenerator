@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6224d4b2decd71c449e1d713bab665c4, type: 3}
+  m_Name: SpaghettiCaveGenerator
+  m_EditorClassIdentifier: 
+  size: {x: 250, y: 100, z: 200}
+  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
+  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  fogPower: 0.75
+  vignetteInsentity: 0.25
+  ambiantLightIntensity: 0.7
+  wallGenerator:
+    frequency: 0
+    wallSurface: 0.5
+    curveFrequency: 0
+    curveVerticalScale: 0
+    curveMinNoise: 0
+  spaghettiCaver:
+    frequency1: 0.02
+    frequency2: 0.02
+    verticalScale1: 1
+    verticalScale2: 1
+    curve: {fileID: 11400000, guid: b5719d8f776665e4d8534f58b4f9a6ea, type: 2}
+    bonusNoiseByEllipsisDistance: {fileID: 11400000, guid: 6870117abbf3d0d44a558eea3d45f9af,
+      type: 2}
+    yDerivativeBonus: {fileID: 11400000, guid: 696b8aafd9874204fb01259d2943f254, type: 2}
+    yDerivativefloorDensityBonus: {fileID: 11400000, guid: 2e5b4406ca1820b4a947fae12046e37a,
+      type: 2}
+    layersDistance: 20
+    layersAmplitude: 40
+    layersFrequency: 0.02
+    layerCurve: {fileID: 11400000, guid: a098898c2dd84144c9cd2be8f248b220, type: 2}
+  sin:
+    a: 1
+    b: 0.1
+    c: 0.05
+    layersDistance: 10
+    layersAmplitude: 20
+    layersFrequency: 0.02
+    surfaceCurve: {fileID: 11400000, guid: a098898c2dd84144c9cd2be8f248b220, type: 2}
+  carver:
+    enabled: 1
+    frequency: 0.03
+    verticalScale: 0.5
+    surfaceLevel: 0.5
+  waller:
+    floor:
+      enabled: 1
+      noise: 0
+      minThickness: 1
+      maxThickness: 0
+    ceilling:
+      enabled: 1
+      noise: 0
+      minThickness: 1
+      maxThickness: 0
+    walls:
+      enabled: 1
+      noise: 0
+      minThickness: 1
+      maxThickness: 0
+    wallRoundingFactor: 0
+    blendFactor: 0.1
+    roundWallsToCeilling: 0
+  cave3d:
+    enabled: 0
+    smoothingInterations: 2
+    forceWalls: 1
+  map3dNoiser:
+    enabled: 0
+    frequency: 0.434
+    amplitude: 0.02

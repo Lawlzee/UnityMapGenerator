@@ -9,10 +9,12 @@ using UnityMeshSimplifier;
 
 namespace ProceduralStages
 {
-    [CreateAssetMenu(fileName = "caveGenerator", menuName = "ProceduralStages/CaveGenerator", order = 2)]
-    public class CaveGenerator : TerrainGenerator
+    [CreateAssetMenu(fileName = "spaghettiCaveGenerator", menuName = "ProceduralStages/SpaghettiCaveGenerator", order = 2)]
+    public class SpaghettiCaveGenerator : TerrainGenerator
     {
         public Map2dGenerator wallGenerator = new Map2dGenerator();
+        public SpaghettiCaver spaghettiCaver = new SpaghettiCaver();
+        public SinCaver sin = new SinCaver();
         public Carver carver = new Carver();
         public Waller waller = new Waller();
         public CellularAutomata3d cave3d = new CellularAutomata3d();
@@ -22,26 +24,30 @@ namespace ProceduralStages
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
-            LogStats("wallGenerator");
+            var maps = spaghettiCaver.Create(MapGenerator.instance.stageSize);
+            LogStats("spaghettiCaver");
+            //float[,,] map3d = sin.Create(MapGenerator.instance.stageSize);
 
-            carver.CarveWalls(map3d);
-            LogStats("carver");
+            //float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
+            //LogStats("wallGenerator");
+            //
+            //carver.CarveWalls(map3d);
+            //LogStats("carver");
+            //
+            //waller.AddCeilling(map3d);
+            //LogStats("waller.AddCeilling");
+            //
+            //waller.AddWalls(map3d);
+            //LogStats("waller.AddWalls");
+            //
+            //var floorlessMap = map3d;
+            //map3d = waller.AddFloor(map3d);
+            //LogStats("waller.AddFloor");
 
-            waller.AddCeilling(map3d);
-            LogStats("waller.AddCeilling");
-
-            waller.AddWalls(map3d);
-            LogStats("waller.AddWalls");
-
-            var floorlessMap = map3d;
-            map3d = waller.AddFloor(map3d);
-            LogStats("waller.AddFloor");
-
-            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
-            LogStats("map3dNoiser");
-
-            float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
+            //float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
+            //LogStats("map3dNoiser");
+            //
+            float[,,] smoothMap3d = cave3d.SmoothMap(maps.map);
             LogStats("cave3d");
 
             var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
@@ -61,9 +67,9 @@ namespace ProceduralStages
                     triangles = optimisedMesh.triangles,
                     vertices = optimisedMesh.vertices
                 },
-                floorlessDensityMap = floorlessMap,
+                floorlessDensityMap = maps.floorlessMap,
                 densityMap = smoothMap3d,
-                maxGroundheight = waller.floor.maxThickness * MapGenerator.instance.mapScale
+                maxGroundheight = float.MaxValue
             };
 
             void LogStats(string name)

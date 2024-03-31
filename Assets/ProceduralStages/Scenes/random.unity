@@ -1133,7 +1133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullMask: 1
-  nodeFlags: 5
+  nodeFlags: 2
   showGroundMesh: 0
   showAirMesh: 0
   groundMeshObject: {fileID: 68506087}
@@ -1540,7 +1540,7 @@ MonoBehaviour:
     frequency: 0.03
     amplitude: 0.2
   nodeGraphCreator:
-    minFloorAngle: 0.5
+    minFloorAngle: 0.35
     airNodeMinDistance: 10
     airNodeSample: 6
     densityMap:

@@ -1,3 +1,12 @@
+## 1.9
+
+1. **Tunnel Caves Addition**: Introduced tunnel caves, reminiscent of [Minecraft's spaghetti caves](https://minecraft.fandom.com/wiki/Cave#Spaghetti_cave).
+   - Tunnel caves now have a 25% chance of spawning.
+   - Open caves also now have a 25% chance of spawning.
+   - These caves are currently experimental and may exhibit peculiarities. Expect interactables to spawn in unusual locations. Players might encounter getting stuck in holes, necessitating the use of 'no clip' mode to escape. This issue will be addressed in a future update.
+   
+2. **Music Fix**: Rectified occasional issues with music not playing during teleporter events.
+
 ## 1.8
 1. Overhauled overworld maps to resemble islands.
 2. Introduced water puddles to cave stages.

@@ -48,7 +48,7 @@ namespace ProceduralStages
 
         const int permutationCount = 255;
 
-        private static readonly Vector3[] _directions =
+        private static readonly Vector3[] _gradiants =
         {
             new Vector3( 1f, 1f, 0f),
             new Vector3(-1f, 1f, 0f),
@@ -62,14 +62,13 @@ namespace ProceduralStages
             new Vector3( 0f,-1f, 1f),
             new Vector3( 0f, 1f,-1f),
             new Vector3( 0f,-1f,-1f),
-
             new Vector3( 1f, 1f, 0f),
             new Vector3(-1f, 1f, 0f),
             new Vector3( 0f,-1f, 1f),
             new Vector3( 0f,-1f,-1f)
         };
 
-        private const int directionCount = 15;
+        private const int gradiantsCount = 15;
 
         public static float Get(Vector3 point, float frequency)
         {
@@ -79,13 +78,13 @@ namespace ProceduralStages
             int flooredPointY0 = Mathf.FloorToInt(point.y);
             int flooredPointZ0 = Mathf.FloorToInt(point.z);
 
-            float distanceX0 = point.x - flooredPointX0;
-            float distanceY0 = point.y - flooredPointY0;
-            float distanceZ0 = point.z - flooredPointZ0;
+            float x0 = point.x - flooredPointX0;
+            float y0 = point.y - flooredPointY0;
+            float z0 = point.z - flooredPointZ0;
 
-            float distanceX1 = distanceX0 - 1f;
-            float distanceY1 = distanceY0 - 1f;
-            float distanceZ1 = distanceZ0 - 1f;
+            float x1 = x0 - 1f;
+            float y1 = y0 - 1f;
+            float z1 = z0 - 1f;
 
             flooredPointX0 &= permutationCount;
             flooredPointY0 &= permutationCount;
@@ -112,14 +111,14 @@ namespace ProceduralStages
             int permutationZ011 = permutation[permutationY10 + flooredPointZ1];
             int permutationZ111 = permutation[permutationY11 + flooredPointZ1];
             */
-            Vector3 direction000 = _directions[permutation[permutationY00 + flooredPointZ0] & directionCount];
-            Vector3 direction100 = _directions[permutation[permutationY10 + flooredPointZ0] & directionCount];
-            Vector3 direction010 = _directions[permutation[permutationY01 + flooredPointZ0] & directionCount];
-            Vector3 direction110 = _directions[permutation[permutationY11 + flooredPointZ0] & directionCount];
-            Vector3 direction001 = _directions[permutation[permutationY00 + flooredPointZ1] & directionCount];
-            Vector3 direction101 = _directions[permutation[permutationY10 + flooredPointZ1] & directionCount];
-            Vector3 direction011 = _directions[permutation[permutationY01 + flooredPointZ1] & directionCount];
-            Vector3 direction111 = _directions[permutation[permutationY11 + flooredPointZ1] & directionCount];
+            Vector3 gradiant000 = _gradiants[permutation[permutationY00 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant100 = _gradiants[permutation[permutationY10 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant010 = _gradiants[permutation[permutationY01 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant110 = _gradiants[permutation[permutationY11 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant001 = _gradiants[permutation[permutationY00 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant101 = _gradiants[permutation[permutationY10 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant011 = _gradiants[permutation[permutationY01 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant111 = _gradiants[permutation[permutationY11 + flooredPointZ1] & gradiantsCount];
 
             /*
             Vector3 direction000 = directions[permutationZ000 & directionCount];
@@ -132,23 +131,171 @@ namespace ProceduralStages
             Vector3 direction111 = directions[permutationZ111 & directionCount];
             */
 
-            float value000 = Scalar(direction000, new Vector3(distanceX0, distanceY0, distanceZ0));
-            float value100 = Scalar(direction100, new Vector3(distanceX1, distanceY0, distanceZ0));
-            float value010 = Scalar(direction010, new Vector3(distanceX0, distanceY1, distanceZ0));
-            float value110 = Scalar(direction110, new Vector3(distanceX1, distanceY1, distanceZ0));
-            float value001 = Scalar(direction001, new Vector3(distanceX0, distanceY0, distanceZ1));
-            float value101 = Scalar(direction101, new Vector3(distanceX1, distanceY0, distanceZ1));
-            float value011 = Scalar(direction011, new Vector3(distanceX0, distanceY1, distanceZ1));
-            float value111 = Scalar(direction111, new Vector3(distanceX1, distanceY1, distanceZ1));
+            float dot000 = Scalar(gradiant000, new Vector3(x0, y0, z0));
+            float dot100 = Scalar(gradiant100, new Vector3(x1, y0, z0));
+            float dot010 = Scalar(gradiant010, new Vector3(x0, y1, z0));
+            float dot110 = Scalar(gradiant110, new Vector3(x1, y1, z0));
+            float dot001 = Scalar(gradiant001, new Vector3(x0, y0, z1));
+            float dot101 = Scalar(gradiant101, new Vector3(x1, y0, z1));
+            float dot011 = Scalar(gradiant011, new Vector3(x0, y1, z1));
+            float dot111 = Scalar(gradiant111, new Vector3(x1, y1, z1));
 
-            float smoothDistanceX = SmoothDistance(distanceX0);
-            float smoothDistanceY = SmoothDistance(distanceY0);
-            float smoothDistanceZ = SmoothDistance(distanceZ0);
+            float u = SmoothDistance(x0);
+            float v = SmoothDistance(y0);
+            float w = SmoothDistance(z0);
 
             return Mathf.Lerp(
-                Mathf.Lerp(Mathf.Lerp(value000, value100, smoothDistanceX), Mathf.Lerp(value010, value110, smoothDistanceX), smoothDistanceY),
-                Mathf.Lerp(Mathf.Lerp(value001, value101, smoothDistanceX), Mathf.Lerp(value011, value111, smoothDistanceX), smoothDistanceY),
-                smoothDistanceZ);
+                Mathf.Lerp(
+                    Mathf.Lerp(dot000, dot100, u),
+                    Mathf.Lerp(dot010, dot110, u),
+                    v),
+                Mathf.Lerp(
+                    Mathf.Lerp(dot001, dot101, u),
+                    Mathf.Lerp(dot011, dot111, u),
+                    v),
+                w);
+
+            float Scalar(Vector3 a, Vector3 b)
+            {
+                return a.x * b.x + a.y * b.y + a.z * b.z;
+            }
+
+            float SmoothDistance(float d)
+            {
+                return d * d * d * (d * (d * 6f - 15f) + 10f);
+            }
+        }
+
+        //https://stackoverflow.com/questions/4297024/3d-perlin-noise-analytical-derivative
+        public static Vector4 GetWithDerivative(Vector3 point, float frequency)
+        {
+            point *= frequency;
+
+            int flooredPointX0 = Mathf.FloorToInt(point.x);
+            int flooredPointY0 = Mathf.FloorToInt(point.y);
+            int flooredPointZ0 = Mathf.FloorToInt(point.z);
+
+            float x0 = point.x - flooredPointX0;
+            float y0 = point.y - flooredPointY0;
+            float z0 = point.z - flooredPointZ0;
+
+            float x1 = x0 - 1f;
+            float y1 = y0 - 1f;
+            float z1 = z0 - 1f;
+
+            flooredPointX0 &= permutationCount;
+            flooredPointY0 &= permutationCount;
+            flooredPointZ0 &= permutationCount;
+
+            int flooredPointX1 = flooredPointX0 + 1;
+            int flooredPointY1 = flooredPointY0 + 1;
+            int flooredPointZ1 = flooredPointZ0 + 1;
+
+            int permutationX0 = permutation[flooredPointX0];
+            int permutationX1 = permutation[flooredPointX1];
+
+            int permutationY00 = permutation[permutationX0 + flooredPointY0];
+            int permutationY10 = permutation[permutationX1 + flooredPointY0];
+            int permutationY01 = permutation[permutationX0 + flooredPointY1];
+            int permutationY11 = permutation[permutationX1 + flooredPointY1];
+            /*
+            int permutationZ000 = permutation[permutationY00 + flooredPointZ0];
+            int permutationZ100 = permutation[permutationY10 + flooredPointZ0];
+            int permutationZ010 = permutation[permutationY01 + flooredPointZ0];
+            int permutationZ110 = permutation[permutationY11 + flooredPointZ0];
+            int permutationZ001 = permutation[permutationY00 + flooredPointZ1];
+            int permutationZ101 = permutation[permutationY01 + flooredPointZ1];
+            int permutationZ011 = permutation[permutationY10 + flooredPointZ1];
+            int permutationZ111 = permutation[permutationY11 + flooredPointZ1];
+            */
+            Vector3 gradiant000 = _gradiants[permutation[permutationY00 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant100 = _gradiants[permutation[permutationY10 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant010 = _gradiants[permutation[permutationY01 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant110 = _gradiants[permutation[permutationY11 + flooredPointZ0] & gradiantsCount];
+            Vector3 gradiant001 = _gradiants[permutation[permutationY00 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant101 = _gradiants[permutation[permutationY10 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant011 = _gradiants[permutation[permutationY01 + flooredPointZ1] & gradiantsCount];
+            Vector3 gradiant111 = _gradiants[permutation[permutationY11 + flooredPointZ1] & gradiantsCount];
+
+            /*
+            Vector3 direction000 = directions[permutationZ000 & directionCount];
+            Vector3 direction100 = directions[permutationZ100 & directionCount];
+            Vector3 direction010 = directions[permutationZ010 & directionCount];
+            Vector3 direction110 = directions[permutationZ110 & directionCount];
+            Vector3 direction001 = directions[permutationZ001 & directionCount];
+            Vector3 direction101 = directions[permutationZ101 & directionCount];
+            Vector3 direction011 = directions[permutationZ011 & directionCount];
+            Vector3 direction111 = directions[permutationZ111 & directionCount];
+            */
+
+            float dot000 = Scalar(gradiant000, new Vector3(x0, y0, z0));
+            float dot100 = Scalar(gradiant100, new Vector3(x1, y0, z0));
+            float dot010 = Scalar(gradiant010, new Vector3(x0, y1, z0));
+            float dot110 = Scalar(gradiant110, new Vector3(x1, y1, z0));
+            float dot001 = Scalar(gradiant001, new Vector3(x0, y0, z1));
+            float dot101 = Scalar(gradiant101, new Vector3(x1, y0, z1));
+            float dot011 = Scalar(gradiant011, new Vector3(x0, y1, z1));
+            float dot111 = Scalar(gradiant111, new Vector3(x1, y1, z1));
+
+            float u = SmoothDistance(x0);
+            float v = SmoothDistance(y0);
+            float w = SmoothDistance(z0);
+
+            float noise = Mathf.Lerp(
+                Mathf.Lerp(
+                    Mathf.Lerp(dot000, dot100, u),
+                    Mathf.Lerp(dot010, dot110, u),
+                    v),
+                Mathf.Lerp(
+                    Mathf.Lerp(dot001, dot101, u),
+                    Mathf.Lerp(dot011, dot111, u),
+                    v),
+                w);
+
+            float up = 30 * x0 * x0 * (x0 - 1) * (x0 - 1);
+            float vp = 30 * y0 * y0 * (y0 - 1) * (y0 - 1);
+            float wp = 30 * z0 * z0 * (z0 - 1) * (z0 - 1);
+
+            float nx = gradiant000.x
+               + up * (dot100 - dot000)
+               + u * (gradiant100.x - gradiant000.x)
+               + v * (gradiant010.x - gradiant000.x)
+               + w * (gradiant001.x - gradiant000.x)
+               + up * v * (dot110 - dot010 - dot100 + dot000)
+               + u * v * (gradiant110.x - gradiant010.x - gradiant100.x + gradiant000.x)
+               + u * w * (gradiant101.x - gradiant001.x - gradiant100.x - gradiant000.x)
+               + up * w * (dot101 - dot001 - dot100 + dot000)
+               + v * w * (gradiant011.x - gradiant001.x - gradiant010.x + gradiant000.x)
+               + up * v * w * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
+               + u * v * w * (gradiant111.x - gradiant011.x - gradiant101.x + gradiant001.x - gradiant110.x + gradiant010.x + gradiant100.x - gradiant000.x);
+
+            float ny = gradiant000.y
+               + u * (gradiant100.y - gradiant000.y)
+               + vp * (dot010 - dot000)
+               + v * (gradiant010.y - gradiant000.y)
+               + w * (gradiant001.y - gradiant000.y)
+               + u * vp * (dot110 - dot010 - dot100 + dot000)
+               + u * v * (gradiant110.y - gradiant010.y - gradiant100.y + gradiant000.y)
+               + u * w * (gradiant101.y - gradiant001.y - gradiant100.y + gradiant000.y)
+               + vp * w * (dot011 - dot001 - dot010 + dot000)
+               + v * w * (gradiant011.y - gradiant001.y - gradiant010.y + gradiant000.y)
+               + u * vp * w * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
+               + u * v * w * (gradiant111.y - gradiant011.y - gradiant101.y + gradiant001.y - gradiant110.y + gradiant010.y + gradiant100.y - gradiant000.y);
+
+            float nz = gradiant000.z
+               + u * (gradiant100.z - gradiant000.z)
+               + v * (gradiant010.z - gradiant000.z)
+               + wp * (dot001 - dot000)
+               + w * (gradiant001.z - gradiant000.z)
+               + u * v * (gradiant110.z - gradiant010.z - gradiant100.z + gradiant000.z)
+               + u * wp * (dot101 - dot001 - dot100 + dot000)
+               + u * w * (gradiant101.z - gradiant001.z - gradiant100.z + gradiant000.z)
+               + v * wp * (dot011 - dot001 - dot010 + dot000)
+               + v * w * (gradiant011.z - gradiant001.z - gradiant010.z + gradiant000.z)
+               + u * v * wp * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
+               + u * v * w * (gradiant111.z - gradiant011.z - gradiant101.z + gradiant001.z - gradiant110.z + gradiant010.z + gradiant100.z - gradiant000.z);
+
+            return new Vector4(nx, ny, nz, noise);
 
             float Scalar(Vector3 a, Vector3 b)
             {

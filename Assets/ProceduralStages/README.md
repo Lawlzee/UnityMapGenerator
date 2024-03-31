@@ -2,9 +2,11 @@
 
 Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.
 
+[Changelog](https://thunderstore.io/package/Lawlzee/ProceduralStages/changelog/)
+
 ## Features
 
-- **Diverse Terrain Types:** Explore islands and caves, each dynamically generated for a fresh adventure.
+- **Diverse Terrain Types**: Explore islands, open caves, and tunnel caves, each dynamically generated for a fresh adventure.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
 - **Integration with Simulacrum:** Seamlessly compatible with Simulacrum.
@@ -25,6 +27,8 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 ![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7.1/Image5.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
 
+[More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
+
 ## Video
 
 [Here is a video created by LimeLight demonstrating the mod](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
@@ -43,7 +47,7 @@ More configurations coming soon!
 
 ## Report an issue
 
-If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) or create a [GitHub issue](https://github.com/Lawlzee/UnityMapGenerator/issues/new).
+If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) or create a [GitHub issue](https://github.com/Lawlzee/UnityMapGenerator/issues/new). Please include your log file; it is really useful for troubleshooting.
 
 ### Credits stuff
 
