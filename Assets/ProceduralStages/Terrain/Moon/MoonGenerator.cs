@@ -24,6 +24,9 @@ namespace ProceduralStages
         public CellularAutomata3d cave3d = new CellularAutomata3d();
         public Map3dNoiser map3dNoiser = new Map3dNoiser();
 
+        //todo
+        public override TerrainType TerrainType { get; } = TerrainType.OpenCaves;
+
         public override Terrain Generate()
         {
             AddArena(Vector3.zero);

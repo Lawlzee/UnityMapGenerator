@@ -22,8 +22,11 @@ namespace ProceduralStages
 
         public static ContentPack ContentPack = new ContentPack();
 
-        public static Material SeerMaterial;
-        public static Texture texScenePreview;
+        public static Dictionary<TerrainType, Material> SeerMaterialByTerrainType = new Dictionary<TerrainType, Material>();
+
+        public static Texture texOpenCavePreview;
+        public static Texture texTunnelCavesPreview;
+        public static Texture texIslandPreview;
         public static GameObject runConfigPrefab;
 
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
@@ -54,7 +57,9 @@ namespace ProceduralStages
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<Texture[]>)((assets) =>
             {
-                texScenePreview = assets.First(a => a.name == "texScenePreview");
+                texOpenCavePreview = assets.First(a => a.name == "texOpenCavePreview");
+                texTunnelCavesPreview = assets.First(a => a.name == "texTunnelCavesPreview");
+                texIslandPreview = assets.First(a => a.name == "texIslandPreview");
             }));
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
@@ -69,8 +74,9 @@ namespace ProceduralStages
                 yield return null;
             }
 
-            SeerMaterial = UnityEngine.Object.Instantiate(seerRequest.Result);
-            SeerMaterial.mainTexture = texScenePreview;
+            AddSeerMaterial(texOpenCavePreview, TerrainType.OpenCaves);
+            AddSeerMaterial(texTunnelCavesPreview, TerrainType.TunnelCaves);
+            AddSeerMaterial(texIslandPreview, TerrainType.Islands);
 
             SceneDef[] sceneDefs = new SceneDef[6];
 
@@ -82,8 +88,8 @@ namespace ProceduralStages
                 sceneDef.isOfflineScene = false;
                 sceneDef.nameToken = "MAP_RANDOM_TITLE";
                 sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
-                sceneDef.previewTexture = texScenePreview;
-                sceneDef.portalMaterial = SeerMaterial;
+                sceneDef.previewTexture = texOpenCavePreview;
+                sceneDef.portalMaterial = SeerMaterialByTerrainType[TerrainType.OpenCaves];
                 sceneDef.portalSelectionMessageString = "BAZAAR_SEER_RANDOM";
                 sceneDef.shouldIncludeInLogbook = false;
                 sceneDef.loreToken = null;
@@ -131,6 +137,14 @@ namespace ProceduralStages
 
             Log.Info("SceneDef initialised");
             yield break;
+
+            void AddSeerMaterial(Texture previewTexture, TerrainType terrainType)
+            {
+                var seerMaterial = UnityEngine.Object.Instantiate(seerRequest.Result);
+                seerMaterial.mainTexture = previewTexture;
+
+                SeerMaterialByTerrainType[terrainType] = seerMaterial;
+            }
         }
 
         private IEnumerator LoadAssetBundle(string assetBundleFullPath, IProgress<float> progress, Action<AssetBundle> onAssetBundleLoaded)

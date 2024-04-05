@@ -119,6 +119,11 @@ namespace ProceduralStages
 
             On.RoR2.PreGameController.Awake += PreGameController_Awake;
 
+            On.RoR2.SeerStationController.OnTargetSceneChanged += SeerStationController_OnTargetSceneChanged;
+            On.RoR2.SeerStationController.SetRunNextStageToTarget += SeerStationController_SetRunNextStageToTarget;
+
+            Stage.onStageStartGlobal += Stage_onStageStartGlobal;
+
             Run.onRunDestroyGlobal += _ =>
             {
                 if (RunConfig.instance != null)
@@ -126,6 +131,59 @@ namespace ProceduralStages
                     Destroy(RunConfig.instance);
                 }
             };
+        }
+
+        private void Stage_onStageStartGlobal(Stage obj)
+        {
+            if (NetworkServer.active)
+            {
+                int nextStageClearCount = Run.instance.stageClearCount;
+                if (SceneCatalog.GetSceneDefForCurrentScene().sceneType == SceneType.Stage)
+                {
+                    nextStageClearCount++;
+                }
+                RunConfig.instance.nextStageClearCount = nextStageClearCount;
+            }
+        }
+
+        private void SeerStationController_OnTargetSceneChanged(On.RoR2.SeerStationController.orig_OnTargetSceneChanged orig, SeerStationController self, SceneDef targetScene)
+        {
+            Log.Debug(self.gameObject.name);
+
+            Material portalMaterial = (Material)null;
+            if (targetScene)
+            {
+                if (targetScene.cachedName == "random")
+                {
+                    var terrainType = (TerrainType)RunConfig.instance.seerRng.RangeInt(1, Enum.GetValues(typeof(TerrainType)).Length);
+                    portalMaterial = ContentProvider.SeerMaterialByTerrainType[terrainType];
+                }
+                else
+                {
+                    portalMaterial = targetScene.portalMaterial;
+                }
+            }
+
+            self.SetPortalMaterial(portalMaterial);
+        }
+
+        private void SeerStationController_SetRunNextStageToTarget(On.RoR2.SeerStationController.orig_SetRunNextStageToTarget orig, SeerStationController self)
+        {
+            orig(self);
+            var scene = SceneCatalog.GetSceneDef((SceneIndex)self.targetSceneDefIndex);
+            if (scene.cachedName == "random")
+            {
+                self.targetRenderer.GetSharedMaterials(SeerStationController.sharedSharedMaterialsList);
+                var material = SeerStationController.sharedSharedMaterialsList[self.materialIndexToAssign];
+
+                var terrainType = ContentProvider.SeerMaterialByTerrainType
+                    .Where(x => x.Value == material)
+                    .Select(x => x.Key)
+                    .First();
+
+                RunConfig.instance.selectedTerrainType = terrainType;
+                SeerStationController.sharedSharedMaterialsList.Clear();
+            }
         }
 
         private SceneIndex SceneCatalog_FindSceneIndex(On.RoR2.SceneCatalog.orig_FindSceneIndex orig, string sceneName)

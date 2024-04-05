@@ -1,5 +1,7 @@
 ## 1.10
 - Added config multiplayer sync
+- Seer dreaming terrain type
+- Fixed terrain desync in multiplayer
 
 ## 1.9
 

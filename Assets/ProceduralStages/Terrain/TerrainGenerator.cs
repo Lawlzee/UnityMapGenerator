@@ -32,6 +32,8 @@ namespace ProceduralStages
         public float vignetteInsentity = 0.25f;
         public float ambiantLightIntensity;
 
+        public abstract TerrainType TerrainType { get; }
+
         public abstract Terrain Generate();
     }
 }

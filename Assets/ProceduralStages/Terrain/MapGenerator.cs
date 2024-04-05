@@ -94,12 +94,16 @@ namespace ProceduralStages
 
         private void GenerateMap()
         {
-            int stageClearCount = (Run.instance?.stageClearCount ?? 0);
+            int stageClearCount = RunConfig.instance.nextStageClearCount;
             int stageInLoop = (stageClearCount % Run.stagesPerLoop) + 1;
 
-            int stageScaling = !Application.isEditor && RunConfig.instance.infiniteMapScaling
+            int stageScaling = RunConfig.instance.infiniteMapScaling
                 ? stageClearCount + 1
                 : stageInLoop;
+
+            Log.Debug($"stageClearCount: {stageClearCount}");
+            Log.Debug($"stageInLoop: {stageInLoop}");
+            Log.Debug($"stageScaling: {stageScaling}");
 
             SetSeed();
 
@@ -107,7 +111,11 @@ namespace ProceduralStages
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            TerrainGenerator terrainGenerator = terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)];
+            TerrainGenerator terrainGenerator = RunConfig.instance.selectedTerrainType == TerrainType.None
+                ? terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)]
+                : terrainGenerators.First(x => x.TerrainType == RunConfig.instance.selectedTerrainType);
+
+            RunConfig.instance.selectedTerrainType = TerrainType.None;
 
             stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
@@ -294,6 +302,7 @@ namespace ProceduralStages
                     currentSeed = RunConfig.instance.stageRng.nextUlong;
                 }
             }
+
             Log.Debug("Stage Seed: " + currentSeed);
 
             rng = new Xoroshiro128Plus(currentSeed);
