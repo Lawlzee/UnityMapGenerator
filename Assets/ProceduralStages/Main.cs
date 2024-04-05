@@ -57,10 +57,10 @@ namespace ProceduralStages
             ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
             ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
 
-            InfiniteMapScaling = Config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. In multiplayer, all players must set the same value.");
+            InfiniteMapScaling = Config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate.");
             ModSettingsManager.AddOption(new CheckBoxOption(InfiniteMapScaling));
 
-            StageSeed = Config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used. In multiplayer, all players must set the same value.");
+            StageSeed = Config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
             ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
 
             //string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
@@ -118,6 +118,14 @@ namespace ProceduralStages
             On.RoR2.SceneCatalog.FindSceneIndex += SceneCatalog_FindSceneIndex;
 
             On.RoR2.PreGameController.Awake += PreGameController_Awake;
+
+            Run.onRunDestroyGlobal += _ =>
+            {
+                if (RunConfig.instance != null)
+                {
+                    Destroy(RunConfig.instance);
+                }
+            };
         }
 
         private SceneIndex SceneCatalog_FindSceneIndex(On.RoR2.SceneCatalog.orig_FindSceneIndex orig, string sceneName)
@@ -142,9 +150,9 @@ namespace ProceduralStages
 
             if (NetworkServer.active)
             {
-                var seedSyncerObject = Instantiate(ContentProvider.seedSyncerPrefab);
-                seedSyncerObject.GetComponent<SeedSyncer>().seed = self.runSeed;
-                NetworkServer.Spawn(seedSyncerObject);
+                var runConfig = Instantiate(ContentProvider.runConfigPrefab);
+                runConfig.GetComponent<RunConfig>().InitHostConfig(self.runSeed);
+                NetworkServer.Spawn(runConfig);
             }
         }
 

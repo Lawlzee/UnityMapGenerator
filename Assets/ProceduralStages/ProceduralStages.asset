@@ -21,7 +21,7 @@ MonoBehaviour:
   - assetBundleName: proceduralAssets
     assets:
     - {fileID: 2800000, guid: c599b731fccac9347b7425faff8d394a, type: 3}
-    - {fileID: 7406066706967165406, guid: a0d326cb2b2bdf34d8274181587b2613, type: 3}
+    - {fileID: 1602042166293436297, guid: 1ffa1f5e6459ee54784dcfa366b6e75f, type: 3}
     - {fileID: 8957093253140908505, guid: 211705b054138ef4189a5416b2f80291, type: 3}
 --- !u!114 &-6844045057250356348
 MonoBehaviour:

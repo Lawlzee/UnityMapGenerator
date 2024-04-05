@@ -1,3 +1,6 @@
+## 1.10
+- Added config multiplayer sync
+
 ## 1.9
 
 1. **Tunnel Caves Addition**: Introduced tunnel caves, reminiscent of [Minecraft's spaghetti caves](https://minecraft.fandom.com/wiki/Cave#Spaghetti_cave).

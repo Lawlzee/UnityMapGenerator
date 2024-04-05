@@ -24,7 +24,7 @@ namespace ProceduralStages
 
         public static Material SeerMaterial;
         public static Texture texScenePreview;
-        public static GameObject seedSyncerPrefab;
+        public static GameObject runConfigPrefab;
 
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
         public static SceneDef ItSceneDef;
@@ -59,8 +59,8 @@ namespace ProceduralStages
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
             {
-                seedSyncerPrefab = assets.First(a => a.name == "Seed Syncer");
-                ClientScene.RegisterPrefab(seedSyncerPrefab);
+                runConfigPrefab = assets.First(a => a.name == "Run Config");
+                ClientScene.RegisterPrefab(runConfigPrefab);
             }));
 
             var seerRequest = Addressables.LoadAssetAsync<Material>("RoR2/Base/bazaar/matBazaarSeerWispgraveyard.mat");

@@ -34,8 +34,8 @@ Open caves stages have a 25% chance to spawn
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
 
-## Open caves stages
-Open caves stages have a 25% chance to spawn
+## Tunnel caves stages
+Tunnel caves stages have a 25% chance to spawn
 
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image5.png)
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image7.png)
@@ -54,8 +54,8 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`.
 | Category      | Name                 | Default value | Description                                                                                                                                                                      |
 |---------------|----------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Configuration | Replace all stages   | Enabled       | If enabled, all stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.                                             |
-| Configuration | Infinite map scaling | Disabled      | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. In multiplayer, all players must set the same value. |
-| Debug         | Stage seed           |               | Specifies the stage seed. If left blank, a random seed will be used. In multiplayer, all players must set the same value.                                                        |
+| Configuration | Infinite map scaling | Disabled      | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
+| Debug         | Stage seed           |               | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
 
 More configurations coming soon!
 

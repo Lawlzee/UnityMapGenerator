@@ -97,7 +97,7 @@ namespace ProceduralStages
             int stageClearCount = (Run.instance?.stageClearCount ?? 0);
             int stageInLoop = (stageClearCount % Run.stagesPerLoop) + 1;
 
-            int stageScaling = !Application.isEditor && Main.InfiniteMapScaling.Value
+            int stageScaling = !Application.isEditor && RunConfig.instance.infiniteMapScaling
                 ? stageClearCount + 1
                 : stageInLoop;
 
@@ -267,9 +267,9 @@ namespace ProceduralStages
                 {
                     currentSeed = editorSeed;
                 }
-                else if (SeedSyncer.randomStageRng != null)
+                else if (RunConfig.instance.stageRng != null)
                 {
-                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
+                    currentSeed = RunConfig.instance.stageRng.nextUlong;
                 }
                 else
                 {
@@ -278,20 +278,20 @@ namespace ProceduralStages
             }
             else
             {
-                if (Main.StageSeed.Value != "")
+                if (RunConfig.instance.stageSeed != "")
                 {
-                    if (ulong.TryParse(Main.StageSeed.Value, out ulong seed))
+                    if (ulong.TryParse(RunConfig.instance.stageSeed, out ulong seed))
                     {
                         currentSeed = seed;
                     }
                     else
                     {
-                        currentSeed = (ulong)Main.StageSeed.Value.GetHashCode();
+                        currentSeed = (ulong)RunConfig.instance.stageSeed.GetHashCode();
                     }
                 }
                 else
                 {
-                    currentSeed = SeedSyncer.randomStageRng.nextUlong;
+                    currentSeed = RunConfig.instance.stageRng.nextUlong;
                 }
             }
             Log.Debug("Stage Seed: " + currentSeed);
