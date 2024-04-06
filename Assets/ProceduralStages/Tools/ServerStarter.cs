@@ -15,7 +15,6 @@ namespace ProceduralStages
         {
             Log.Debug("Starting server");
             GetComponent<NetworkManager>().StartHost();
-            Log.Debug(NetworkServer.active);
         }
     }
 }

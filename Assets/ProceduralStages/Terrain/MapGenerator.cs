@@ -31,6 +31,7 @@ namespace ProceduralStages
         public bool loadResourcesInEditor = false;
         public bool loadPropsInEditor = false;
         public ulong editorSeed;
+        public TerrainType editorTerrainType;
 
         public TerrainGenerator[] terrainGenerators;
         public MapTheme[] themes;
@@ -101,21 +102,41 @@ namespace ProceduralStages
                 ? stageClearCount + 1
                 : stageInLoop;
 
-            Log.Debug($"stageClearCount: {stageClearCount}");
-            Log.Debug($"stageInLoop: {stageInLoop}");
-            Log.Debug($"stageScaling: {stageScaling}");
-
             SetSeed();
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            TerrainGenerator terrainGenerator = RunConfig.instance.selectedTerrainType == TerrainType.None
-                ? terrainGenerators[rng.RangeInt(0, terrainGenerators.Length)]
-                : terrainGenerators.First(x => x.TerrainType == RunConfig.instance.selectedTerrainType);
+            TerrainType terrainType = RunConfig.instance.selectedTerrainType;
+            if (Application.isEditor)
+            {
+                terrainType = editorTerrainType;
+            }
+            else if (terrainType == TerrainType.Random)
+            {
+                var typesWeights = RunConfig.instance.terrainTypesPercents
+                    .Where(x => x.StageIndex + 1 == stageInLoop)
+                    .ToList();
 
-            RunConfig.instance.selectedTerrainType = TerrainType.None;
+                WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                for (int i = 0; i < typesWeights.Count; i++)
+                {
+                    var config = typesWeights[i];
+                    selection.AddChoice(config.TerrainType, config.Percent);
+                }
+
+                terrainType = selection.totalWeight > 0
+                    ? selection.Evaluate(rng.nextNormalizedFloat)
+                    : TerrainType.OpenCaves;
+
+            }
+
+            Log.Debug(terrainType);
+
+            TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.TerrainType == terrainType);
+            RunConfig.instance.selectedTerrainType = TerrainType.Random;
 
             stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);

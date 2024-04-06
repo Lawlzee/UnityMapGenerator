@@ -1602,6 +1602,7 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
+  editorTerrainType: 3
   terrainGenerators:
   - {fileID: 11400000, guid: b1c7047386753f547af448012ee9a98d, type: 2}
   - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}

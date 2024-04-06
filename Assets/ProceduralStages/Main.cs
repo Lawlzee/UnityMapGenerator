@@ -25,82 +25,13 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.9.0";
-
-        public static ConfigEntry<bool> ReplaceAllStages;
-
-        public static ConfigEntry<string> StageSeed;
-        public static ConfigEntry<bool> InfiniteMapScaling;
-        //public static ConfigEntry<float> FloorSaturation;
-        //public static ConfigEntry<float> FloorValue;
-        //public static ConfigEntry<float> WallsSaturation;
-        //public static ConfigEntry<float> WallsValue;
-        //public static ConfigEntry<float> CeillingSaturation;
-        //public static ConfigEntry<float> CeillingValue;
-        //public static ConfigEntry<float> LightSaturation;
-        //public static ConfigEntry<float> LightValue;
-        //
-        //public static ConfigEntry<float> FogSaturation;
-        //public static ConfigEntry<float> FogValue;
-        //public static ConfigEntry<float> FogColorStartAlpha;
-        //public static ConfigEntry<float> FogColorMidAlpha;
-        //public static ConfigEntry<float> FogColorEndAlpha;
-        //public static ConfigEntry<float> FogZero;
-        //public static ConfigEntry<float> FogOne;
-        //public static ConfigEntry<float> FogIntensity;
-        //public static ConfigEntry<float> FogPower;
+        public const string PluginVersion = "1.10.0";
 
         public void Awake()
         {
             Log.Init(Logger);
 
-            ReplaceAllStages = Config.Bind("Configuration", "Replace all stages", true, "If enabled, all the stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.");
-            ModSettingsManager.AddOption(new CheckBoxOption(ReplaceAllStages));
-
-            InfiniteMapScaling = Config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate.");
-            ModSettingsManager.AddOption(new CheckBoxOption(InfiniteMapScaling));
-
-            StageSeed = Config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
-            ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
-
-            //string debugDescrption = "This configuration is intended for debugging the map generation. Please refrain from making any changes unless you know what you are doing.";
-            //FloorSaturation = Config.Bind("Debug", nameof(FloorSaturation), 0.5f, debugDescrption);
-            //FloorValue = Config.Bind("Debug", nameof(FloorValue), 0.36f, debugDescrption);
-            //WallsSaturation = Config.Bind("Debug", nameof(WallsSaturation), 0.3f, debugDescrption);
-            //WallsValue = Config.Bind("Debug", nameof(WallsValue), 0.27f, debugDescrption);
-            //CeillingSaturation = Config.Bind("Debug", nameof(CeillingSaturation), 0.3f, debugDescrption);
-            //CeillingValue = Config.Bind("Debug", nameof(CeillingValue), 0.15f, debugDescrption);
-            //LightSaturation = Config.Bind("Debug", nameof(LightSaturation), 0.7f, debugDescrption);
-            //LightValue = Config.Bind("Debug", nameof(LightValue), 0.7f, debugDescrption);
-            //
-            //FogSaturation = Config.Bind("Debug", nameof(FogSaturation), 0.7f, debugDescrption);
-            //FogValue = Config.Bind("Debug", nameof(FogValue), 0.7f, debugDescrption);
-            //FogColorStartAlpha = Config.Bind("Debug", nameof(FogColorStartAlpha), 0f, debugDescrption);
-            //FogColorMidAlpha = Config.Bind("Debug", nameof(FogColorMidAlpha), 0.175f, debugDescrption);
-            //FogColorEndAlpha = Config.Bind("Debug", nameof(FogColorEndAlpha), 0.35f, debugDescrption);
-            //FogZero = Config.Bind("Debug", nameof(FogZero), 0f, debugDescrption);
-            //FogOne = Config.Bind("Debug", nameof(FogOne), 0.1f, debugDescrption);
-            //FogIntensity = Config.Bind("Debug", nameof(FogIntensity), 0.25f, debugDescrption);
-            //FogPower = Config.Bind("Debug", nameof(FogPower), 0.75f, debugDescrption);
-            //
-            //ModSettingsManager.AddOption(new SliderOption(FloorSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FloorValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(WallsSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(WallsValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(CeillingSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(CeillingValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(LightSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(LightValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //
-            //ModSettingsManager.AddOption(new SliderOption(FogSaturation, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogValue, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogColorStartAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogColorMidAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogColorEndAlpha, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogZero, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogOne, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogIntensity, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
-            //ModSettingsManager.AddOption(new SliderOption(FogPower, new SliderConfig { min = 0, max = 1, formatString = "{0:0.00}" }));
+            ModConfig.Init(Config);
 
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
@@ -121,6 +52,7 @@ namespace ProceduralStages
 
             On.RoR2.SeerStationController.OnTargetSceneChanged += SeerStationController_OnTargetSceneChanged;
             On.RoR2.SeerStationController.SetRunNextStageToTarget += SeerStationController_SetRunNextStageToTarget;
+            On.RoR2.BazaarController.SetUpSeerStations += BazaarController_SetUpSeerStations;
 
             Stage.onStageStartGlobal += Stage_onStageStartGlobal;
 
@@ -131,6 +63,91 @@ namespace ProceduralStages
                     Destroy(RunConfig.instance);
                 }
             };
+        }
+
+        private void BazaarController_SetUpSeerStations(On.RoR2.BazaarController.orig_SetUpSeerStations orig, BazaarController self)
+        {
+            var scenesSelection = new WeightedSelection<SceneDef>();
+            if (Run.instance.nextStageScene != null)
+            {
+                SceneDef randomStage = null;
+
+                int stageOrder = Run.instance.nextStageScene.stageOrder;
+                foreach (SceneDef sceneDef in SceneCatalog.allSceneDefs)
+                {
+                    if (sceneDef.stageOrder == stageOrder
+                        && (sceneDef.requiredExpansion == null || Run.instance.IsExpansionEnabled(sceneDef.requiredExpansion)))
+                    {
+                        if (sceneDef.cachedName == "random")
+                        {
+                            randomStage = sceneDef;
+                        }
+                        else
+                        {
+                            scenesSelection.AddChoice(sceneDef, 1f);
+                        }
+                    }
+                }
+
+                if (randomStage != null)
+                {
+                    var totalPercent = RunConfig.instance.terrainTypesPercents
+                        .Where(x => x.StageIndex + 1 == stageOrder)
+                        .Select(x => x.Percent)
+                        .Sum();
+
+                    if (totalPercent > 0)
+                    {
+                        float randomStageWeight = 1;
+
+                        if (totalPercent >= 1)
+                        {
+                            scenesSelection.Clear();
+                        }
+                        else
+                        {
+                            randomStageWeight = scenesSelection.totalWeight / (1 - totalPercent) - scenesSelection.totalWeight;
+                        }
+
+                        scenesSelection.AddChoice(randomStage, randomStageWeight);
+                    }
+                }
+            }
+
+            WeightedSelection<SceneDef> specialStagesSelection = new WeightedSelection<SceneDef>();
+            foreach (BazaarController.SeerSceneOverride seerSceneOverride in self.seerSceneOverrides)
+            {
+                bool hasReachMinStageClearCount = Run.instance.stageClearCount >= seerSceneOverride.minStagesCleared;
+                bool hasExpansion = seerSceneOverride.requiredExpasion == null || Run.instance.IsExpansionEnabled(seerSceneOverride.requiredExpasion);
+                bool isNotBanned = string.IsNullOrEmpty(seerSceneOverride.bannedEventFlag) || !Run.instance.GetEventFlag(seerSceneOverride.bannedEventFlag);
+
+                if (hasReachMinStageClearCount && hasExpansion && isNotBanned)
+                {
+                    specialStagesSelection.AddChoice(seerSceneOverride.sceneDef, seerSceneOverride.overrideChance);
+                }
+            }
+
+            foreach (SeerStationController seerStation in self.seerStations)
+            {
+                if (self.rng.nextNormalizedFloat < specialStagesSelection.totalWeight)
+                {
+                    int index = specialStagesSelection.EvaluateToChoiceIndex(self.rng.nextNormalizedFloat);
+                    var specialScene = specialStagesSelection.choices[index].value;
+                    specialStagesSelection.RemoveChoice(index);
+                    seerStation.SetTargetScene(specialScene);
+                }
+                else if (scenesSelection.Count == 0)
+                {
+                    seerStation.GetComponent<PurchaseInteraction>().SetAvailable(false);
+                }
+                else
+                {
+                    var selectedSceneIndex = scenesSelection.EvaluateToChoiceIndex(self.rng.nextNormalizedFloat);
+                    var selectedScene = scenesSelection.choices[selectedSceneIndex].value;
+                    scenesSelection.RemoveChoice(selectedSceneIndex);
+                    seerStation.SetTargetScene(selectedScene);
+                }
+            }
         }
 
         private void Stage_onStageStartGlobal(Stage obj)
@@ -148,14 +165,29 @@ namespace ProceduralStages
 
         private void SeerStationController_OnTargetSceneChanged(On.RoR2.SeerStationController.orig_OnTargetSceneChanged orig, SeerStationController self, SceneDef targetScene)
         {
-            Log.Debug(self.gameObject.name);
-
-            Material portalMaterial = (Material)null;
+            Material portalMaterial = null;
             if (targetScene)
             {
                 if (targetScene.cachedName == "random")
                 {
-                    var terrainType = (TerrainType)RunConfig.instance.seerRng.RangeInt(1, Enum.GetValues(typeof(TerrainType)).Length);
+                    int stageIndex = Math.Max(0, Run.instance.stageClearCount) % Run.stagesPerLoop;
+
+                    var typesWeights = RunConfig.instance.terrainTypesPercents
+                        .Where(x => x.StageIndex == stageIndex)
+                        .ToList();
+
+                    WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                    for (int i = 0; i < typesWeights.Count; i++)
+                    {
+                        var config = typesWeights[i];
+                        selection.AddChoice(config.TerrainType, config.Percent);
+                    }
+
+                    TerrainType terrainType = selection.totalWeight > 0
+                        ? selection.Evaluate(RunConfig.instance.seerRng.nextNormalizedFloat)
+                        : TerrainType.OpenCaves;
+
                     portalMaterial = ContentProvider.SeerMaterialByTerrainType[terrainType];
                 }
                 else
@@ -273,16 +305,23 @@ namespace ProceduralStages
         private void SceneExitController_SetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
         {
             if (!NetworkServer.active
-                || !Run.instance.name.Contains("Judgement") 
+                || !Run.instance.name.Contains("Judgement")
                 || newState != SceneExitController.ExitState.Finished
                 || SceneCatalog.currentSceneDef.cachedName != "bazaar"
-                || Run.instance.stageClearCount >= 11)
+                || Run.instance.stageClearCount >= 10)
             {
                 orig(self, newState);
                 return;
             }
 
-            if (ReplaceAllStages.Value || Run.instance.stageRngGenerator.nextNormalizedFloat > 0.5f)
+            int stageIndex = (Run.instance.stageClearCount / 2) % Run.stagesPerLoop;
+
+            float totalPercent = RunConfig.instance.terrainTypesPercents
+                .Where(x => x.StageIndex == stageIndex)
+                .Select(x => x.Percent)
+                .Sum();
+
+            if (Run.instance.stageRngGenerator.nextNormalizedFloat <= totalPercent)
             {
                 Run.instance.nextStageScene = ContentProvider.ItSceneDef;
             }
@@ -310,17 +349,25 @@ namespace ProceduralStages
                 return;
             }
 
+            int stageIndex = (Math.Max(0, Run.instance.stageClearCount) + 1) % Run.stagesPerLoop;
+
+            float totalPercent = RunConfig.instance.terrainTypesPercents
+                .Where(x => x.StageIndex == stageIndex)
+                .Select(x => x.Percent)
+                .Sum();
+
             SceneDef sceneDef = self is InfiniteTowerRun
                 ? ContentProvider.ItSceneDef
-                : ContentProvider.LoopSceneDefs[(Math.Max(0, Run.instance.stageClearCount) + 1) % 5];
+                : ContentProvider.LoopSceneDefs[stageIndex];
 
-            if (ReplaceAllStages.Value)
+            if (totalPercent >= 1)
             {
                 self.nextStageScene = sceneDef;
             }
             else
             {
-                choices.AddChoice(sceneDef, 1f);
+                float weight = choices.totalWeight / (1 - totalPercent) - choices.totalWeight;
+                choices.AddChoice(sceneDef, weight);
                 orig(self, choices);
             }
         }
@@ -337,6 +384,3 @@ namespace ProceduralStages
         }
     }
 }
-
-
-

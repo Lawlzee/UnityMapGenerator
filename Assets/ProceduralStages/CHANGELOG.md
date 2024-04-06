@@ -2,6 +2,8 @@
 - Added config multiplayer sync
 - Seer dreaming terrain type
 - Fixed terrain desync in multiplayer
+- Added configurable terrain spawn rate
+    - works with seers
 
 ## 1.9
 

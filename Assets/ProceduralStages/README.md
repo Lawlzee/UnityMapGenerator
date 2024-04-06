@@ -21,21 +21,18 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 ## Terrain types
 
 ## Island stages
-Islands stages have a 50% chance to spawn
 
 ![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image5.png)
 ![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7.1/Image5.png)
 ![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image3.png)
 
 ## Open caves stages
-Open caves stages have a 25% chance to spawn
 
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.8/Image4.png)
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
 
 ## Tunnel caves stages
-Tunnel caves stages have a 25% chance to spawn
 
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image5.png)
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image7.png)
@@ -56,6 +53,16 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`.
 | Configuration | Replace all stages   | Enabled       | If enabled, all stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.                                             |
 | Configuration | Infinite map scaling | Disabled      | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
 | Debug         | Stage seed           |               | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
+
+todo: doc
+
+| Stage   | Open Caves | Tunnel Caves | Islands |
+|---------|------------|--------------|---------|
+| Stage 1 | 40%        | 40%          | 20%     |
+| Stage 2 | 40%        | 20%          | 40%     |
+| Stage 3 | 30%        | 60%          | 10%     |
+| Stage 4 | 20%        | 10%          | 70%     |
+| Stage 5 | 20%        | 40%          | 40%     |
 
 More configurations coming soon!
 

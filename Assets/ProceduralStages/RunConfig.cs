@@ -8,10 +8,19 @@ using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
+    public struct TerrainTypePercent
+    {
+        public int StageIndex;
+        public TerrainType TerrainType;
+        public float Percent;
+    }
+
     [DefaultExecutionOrder(-100)]
     public class RunConfig : NetworkBehaviour
     {
         public static RunConfig instance;
+
+        private bool _isHost;
 
         [SyncVar]
         public ulong seed;
@@ -35,6 +44,30 @@ namespace ProceduralStages
         //is not synced yet to the client before generating the next stage
         [SyncVar]
         public int nextStageClearCount;
+
+        [SyncVar]
+        private SyncListFloat _terrainTypesPercents;
+
+        public TerrainTypePercent[] terrainTypesPercents
+        {
+            get
+            {
+                var result = new TerrainTypePercent[ModConfig.TerrainTypesPercents.Count];
+                for (int i = 0; i < ModConfig.TerrainTypesPercents.Count; i++)
+                {
+                    var config = ModConfig.TerrainTypesPercents[i];
+                    ref var resultConfig = ref result[i];
+
+                    resultConfig.StageIndex = config.StageIndex;
+                    resultConfig.TerrainType = config.TerrainType;
+                    resultConfig.Percent = config.Config.Value;
+                }
+
+                return result;
+            }
+        }
+
+        private EventHandler[] _terrainTypesPercentsSettingChanged;
 
         public Xoroshiro128Plus stageRng;
         public Xoroshiro128Plus seerRng;
@@ -64,29 +97,56 @@ namespace ProceduralStages
         {
             Log.Debug($"RunConfig.OnDestroy");
             instance = null;
-            Main.StageSeed.SettingChanged -= StageSeed_SettingChanged;
-            Main.InfiniteMapScaling.SettingChanged -= InfiniteMapScaling_SettingChanged;
+            if (_isHost)
+            {
+                ModConfig.StageSeed.SettingChanged -= StageSeed_SettingChanged;
+                ModConfig.InfiniteMapScaling.SettingChanged -= InfiniteMapScaling_SettingChanged;
+
+                for (int i = 0; i < ModConfig.TerrainTypesPercents.Count; i++)
+                {
+                    var config = ModConfig.TerrainTypesPercents[i];
+                    config.Config.SettingChanged -= _terrainTypesPercentsSettingChanged[i];
+                }
+            }
         }
 
         public void InitHostConfig(ulong runSeed)
         {
+            _isHost = true;
             seed = runSeed;
 
-            stageSeed = Main.StageSeed.Value;
-            Main.StageSeed.SettingChanged += StageSeed_SettingChanged;
+            stageSeed = ModConfig.StageSeed.Value;
+            ModConfig.StageSeed.SettingChanged += StageSeed_SettingChanged;
 
-            infiniteMapScaling = Main.InfiniteMapScaling.Value;
-            Main.InfiniteMapScaling.SettingChanged += InfiniteMapScaling_SettingChanged;
+            infiniteMapScaling = ModConfig.InfiniteMapScaling.Value;
+            ModConfig.InfiniteMapScaling.SettingChanged += InfiniteMapScaling_SettingChanged;
+
+            _terrainTypesPercentsSettingChanged = new EventHandler[ModConfig.TerrainTypesPercents.Count];
+
+            for (int i = 0; i < ModConfig.TerrainTypesPercents.Count; i++)
+            {
+                var config = ModConfig.TerrainTypesPercents[i];
+
+                _terrainTypesPercents.Add(config.Config.Value);
+
+                int index = i;
+                EventHandler settingsChanged = (object o, EventArgs e) =>
+                {
+                    _terrainTypesPercents[index] = config.Config.Value;
+                };
+
+                config.Config.SettingChanged += settingsChanged;
+            }
         }
 
         private void StageSeed_SettingChanged(object sender, EventArgs e)
         {
-            stageSeed = Main.StageSeed.Value;
+            stageSeed = ModConfig.StageSeed.Value;
         }
 
         private void InfiniteMapScaling_SettingChanged(object sender, EventArgs e)
         {
-            infiniteMapScaling = Main.InfiniteMapScaling.Value;
+            infiniteMapScaling = ModConfig.InfiniteMapScaling.Value;
         }
     }
 }
