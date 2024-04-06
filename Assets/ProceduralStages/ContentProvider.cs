@@ -83,7 +83,7 @@ namespace ProceduralStages
             for (int i = 1; i <= 6; i++)
             {
                 SceneDef sceneDef = ScriptableObject.CreateInstance<SceneDef>();
-                sceneDef.cachedName = "random";
+                sceneDef.cachedName = Main.SceneName;
                 sceneDef.sceneType = SceneType.Stage;
                 sceneDef.isOfflineScene = false;
                 sceneDef.nameToken = "MAP_RANDOM_TITLE";

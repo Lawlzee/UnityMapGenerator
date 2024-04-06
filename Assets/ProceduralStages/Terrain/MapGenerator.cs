@@ -245,7 +245,7 @@ namespace ProceduralStages
             if (!Application.isEditor)
             {
                 var stages = SceneCatalog.allStageSceneDefs
-                    .Where(x => x.cachedName != "random")
+                    .Where(x => x.cachedName != Main.SceneName)
                     .ToList();
 
                 var mainTracks = stages
@@ -267,7 +267,7 @@ namespace ProceduralStages
                 onSceneChanged = scene =>
                 {
                     SceneCatalog.onMostRecentSceneDefChanged -= onSceneChanged;
-                    if (scene.cachedName == "random")
+                    if (scene.cachedName == Main.SceneName)
                     {
                         scene.mainTrack = mainTrack;
                         scene.bossTrack = bossTrack;
