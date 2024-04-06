@@ -136,6 +136,7 @@ namespace ProceduralStages
                 };
 
                 config.Config.SettingChanged += settingsChanged;
+                _terrainTypesPercentsSettingChanged[i] = settingsChanged;
             }
         }
 

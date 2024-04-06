@@ -128,7 +128,7 @@ namespace ProceduralStages
                 || !Run.instance.name.Contains(Main.Judgement)
                 || newState != SceneExitController.ExitState.Finished
                 || SceneCatalog.currentSceneDef.cachedName != "bazaar"
-                || Run.instance.stageClearCount >= 10)
+                || Run.instance.stageClearCount >= 11)
             {
                 orig(self, newState);
                 return;
@@ -136,14 +136,27 @@ namespace ProceduralStages
 
             int stageIndex = (Run.instance.stageClearCount / 2) % Run.stagesPerLoop;
 
-            float totalPercent = RunConfig.instance.terrainTypesPercents
+            var typesWeights = RunConfig.instance.terrainTypesPercents
                 .Where(x => x.StageIndex == stageIndex)
+                .ToList();
+
+            float totalPercent = typesWeights
                 .Select(x => x.Percent)
                 .Sum();
 
             if (Run.instance.stageRngGenerator.nextNormalizedFloat <= totalPercent)
             {
                 Run.instance.nextStageScene = ContentProvider.ItSceneDef;
+
+                WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                for (int i = 0; i < typesWeights.Count; i++)
+                {
+                    var config = typesWeights[i];
+                    selection.AddChoice(config.TerrainType, config.Percent);
+                }
+
+                RunConfig.instance.selectedTerrainType = selection.Evaluate(RunConfig.instance.stageRng.nextNormalizedFloat);
             }
 
             orig(self, newState);
