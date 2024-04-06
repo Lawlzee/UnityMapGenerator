@@ -59,9 +59,6 @@ namespace ProceduralStages
             InfiniteMapScaling = config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate.");
             ModSettingsManager.AddOption(new CheckBoxOption(InfiniteMapScaling));
 
-            StageSeed = config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
-            ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
-
             TerrainTypesPercents = new List<TerrainTypePercentConfig>();
 
             for (int stageIndex = 0; stageIndex < Run.stagesPerLoop; stageIndex++)
@@ -75,8 +72,9 @@ namespace ProceduralStages
                     {
                         float defaultPercent = _defaultTerrainTypesPercents[(terrainType, stageIndex)];
 
-                        var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, "TODO");
-                        terrainConfig.Value = defaultPercent;
+                        string description = $"Specifies the percentage of maps that will be generated with the \"{terrainType.GetName()}\" terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
+                        var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, description);
+                        //terrainConfig.Value = defaultPercent;
                         ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
 
                         TerrainTypesPercents.Add(new TerrainTypePercentConfig
@@ -103,6 +101,9 @@ namespace ProceduralStages
                     }
                 }
             }
+
+            StageSeed = config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
+            ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
         }
     }
 }

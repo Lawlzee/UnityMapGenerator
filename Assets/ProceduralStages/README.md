@@ -40,21 +40,25 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
-## Video
+## Videos
 
-[Here is a video created by LimeLight demonstrating the mod](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
+Below are several videos that demonstrate the mod in action:
+- [Video by LimeLight](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
+- [Video by TrentoMento](https://www.youtube.com/watch?v=5wyeGS0PbeU)
+- [Video by PixelClub](https://www.youtube.com/watch?v=dBWXATNUGjY)
+
 
 ## Configuration
 
-You can edit the configuration in `Settings > Mod Options > ProceduralStages`.
+You can edit the configuration in `Settings > Mod Options > ProceduralStages`. All configurations can be adjusted at any time, even in the middle of a run. In multiplayer, the host's configuration is used.
 
-| Category      | Name                 | Default value | Description                                                                                                                                                                      |
-|---------------|----------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Configuration | Replace all stages   | Enabled       | If enabled, all stages will be procedurally generated. If disabled, normal stages and procedurally generated stages will be used.                                             |
-| Configuration | Infinite map scaling | Disabled      | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
-| Debug         | Stage seed           |               | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
+| Category      | Name                 | Default value    | Description                                                                                                                                                                      |
+|---------------|----------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                        |
+| Configuration | Infinite map scaling | Disabled         | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
+| Stage `[1,5]` | `<Terrain type>` map spawn rate | See table below | Specifies the percentage of maps that will be generated with the `<Terrain type>` for stage 1. If the total percentage for stage `X` is less than 100%, normal stages may also spawn. If the total percentage for stage `X` is 0%, only normal stages will spawn.|
+| Debug         | Stage seed           |                  | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
 
-todo: doc
+Here are the default spawn rates for all terrain types:
 
 | Stage   | Open Caves | Tunnel Caves | Islands |
 |---------|------------|--------------|---------|
@@ -63,8 +67,6 @@ todo: doc
 | Stage 3 | 30%        | 60%          | 10%     |
 | Stage 4 | 20%        | 10%          | 70%     |
 | Stage 5 | 20%        | 40%          | 40%     |
-
-More configurations coming soon!
 
 ## Report an issue
 
@@ -89,15 +91,12 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
 - Improve compatibility with Ro2API.DirectorAPI
 - Randomize more terrain settings
-- Add more configurations
 - Create a random DccsPool instead of reusing the DccsPools from the game
 - Replace the moon with a procedurally generated stage
 - Randomize stage names
 - Address the issue of getting stuck in holes in the map.
 - Enhance stage creation performance.
 - Enhance the uniqueness of stages.
-- Remove the ability to dream for normal stages
-- Add a config that lets you control the spawn rate of terrain types
 
 
 ## Algorithms used

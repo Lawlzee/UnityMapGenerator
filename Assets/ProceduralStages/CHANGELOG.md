@@ -1,9 +1,8 @@
 ## 1.10
-- Added config multiplayer sync
-- Seer dreaming terrain type
-- Fixed terrain desync in multiplayer
-- Added configurable terrain spawn rate
-    - works with seers
+1. **Configurable Terrain Spawn Rates**: Spawn rates for different terrain types can now be customized for each stage (1 to 5) of the game. The lunar seers will also utilize these spawn rates to determine the destinations.
+2. **Lunar Seers Terrain Choice**: The lunar seers in the bazaar will now display the terrain type of procedural stages.
+3. **Multiplayer Terrain Synchronization Fix**: An issue where the terrain would differ slightly between players in multiplayer mode has been resolved.
+4. **Host Mod Configuration in Multiplayer**: In multiplayer mode, the host's configuration will now apply to all players.
 
 ## 1.9
 
