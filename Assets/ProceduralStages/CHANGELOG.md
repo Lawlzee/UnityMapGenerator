@@ -1,3 +1,7 @@
+## 1.11
+- **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
+
+
 ## 1.10
 1. **Configurable Terrain Spawn Rates**: Spawn rates for different terrain types can now be customized for each stage (1 to 5) of the game. The lunar seers will also utilize these spawn rates to determine the destinations.
 2. **Lunar Seers Terrain Choice**: The lunar seers in the bazaar will now display the terrain type of procedural stages.

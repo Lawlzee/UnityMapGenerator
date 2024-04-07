@@ -17,6 +17,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 - **Randomized Enemy Pool:** Experience a dynamically curated assortment of enemies.
 - **Varied Music Selection:** Immerse yourself in randomly selected music tracks.
 - **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
+- **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
 
 ## Terrain types
 
@@ -53,7 +54,7 @@ Below are several videos that demonstrate the mod in action:
 You can edit the configuration in `Settings > Mod Options > ProceduralStages`. All configurations can be adjusted at any time, even in the middle of a run. In multiplayer, the host's configuration is used.
 
 | Category      | Name                 | Default value    | Description                                                                                                                                                                      |
-|---------------|----------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                        |
+|---------------|----------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                        
 | Configuration | Infinite map scaling | Disabled         | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
 | Stage `[1,5]` | `<Terrain type>` map spawn rate | See table below | Specifies the percentage of maps that will be generated with the `<Terrain type>` for stage 1. If the total percentage for stage `X` is less than 100%, normal stages may also spawn. If the total percentage for stage `X` is 0%, only normal stages will spawn.|
 | Debug         | Stage seed           |                  | Specifies the stage seed. If left blank, a random seed will be used.                                                      |

@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using RoR2.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
 
 namespace ProceduralStages
 {
@@ -18,6 +20,8 @@ namespace ProceduralStages
             On.RoR2.SceneDirector.PlacePlayerSpawnsViaNodegraph += SceneDirector_PlacePlayerSpawnsViaNodegraph;
             On.RoR2.SceneExitController.SetState += SceneExitController_SetState;
             On.RoR2.SceneCatalog.FindSceneIndex += SceneCatalog_FindSceneIndex;
+            On.RoR2.Run.FindSafeTeleportPosition_CharacterBody_Transform_float_float += Run_FindSafeTeleportPosition_CharacterBody_Transform_float_float;
+            On.RoR2.DirectorSpawnRequest.ctor += DirectorSpawnRequest_ctor;
             On.RoR2.WireMeshBuilder.GenerateMesh_Mesh += WireMeshBuilder_GenerateMesh_Mesh;
         }
 
@@ -162,9 +166,33 @@ namespace ProceduralStages
             orig(self, newState);
         }
 
+        private static bool _inFindSafeTeleportPosition;
+
+        private static Vector3 Run_FindSafeTeleportPosition_CharacterBody_Transform_float_float(On.RoR2.Run.orig_FindSafeTeleportPosition_CharacterBody_Transform_float_float orig, Run self, CharacterBody characterBody, Transform targetDestination, float idealMinDistance, float idealMaxDistance)
+        {
+            try
+            {
+                _inFindSafeTeleportPosition = SceneCatalog.currentSceneDef.cachedName == Main.SceneName;
+                return orig(self, characterBody, targetDestination, idealMinDistance, idealMaxDistance);
+            }
+            finally
+            {
+                _inFindSafeTeleportPosition = false;
+            }
+        }
+
+        private static void DirectorSpawnRequest_ctor(On.RoR2.DirectorSpawnRequest.orig_ctor orig, DirectorSpawnRequest self, SpawnCard spawnCard, DirectorPlacementRule placementRule, Xoroshiro128Plus rng)
+        {
+            orig(self, spawnCard, placementRule, rng);
+            if (_inFindSafeTeleportPosition)
+            {
+                spawnCard.forbiddenFlags |= NodeFlags.NoCharacterSpawn;
+            }
+        }
+
         private static void WireMeshBuilder_GenerateMesh_Mesh(On.RoR2.WireMeshBuilder.orig_GenerateMesh_Mesh orig, WireMeshBuilder self, Mesh dest)
         {
-            dest.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            dest.indexFormat = IndexFormat.UInt32;
             orig(self, dest);
         }
     }
