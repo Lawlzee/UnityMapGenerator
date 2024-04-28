@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
-  m_Name: CeillingColor
+  m_Script: {fileID: 11500000, guid: 482c7e6432979ba40b31fb31e5e28639, type: 3}
+  m_Name: SpaghettiNoise
   m_EditorClassIdentifier: 
-  saturation: 0.3
-  value: 0.16
-  perlinAmplitude: 0.4
-  detailPerlinAmplitude: 0.2
+  amplitude: 1
+  frequency: 0.02
+  octaves: 3
+  persistence: 0.5
+  lacunarity: 1.4

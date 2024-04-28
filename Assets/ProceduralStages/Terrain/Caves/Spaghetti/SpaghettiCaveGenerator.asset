@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6224d4b2decd71c449e1d713bab665c4, type: 3}
   m_Name: SpaghettiCaveGenerator
   m_EditorClassIdentifier: 
-  size: {x: 250, y: 100, z: 200}
-  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
-  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
-  fogPower: 0.75
-  vignetteInsentity: 0.25
+  size: {x: 175, y: 70, z: 200}
+  sizeIncreasePerStage: {x: 15, y: 10, z: 25}
+  sizeVariation: {x: 0.1, y: 0.1, z: 0.05}
+  fogPower: 1
+  vignetteInsentity: 0.2
   ambiantLightIntensity: 0.7
+  waterLevel: 30
   wallGenerator:
     frequency: 0
     wallSurface: 0.5
@@ -35,6 +36,7 @@ MonoBehaviour:
     yDerivativeBonus: {fileID: 11400000, guid: 696b8aafd9874204fb01259d2943f254, type: 2}
     yDerivativefloorDensityBonus: {fileID: 11400000, guid: 2e5b4406ca1820b4a947fae12046e37a,
       type: 2}
+    spaghettiNoise: {fileID: 11400000, guid: b9b498959d94e854f9f7cf7b1e2f210e, type: 2}
     layersDistance: 20
     layersAmplitude: 40
     layersFrequency: 0.02

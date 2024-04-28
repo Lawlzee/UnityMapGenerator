@@ -31,6 +31,7 @@ namespace ProceduralStages
         public float fogPower = 0.75f;
         public float vignetteInsentity = 0.25f;
         public float ambiantLightIntensity;
+        public float waterLevel = 0f;
 
         public abstract TerrainType TerrainType { get; }
 

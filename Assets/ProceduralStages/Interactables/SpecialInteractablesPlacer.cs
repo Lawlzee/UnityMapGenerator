@@ -58,9 +58,8 @@ namespace ProceduralStages
                 }
                 else
                 {
-                    AwuEventBehaviour awuEventBehaviour = MapGenerator.instance.awuEventObject.GetComponent<AwuEventBehaviour>();
-                    awuEventBehaviour.seed = MapGenerator.rng.nextUlong;
-                    awuEventBehaviour.enabled = true;
+                    MapGenerator.instance.awuEvent.seed = MapGenerator.rng.nextUlong;
+                    MapGenerator.instance.awuEvent.enabled = true;
                 }
             }
         }

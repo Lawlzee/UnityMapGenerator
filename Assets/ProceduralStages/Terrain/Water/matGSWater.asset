@@ -17,5 +17,12 @@ MonoBehaviour:
   distortion: 0
   minSaturation: 0
   maxSaturation: 0.4
+  seaFloorSaturation: 0
+  cubeSaturation: 0
   minValue: 0.7
   maxValue: 0.9
+  seaFloorValue: -0.59
+  cubeValue: 0.4
+  lift: 1
+  gamma: 1
+  gain: 1

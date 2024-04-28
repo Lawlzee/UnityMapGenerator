@@ -13,3 +13,16 @@ MonoBehaviour:
   m_Name: matBBWater
   m_EditorClassIdentifier: 
   asset: RoR2/Base/blackbeach/matBBWater.mat
+  reflection: 0.3
+  distortion: 0
+  minSaturation: 0
+  maxSaturation: 1
+  seaFloorSaturation: 0
+  cubeSaturation: 0
+  minValue: 0
+  maxValue: 1
+  seaFloorValue: 0
+  cubeValue: 0
+  lift: 0
+  gamma: 0
+  gain: 0

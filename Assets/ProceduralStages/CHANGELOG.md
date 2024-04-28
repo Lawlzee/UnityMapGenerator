@@ -1,5 +1,8 @@
 ## 1.11
 - **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
+- Increased water level in tunnel caves
+- Added PP in water
+- Added mulitple octaves in tunnel caves
 
 
 ## 1.10

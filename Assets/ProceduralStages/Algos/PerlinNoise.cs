@@ -256,44 +256,70 @@ namespace ProceduralStages
             float vp = 30 * y0 * y0 * (y0 - 1) * (y0 - 1);
             float wp = 30 * z0 * z0 * (z0 - 1) * (z0 - 1);
 
+            float uv = u * v;
+            float uw = u * w;
+            float vw = v * w;
+
+            float upv = up * v;
+            float vpw = vp * w;
+            float vwp = v * wp;
+
+            float uvw = uv * w;
+
+            float k0 = dot100 - dot000;
+            float k1 = dot010 - dot000;
+            float k2 = dot001 - dot000;
+            float k3 = dot110 - dot010 - k0;
+            float k4 = dot101 - dot001 - k0;
+            float k5 = dot011 - dot001 - k1;
+            float k6 = (dot111 - dot011) - (dot101 - dot001) - k3;
+
+            Vector3 g0 = gradiant100 - gradiant000;
+            Vector3 g1 = gradiant010 - gradiant000;
+            Vector3 g2 = gradiant001 - gradiant000;
+            Vector3 g4 = gradiant110 - g1 - gradiant100;
+            Vector3 g5 = gradiant011 - gradiant001 - g1;
+            Vector3 g6 = gradiant101 - g2 - gradiant100;
+            Vector3 g7 = gradiant111 - gradiant011 - gradiant101 + gradiant001 - gradiant110 + gradiant010 + g0;
+
             float nx = gradiant000.x
-               + up * (dot100 - dot000)
-               + u * (gradiant100.x - gradiant000.x)
-               + v * (gradiant010.x - gradiant000.x)
-               + w * (gradiant001.x - gradiant000.x)
-               + up * v * (dot110 - dot010 - dot100 + dot000)
-               + u * v * (gradiant110.x - gradiant010.x - gradiant100.x + gradiant000.x)
-               + u * w * (gradiant101.x - gradiant001.x - gradiant100.x - gradiant000.x)
-               + up * w * (dot101 - dot001 - dot100 + dot000)
-               + v * w * (gradiant011.x - gradiant001.x - gradiant010.x + gradiant000.x)
-               + up * v * w * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
-               + u * v * w * (gradiant111.x - gradiant011.x - gradiant101.x + gradiant001.x - gradiant110.x + gradiant010.x + gradiant100.x - gradiant000.x);
+               + u * g0.x
+               + up * k0
+               + v * g1.x
+               + w * g2.x
+               + upv * k3
+               + uv * g4.x
+               + uw * g6.x
+               + up * w * k4
+               + vw * g5.x
+               + upv * w * k6
+               + uvw * g7.x;
 
             float ny = gradiant000.y
-               + u * (gradiant100.y - gradiant000.y)
-               + vp * (dot010 - dot000)
-               + v * (gradiant010.y - gradiant000.y)
-               + w * (gradiant001.y - gradiant000.y)
-               + u * vp * (dot110 - dot010 - dot100 + dot000)
-               + u * v * (gradiant110.y - gradiant010.y - gradiant100.y + gradiant000.y)
-               + u * w * (gradiant101.y - gradiant001.y - gradiant100.y + gradiant000.y)
-               + vp * w * (dot011 - dot001 - dot010 + dot000)
-               + v * w * (gradiant011.y - gradiant001.y - gradiant010.y + gradiant000.y)
-               + u * vp * w * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
-               + u * v * w * (gradiant111.y - gradiant011.y - gradiant101.y + gradiant001.y - gradiant110.y + gradiant010.y + gradiant100.y - gradiant000.y);
+               + u * g0.y
+               + vp * k1
+               + v * g1.y
+               + w * g2.y
+               + u * vp * k3
+               + uv * g4.y
+               + uw * g6.y
+               + vpw * k5
+               + vw * g5.y
+               + u * vpw * k6
+               + uvw * g7.y;
 
             float nz = gradiant000.z
-               + u * (gradiant100.z - gradiant000.z)
-               + v * (gradiant010.z - gradiant000.z)
-               + wp * (dot001 - dot000)
-               + w * (gradiant001.z - gradiant000.z)
-               + u * v * (gradiant110.z - gradiant010.z - gradiant100.z + gradiant000.z)
-               + u * wp * (dot101 - dot001 - dot100 + dot000)
-               + u * w * (gradiant101.z - gradiant001.z - gradiant100.z + gradiant000.z)
-               + v * wp * (dot011 - dot001 - dot010 + dot000)
-               + v * w * (gradiant011.z - gradiant001.z - gradiant010.z + gradiant000.z)
-               + u * v * wp * (dot111 - dot011 - dot101 + dot001 - dot110 + dot010 + dot100 - dot000)
-               + u * v * w * (gradiant111.z - gradiant011.z - gradiant101.z + gradiant001.z - gradiant110.z + gradiant010.z + gradiant100.z - gradiant000.z);
+               + u * g0.z
+               + v * g1.z
+               + wp * k2
+               + w * g2.z
+               + uv * g4.z
+               + u * wp * k4
+               + uw * g6.z
+               + vwp * k5
+               + vw * g5.z
+               + u * vwp * k6
+               + uvw * g7.z;
 
             return new Vector4(nx, ny, nz, noise);
 

@@ -23,10 +23,27 @@ namespace ProceduralStages
         [Range(0f, 1f)]
         public float maxSaturation = 1f;
 
+        [Range(-1f, 1f)]
+        public float seaFloorSaturation = 0f;
+        [Range(-1f, 1f)]
+        public float cubeSaturation = 0f;
+
         [Range(0f, 1f)]
         public float minValue = 0f;
         [Range(0f, 1f)]
         public float maxValue = 1f;
+
+        [Range(-1f, 1f)]
+        public float seaFloorValue = 0f;
+        [Range(-1f, 1f)]
+        public float cubeValue = 0f;
+
+        [Range(0f, 100f)]
+        public float lift;
+        [Range(0f, 100f)]
+        public float gamma;
+        [Range(0f, 100f)]
+        public float gain;
 
         private Material _material;
         public Material material => _material

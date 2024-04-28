@@ -49,7 +49,7 @@ namespace ProceduralStages
             //float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
             //LogStats("map3dNoiser");
             //
-            float[,,] smoothMap3d = cave3d.SmoothMap(maps.map);
+            float[,,] smoothMap3d = maps.map;//cave3d.SmoothMap(maps.map);
             LogStats("cave3d");
 
             var unOptimisedMesh = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);

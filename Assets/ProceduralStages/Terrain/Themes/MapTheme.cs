@@ -27,6 +27,7 @@ namespace ProceduralStages
             RampFog fog, 
             Vignette vignette,
             MeshRenderer waterMeshRenderer,
+            ColorGrading waterColorGrading,
             MeshRenderer seaFloorMeshRenderer)
         {
             ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
@@ -48,17 +49,38 @@ namespace ProceduralStages
                 skySaturation = 0.2f;
             }
 
-            var waterColor = Color.HSVToRGB(
-                skyHue,
-                Mathf.Clamp(skySaturation, water.minSaturation, water.maxSaturation),
-                Mathf.Clamp(skyValue, water.minValue, water.maxValue));
+            float depthColorSaturation = Mathf.Clamp(skySaturation, water.minSaturation, water.maxSaturation);
+            float depthColorValue = Mathf.Clamp(skyValue, water.minValue, water.maxValue);
 
-            waterMeshRenderer.material.SetColor("_CubeColor", waterColor);
-            waterMeshRenderer.material.SetColor("_DepthColor", waterColor);
+            var depthColor = Color.HSVToRGB(skyHue, depthColorSaturation, depthColorValue);
+
+            var cubeColor = Color.HSVToRGB(
+                skyHue,
+                Mathf.Clamp01(water.cubeSaturation + depthColorSaturation),
+                Mathf.Clamp01(water.cubeValue + depthColorValue));
+
+            waterMeshRenderer.material.SetColor("_DepthColor", depthColor);
+            waterMeshRenderer.material.SetColor("_CubeColor", cubeColor);
             waterMeshRenderer.material.SetFloat("_Reflection", water.reflection);
             waterMeshRenderer.material.SetFloat("_Distortion", water.distortion);
 
-            seaFloorMeshRenderer.material.color = waterColor;
+            var seaFloorColor = Color.HSVToRGB(
+                skyHue,
+                Mathf.Clamp01(water.seaFloorSaturation + depthColorSaturation),
+                Mathf.Clamp01(water.seaFloorValue + depthColorValue));
+
+            seaFloorMeshRenderer.material.color = seaFloorColor;
+
+            Vector4 waterVector = depthColor;
+            Vector3 waterVector3 = waterVector;
+
+            waterColorGrading.lift.Override(waterVector3 * water.lift);
+            waterColorGrading.gamma.Override(waterVector3 * water.gamma);
+            waterColorGrading.gain.Override(waterVector3 * water.gain);
+
+            //waterColorGrading.mixerRedOutRedIn.Override(100 + waterColor.r * 100);
+            //waterColorGrading.mixerGreenOutGreenIn.Override(100 + waterColor.g * 100);
+            //waterColorGrading.mixerBlueOutBlueIn.Override(100 + waterColor.b * 100);
 
             //seaFloorMeshRenderer.material.mainTexture = seaFloors[MapGenerator.rng.RangeInt(0, seaFloors.Length)].texture;
 

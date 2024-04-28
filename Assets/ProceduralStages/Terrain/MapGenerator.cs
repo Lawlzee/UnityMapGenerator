@@ -44,15 +44,17 @@ namespace ProceduralStages
 
         public PropsPlacer propsPlacer = new PropsPlacer();
 
-        public GameObject postProcessingObject;
-        public GameObject waterObject;
-        public GameObject seaFloorObject;
+        public PostProcessVolume postProcessVolume;
+
+        public MeshRenderer waterRenderer;
+        public MeshRenderer seaFloorRenderer;
+        public GameObject waterPostProcessingObject;
 
         public GameObject sceneInfoObject;
         public GameObject directorObject;
 
-        public GameObject oobZoneObject;
-        public GameObject awuEventObject;
+        public BoxCollider oobZone;
+        public AwuEventBehaviour awuEvent;
 
         public Graphs graphs;
 
@@ -138,12 +140,19 @@ namespace ProceduralStages
             TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.TerrainType == terrainType);
             RunConfig.instance.selectedTerrainType = TerrainType.Random;
 
+            PostProcessVolume waterPPV = waterPostProcessingObject.GetComponent<PostProcessVolume>();
+            ColorGrading waterColorGrading = waterPPV.profile.GetSetting<ColorGrading>();
+            BoxCollider waterPPCollider = waterPostProcessingObject.GetComponent<BoxCollider>();
+
+            waterRenderer.gameObject.transform.position = new Vector3(0, terrainGenerator.waterLevel, 0);
+            waterPPCollider.center = new Vector3(0, terrainGenerator.waterLevel / 2, 0);
+            waterPPCollider.size = new Vector3(10000, terrainGenerator.waterLevel, 10000);
+
             stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
             stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
 
-            BoxCollider oobZone = oobZoneObject.GetComponent<BoxCollider>();
             var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
 
             oobZone.size = scaledSize;
@@ -160,13 +169,11 @@ namespace ProceduralStages
             LogStats("MeshFilter");
 
             Material terrainMaterial = GetComponent<MeshRenderer>().material;
-            var profile = postProcessingObject.GetComponent<PostProcessVolume>().profile;
+            var profile = postProcessVolume.profile;
             RampFog fog = profile.GetSetting<RampFog>();
             Vignette vignette = profile.GetSetting<Vignette>();
-            MeshRenderer waterRenderer = waterObject.GetComponent<MeshRenderer>();
-            MeshRenderer seaFloorRenderer = seaFloorObject.GetComponent<MeshRenderer>();
 
-            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette, waterRenderer, seaFloorRenderer);
+            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette, waterRenderer, waterColorGrading, seaFloorRenderer);
 
             GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sdStone.asset").WaitForCompletion();
             LogStats("surfaceDef");

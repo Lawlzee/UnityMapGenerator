@@ -18,6 +18,7 @@ MonoBehaviour:
   fogPower: 1.75
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
+  waterLevel: 8.5
   wallGenerator:
     frequency: 38
     wallSurface: 0.45

@@ -20,6 +20,7 @@ namespace ProceduralStages
         public ThreadSafeCurve bonusNoiseByEllipsisDistance;
         public ThreadSafeCurve yDerivativeBonus;
         public ThreadSafeCurve yDerivativefloorDensityBonus;
+        public FBM spaghettiNoise;
 
         public float layersDistance;
         public float layersAmplitude;
@@ -108,16 +109,16 @@ namespace ProceduralStages
                         float ellipsisDistance = Mathf.Sqrt((dx * dx) / (center.x * center.x) + (dy * dy) / (center.y * center.y) + (dz * dz) / (center.z * center.z));
                         float bonusDistanceNoise = bonusNoiseByEllipsisDistance.Evaluate(ellipsisDistance);
 
-                        Vector4 noise1 = PerlinNoise.GetWithDerivative(new Vector3(x + seed1X, y * verticalScale1 + seed1Y, z + seed1Z), frequency1);
-                        Vector4 noise2 = PerlinNoise.GetWithDerivative(new Vector3(x + seed2X, y * verticalScale2 + seed2Y, z + seed2Z), frequency2);
-                        Vector4 fullNoise = noise1 + noise2;
+                        (float noise1, Vector3 derivative1) = spaghettiNoise.EvaluateWithDerivative(x + seed1X, y * verticalScale1 + seed1Y, z + seed1Z);
+                        (float noise2, Vector3 derivative2) = spaghettiNoise.EvaluateWithDerivative(x + seed2X, y * verticalScale2 + seed2Y, z + seed2Z);
+                        Vector3 fullNoise = derivative1 + derivative2;
                         //float layersNoise = layerCurve.Evaluate(minDistance * inverseMaxDistance);
 
                         //float noiseAngle = (2 * Mathf.Atan2(fullNoise.y, Mathf.Sqrt(fullNoise.x * fullNoise.x + fullNoise.z * fullNoise.z))) / Mathf.PI;
                         //[-1, 1]
                         float noiseAngle = (2 * Mathf.Atan2(fullNoise.y, 1)) / Mathf.PI;
 
-                        float noise = 0.5f * (noise1.w * noise1.w + noise2.w * noise2.w);
+                        float noise = 0.5f * (noise1 * noise1 + noise2 * noise2);
 
                         float finalNoise = Mathf.Clamp01(curve.Evaluate(noise) + bonusDistanceNoise + yDerivativeBonus.Evaluate(noiseAngle));
                         map[x, y, z] = finalNoise;
