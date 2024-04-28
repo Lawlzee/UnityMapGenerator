@@ -11,7 +11,8 @@ namespace ProceduralStages
         Random,
         OpenCaves,
         Islands,
-        TunnelCaves
+        TunnelCaves,
+        Mines
     }
 
     public static class TerrainTypeExtensions
@@ -26,6 +27,8 @@ namespace ProceduralStages
                     return "Tunnel caves";
                 case TerrainType.Islands:
                     return "Islands";
+                case TerrainType.Mines:
+                    return "Mines";
                 default:
                     return "?";
             }
