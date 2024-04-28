@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HeightMapNoise
   m_EditorClassIdentifier: 
   amplitude: 1
-  frequency: 0.05
-  octaves: 4
+  frequency: 0.012
+  octaves: 1
   persistence: 0.5
-  lacunarity: 2
+  lacunarity: 1.7

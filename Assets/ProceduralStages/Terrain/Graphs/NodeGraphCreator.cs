@@ -237,9 +237,10 @@ namespace ProceduralStages
                 .ToArray();
 
             var nodeByPosition = allNodes
+                .GroupBy(x => x.position)
                 .ToDictionary(
-                    x => x.position,
-                    x => x.linkListIndex.index);
+                    x => x.Key,
+                    x => x.First().linkListIndex.index);
 
             List<NodeGraph.Link> linkList = new List<NodeGraph.Link>();
 

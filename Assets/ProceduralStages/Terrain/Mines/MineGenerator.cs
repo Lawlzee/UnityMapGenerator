@@ -16,20 +16,26 @@ namespace ProceduralStages
 
         public FBM heightMapNoise;
         public ThreadSafeCurve heightCurve;
-        public ThreadSafeCurve benchesHeightCurve;
+        public BenchesHeightCurve[] benchesHeightCurves;
         public ThreadSafeCurve benchesWidthByHeightCurve;
         public float floorBlendFactor = 0.1f;
+
+        public ThreadSafeCurve densityCurve;
 
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
+            Vector3Int size = MapGenerator.instance.stageSize;
 
-            float[,] map2d = GenerateHeightMap(MapGenerator.instance.stageSize);
+            float[,] map2d = GenerateHeightMap(size);
             LogStats("GenerateHeightMap");
 
 
-            float[,,] map3d = To3DMap(map2d, MapGenerator.instance.stageSize);
-            LogStats("wallGenerator");
+            float[,,] map3d = To3DMap(map2d, size);
+            LogStats("To3DMap");
+
+            float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
+            LogStats("floorDensityMap");
 
             var unOptimisedMesh = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
@@ -38,6 +44,7 @@ namespace ProceduralStages
             simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
             var optimisedMesh = simplifier.ToMesh();
             LogStats("MeshSimplifier");
+
 
             return new Terrain
             {
@@ -48,7 +55,7 @@ namespace ProceduralStages
                     triangles = optimisedMesh.triangles,
                     vertices = optimisedMesh.vertices
                 },
-                floorlessDensityMap = map3d,
+                floorlessDensityMap = floorDensityMap,
                 densityMap = map3d,
                 maxGroundheight = float.MaxValue
             };
@@ -67,48 +74,49 @@ namespace ProceduralStages
 
             float[,] map = new float[size.x, size.z];
 
-            float min = float.MaxValue;
-            float max = float.MinValue;
-
             Parallel.For(0, size.x, x =>
             {
-                
-
                 for (int z = 0; z < size.z; z++)
                 {
                     (float noise, Vector2 derivative) = heightMapNoise.EvaluateWithDerivative(x + seedX, z + seedZ);
-                    float noise01 = Mathf.Clamp01(heightCurve.Evaluate((noise + 1) * 0.5f)); ;
-                    
+                    float noise01 = heightCurve.Evaluate((noise + 1) * 0.5f);
+
                     float slopeAngle = Mathf.Atan2(derivative.y, derivative.x);
                     float slopeAngle01 = (slopeAngle + Mathf.PI) / (2 * Mathf.PI);
-
-                    min = Mathf.Min(min, slopeAngle01);
-                    max = Mathf.Max(max, slopeAngle01);
-
-                    //map[x, z] = Mathf.Clamp01(heightCurve.Evaluate(slopeAngle01));
-                    //continue;
 
                     float benchWidth = benchesWidthByHeightCurve.Evaluate(noise01);
 
                     float benchCrest1 = 0;
                     float benchCrest2 = 1;
-                    for (float benchPos = slopeAngle01; benchPos < benchesHeightCurve._max; benchPos++)
+                    for (int i = 0; i < benchesHeightCurves.Length; i++)
                     {
-                        float benchCrest = benchesHeightCurve.Evaluate(benchPos);
+                        var benchesHeightCurve = benchesHeightCurves[i].curve;
+                        float benchPos = benchesHeightCurves[i].direction == BenchDirection.AntiClockWise
+                            ? slopeAngle01
+                            : 1 - slopeAngle01;
 
-                        if (benchCrest <= noise01)
+                        for (; benchPos < benchesHeightCurve._max; benchPos++)
                         {
-                            benchCrest1 = Mathf.Max(benchCrest1, benchCrest);
-                        }
-                        else
-                        {
-                            benchCrest2 = Mathf.Min(benchCrest2, benchCrest);
+                            float benchCrest = benchesHeightCurve.Evaluate(benchPos);
+
+                            if (benchCrest <= noise01)
+                            {
+                                benchCrest1 = Mathf.Max(benchCrest1, benchCrest);
+                            }
+                            else
+                            {
+                                benchCrest2 = Mathf.Min(benchCrest2, benchCrest);
+                            }
                         }
                     }
 
                     float benchToe1 = benchCrest1 + benchWidth;
 
                     float height;
+                    if (benchCrest1 == 0 || benchCrest2 == 1)
+                    {
+                        height = noise01;
+                    }
                     if (noise01 < benchToe1)
                     {
                         height = benchCrest1;
@@ -129,13 +137,9 @@ namespace ProceduralStages
                         height = Mathf.Lerp(benchCrest1, benchCrest2, t);
                     }
 
-                    map[x, z] = Mathf.Clamp01(height);
+                    map[x, z] = height;
                 }
             });
-
-            Log.Debug("min: " + min);
-            Log.Debug("max: " + max);
-
             return map;
         }
 
@@ -162,6 +166,43 @@ namespace ProceduralStages
             });
 
             return map;
+        }
+
+        private float[,,] ComputeFloorDensityMap(float[,,] map3d, Vector3Int size)
+        {
+            float[,,] densityMap = new float[size.x, size.y, size.z];
+
+            Parallel.For(0, size.y, y =>
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        if (x == 0 || z == 0 || x == size.x - 1 || z == size.z - 1)
+                        {
+                            densityMap[x, y, z] = 1;
+                            continue;
+                        }
+
+                        float min = float.MaxValue;
+                        float max = float.MinValue;
+
+                        for (int dx = -1; dx <= 1; dx++)
+                        {
+                            for (int dz = -1; dz <= 1; dz++)
+                            {
+                                float value = map3d[x + dx, y, z + dz];
+                                min = Mathf.Min(value, min);
+                                max = Mathf.Max(value, max);
+                            }
+                        }
+
+                        densityMap[x, y, z] = densityCurve.Evaluate(max - min);
+                    }
+                }
+            });
+
+            return densityMap;
         }
     }
 }

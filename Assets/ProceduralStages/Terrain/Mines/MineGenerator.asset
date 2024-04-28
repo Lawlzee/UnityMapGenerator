@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773746421f88cdb47a7d7fb0f8e2a5d3, type: 3}
   m_Name: MineGenerator
   m_EditorClassIdentifier: 
-  size: {x: 150, y: 80, z: 175}
+  size: {x: 400, y: 150, z: 150}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   fogPower: 0.75
   vignetteInsentity: 0.25
-  ambiantLightIntensity: 0.7
-  waterLevel: 10
+  ambiantLightIntensity: 0.8
+  waterLevel: 0.1
   heightMapNoise: {fileID: 11400000, guid: c9ab672809ccb204796da9bbda9820bb, type: 2}
   heightCurve: {fileID: 11400000, guid: 000b1691e59c2b24a8c01d6d147b9361, type: 2}
-  benchesHeightCurve: {fileID: 11400000, guid: c2a9fd4035a57c743a8493a0df3b7d84, type: 2}
+  benchesHeightCurves:
+  - curve: {fileID: 11400000, guid: c2a9fd4035a57c743a8493a0df3b7d84, type: 2}
+    direction: 0
   benchesWidthByHeightCurve: {fileID: 11400000, guid: abd0179940bbd494eb3c605e6084bc4c,
     type: 2}
   floorBlendFactor: 0.015
+  densityCurve: {fileID: 11400000, guid: fc3f16a3a9f35a14d818269aca0befb1, type: 2}
