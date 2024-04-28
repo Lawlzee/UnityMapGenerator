@@ -22,17 +22,24 @@ namespace ProceduralStages
 
         public ThreadSafeCurve densityCurve;
 
+        public ThreadSafeCurve caveCurve;
+        public ThreadSafeCurve caveYDerivativeBonus;
+        public FBM spaghettiNoise;
+
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             Vector3Int size = MapGenerator.instance.stageSize;
 
-            float[,] map2d = GenerateHeightMap(size);
+            (float[,] map2d, float min, float max) = GenerateHeightMap(size);
             LogStats("GenerateHeightMap");
 
 
-            float[,,] map3d = To3DMap(map2d, size);
+            float[,,] map3d = To3DMap(map2d, size, min, max);
             LogStats("To3DMap");
+
+            CarveCaves(map3d, size);
+            LogStats("CarveCaves");
 
             float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
             LogStats("floorDensityMap");
@@ -67,15 +74,20 @@ namespace ProceduralStages
             }
         }
 
-        private float[,] GenerateHeightMap(Vector3Int size)
+        private (float[,] map, float min, float max) GenerateHeightMap(Vector3Int size)
         {
             int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             float[,] map = new float[size.x, size.z];
+            float[] mins = new float[size.x];
+            float[] maxs = new float[size.x];
 
             Parallel.For(0, size.x, x =>
             {
+                float min = float.MaxValue;
+                float max = float.MinValue;
+
                 for (int z = 0; z < size.z; z++)
                 {
                     (float noise, Vector2 derivative) = heightMapNoise.EvaluateWithDerivative(x + seedX, z + seedZ);
@@ -137,15 +149,22 @@ namespace ProceduralStages
                         height = Mathf.Lerp(benchCrest1, benchCrest2, t);
                     }
 
+                    min = Mathf.Min(height, min);
+                    max = Mathf.Max(height, max);
+
                     map[x, z] = height;
                 }
+
+                mins[x] = min;
+                maxs[x] = max;
             });
-            return map;
+            return (map, mins.Min(), maxs.Max());
         }
 
-        private float[,,] To3DMap(float[,] map2d, Vector3Int size)
+        private float[,,] To3DMap(float[,] map2d, Vector3Int size, float min, float max)
         {
             float[,,] map = new float[size.x, size.y, size.z];
+            float coefficient = 1 / (max - min);
 
             Parallel.For(0, size.x, x =>
             {
@@ -153,7 +172,7 @@ namespace ProceduralStages
                 {
                     for (int y = 0; y < size.y; y++)
                     {
-                        float floorTickness = 1 + map2d[x, z] * size.y;
+                        float floorTickness = 1 + (map2d[x, z] - min) * coefficient * size.y;
                         float noise = Mathf.Clamp01((floorTickness - y) * floorBlendFactor + 0.5f);
                         if (noise == 0f)
                         {
@@ -166,6 +185,39 @@ namespace ProceduralStages
             });
 
             return map;
+        }
+
+        private void CarveCaves(float[,,] map3d, Vector3Int size)
+        {
+            int seed1X = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed1Y = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed1Z = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            int seed2X = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed2Y = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed2Z = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            Parallel.For(0, size.y, y =>
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        (float noise1, Vector3 derivative1) = spaghettiNoise.EvaluateWithDerivative(x + seed1X, y + seed1Y, z + seed1Z);
+                        (float noise2, Vector3 derivative2) = spaghettiNoise.EvaluateWithDerivative(x + seed2X, y + seed2Y, z + seed2Z);
+                        Vector3 fullNoise = derivative1 + derivative2;
+
+                        float noiseAngle = (2 * Mathf.Atan2(fullNoise.y, 1)) / Mathf.PI;
+
+                        float noise = 0.5f * (noise1 * noise1 + noise2 * noise2);
+
+                        float cavelNoise = Mathf.Clamp01(caveCurve.Evaluate(noise) + caveYDerivativeBonus.Evaluate(noiseAngle));
+
+
+                        map3d[x, y, z] = Math.Min(cavelNoise, map3d[x, y, z]);
+                    }
+                }
+            });
         }
 
         private float[,,] ComputeFloorDensityMap(float[,,] map3d, Vector3Int size)
@@ -184,6 +236,8 @@ namespace ProceduralStages
                             continue;
                         }
 
+                        float baseDensity = map3d[x, y, z];
+
                         float min = float.MaxValue;
                         float max = float.MinValue;
 
@@ -192,12 +246,15 @@ namespace ProceduralStages
                             for (int dz = -1; dz <= 1; dz++)
                             {
                                 float value = map3d[x + dx, y, z + dz];
-                                min = Mathf.Min(value, min);
-                                max = Mathf.Max(value, max);
+                                float delta = value - baseDensity;
+
+                                min = Mathf.Min(delta, min);
+                                max = Mathf.Max(delta, max);
                             }
                         }
 
-                        densityMap[x, y, z] = densityCurve.Evaluate(max - min);
+                        float density = -min > max ? min : max;
+                        densityMap[x, y, z] = densityCurve.Evaluate(density);
                     }
                 }
             });

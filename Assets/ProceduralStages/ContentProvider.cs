@@ -77,6 +77,8 @@ namespace ProceduralStages
             AddSeerMaterial(texOpenCavePreview, TerrainType.OpenCaves);
             AddSeerMaterial(texTunnelCavesPreview, TerrainType.TunnelCaves);
             AddSeerMaterial(texIslandPreview, TerrainType.Islands);
+            //todo
+            AddSeerMaterial(texIslandPreview, TerrainType.Mines);
 
             SceneDef[] sceneDefs = new SceneDef[6];
 
