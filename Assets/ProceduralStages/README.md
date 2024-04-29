@@ -6,7 +6,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 ## Features
 
-- **Diverse Terrain Types**: Explore islands, open caves, and tunnel caves, each dynamically generated for a fresh adventure.
+- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons and tunnel caves, each dynamically generated for a fresh adventure.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
 - **Integration with Simulacrum:** Seamlessly compatible with Simulacrum.
@@ -19,25 +19,31 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 - **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 - **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
 
-## Terrain types
+## Terrain Types
 
-## Island stages
+## Island Stages
 
 ![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image5.png)
 ![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7.1/Image5.png)
 ![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image3.png)
 
-## Open caves stages
+## Open Caves Stages
 
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.8/Image4.png)
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
 
-## Tunnel caves stages
+## Tunnel Caves Stages
 
 ![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image5.png)
 ![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image7.png)
 ![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image9.png)
+
+## Twisted Canyons Stages
+
+![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image1.png)
+![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image7.png)
+![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image3.png)
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 

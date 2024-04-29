@@ -1,9 +1,9 @@
 ## 1.11
-- **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
-- Increased water level in tunnel caves
-- Added PP in water
-- Added mulitple octaves in tunnel caves
-
+1. **Twisted Canyons Stages**: Introducing a new stage type featuring twisted canyons.
+2. **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
+3. **Increased Water Level**: In the tunnel caves stages, the water level has been raised.
+4. **Post Processing in Water**: Enhancements have been made to the visual effects within the water.
+5. **Improved Cave Shapes**: The shapes of caves in the tunnel caves stages have been improved.
 
 ## 1.10
 1. **Configurable Terrain Spawn Rates**: Spawn rates for different terrain types can now be customized for each stage (1 to 5) of the game. The lunar seers will also utilize these spawn rates to determine the destinations.
