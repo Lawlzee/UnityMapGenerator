@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpaghettiNoise
   m_EditorClassIdentifier: 
   amplitude: 1
-  frequency: 0.01
+  frequency: 0.02
   octaves: 2
   persistence: 0.5
   lacunarity: 1.4

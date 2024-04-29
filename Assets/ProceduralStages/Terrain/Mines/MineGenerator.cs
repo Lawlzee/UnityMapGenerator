@@ -33,13 +33,15 @@ namespace ProceduralStages
 
             (float[,] map2d, float min, float max) = GenerateHeightMap(size);
             LogStats("GenerateHeightMap");
-
-
+            
+            
             float[,,] map3d = To3DMap(map2d, size, min, max);
             LogStats("To3DMap");
+            
+            //CarveCaves(map3d, size);
+            //LogStats("CarveCaves");
 
-            CarveCaves(map3d, size);
-            LogStats("CarveCaves");
+            //var map3d = CarveCaves2(size);
 
             float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
             LogStats("floorDensityMap");
@@ -218,6 +220,43 @@ namespace ProceduralStages
                     }
                 }
             });
+        }
+
+        private float[,,] CarveCaves2(Vector3Int size)
+        {
+            float[,,] map = new float[size.x, size.y, size.z];
+
+            int seed1X = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed1Y = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed1Z = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            int seed2X = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed2Y = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seed2Z = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            Parallel.For(0, size.y, y =>
+            {
+                for (int x = 0; x < size.x; x++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        (float noise1, Vector3 derivative1) = spaghettiNoise.EvaluateWithDerivative(x + seed1X, y + seed1Y, z + seed1Z);
+                        (float noise2, Vector3 derivative2) = spaghettiNoise.EvaluateWithDerivative(x + seed2X, y + seed2Y, z + seed2Z);
+                        Vector3 fullNoise = derivative1 + derivative2;
+
+                        float noiseAngle = (2 * Mathf.Atan2(fullNoise.y, 1)) / Mathf.PI;
+
+                        float noise = 0.5f * (noise1 * noise1 + noise2 * noise2);
+
+                        float cavelNoise = Mathf.Clamp01(caveCurve.Evaluate(noise) + caveYDerivativeBonus.Evaluate(noiseAngle));
+
+
+                        map[x, y, z] = cavelNoise;
+                    }
+                }
+            });
+
+            return map;
         }
 
         private float[,,] ComputeFloorDensityMap(float[,,] map3d, Vector3Int size)

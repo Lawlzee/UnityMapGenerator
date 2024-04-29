@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773746421f88cdb47a7d7fb0f8e2a5d3, type: 3}
   m_Name: MineGenerator
   m_EditorClassIdentifier: 
-  size: {x: 275, y: 175, z: 150}
+  size: {x: 275, y: 150, z: 150}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
   fogPower: 1.75
