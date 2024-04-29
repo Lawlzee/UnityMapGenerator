@@ -110,6 +110,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 
 This section includes the algorithms utilized for implementing procedural terrain generation. If you are not a programmer, feel free to skip this section.
 
+- [Spaghetti caves, Fractional Brownian Motion, domain mapping and more](https://www.youtube.com/watch?v=ob3VwY4JyzE)
 - [2D / 3D Cellular Automata](https://www.youtube.com/watch?v=v7yyZZjF1z4&list=PLFt_AvWsXl0eZgMK_DT5_biRkWXftAOf9)
 - [2D / 3D Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise)
 - [Marching Cubes](https://www.youtube.com/watch?v=M3iI2l0ltbE)
