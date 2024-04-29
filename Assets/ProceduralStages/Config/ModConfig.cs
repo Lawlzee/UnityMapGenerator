@@ -23,29 +23,29 @@ namespace ProceduralStages
         private static Dictionary<(TerrainType, int), float> _defaultTerrainTypesPercents = new Dictionary<(TerrainType, int), float>
         {
             [(TerrainType.OpenCaves, 0)] = 0.4f,
-            [(TerrainType.TunnelCaves, 0)] = 0.4f,
+            [(TerrainType.TunnelCaves, 0)] = 0.2f,
             [(TerrainType.Islands, 0)] = 0.2f,
-            [(TerrainType.Mines, 0)] = 0f,
+            [(TerrainType.Mines, 0)] = 0.2f,
 
-            [(TerrainType.OpenCaves, 1)] = 0.4f,
+            [(TerrainType.OpenCaves, 1)] = 0.2f,
             [(TerrainType.TunnelCaves, 1)] = 0.2f,
             [(TerrainType.Islands, 1)] = 0.4f,
-            [(TerrainType.Mines, 1)] = 0f,
+            [(TerrainType.Mines, 1)] = 0.2f,
 
-            [(TerrainType.OpenCaves, 2)] = 0.3f,
-            [(TerrainType.TunnelCaves, 2)] = 0.6f,
+            [(TerrainType.OpenCaves, 2)] = 0.1f,
+            [(TerrainType.TunnelCaves, 2)] = 0.4f,
             [(TerrainType.Islands, 2)] = 0.1f,
-            [(TerrainType.Mines, 2)] = 0f,
+            [(TerrainType.Mines, 2)] = 0.4f,
 
             [(TerrainType.OpenCaves, 3)] = 0.20f,
-            [(TerrainType.TunnelCaves, 3)] = 0.1f,
-            [(TerrainType.Islands, 3)] = 0.7f,
-            [(TerrainType.Mines, 3)] = 0f,
+            [(TerrainType.TunnelCaves, 3)] = 0.4f,
+            [(TerrainType.Islands, 3)] = 0.2f,
+            [(TerrainType.Mines, 3)] = 0.2f,
 
             [(TerrainType.OpenCaves, 4)] = 0.20f,
-            [(TerrainType.TunnelCaves, 4)] = 0.40f,
-            [(TerrainType.Islands, 4)] = 0.40f,
-            [(TerrainType.Mines, 4)] = 0f,
+            [(TerrainType.TunnelCaves, 4)] = 0.2f,
+            [(TerrainType.Islands, 4)] = 0.2f,
+            [(TerrainType.Mines, 4)] = 0.4f,
         };
 
         public static ConfigEntry<string> ConfigVersion;
@@ -58,6 +58,7 @@ namespace ProceduralStages
         public static void Init(ConfigFile config)
         {
             ConfigVersion = config.Bind("Configuration", "Last version played", Main.PluginVersion, "Do not touch");
+            var lastVersion = SemanticVersion.Parse(ConfigVersion.Value);
             //Upgrade config here
             ConfigVersion.Value = Main.PluginVersion;
 
@@ -79,7 +80,11 @@ namespace ProceduralStages
 
                         string description = $"Specifies the percentage of maps that will be generated with the \"{terrainType.GetName()}\" terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
                         var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, description);
-                        //terrainConfig.Value = defaultPercent;
+                        if (lastVersion < SemanticVersion.Parse("1.10.0"))
+                        {
+                            terrainConfig.Value = defaultPercent;
+                        }
+                        
                         ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
 
                         TerrainTypesPercents.Add(new TerrainTypePercentConfig

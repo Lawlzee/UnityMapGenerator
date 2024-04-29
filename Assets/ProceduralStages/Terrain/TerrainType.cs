@@ -22,13 +22,13 @@ namespace ProceduralStages
             switch (terrainType)
             {
                 case TerrainType.OpenCaves:
-                    return "Open caves";
+                    return "Open Caves";
                 case TerrainType.TunnelCaves:
-                    return "Tunnel caves";
+                    return "Tunnel Caves";
                 case TerrainType.Islands:
                     return "Islands";
                 case TerrainType.Mines:
-                    return "Mines";
+                    return "Twisted Canyons";
                 default:
                     return "?";
             }

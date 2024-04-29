@@ -61,13 +61,13 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 
 Here are the default spawn rates for all terrain types:
 
-| Stage   | Open Caves | Tunnel Caves | Islands |
-|---------|------------|--------------|---------|
-| Stage 1 | 40%        | 40%          | 20%     |
-| Stage 2 | 40%        | 20%          | 40%     |
-| Stage 3 | 30%        | 60%          | 10%     |
-| Stage 4 | 20%        | 10%          | 70%     |
-| Stage 5 | 20%        | 40%          | 40%     |
+| Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons |
+|---------|------------|--------------|---------|-----------------|
+| Stage 1 | 40%        | 20%          | 20%     | 20%             |
+| Stage 2 | 40%        | 20%          | 40%     | 20%             |                 
+| Stage 3 | 10%        | 40%          | 10%     | 40%             |
+| Stage 4 | 20%        | 40%          | 20%     | 20%             |
+| Stage 5 | 20%        | 20%          | 20%     | 40%             |
 
 ## Report an issue
 
