@@ -17,6 +17,7 @@ namespace ProceduralStages
         public float _min;
         public float _max;
         public float _inverseRange;
+        public float _step;
 
         private void Awake()
         {
@@ -39,11 +40,11 @@ namespace ProceduralStages
                 ? 0
                 : 1 / range;
 
-            float step = range / (sampleCount - 1);
+            _step = range / (sampleCount - 1);
 
             for (int i = 0; i < sampleCount; i++)
             {
-                float time = step * i + _min;
+                float time = _step * i + _min;
                 _samples[i] = curve.Evaluate(time);
             }
         }
@@ -57,6 +58,16 @@ namespace ProceduralStages
             int ceilIndex = HGMath.Clamp(Mathf.CeilToInt(index), 0, sampleCount - 1);
 
             return Mathf.LerpUnclamped(_samples[floorIndex], _samples[ceilIndex], index - floorIndex);
+        }
+
+        public float Derivative(float time)
+        {
+            float clampedTime = Mathf.Clamp(time, _min, _max);
+            float index = (clampedTime - _min) * _inverseRange * sampleCount;
+            int floorIndex = HGMath.Clamp(Mathf.FloorToInt(index), 0, sampleCount - 1);
+            int ceilIndex = HGMath.Clamp(Mathf.CeilToInt(index), 0, sampleCount - 1);
+
+            return (_samples[ceilIndex] - _samples[floorIndex]) / _step;
         }
     }
 }

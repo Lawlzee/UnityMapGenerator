@@ -87,6 +87,11 @@ namespace ProceduralStages
 
                 for (int i = 0; i < prop.count; i++)
                 {
+                    if (graph.Count == 0)
+                    {
+                        continue;
+                    }
+
                     int attempt = 0;
                     int index;
                     do

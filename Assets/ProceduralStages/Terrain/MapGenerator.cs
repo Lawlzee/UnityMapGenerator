@@ -153,12 +153,11 @@ namespace ProceduralStages
             stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
 
-            var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
+            Terrain terrain = terrainGenerator.Generate();
 
+            var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
             oobZone.size = scaledSize;
             oobZone.center = scaledSize / 2;
-
-            Terrain terrain = terrainGenerator.Generate();
 
             MapTheme theme = themes[rng.RangeInt(0, themes.Length)];
 

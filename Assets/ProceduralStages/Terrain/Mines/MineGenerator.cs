@@ -14,10 +14,19 @@ namespace ProceduralStages
     {
         public override TerrainType TerrainType => TerrainType.Mines;
 
+        public int seedToSearch;
+        public float minPlayableArea;
+        public float maxPlayableArea;
+        [Range(-1f, 1f)]
+        public float wallNoiseLevel;
+        public Vector2Int outerWallBuffer;
+
         public FBM heightMapNoise;
         public ThreadSafeCurve heightCurve;
         public BenchesHeightCurve[] benchesHeightCurves;
         public ThreadSafeCurve benchesWidthByHeightCurve;
+        public ThreadSafeCurve bonusNoiseByEllipsisDistance;
+
         public float floorBlendFactor = 0.1f;
 
         public ThreadSafeCurve densityCurve;
@@ -26,22 +35,36 @@ namespace ProceduralStages
         public ThreadSafeCurve caveYDerivativeBonus;
         public FBM spaghettiNoise;
 
+        public FBM wallCurvingNoise;
+        [Range(0f, 1f)]
+        public float wallCurvingMinNoise;
+        public float wallCurvingVecticalScale;
+
+        public CellularAutomata3d smoother;
+
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Vector3Int size = MapGenerator.instance.stageSize;
 
-            (float[,] map2d, float min, float max) = GenerateHeightMap(size);
+            (Vector2Int seed, Vector3Int size) = FindSeed(MapGenerator.instance.stageSize);
+            LogStats("FindSeed");
+            MapGenerator.instance.stageSize = size;
+
+            (float[,] map2d, float min, float max) = GenerateHeightMap(seed, size);
             LogStats("GenerateHeightMap");
-            
-            
+
+
             float[,,] map3d = To3DMap(map2d, size, min, max);
             LogStats("To3DMap");
-            
+
             //CarveCaves(map3d, size);
             //LogStats("CarveCaves");
 
             //var map3d = CarveCaves2(size);
+
+            map3d = smoother.SmoothMap(map3d);
+            LogStats("smoother.SmoothMap");
+
 
             float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
             LogStats("floorDensityMap");
@@ -76,14 +99,145 @@ namespace ProceduralStages
             }
         }
 
-        private (float[,] map, float min, float max) GenerateHeightMap(Vector3Int size)
+        private (Vector2Int seed, Vector3Int size) FindSeed(Vector3Int targetSize)
         {
-            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
-            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            while (true)
+            {
+                int targetArea = (targetSize.x + 2 * outerWallBuffer.x) * (targetSize.y + 2 * outerWallBuffer.y);
+                float minArea = targetArea * minPlayableArea;
+                float maxArea = targetArea * maxPlayableArea;
 
+                Vector2Int[] seeds = new Vector2Int[seedToSearch];
+                Vector2Int[] mapSizes = new Vector2Int[seedToSearch];
+                float[] scores = new float[seedToSearch];
+
+                for (int i = 0; i < seedToSearch; i++)
+                {
+                    seeds[i] = new Vector2Int(
+                        MapGenerator.rng.RangeInt(0, short.MaxValue),
+                        MapGenerator.rng.RangeInt(0, short.MaxValue));
+                }
+
+                Parallel.For(0, seedToSearch, seedIndex =>
+                {
+                    Vector2Int seed = seeds[seedIndex];
+                    int xOffset = 0;
+                    for (; true; xOffset++)
+                    {
+                        float noise = -heightMapNoise.Evaluate(xOffset + seed.x, seed.y);
+                        if (noise < wallNoiseLevel)
+                        {
+                            seed.x += xOffset;
+                            break;
+                        }
+                    }
+
+                    int minX = seed.x;
+                    int maxX = seed.x;
+
+                    int minY = seed.y;
+                    int maxY = seed.y;
+
+                    Queue<Vector2Int> queue = new Queue<Vector2Int>();
+                    queue.Enqueue(seed);
+
+                    HashSet<Vector2Int> positionUsed = new HashSet<Vector2Int>();
+                    positionUsed.Add(seed);
+
+                    while (queue.Count > 0)
+                    {
+                        var position = queue.Dequeue();
+
+                        if (positionUsed.Count > maxArea)
+                        {
+                            break;
+                        }
+
+                        float noise = -heightMapNoise.Evaluate(position);
+                        if (noise >= wallNoiseLevel)
+                        {
+                            continue;
+                        }
+
+                        minX = Mathf.Min(minX, position.x);
+                        maxX = Mathf.Max(maxX, position.x);
+
+                        minY = Mathf.Min(minY, position.y);
+                        maxY = Mathf.Max(maxY, position.y);
+
+                        var p1 = position + Vector2Int.up;
+                        var p2 = position + Vector2Int.down;
+                        var p3 = position + Vector2Int.left;
+                        var p4 = position + Vector2Int.right;
+
+                        if (!positionUsed.Contains(p1))
+                        {
+                            queue.Enqueue(p1);
+                            positionUsed.Add(p1);
+                        }
+
+                        if (!positionUsed.Contains(p2))
+                        {
+                            queue.Enqueue(p2);
+                            positionUsed.Add(p2);
+                        }
+
+                        if (!positionUsed.Contains(p3))
+                        {
+                            queue.Enqueue(p3);
+                            positionUsed.Add(p3);
+                        }
+
+                        if (!positionUsed.Contains(p4))
+                        {
+                            queue.Enqueue(p4);
+                            positionUsed.Add(p4);
+                        }
+                    }
+
+                    if (positionUsed.Count < minArea || queue.Count > 0)
+                    {
+                        scores[seedIndex] = float.MaxValue;
+                        return;
+                    }
+
+                    seeds[seedIndex] = new Vector2Int(minX, minY) - outerWallBuffer;
+                    Vector2Int mapSize = new Vector2Int(maxX - minX, maxY - minY) + 2 * outerWallBuffer;
+                    mapSizes[seedIndex] = mapSize;
+                    scores[seedIndex] = 1 - (positionUsed.Count / (float)(mapSize.x * mapSize.y));
+                });
+
+                var bestSeed = Enumerable.Range(0, seedToSearch)
+                    .Select(i => new
+                    {
+                        Index = i,
+                        Score = scores[i]
+                    })
+                    .Where(x => x.Score != float.MaxValue)
+                    .OrderBy(x => x.Score)
+                    .Select(x => (
+                        seed: seeds[x.Index],
+                        size: new Vector3Int(mapSizes[x.Index].x, targetSize.y, mapSizes[x.Index].y)
+                    ))
+                    .FirstOrDefault();
+
+                if (bestSeed.size == Vector3Int.zero)
+                {
+                    Log.Debug("No seed found, retrying");
+                    continue;
+                }
+
+                return bestSeed;
+            }
+        }
+
+        private (float[,] map, float min, float max) GenerateHeightMap(Vector2Int seed, Vector3Int size)
+        {
             float[,] map = new float[size.x, size.z];
             float[] mins = new float[size.x];
             float[] maxs = new float[size.x];
+
+            var center = size / 2;
 
             Parallel.For(0, size.x, x =>
             {
@@ -92,10 +246,20 @@ namespace ProceduralStages
 
                 for (int z = 0; z < size.z; z++)
                 {
-                    (float noise, Vector2 derivative) = heightMapNoise.EvaluateWithDerivative(x + seedX, z + seedZ);
-                    float noise01 = heightCurve.Evaluate((noise + 1) * 0.5f);
+                    float dx = x - center.x;
+                    float dz = z - center.z;
 
-                    float slopeAngle = Mathf.Atan2(derivative.y, derivative.x);
+                    float ellipsisDistance = Mathf.Sqrt((dx * dx) / (center.x * center.x) + (dz * dz) / (center.z * center.z));
+                    
+                    float bonusDistanceNoise = bonusNoiseByEllipsisDistance.Evaluate(ellipsisDistance);
+                    float ellipsisDerivative = bonusNoiseByEllipsisDistance.Derivative(ellipsisDistance);
+                    Vector2 ellipsisDirection = new Vector2(dx, dz);
+                    ellipsisDirection.Normalize();
+
+                    (float noise, Vector2 derivative) = heightMapNoise.EvaluateWithDerivative(x + seed.x, z + seed.y);
+                    float noise01 = heightCurve.Evaluate((noise + 1) * 0.5f - bonusDistanceNoise);
+
+                    float slopeAngle = Mathf.Atan2(derivative.y + ellipsisDirection.y * ellipsisDerivative, derivative.x + ellipsisDirection.x * ellipsisDerivative);
                     float slopeAngle01 = (slopeAngle + Mathf.PI) / (2 * Mathf.PI);
 
                     float benchWidth = benchesWidthByHeightCurve.Evaluate(noise01);
@@ -105,9 +269,11 @@ namespace ProceduralStages
                     for (int i = 0; i < benchesHeightCurves.Length; i++)
                     {
                         var benchesHeightCurve = benchesHeightCurves[i].curve;
-                        float benchPos = benchesHeightCurves[i].direction == BenchDirection.AntiClockWise
+                        float angleStartHeight = benchesHeightCurves[i].direction == BenchDirection.ClockWise
                             ? slopeAngle01
                             : 1 - slopeAngle01;
+
+                        float benchPos = angleStartHeight;
 
                         for (; benchPos < benchesHeightCurve._max; benchPos++)
                         {
@@ -131,7 +297,7 @@ namespace ProceduralStages
                     {
                         height = noise01;
                     }
-                    if (noise01 < benchToe1)
+                    else if (noise01 < benchToe1)
                     {
                         height = benchCrest1;
                     }
@@ -168,14 +334,21 @@ namespace ProceduralStages
             float[,,] map = new float[size.x, size.y, size.z];
             float coefficient = 1 / (max - min);
 
+            int curveSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int curveSeedY = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int curveSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
             Parallel.For(0, size.x, x =>
             {
                 for (int z = 0; z < size.z; z++)
                 {
-                    for (int y = 0; y < size.y; y++)
+                    for (int y = 0; y < size.y - 1; y++)
                     {
+                        float curveNoise = (wallCurvingNoise.Evaluate(x + curveSeedX, y * wallCurvingVecticalScale + curveSeedY, z + curveSeedZ) + 1) / 2;
+                        float scaledCurveNoise = wallCurvingMinNoise + (curveNoise * (1 - wallCurvingMinNoise));
+
                         float floorTickness = 1 + (map2d[x, z] - min) * coefficient * size.y;
-                        float noise = Mathf.Clamp01((floorTickness - y) * floorBlendFactor + 0.5f);
+                        float noise = Mathf.Clamp01(scaledCurveNoise * ((floorTickness - y) * floorBlendFactor + 0.5f));
                         if (noise == 0f)
                         {
                             break;

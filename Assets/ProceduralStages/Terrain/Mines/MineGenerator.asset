@@ -12,13 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773746421f88cdb47a7d7fb0f8e2a5d3, type: 3}
   m_Name: MineGenerator
   m_EditorClassIdentifier: 
-  size: {x: 275, y: 150, z: 150}
+  size: {x: 275, y: 150, z: 200}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
-  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  sizeVariation: {x: 0.1, y: 0.1, z: 0.05}
   fogPower: 1.75
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
   waterLevel: 8.5
+  seedToSearch: 25
+  minPlayableArea: 0.6
+  maxPlayableArea: 0.75
+  wallNoiseLevel: 0.1
+  outerWallBuffer: {x: 10, y: 10}
   heightMapNoise: {fileID: 11400000, guid: c9ab672809ccb204796da9bbda9820bb, type: 2}
   heightCurve: {fileID: 11400000, guid: 000b1691e59c2b24a8c01d6d147b9361, type: 2}
   benchesHeightCurves:
@@ -26,9 +31,19 @@ MonoBehaviour:
     direction: 0
   benchesWidthByHeightCurve: {fileID: 11400000, guid: abd0179940bbd494eb3c605e6084bc4c,
     type: 2}
+  bonusNoiseByEllipsisDistance: {fileID: 11400000, guid: cc2f23bbe5fc7bb40a533315b668c12a,
+    type: 2}
   floorBlendFactor: 0.015
   densityCurve: {fileID: 11400000, guid: fc3f16a3a9f35a14d818269aca0befb1, type: 2}
   caveCurve: {fileID: 11400000, guid: c3a7c1b7e78515f4eb257f04d1c17bd4, type: 2}
   caveYDerivativeBonus: {fileID: 11400000, guid: 527111cbedaa3834c99e35ea2877f67f,
     type: 2}
   spaghettiNoise: {fileID: 11400000, guid: 6e2b7e0d383036a4ca7dff51091db116, type: 2}
+  wallCurvingNoise: {fileID: 11400000, guid: a51bfdc7285bb5c4f80a9f263a101692, type: 2}
+  wallCurvingMinNoise: 0.9
+  wallCurvingVecticalScale: 0.6
+  smoother:
+    enabled: 1
+    smoothingInterations: 1
+    forceWalls: 0
+    forceFloor: 1

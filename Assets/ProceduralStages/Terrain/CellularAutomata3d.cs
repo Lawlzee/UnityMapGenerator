@@ -13,6 +13,7 @@ namespace ProceduralStages
         public bool enabled = true;
         public int smoothingInterations;
         public bool forceWalls = false;
+        public bool forceFloor = false;
 
         public float[,,] SmoothMap(float[,,] map)
         {
@@ -37,6 +38,10 @@ namespace ProceduralStages
                         for (int z = 0; z < depth; z++)
                         {
                             if (forceWalls && (x == 0 || y == 0 || z == 0 || x == width - 1 || y == height - 1 || z == depth - 1))
+                            {
+                                newMap[x, y, z] = 1f;
+                            }
+                            else if (forceFloor && y == 0)
                             {
                                 newMap[x, y, z] = 1f;
                             }
