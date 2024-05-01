@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/blackbeach/spmBbIvy1.spm
   scale: 10
+  minScale: 10
+  maxScale: 12.5
   ground: 0
   count: 180
   changeColor: 1

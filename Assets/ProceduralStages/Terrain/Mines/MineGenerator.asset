@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773746421f88cdb47a7d7fb0f8e2a5d3, type: 3}
   m_Name: MineGenerator
   m_EditorClassIdentifier: 
-  size: {x: 200, y: 110, z: 200}
-  sizeIncreasePerStage: {x: 15, y: 10, z: 25}
+  size: {x: 175, y: 90, z: 200}
+  sizeIncreasePerStage: {x: 15, y: 8, z: 25}
   sizeVariation: {x: 0, y: 0.1, z: 0}
   fogPower: 1.75
+  fogIntensityCoefficient: 0.75
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
   waterLevel: 8.5
+  terrainType: 4
+  ceillingPropsWeight: 0
   seedToSearch: 25
   minPlayableArea: 0.6
   maxPlayableArea: 0.75

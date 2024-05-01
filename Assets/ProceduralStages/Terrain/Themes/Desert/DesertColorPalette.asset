@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021287e9fb8bd343875ef250c1ccb01, type: 3}
+  m_Name: DesertColorPalette
+  m_EditorClassIdentifier: 
+  size: 256
+  floor: {fileID: 11400000, guid: a73ba646ad3f63445a3b45c13d26c450, type: 2}
+  walls: {fileID: 11400000, guid: caf53d13f1db13645ae147183ad4e9c0, type: 2}
+  ceilling: {fileID: 11400000, guid: d0b2935b6fc0dd84586f728a802527e5, type: 2}
+  light: {fileID: 11400000, guid: bcb9cb22902fecc41a3dc25b6badfaf7, type: 2}
+  fog: {fileID: 11400000, guid: e955d2b5e7d95f54c818b76a02a1ae4f, type: 2}
+  minNoise: 0.2
+  maxNoise: 0.25

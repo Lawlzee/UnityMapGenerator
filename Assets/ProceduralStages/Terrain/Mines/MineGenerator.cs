@@ -12,8 +12,6 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "MineGenerator", menuName = "ProceduralStages/MineGenerator", order = 2)]
     public class MineGenerator : TerrainGenerator
     {
-        public override TerrainType TerrainType => TerrainType.Mines;
-
         public int seedToSearch;
         public float minPlayableArea;
         public float maxPlayableArea;

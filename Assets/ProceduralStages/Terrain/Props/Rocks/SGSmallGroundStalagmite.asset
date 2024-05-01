@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/shipgraveyard/SGSmallGroundStalagmite.prefab
   scale: 2
+  minScale: 2
+  maxScale: 3
   ground: 1
   count: 20
   changeColor: 0

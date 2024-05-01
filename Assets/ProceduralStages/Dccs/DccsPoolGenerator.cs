@@ -113,6 +113,7 @@ namespace ProceduralStages
                             .FirstOrDefault();
 
                         return dccsCategory.cards
+                            .Where(x => x?.spawnCard?.name != null)
                             .Select(card => new
                             {
                                 stage.Info.StageIndex,

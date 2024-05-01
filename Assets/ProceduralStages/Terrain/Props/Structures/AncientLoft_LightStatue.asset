@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/DLC1/ancientloft/AncientLoft_LightStatue.prefab
   scale: 1
+  minScale: 1
+  maxScale: 1.5
   ground: 1
   count: 10
   changeColor: 0

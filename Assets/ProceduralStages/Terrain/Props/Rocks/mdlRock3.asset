@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/Common/Props/mdlRock3.fbx
   scale: 1
+  minScale: 1
+  maxScale: 1.5
   ground: 1
   count: 25
   changeColor: 0

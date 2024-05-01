@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/skymeadow/SMRockFormationMedium1.fbx
   scale: 400
+  minScale: 400
+  maxScale: 600
   ground: 1
   count: 30
   changeColor: 0

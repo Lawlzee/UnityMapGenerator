@@ -26,11 +26,30 @@ namespace ProceduralStages
         public List<GameObject> instances = new List<GameObject>();
 
 
-        public void PlaceAll(Graphs graphs, PropsDefinitionCollection propsCollection, MeshColorer meshColorer, Texture2D colorGradiant, Material terrainMaterial)
+        public void PlaceAll(
+            Graphs graphs, 
+            PropsDefinitionCollection propsCollection, 
+            MeshColorer meshColorer, 
+            Texture2D colorGradiant, 
+            Material terrainMaterial,
+            float ceillingWeight)
         {
             List<PropsDefinition> props = propsCollection.categories
                 .SelectMany(x => x.props)
                 .ToList();
+
+            WeightedSelection<PropsDefinition> propsSelection = new WeightedSelection<PropsDefinition>();
+            foreach (var prop in props)
+            {
+                if (prop.ground)
+                {
+                    propsSelection.AddChoice(prop, 1);
+                }
+                else if (ceillingWeight > 0)
+                {
+                    propsSelection.AddChoice(prop, ceillingWeight);
+                }
+            }
 
             if (Application.isEditor)
             {
@@ -55,22 +74,16 @@ namespace ProceduralStages
             }
 
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
-
-            HashSet<int> choosenPropsIndex = new HashSet<int>();
-
-            int stagePropCount = Math.Min(props.Count, propsCount + stageInLoop);
-
-            while (choosenPropsIndex.Count < stagePropCount)
-            {
-                choosenPropsIndex.Add(MapGenerator.rng.RangeInt(0, props.Count));
-            }
+            int stagePropCount = Math.Min(propsSelection.Count, propsCount + stageInLoop);
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();
             HashSet<int> usedCeillingIndexes = new HashSet<int>();
 
-            foreach (int j in choosenPropsIndex)
+            for (int j = 0; j < stagePropCount; j++)
             {
-                var prop = props[j];
+                int propIndex = propsSelection.EvaluateToChoiceIndex(MapGenerator.rng.nextNormalizedFloat);
+                var prop = propsSelection.choices[propIndex].value;
+                propsSelection.RemoveChoice(propIndex);
 
                 Vector3Int colorSeed = new Vector3Int(
                     MapGenerator.rng.RangeInt(0, short.MaxValue),
@@ -128,6 +141,8 @@ namespace ProceduralStages
                         material = terrainMaterial;
                     }
 
+                    float scale = MapGenerator.rng.RangeFloat(prop.minScale, prop.maxScale);
+
                     GameObject instance = propsNode.Place(
                         prop.prefab, 
                         propsObject, 
@@ -136,7 +151,7 @@ namespace ProceduralStages
                         normal: prop.normal != Vector3.zero
                             ? prop.normal
                             : default(Vector3?),
-                        prop.scale);
+                        scale);
 
                     instance.transform.position += prop.offset;
 

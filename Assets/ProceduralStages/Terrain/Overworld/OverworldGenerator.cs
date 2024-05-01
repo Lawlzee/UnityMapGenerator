@@ -20,9 +20,6 @@ namespace ProceduralStages
         public CellularAutomata3d cave3d = new CellularAutomata3d();
         public Map3dNoiser map3dNoiser = new Map3dNoiser();
 
-
-        public override TerrainType TerrainType { get; } = TerrainType.Islands;
-
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();

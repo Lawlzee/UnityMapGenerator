@@ -13,12 +13,12 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "theme", menuName = "ProceduralStages/Theme", order = 1)]
     public class MapTheme : ScriptableObject
     {
+        public Theme Theme;
         public SurfaceTexture[] walls = new SurfaceTexture[0];
         public SurfaceTexture[] floor = new SurfaceTexture[0];
         public ThemeColorPalettes[] colorPalettes;
         public SkyboxDef[] skyboxes = new SkyboxDef[0];
         public WaterDef[] waters = new WaterDef[0];
-        public SurfaceTexture[] seaFloors = new SurfaceTexture[0];
         public PropsDefinitionCollection[] propCollections = new PropsDefinitionCollection[0];
 
         public Texture2D ApplyTheme(
@@ -82,17 +82,14 @@ namespace ProceduralStages
             //waterColorGrading.mixerGreenOutGreenIn.Override(100 + waterColor.g * 100);
             //waterColorGrading.mixerBlueOutBlueIn.Override(100 + waterColor.b * 100);
 
-            //seaFloorMeshRenderer.material.mainTexture = seaFloors[MapGenerator.rng.RangeInt(0, seaFloors.Length)].texture;
-
             float sunHue = MapGenerator.rng.nextNormalizedFloat;
             RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);
 
             RenderSettings.ambientLight = new Color(terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity);
 
-            SetFog(fog, sunHue, terrainGenerator.fogPower, colorPalette);
+            SetFog(fog, sunHue, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
 
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
-            //DynamicGI.UpdateEnvironment();
 
             return colorGradiant;
         }
@@ -133,7 +130,7 @@ namespace ProceduralStages
             return colorGradiant;
         }
 
-        private void SetFog(RampFog fog, float sunHue, float power, ThemeColorPalettes colorPalette)
+        private void SetFog(RampFog fog, float sunHue, float power, float intensityCoefficient, ThemeColorPalettes colorPalette)
         {
             var fogColor = Color.HSVToRGB(sunHue, colorPalette.fog.saturation, colorPalette.fog.value);
 
@@ -146,7 +143,7 @@ namespace ProceduralStages
             fog.fogZero.value = colorPalette.fog.zero;
             fog.fogOne.value = colorPalette.fog.one;
 
-            fog.fogIntensity.value = colorPalette.fog.intensity;
+            fog.fogIntensity.value = colorPalette.fog.intensity * intensityCoefficient;
             fog.fogPower.value = power;
         }
     }

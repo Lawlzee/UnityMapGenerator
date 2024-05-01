@@ -29,11 +29,12 @@ namespace ProceduralStages
         public Vector3Int sizeIncreasePerStage;
         public Vector3 sizeVariation;
         public float fogPower = 0.75f;
+        public float fogIntensityCoefficient = 1f;
         public float vignetteInsentity = 0.25f;
         public float ambiantLightIntensity;
         public float waterLevel = 0f;
-
-        public abstract TerrainType TerrainType { get; }
+        public TerrainType terrainType;
+        public float ceillingPropsWeight = 1;
 
         public abstract Terrain Generate();
     }

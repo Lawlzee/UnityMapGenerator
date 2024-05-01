@@ -12,13 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db26add71c53e4342b7987556078bbff, type: 3}
   m_Name: OverworldGenerator
   m_EditorClassIdentifier: 
-  size: {x: 175, y: 65, z: 225}
-  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
+  size: {x: 200, y: 65, z: 275}
+  sizeIncreasePerStage: {x: 25, y: 5, z: 30}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
+  fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
   waterLevel: 8.5
+  terrainType: 2
+  ceillingPropsWeight: 0.3
   wallGenerator:
     frequency: 38
     wallSurface: 0.45
@@ -66,6 +69,7 @@ MonoBehaviour:
     enabled: 1
     smoothingInterations: 2
     forceWalls: 0
+    forceFloor: 0
   map3dNoiser:
     enabled: 1
     frequency: 0.434

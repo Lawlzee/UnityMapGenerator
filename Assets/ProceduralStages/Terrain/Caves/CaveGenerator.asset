@@ -19,6 +19,8 @@ MonoBehaviour:
   vignetteInsentity: 0.25
   ambiantLightIntensity: 0.7
   waterLevel: 8.5
+  terrainType: 1
+  ceillingPropsWeight: 1
   wallGenerator:
     frequency: 28
     wallSurface: 0.3
@@ -53,6 +55,7 @@ MonoBehaviour:
     enabled: 1
     smoothingInterations: 2
     forceWalls: 1
+    forceFloor: 0
   map3dNoiser:
     enabled: 1
     frequency: 0.434

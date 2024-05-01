@@ -20,6 +20,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 8de53b4000dec71488101bedbda293cc, type: 2}
     - {fileID: 11400000, guid: c788246b1683e8c4a8ec2201fbb3c023, type: 2}
     - {fileID: 11400000, guid: 756b1cc552c419743b5f0182107aa73c, type: 2}
+    - {fileID: 11400000, guid: eea4aba115edd974581cec679954639d, type: 2}
   - name: Grass
     props:
     - {fileID: 11400000, guid: 4cd02822923d6e84889933a68e8447aa, type: 2}
@@ -29,9 +30,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: fb0ac0eb1b91cce4f907461317318561, type: 2}
   - name: Plants
     props:
-    - {fileID: 11400000, guid: ca3a50c2ea328b845bd89b5816adc2f4, type: 2}
     - {fileID: 11400000, guid: 44e1b7488de590044a5bea76b3fedab6, type: 2}
-    - {fileID: 11400000, guid: eea4aba115edd974581cec679954639d, type: 2}
     - {fileID: 11400000, guid: d6c7cbcf7be414a4eae460e81f1101b3, type: 2}
     - {fileID: 11400000, guid: dc0193113f246cb4d9146f041e9becb9, type: 2}
     - {fileID: 11400000, guid: f2a105dc71be9fc4188dae82a9cf628d, type: 2}

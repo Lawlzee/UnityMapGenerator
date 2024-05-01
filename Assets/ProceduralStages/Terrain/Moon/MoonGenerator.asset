@@ -18,6 +18,9 @@ MonoBehaviour:
   fogPower: 1.75
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
+  waterLevel: 0
+  terrainType: 1
+  ceillingPropsWeight: 1
   wallGenerator:
     frequency: 38
     wallSurface: 0.45
@@ -59,10 +62,13 @@ MonoBehaviour:
     roofFrequency: 30.3434
     roofVerticalScale: 1
     roofCarvingRelativeMinHeight: 0.8
+    roofCarvingRelativeMaxHeight: 0.95
+    ellipsisDistancePower: 0.5
   cave3d:
     enabled: 1
     smoothingInterations: 2
     forceWalls: 0
+    forceFloor: 0
   map3dNoiser:
     enabled: 1
     frequency: 0.434

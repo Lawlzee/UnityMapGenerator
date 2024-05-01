@@ -16,7 +16,7 @@ MonoBehaviour:
   normalAsset: 
   bias: 0
   averageColor: {r: 0.43137255, g: 0.45882353, b: 0.48235294, a: 0}
-  scale: 0
+  scale: 0.025
   bumpScale: 0
   constrast: 0.5
   glossiness: 0.2

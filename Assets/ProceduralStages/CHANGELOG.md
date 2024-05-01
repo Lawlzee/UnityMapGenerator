@@ -1,3 +1,10 @@
+## 1.12
+1. Fixed compatibility issue with Starstorm 2
+1. Random prop scale
+1. Balanced stage size islands + canyons
+1. Improve texture scale
+1. Desert theme
+
 ## 1.11
 1. **Twisted Canyons Stages**: Introducing a new stage type featuring twisted canyons.
 2. **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.

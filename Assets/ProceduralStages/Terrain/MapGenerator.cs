@@ -32,6 +32,9 @@ namespace ProceduralStages
         public bool loadPropsInEditor = false;
         public ulong editorSeed;
         public TerrainType editorTerrainType;
+        public Theme editorTheme;
+        [Range(1, 5)]
+        public int editorStageInLoop = 1;
 
         public TerrainGenerator[] terrainGenerators;
         public MapTheme[] themes;
@@ -58,6 +61,7 @@ namespace ProceduralStages
 
         public Graphs graphs;
 
+        private ulong lastSeed;
         public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
 
@@ -66,6 +70,7 @@ namespace ProceduralStages
             instance = this;
             if (Application.IsPlaying(this))
             {
+                lastSeed = SetSeed();
                 GenerateMap();
             }
         }
@@ -84,13 +89,23 @@ namespace ProceduralStages
 
         private void Update()
         {
-            if (Application.isEditor && Input.GetKeyDown(KeyCode.F2))
+            if (Application.isEditor && (Input.GetKeyDown(KeyCode.F2) || Input.GetKeyDown(KeyCode.F3)))
             {
                 for (int i = 0; i < propsPlacer.instances.Count; i++)
                 {
                     Destroy(propsPlacer.instances[i]);
                 }
                 propsPlacer.instances.Clear();
+
+                if (Input.GetKeyDown(KeyCode.F2))
+                {
+                    lastSeed = SetSeed();
+                }
+                else
+                {
+                    rng = new Xoroshiro128Plus(lastSeed);
+                }
+
                 GenerateMap();
             }
         }
@@ -98,13 +113,13 @@ namespace ProceduralStages
         private void GenerateMap()
         {
             int stageClearCount = RunConfig.instance.nextStageClearCount;
-            int stageInLoop = (stageClearCount % Run.stagesPerLoop) + 1;
+            int stageInLoop = Application.isEditor
+                ? editorStageInLoop
+                : (stageClearCount % Run.stagesPerLoop) + 1;
 
             int stageScaling = RunConfig.instance.infiniteMapScaling
                 ? stageClearCount + 1
                 : stageInLoop;
-
-            SetSeed();
 
             Stopwatch totalStopwatch = Stopwatch.StartNew();
 
@@ -113,7 +128,14 @@ namespace ProceduralStages
             TerrainType terrainType = RunConfig.instance.selectedTerrainType;
             if (Application.isEditor)
             {
-                terrainType = editorTerrainType;
+                if (editorTerrainType == TerrainType.Random)
+                {
+                    terrainType = terrainGenerators[rng.RangeInt(1, terrainGenerators.Length)].terrainType;
+                }
+                else
+                {
+                    terrainType = editorTerrainType;
+                }
             }
             else if (terrainType == TerrainType.Random)
             {
@@ -137,7 +159,7 @@ namespace ProceduralStages
 
             Log.Debug(terrainType);
 
-            TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.TerrainType == terrainType);
+            TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
             RunConfig.instance.selectedTerrainType = TerrainType.Random;
 
             PostProcessVolume waterPPV = waterPostProcessingObject.GetComponent<PostProcessVolume>();
@@ -159,7 +181,18 @@ namespace ProceduralStages
             oobZone.size = scaledSize;
             oobZone.center = scaledSize / 2;
 
-            MapTheme theme = themes[rng.RangeInt(0, themes.Length)];
+            Theme themeType = Theme.LegacyRandom;
+            if (Application.isEditor && editorTheme != Theme.Random)
+            {
+                themeType = editorTheme;
+            }
+            else
+            {
+                //todo: add to config
+                themeType = themes[rng.RangeInt(1, themes.Length)].Theme;
+            }
+
+            MapTheme theme = themes.First(x => x.Theme == themeType);
 
             meshColorer.ColorMesh(terrain.meshResult);
             LogStats("meshColorer");
@@ -244,7 +277,13 @@ namespace ProceduralStages
             if (!Application.isEditor || loadPropsInEditor)
             {
                 PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
-                propsPlacer.PlaceAll(graphs, propsCollection, meshColorer, colorGradiant, terrainMaterial);
+                propsPlacer.PlaceAll(
+                    graphs,
+                    propsCollection,
+                    meshColorer,
+                    colorGradiant,
+                    terrainMaterial,
+                    terrainGenerator.ceillingPropsWeight);
                 LogStats("propsPlacer");
             }
 
@@ -293,7 +332,7 @@ namespace ProceduralStages
             }
         }
 
-        private void SetSeed()
+        private ulong SetSeed()
         {
             ulong currentSeed;
             if (Application.isEditor)
@@ -333,6 +372,7 @@ namespace ProceduralStages
             Log.Debug("Stage Seed: " + currentSeed);
 
             rng = new Xoroshiro128Plus(currentSeed);
+            return currentSeed;
         }
 
         private void SetDCCS(ClassicStageInfo stageInfo)

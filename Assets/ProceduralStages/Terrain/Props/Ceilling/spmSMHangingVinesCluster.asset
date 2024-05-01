@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/skymeadow/spmSMHangingVinesCluster.spm
   scale: 3
+  minScale: 3
+  maxScale: 4
   ground: 0
   count: 200
   changeColor: 0

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: FWSimpleGrass
   m_EditorClassIdentifier: 
   asset: RoR2/Base/frozenwall/FWSimpleGrass.prefab
-  scale: 1
+  scale: 2
+  minScale: 2
+  maxScale: 3
   ground: 1
   count: 300
   changeColor: 1

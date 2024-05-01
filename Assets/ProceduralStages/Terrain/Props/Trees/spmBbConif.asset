@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asset: RoR2/Base/blackbeach/spmBbConif.spm
   scale: 0.5
+  minScale: 0.5
+  maxScale: 1
   ground: 1
   count: 10
   changeColor: 0
