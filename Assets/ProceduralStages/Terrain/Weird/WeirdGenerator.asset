@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e83b01d9d7116df4aae861cb4a291685, type: 3}
+  m_Name: WeirdGenerator
+  m_EditorClassIdentifier: 
+  size: {x: 175, y: 200, z: 200}
+  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
+  sizeVariation: {x: 0.1, y: 0, z: 0.2}
+  fogPower: 1.75
+  fogIntensityCoefficient: 0.75
+  vignetteInsentity: 0.12
+  ambiantLightIntensity: 0.8
+  waterLevel: 8.5
+  terrainType: 2
+  ceillingPropsWeight: 1
+  randomWalks: 8
+  randomWalkIterations: 1000
+  randomWalkMinLength: 5
+  randomWalkMaxLength: 10
+  randomWalkAddedWeight: 1
+  maxYSlop: 0.602
+  directionChangeWeight: 0.382
+  smoother:
+    enabled: 1
+    smoothingInterations: 3
+    forceWalls: 0
+    forceFloor: 0
