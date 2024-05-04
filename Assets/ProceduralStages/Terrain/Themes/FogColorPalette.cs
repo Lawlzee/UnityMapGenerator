@@ -10,10 +10,8 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "fog", menuName = "ProceduralStages/Fog", order = 1)]
     public class FogColorPalette : ScriptableObject
     {
-        [Range(0, 1)]
-        public float saturation;
-        [Range(0, 1)]
-        public float value;
+        public Color minColor;
+        public Color maxColor;
 
         [Range(0, 1)]
         public float colorStartAlpha;

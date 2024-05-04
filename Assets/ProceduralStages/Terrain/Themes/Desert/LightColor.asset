@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: LightColor
   m_EditorClassIdentifier: 
-  saturation: 0.7
-  value: 0.7
-  perlinAmplitude: 0
-  detailPerlinAmplitude: 0
+  minColor: {r: 0.69803923, g: 0.21176471, b: 0.29226455, a: 0}
+  maxColor: {r: 0.69803923, g: 0.6103876, b: 0.21176471, a: 0}

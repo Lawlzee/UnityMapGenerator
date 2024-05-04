@@ -40,22 +40,26 @@ namespace ProceduralStages
             waterMeshRenderer.material = new Material(water.material);
             waterMeshRenderer.material.SetTexture("_Cube", skybox.GetTexture("_Tex"));
 
-            var skyTint = skybox.GetColor("_Tint") * skybox.GetFloat("_Exposure"); ;
-            Color.RGBToHSV(skyTint, out float skyHue, out float skySaturation, out float skyValue);
-
-            if (skyHue == 0 && skySaturation == 0)
+            var skyColor = (skybox.GetColor("_Tint") * skybox.GetFloat("_Exposure")).ToHSV();
+            
+            if (skyColor.hue == 0 && skyColor.saturation == 0)
             {
-                skyHue = 0.5f;
-                skySaturation = 0.2f;
+                skyColor.hue = 0.5f;
+                skyColor.saturation = 0.2f;
             }
 
-            float depthColorSaturation = Mathf.Clamp(skySaturation, water.minSaturation, water.maxSaturation);
-            float depthColorValue = Mathf.Clamp(skyValue, water.minValue, water.maxValue);
+            ColorHSV minLightHsv = colorPalette.light.minColor.ToHSV();
+            ColorHSV maxLightHsv = colorPalette.light.maxColor.ToHSV();
 
-            var depthColor = Color.HSVToRGB(skyHue, depthColorSaturation, depthColorValue);
+            skyColor.hue = ColorHSV.ClampHue(skyColor.hue, minLightHsv.hue, maxLightHsv.hue);
+
+            float depthColorSaturation = Mathf.Clamp(skyColor.saturation, water.minSaturation, water.maxSaturation);
+            float depthColorValue = Mathf.Clamp(skyColor.value, water.minValue, water.maxValue);
+
+            var depthColor = Color.HSVToRGB(skyColor.hue, depthColorSaturation, depthColorValue);
 
             var cubeColor = Color.HSVToRGB(
-                skyHue,
+                skyColor.hue,
                 Mathf.Clamp01(water.cubeSaturation + depthColorSaturation),
                 Mathf.Clamp01(water.cubeValue + depthColorValue));
 
@@ -65,7 +69,7 @@ namespace ProceduralStages
             waterMeshRenderer.material.SetFloat("_Distortion", water.distortion);
 
             var seaFloorColor = Color.HSVToRGB(
-                skyHue,
+                skyColor.hue,
                 Mathf.Clamp01(water.seaFloorSaturation + depthColorSaturation),
                 Mathf.Clamp01(water.seaFloorValue + depthColorValue));
 
@@ -82,12 +86,12 @@ namespace ProceduralStages
             //waterColorGrading.mixerGreenOutGreenIn.Override(100 + waterColor.g * 100);
             //waterColorGrading.mixerBlueOutBlueIn.Override(100 + waterColor.b * 100);
 
-            float sunHue = MapGenerator.rng.nextNormalizedFloat;
-            RenderSettings.sun.color = Color.HSVToRGB(sunHue, colorPalette.light.saturation, colorPalette.light.value);
+            ColorHSV lightHsv = ColorHSV.GetRandom(minLightHsv, maxLightHsv, MapGenerator.rng);
 
+            RenderSettings.sun.color = lightHsv.ToRGB();
             RenderSettings.ambientLight = new Color(terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity);
 
-            SetFog(fog, sunHue, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
+            SetFog(fog, lightHsv.hue, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
 
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
 
@@ -132,7 +136,13 @@ namespace ProceduralStages
 
         private void SetFog(RampFog fog, float sunHue, float power, float intensityCoefficient, ThemeColorPalettes colorPalette)
         {
-            var fogColor = Color.HSVToRGB(sunHue, colorPalette.fog.saturation, colorPalette.fog.value);
+            ColorHSV minColor = colorPalette.fog.minColor.ToHSV();
+            ColorHSV maxColor = colorPalette.fog.maxColor.ToHSV();
+
+            ColorHSV fogColorHSV = ColorHSV.GetRandom(minColor, maxColor, MapGenerator.rng);
+            float fogHue = ColorHSV.ClampHue(sunHue, minColor.hue, maxColor.hue);
+
+            var fogColor = Color.HSVToRGB(fogHue, fogColorHSV.saturation, fogColorHSV.value);
 
             fog.fogColorStart.value = fogColor;
             fog.fogColorStart.value.a = colorPalette.fog.colorStartAlpha;

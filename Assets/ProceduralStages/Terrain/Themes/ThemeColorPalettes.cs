@@ -34,32 +34,39 @@ namespace ProceduralStages
                 ceilling
             };
 
-            float hue1 = MapGenerator.rng.nextNormalizedFloat;
-            float noise1 = MapGenerator.rng.nextNormalizedFloat * (maxNoise - minNoise) + minNoise;
-            float hue1Variation = (hue1 + noise1 + 1) % 1;
+            ColorHSV minFloorColor = floor.minColor.ToHSV();
+            ColorHSV maxFloorColor = floor.maxColor.ToHSV();
 
-            float hue2 = MapGenerator.rng.nextNormalizedFloat;
-            float noise2 = MapGenerator.rng.nextNormalizedFloat * (maxNoise - minNoise) + minNoise;
-            float hue2Variation = (hue2 + noise2 + 1) % 1;
+            ColorHSV minWallColor = floor.minColor.ToHSV();
+            ColorHSV maxWallColor = floor.maxColor.ToHSV();
 
-            colors[0] = Color.HSVToRGB(hue1, floor.saturation, floor.value);
-            colors[1] = Color.HSVToRGB(hue1Variation, floor.saturation, floor.value);
+            ColorHSV minCeilColor = floor.minColor.ToHSV();
+            ColorHSV maxCeilColor = floor.maxColor.ToHSV();
 
-            colors[2] = Color.HSVToRGB(hue2, walls.saturation, walls.value);
-            colors[3] = Color.HSVToRGB(hue2Variation, walls.saturation, walls.value);
+            ColorHSV floorColor = ColorHSV.GetRandom(floor.minColor.ToHSV(), floor.maxColor.ToHSV(), MapGenerator.rng);
+            ColorHSV wallColor = ColorHSV.GetRandom(walls.minColor.ToHSV(), walls.maxColor.ToHSV(), MapGenerator.rng);
+            ColorHSV ceilColor = ColorHSV.GetRandom(ceilling.minColor.ToHSV(), ceilling.maxColor.ToHSV(), MapGenerator.rng);
 
-            colors[4] = Color.HSVToRGB(hue2, ceilling.saturation, ceilling.value);
-            colors[5] = Color.HSVToRGB(hue2Variation, ceilling.saturation, ceilling.value);
+            float floorNoise = MapGenerator.rng.RangeFloat(minNoise, maxNoise);
+            float floorHueVariation = ColorHSV.ClampHue((floorColor.hue + floorNoise + 1) % 1, minFloorColor.hue, maxFloorColor.hue);
+
+            float wallNoise = MapGenerator.rng.RangeFloat(minNoise, maxNoise);
+            float wallHueVariation = ColorHSV.ClampHue((wallColor.hue + wallNoise + 1) % 1, minWallColor.hue, maxWallColor.hue);
+
+            colors[0] = floorColor.ToRGB();
+            colors[1] = Color.HSVToRGB(floorHueVariation, floorColor.saturation, floorColor.value);
+
+            colors[2] = wallColor.ToRGB();
+            colors[3] = Color.HSVToRGB(wallHueVariation, wallColor.saturation, wallColor.value);
+
+            colors[4] = Color.HSVToRGB(wallColor.hue, ceilColor.saturation, ceilColor.value);
+            colors[5] = Color.HSVToRGB(wallHueVariation, ceilColor.saturation, ceilColor.value);
 
             Texture2D texture = new Texture2D(size * 2, size);
 
             float factor = 1f / (size - 1);
 
             Color[] pixels = new Color[2 * size * size];
-
-            Vector2Int seed = new Vector2Int(
-                MapGenerator.rng.RangeInt(0, short.MaxValue),
-                MapGenerator.rng.RangeInt(0, short.MaxValue));
 
             Parallel.For(0, size, y =>
             {
@@ -90,23 +97,6 @@ namespace ProceduralStages
             texture.wrapMode = TextureWrapMode.Clamp;
 
             return texture;
-        }
-
-        public Color AverageColor(Texture2D texture)
-        {
-            Color32[] colors = texture.GetPixels32();
-            int total = colors.Length;
-            var r = 0;
-            var g = 0;
-            var b = 0;
-            for (var i = 0; i < total; i++)
-            {
-                r += colors[i].r;
-                g += colors[i].g;
-                b += colors[i].b;
-            }
-
-            return new Color32((byte)(r / total), (byte)(g / total), (byte)(b / total), 0);
         }
     }
 }

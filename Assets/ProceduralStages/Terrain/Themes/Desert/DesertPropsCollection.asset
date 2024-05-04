@@ -25,7 +25,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: a2aa157a436ad1e4290ab5faf7c071f3, type: 2}
   - name: Plants
     props:
-    - {fileID: 11400000, guid: 44e1b7488de590044a5bea76b3fedab6, type: 2}
     - {fileID: 11400000, guid: d6c7cbcf7be414a4eae460e81f1101b3, type: 2}
     - {fileID: 11400000, guid: dc0193113f246cb4d9146f041e9becb9, type: 2}
     - {fileID: 11400000, guid: 45e9b92bea481fb489f9a8c885d0921d, type: 2}
@@ -41,7 +40,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 6aee491850aaee14fb88ba6197c96d81, type: 2}
   - name: Structures
     props:
-    - {fileID: 11400000, guid: 6790f859c18f7954587f2bf29d63e034, type: 2}
     - {fileID: 11400000, guid: b115dca37ec65874cac0b3eeaa85607e, type: 2}
   - name: Trees
     props:

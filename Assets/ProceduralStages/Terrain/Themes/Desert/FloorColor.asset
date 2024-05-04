@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: FloorColor
   m_EditorClassIdentifier: 
-  saturation: 0.5
-  value: 0.36
-  perlinAmplitude: 0.2
-  detailPerlinAmplitude: 0.1
+  minColor: {r: 0.48235294, g: 0.3197291, b: 0.24705882, a: 0}
+  maxColor: {r: 0.6226415, g: 0.46188727, b: 0.29076183, a: 0}

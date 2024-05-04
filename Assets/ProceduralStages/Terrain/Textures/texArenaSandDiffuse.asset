@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textureAsset: RoR2/Base/arena/texArenaSandDiffuse.png
   normalAsset: 
-  bias: 0.5
-  averageColor: {r: 0.70980394, g: 0.76862746, b: 0.8666667, a: 0}
+  bias: 0.195
+  averageColor: {r: 0.70980394, g: 0.76, b: 0.8666, a: 0}
   scale: 0.01
   bumpScale: 0
   constrast: 1

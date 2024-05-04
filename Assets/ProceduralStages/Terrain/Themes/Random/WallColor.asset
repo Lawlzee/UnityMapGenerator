@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saturation: 0.3
   value: 0.27
-  perlinAmplitude: 0.5
-  detailPerlinAmplitude: 0.25
+  minColor: {r: 0.27, g: 0.18900001, b: 0.18900001, a: 0}
+  maxColor: {r: 0.27, g: 0.18900001, b: 0.19034998, a: 0}

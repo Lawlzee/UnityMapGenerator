@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: WallColor
   m_EditorClassIdentifier: 
-  saturation: 0.3
-  value: 0.27
-  perlinAmplitude: 0.5
-  detailPerlinAmplitude: 0.25
+  minColor: {r: 0.2901961, g: 0.17713599, b: 0.12941179, a: 0}
+  maxColor: {r: 0.38679248, g: 0.30250886, b: 0.15873088, a: 0}
