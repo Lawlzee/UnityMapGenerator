@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: spmBonsai1V2
   m_EditorClassIdentifier: 
   asset: RoR2/Base/Common/Props/spmBonsai1V2.spm
-  scale: 1
   minScale: 1
   maxScale: 2
   ground: 1

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
@@ -143,9 +144,33 @@ namespace ProceduralStages
 
         private static void SeerStationController_SetRunNextStageToTarget(On.RoR2.SeerStationController.orig_SetRunNextStageToTarget orig, SeerStationController self)
         {
-            orig(self);
-            var scene = SceneCatalog.GetSceneDef((SceneIndex)self.targetSceneDefIndex);
-            if (scene.cachedName == Main.SceneName)
+            if (!NetworkServer.active)
+            {
+                Debug.LogWarning("[Server] function 'System.Void RoR2.SeerStationController::SetRunNextStageToTarget()' called on client");
+                return;
+            }
+
+            SceneDef sceneDef = SceneCatalog.GetSceneDef((SceneIndex)self.targetSceneDefIndex);
+            if (!sceneDef)
+            {
+                return;
+            }
+
+            SceneExitController sceneExitController = self.explicitTargetSceneExitController;
+            if (!sceneExitController && self.fallBackToFirstActiveExitController)
+            {
+                sceneExitController = InstanceTracker.FirstOrNull<SceneExitController>();
+            }
+
+            if (!sceneExitController)
+            {
+                return;
+            }
+
+            sceneExitController.destinationScene = sceneDef;
+            sceneExitController.useRunNextStageScene = false;
+
+            if (sceneDef.cachedName == Main.SceneName)
             {
                 self.targetRenderer.GetSharedMaterials(SeerStationController.sharedSharedMaterialsList);
                 var material = SeerStationController.sharedSharedMaterialsList[self.materialIndexToAssign];
@@ -157,7 +182,14 @@ namespace ProceduralStages
 
                 RunConfig.instance.selectedTerrainType = terrainType;
                 SeerStationController.sharedSharedMaterialsList.Clear();
+
+                sceneDef.portalSelectionMessageString = terrainType.GetDreamMessage();
             }
+
+            Chat.SendBroadcastChat(new Chat.SimpleChatMessage()
+            {
+                baseToken = sceneDef.portalSelectionMessageString
+            });
         }
     }
 }

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: spmFern1
   m_EditorClassIdentifier: 
   asset: RoR2/Base/Common/Props/spmFern1.spm
-  scale: 1
   minScale: 1
-  maxScale: 1.5
+  maxScale: 2
   ground: 1
   count: 150
   changeColor: 0

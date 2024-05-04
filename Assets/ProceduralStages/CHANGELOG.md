@@ -4,6 +4,8 @@
 1. Balanced stage size islands + canyons
 1. Improve texture scale
 1. Desert theme
+1. Renamed stages (todo change readme)
+1. Added new stage name, description and dream message
 
 ## 1.11
 1. **Twisted Canyons Stages**: Introducing a new stage type featuring twisted canyons.

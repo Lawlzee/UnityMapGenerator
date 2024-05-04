@@ -28,9 +28,6 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 44e1b7488de590044a5bea76b3fedab6, type: 2}
     - {fileID: 11400000, guid: d6c7cbcf7be414a4eae460e81f1101b3, type: 2}
     - {fileID: 11400000, guid: dc0193113f246cb4d9146f041e9becb9, type: 2}
-    - {fileID: 11400000, guid: 3856ddbf06a4a5a42bc31d64086ffe01, type: 2}
-    - {fileID: 11400000, guid: bb94f649e4041334ca056915fcf7ee83, type: 2}
-    - {fileID: 11400000, guid: 952c15b950b2f48478a2397cfb856865, type: 2}
     - {fileID: 11400000, guid: 45e9b92bea481fb489f9a8c885d0921d, type: 2}
     - {fileID: 11400000, guid: bfeb1c53c7af2ff48ae49343f7f89c39, type: 2}
   - name: Rocks

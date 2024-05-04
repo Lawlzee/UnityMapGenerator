@@ -18,7 +18,6 @@ using UnityEngine.SceneManagement;
 namespace ProceduralStages
 {
     [BepInDependency("com.rune580.riskofoptions")]
-    [BepInDependency("com.bepis.r2api.language")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Main : BaseUnityPlugin
     {

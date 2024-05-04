@@ -27,6 +27,7 @@ namespace ProceduralStages
         public static Texture texOpenCavePreview;
         public static Texture texTunnelCavesPreview;
         public static Texture texIslandPreview;
+        public static Texture texCanyonsPreview;
         public static GameObject runConfigPrefab;
 
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
@@ -60,6 +61,7 @@ namespace ProceduralStages
                 texOpenCavePreview = assets.First(a => a.name == "texOpenCavePreview");
                 texTunnelCavesPreview = assets.First(a => a.name == "texTunnelCavesPreview");
                 texIslandPreview = assets.First(a => a.name == "texIslandPreview");
+                texCanyonsPreview = assets.First(a => a.name == "texCanyonsPreview");
             }));
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
@@ -77,8 +79,7 @@ namespace ProceduralStages
             AddSeerMaterial(texOpenCavePreview, TerrainType.OpenCaves);
             AddSeerMaterial(texTunnelCavesPreview, TerrainType.TunnelCaves);
             AddSeerMaterial(texIslandPreview, TerrainType.Islands);
-            //todo
-            AddSeerMaterial(texIslandPreview, TerrainType.Mines);
+            AddSeerMaterial(texCanyonsPreview, TerrainType.Mines);
 
             SceneDef[] sceneDefs = new SceneDef[6];
 
@@ -88,11 +89,11 @@ namespace ProceduralStages
                 sceneDef.cachedName = Main.SceneName;
                 sceneDef.sceneType = SceneType.Stage;
                 sceneDef.isOfflineScene = false;
-                sceneDef.nameToken = "MAP_RANDOM_TITLE";
-                sceneDef.subtitleToken = "MAP_RANDOM_SUBTITLE";
+                sceneDef.nameToken = "Random Realm";
+                sceneDef.subtitleToken = "Chaotic Landscape";
                 sceneDef.previewTexture = texOpenCavePreview;
                 sceneDef.portalMaterial = SeerMaterialByTerrainType[TerrainType.OpenCaves];
-                sceneDef.portalSelectionMessageString = "BAZAAR_SEER_RANDOM";
+                sceneDef.portalSelectionMessageString = "<style=cWorldEvent>You dream of dices.</style>";
                 sceneDef.shouldIncludeInLogbook = false;
                 sceneDef.loreToken = null;
                 sceneDef.dioramaPrefab = null;
@@ -132,10 +133,6 @@ namespace ProceduralStages
             }
 
             ContentPack.sceneDefs.Add(sceneDefs);
-
-            LanguageAPI.Add("MAP_RANDOM_TITLE", "Random Realm");
-            LanguageAPI.Add("MAP_RANDOM_SUBTITLE", "Chaotic Landscape");
-            LanguageAPI.Add("BAZAAR_SEER_RANDOM", "<style=cWorldEvent>You dream of dices.</style>");
 
             Log.Info("SceneDef initialised");
             yield break;

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: spmSGMushroom1Cluster
   m_EditorClassIdentifier: 
   asset: RoR2/Base/shipgraveyard/spmSGMushroom1Cluster.spm
-  scale: 1
   minScale: 1
-  maxScale: 2
+  maxScale: 3
   ground: 1
   count: 40
   changeColor: 0

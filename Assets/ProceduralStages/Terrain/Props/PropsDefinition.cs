@@ -12,7 +12,6 @@ namespace ProceduralStages
     public class PropsDefinition : ScriptableObject
     {
         public string asset;
-        public float scale = 1;
         public float minScale = 1;
         public float maxScale = 1;
         public bool ground;

@@ -316,6 +316,8 @@ namespace ProceduralStages
                     {
                         scene.mainTrack = mainTrack;
                         scene.bossTrack = bossTrack;
+                        scene.nameToken = terrainType.GetName();
+                        scene.subtitleToken = terrainType.GetSubTitle();
                     }
                 };
 

@@ -80,10 +80,10 @@ namespace ProceduralStages
 
                         string description = $"Specifies the percentage of maps that will be generated with the \"{terrainType.GetName()}\" terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
                         var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, description);
-                        if (lastVersion < SemanticVersion.Parse("1.10.0"))
-                        {
-                            terrainConfig.Value = defaultPercent;
-                        }
+                        //if (lastVersion < SemanticVersion.Parse("1.12.0"))
+                        //{
+                        //    terrainConfig.Value = defaultPercent;
+                        //}
                         
                         ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
 

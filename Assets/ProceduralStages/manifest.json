@@ -7,7 +7,6 @@
   "dependencies": [
     "bbepis-BepInExPack-5.4.2108",
     "RiskofThunder-HookGenPatcher-1.2.3",
-    "Rune580-Risk_Of_Options-2.7.0",
-    "RiskofThunder-R2API_Language-1.0.1"
+    "Rune580-Risk_Of_Options-2.7.0"
   ]
 }
