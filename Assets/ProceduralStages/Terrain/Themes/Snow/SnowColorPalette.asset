@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021287e9fb8bd343875ef250c1ccb01, type: 3}
+  m_Name: SnowColorPalette
+  m_EditorClassIdentifier: 
+  size: 256
+  floor: {fileID: 11400000, guid: 48ffec34ca0b53447ac70f917209ba4f, type: 2}
+  walls: {fileID: 11400000, guid: 71543ad61c126204fa682063872b2b7f, type: 2}
+  ceilling: {fileID: 11400000, guid: f8d754667b066fe40878191e93b900bc, type: 2}
+  light: {fileID: 11400000, guid: 2544005246932cf4d82decae5b1da2af, type: 2}
+  fog: {fileID: 11400000, guid: d9fcf8060e898dc4c8026fedd08ed7a1, type: 2}
+  minNoise: 0.2
+  maxNoise: 0.25

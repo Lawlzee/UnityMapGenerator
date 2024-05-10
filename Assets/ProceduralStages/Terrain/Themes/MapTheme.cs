@@ -141,7 +141,7 @@ namespace ProceduralStages
 
             ColorHSV fogColorHSV = ColorHSV.GetRandom(minColor, maxColor, MapGenerator.rng);
             float fogHue = ColorHSV.ClampHue(sunHue, minColor.hue, maxColor.hue);
-
+            
             var fogColor = Color.HSVToRGB(fogHue, fogColorHSV.saturation, fogColorHSV.value);
 
             fog.fogColorStart.value = fogColor;

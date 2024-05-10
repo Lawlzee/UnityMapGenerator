@@ -10,6 +10,7 @@ namespace ProceduralStages
     {
         Random,
         LegacyRandom,
-        Desert
+        Desert,
+        Snow
     }
 }
