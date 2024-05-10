@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: LightColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.7, g: 0.21000001, b: 0.21000001, a: 0}
-  maxColor: {r: 0.7, g: 0.21000001, b: 0.21816655, a: 0}
+  minColor: {r: 0.35635456, g: 0.9811321, b: 0.91466635, a: 0}
+  maxColor: {r: 0.39259028, g: 0.21176471, b: 0.69803923, a: 0}

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db26add71c53e4342b7987556078bbff, type: 3}
   m_Name: OverworldGenerator
   m_EditorClassIdentifier: 
-  size: {x: 200, y: 65, z: 275}
-  sizeIncreasePerStage: {x: 25, y: 5, z: 30}
+  size: {x: 225, y: 65, z: 275}
+  sizeIncreasePerStage: {x: 25, y: 5, z: 35}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
   fogIntensityCoefficient: 1

@@ -18,5 +18,5 @@ MonoBehaviour:
   ceilling: {fileID: 11400000, guid: f8d754667b066fe40878191e93b900bc, type: 2}
   light: {fileID: 11400000, guid: 2544005246932cf4d82decae5b1da2af, type: 2}
   fog: {fileID: 11400000, guid: d9fcf8060e898dc4c8026fedd08ed7a1, type: 2}
-  minNoise: 0.2
-  maxNoise: 0.25
+  minNoise: 0.1
+  maxNoise: 0.15

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: CeillingColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.16078432, g: 0.11399608, b: 0.11399608, a: 0}
-  maxColor: {r: 0.16078432, g: 0.11372549, b: 0.11450979, a: 0}
+  minColor: {r: 0.2, g: 0.14146341, b: 0.14146341, a: 0}
+  maxColor: {r: 0.2, g: 0.14146341, b: 0.14146341, a: 0}

@@ -11,6 +11,7 @@ namespace ProceduralStages
         Random,
         LegacyRandom,
         Desert,
-        Snow
+        Snow,
+        Void
     }
 }

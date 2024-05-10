@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
-  m_Name: SMRockFormationMedium1
+  m_Name: spmArenaKelpTree
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/skymeadow/SMRockFormationMedium1.fbx
-  minScale: 300
-  maxScale: 400
+  asset: RoR2/Base/arena/spmArenaKelpTree.spm
+  minScale: 0.5
+  maxScale: 0.8
   ground: 1
-  count: 30
-  changeColor: 0
-  isRock: 1
-  normal: {x: 0, y: 0, z: 0}
+  count: 40
+  changeColor: 1
+  isRock: 0
+  normal: {x: 0, y: 1, z: 0}
   offset: {x: 0, y: 0, z: 0}
-  isSolid: 1
-  addCollision: 1
+  isSolid: 0
+  addCollision: 0

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
-  m_Name: FloorColor
+  m_Name: WallColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.59607846, g: 0.8980392, b: 0.8775816, a: 0}
-  maxColor: {r: 0.5245764, g: 0.37380004, b: 0.801, a: 0}
+  minColor: {r: 0.17178614, g: 0.16078432, b: 0.21568628, a: 0}
+  maxColor: {r: 0.16529995, g: 0.12766999, b: 0.1792453, a: 0}

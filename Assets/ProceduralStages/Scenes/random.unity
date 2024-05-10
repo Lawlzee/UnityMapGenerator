@@ -1672,7 +1672,7 @@ MonoBehaviour:
   loadPropsInEditor: 1
   editorSeed: 0
   editorTerrainType: 4
-  editorTheme: 3
+  editorTheme: 4
   editorStageInLoop: 1
   terrainGenerators:
   - {fileID: 11400000, guid: b1c7047386753f547af448012ee9a98d, type: 2}
@@ -1683,6 +1683,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
   - {fileID: 11400000, guid: 805d6808ab298af40a3f93a22b173232, type: 2}
   - {fileID: 11400000, guid: 3d804dcb07f96ef4e9628c3a5f55b464, type: 2}
+  - {fileID: 11400000, guid: e202df0b8d98d3142a45fa47e538948d, type: 2}
   meshColorer:
     grassAngle: -0.15
     detailSize: 100

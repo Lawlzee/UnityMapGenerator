@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
-  m_Name: props
+  m_Name: DCCrystalCluster Variant
   m_EditorClassIdentifier: 
-  asset: 
-  minScale: 1
-  maxScale: 1
-  ground: 0
-  count: 0
-  changeColor: 0
+  asset: RoR2/Base/dampcave/DCCrystalCluster Variant.prefab
+  minScale: 3.5
+  maxScale: 2
+  ground: 1
+  count: 50
+  changeColor: 1
   isRock: 0
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
-  isSolid: 0
+  isSolid: 1
   addCollision: 0
