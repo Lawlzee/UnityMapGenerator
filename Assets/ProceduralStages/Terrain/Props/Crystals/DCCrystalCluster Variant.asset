@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: DCCrystalCluster Variant
   m_EditorClassIdentifier: 
   asset: RoR2/Base/dampcave/DCCrystalCluster Variant.prefab
-  minScale: 3.5
-  maxScale: 2
+  minScale: 1.5
+  maxScale: 2.5
   ground: 1
-  count: 50
+  count: 40
   changeColor: 1
   isRock: 0
   normal: {x: 0, y: 0, z: 0}

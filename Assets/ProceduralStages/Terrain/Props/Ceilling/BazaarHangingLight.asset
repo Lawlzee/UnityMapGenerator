@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
-  m_Name: DCCrystalLarge
+  m_Name: BazaarHangingLight
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/dampcave/DCCrystalLarge.prefab
-  minScale: 2
-  maxScale: 4
-  ground: 1
-  count: 15
-  changeColor: 1
+  asset: RoR2/Base/bazaar/BazaarHangingLight.prefab
+  minScale: 1
+  maxScale: 1
+  ground: 0
+  count: 25
+  changeColor: 0
   isRock: 0
-  normal: {x: 0, y: 0, z: 0}
+  normal: {x: 0, y: 1, z: 0}
   offset: {x: 0, y: 0, z: 0}
-  isSolid: 1
+  isSolid: 0
   addCollision: 0

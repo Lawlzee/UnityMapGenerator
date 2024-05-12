@@ -21,6 +21,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c788246b1683e8c4a8ec2201fbb3c023, type: 2}
     - {fileID: 11400000, guid: 756b1cc552c419743b5f0182107aa73c, type: 2}
     - {fileID: 11400000, guid: eea4aba115edd974581cec679954639d, type: 2}
+    - {fileID: 11400000, guid: 1f81600ef3c686444b32cda63df0cdfc, type: 2}
   - name: Grass
     props:
     - {fileID: 11400000, guid: fb0ac0eb1b91cce4f907461317318561, type: 2}
@@ -32,6 +33,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 952c15b950b2f48478a2397cfb856865, type: 2}
     - {fileID: 11400000, guid: 45e9b92bea481fb489f9a8c885d0921d, type: 2}
     - {fileID: 11400000, guid: bfeb1c53c7af2ff48ae49343f7f89c39, type: 2}
+    - {fileID: 11400000, guid: 115f1be2ed0545d4d93695d1e26143f1, type: 2}
   - name: Rocks
     props:
     - {fileID: 11400000, guid: f3626ef36df2295449b0778ce45bfcc5, type: 2}
@@ -45,10 +47,13 @@ MonoBehaviour:
     props:
     - {fileID: 11400000, guid: 6790f859c18f7954587f2bf29d63e034, type: 2}
     - {fileID: 11400000, guid: b115dca37ec65874cac0b3eeaa85607e, type: 2}
+    - {fileID: 11400000, guid: b3183ff207b4720459498a78b3162d0d, type: 2}
   - name: Trees
     props:
     - {fileID: 11400000, guid: 62d1f9db2c7a4f84aba403b920d96f9d, type: 2}
   - name: Crystals
     props:
-    - {fileID: 11400000, guid: 4a1c15be05a4a0741a11dbb8ab4d0fb5, type: 2}
+    - {fileID: 11400000, guid: 9c3ee42a78a221b40b10cd09c270c1d5, type: 2}
     - {fileID: 11400000, guid: 7eaf81c4d9953c141ac7c3e0d8610fbe, type: 2}
+    - {fileID: 11400000, guid: 071d060832f30c4469cf808e11781626, type: 2}
+    - {fileID: 11400000, guid: 2a7233583c15db647a599b6d5e1b2a5e, type: 2}

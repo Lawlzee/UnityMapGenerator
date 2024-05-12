@@ -189,7 +189,7 @@ namespace ProceduralStages
             else
             {
                 //todo: add to config
-                themeType = themes[rng.RangeInt(1, themes.Length)].Theme;
+                themeType = themes[rng.RangeInt(0, themes.Length)].Theme;
             }
 
             MapTheme theme = themes.First(x => x.Theme == themeType);

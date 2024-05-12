@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: SPCoralMDLit
   m_EditorClassIdentifier: 
   asset: RoR2/DLC1/sulfurpools/SPCoralMDLit.prefab
-  scale: 1
   minScale: 1
   maxScale: 1.5
   ground: 1
@@ -22,5 +21,5 @@ MonoBehaviour:
   isRock: 1
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
-  isSolid: 0
+  isSolid: 1
   addCollision: 0

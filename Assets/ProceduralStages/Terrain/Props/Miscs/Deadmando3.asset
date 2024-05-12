@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: Deadmando3
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/moon/Deadmando1.prefab
+  asset: RoR2/Base/moon/Deadmando3.prefab
   minScale: 2
   maxScale: 2
   ground: 1
