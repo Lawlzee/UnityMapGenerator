@@ -115,6 +115,12 @@ namespace ProceduralStages
             {
                 GameObject gameObject = gameObjects[i];
                 MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+                if (renderers.Length == 0)
+                {
+                    meshRenderers[i] = renderers;
+                    continue;
+                }
+
                 Bounds bound = GetBounds(renderers);
 
                 meshRenderers[i] = renderers;

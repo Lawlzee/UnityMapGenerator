@@ -192,6 +192,7 @@ namespace ProceduralStages
                 themeType = themes[rng.RangeInt(0, themes.Length)].Theme;
             }
 
+            Log.Debug(themeType);
             MapTheme theme = themes.First(x => x.Theme == themeType);
 
             meshColorer.ColorMesh(terrain.meshResult);

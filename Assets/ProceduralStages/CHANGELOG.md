@@ -1,12 +1,10 @@
-## 1.12
-1. Fixed compatibility issue with Starstorm 2
-1. Random prop scale
-1. Balanced stage size islands + canyons
-1. Improve texture scale
-1. Desert theme
-1. Snow theme
-1. Renamed stages (todo change readme)
-1. Added new stage name, description and dream message
+### 1.12
+
+1. **New Themes**: Introduced five new themes: Plains, Desert, Snow, Void, and Mushroom. The old "random" theme will still be able to spawn.
+2. **Stage Size Adjustments**: Balanced the sizes of different stages. Increased the size of Islands and Open caves, while reducing the size of tunnel caves and Twisted canyons.
+3. **Theme-based Updates**: Altered stage names, descriptions, and dream messages to match the terrain type.
+4. **Texture Enhancement**: Improved the quality of textures across the board.
+5. **Compatibility Fixes**: Addressed compatibility issues with Starstorm 2.
 
 ## 1.11
 1. **Twisted Canyons Stages**: Introducing a new stage type featuring twisted canyons.
