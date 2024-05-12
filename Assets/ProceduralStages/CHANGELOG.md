@@ -5,6 +5,7 @@
 3. **Theme-based Updates**: Altered stage names, descriptions, and dream messages to match the terrain type.
 4. **Texture Enhancement**: Improved the quality of textures across the board.
 5. **Compatibility Fixes**: Addressed compatibility issues with Starstorm 2.
+6. **Removed dependency**: Removed dependency on `R2API.Language`.
 
 ## 1.11
 1. **Twisted Canyons Stages**: Introducing a new stage type featuring twisted canyons.

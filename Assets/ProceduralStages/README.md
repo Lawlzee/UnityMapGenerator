@@ -7,6 +7,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 ## Features
 
 - **Diverse Terrain Types**: Explore islands, open caves, twisted canyons and tunnel caves, each dynamically generated for a fresh adventure.
+- **Dynamic Map Themes**: Experience different visual themes with every stage, including Plains, Desert, Snow, Void, Mushroom, and the old "random" theme.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
 - **Integration with Simulacrum:** Seamlessly compatible with Simulacrum.
@@ -19,31 +20,50 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 - **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 - **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
 
-## Terrain Types
+## Stages
 
-## Island Stages
+Each stage is randomly generated, featuring unique terrain types and themes:
 
-![Image3](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image5.png)
-![Image4](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7.1/Image5.png)
-![Image6](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.7/Image3.png)
+- **Terrain Types:** Encounter islands, open caves, twisted canyons, and tunnel caves.
+- **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the classic "Random" theme.
 
-## Open Caves Stages
+### Screenshots
 
-![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.8/Image4.png)
-![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
-![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image3.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image12.png)
+*Twisted canyons map with the desert theme*
 
-## Tunnel Caves Stages
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image4.png)
+*Tunnel cave map with the mushroom theme*
 
-![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image5.png)
-![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image7.png)
-![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.9/Image9.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
+*Open cave map with the legacy "random" theme*
 
-## Twisted Canyons Stages
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image1.png)
+*Islands map with the void theme*
 
-![Image5](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image1.png)
-![Image2](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image7.png)
-![Image1](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.11/Image3.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image6.png)
+*Twisted canyons map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image11.png)
+*Tunnel cave map with the mushroom theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image15.png)
+*Islands map with the desert theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image13.png)
+*Twisted canyons map with the plains theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image3.png)
+*Islands map with the desert theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
+*Tunnel cave map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image8.png)
+*Twisted canyons map with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image10.png)
+*Open cave map with the plains theme*
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
@@ -92,18 +112,17 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 ## Todo list
 
 - Fix the bug where the player sometime gets stuck in the drop pod.
-- Add biomes/map types (snow, grass, desert, etc)
 - Add props clustering
 - Add floating island map?
-- Replace special stages with procedural maps (Gilded Coast, Void Fields, Void Locus)
 - Improve compatibility with Ro2API.DirectorAPI
 - Randomize more terrain settings
 - Create a random DccsPool instead of reusing the DccsPools from the game
 - Replace the moon with a procedurally generated stage
-- Randomize stage names
 - Address the issue of getting stuck in holes in the map.
 - Enhance stage creation performance.
 - Enhance the uniqueness of stages.
+- Improve the enemy pool algorithm.
+- Add theme spawn rate config
 
 
 ## Algorithms used
