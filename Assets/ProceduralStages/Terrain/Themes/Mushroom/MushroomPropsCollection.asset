@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 51a47b1b63b19134e94767582b530385, type: 3}
-  m_Name: PlainsPropsCollection
+  m_Name: MushroomPropsCollection
   m_EditorClassIdentifier: 
   categories:
   - name: Ceilling
@@ -29,33 +29,36 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 22fd4e2a81942ff478d0831ce93226df, type: 2}
     - {fileID: 11400000, guid: fb0ac0eb1b91cce4f907461317318561, type: 2}
     - {fileID: 11400000, guid: acd6590c88b22ba4fafda1f5f9be4af5, type: 2}
+    - {fileID: 11400000, guid: 5e929ea2343924b468333fe576e6a8f5, type: 2}
+    - {fileID: 11400000, guid: 08f5d2c570e911d4fbf1be7081eb9339, type: 2}
   - name: Plants
     props:
     - {fileID: 11400000, guid: 44e1b7488de590044a5bea76b3fedab6, type: 2}
     - {fileID: 11400000, guid: d6c7cbcf7be414a4eae460e81f1101b3, type: 2}
     - {fileID: 11400000, guid: dc0193113f246cb4d9146f041e9becb9, type: 2}
-    - {fileID: 11400000, guid: f2a105dc71be9fc4188dae82a9cf628d, type: 2}
     - {fileID: 11400000, guid: 3856ddbf06a4a5a42bc31d64086ffe01, type: 2}
     - {fileID: 11400000, guid: bb94f649e4041334ca056915fcf7ee83, type: 2}
     - {fileID: 11400000, guid: 952c15b950b2f48478a2397cfb856865, type: 2}
     - {fileID: 11400000, guid: 45e9b92bea481fb489f9a8c885d0921d, type: 2}
     - {fileID: 11400000, guid: bfeb1c53c7af2ff48ae49343f7f89c39, type: 2}
+    - {fileID: 11400000, guid: 96ee3ef26fe694b43864fabc48c03590, type: 2}
+    - {fileID: 11400000, guid: ddfa5ac84cad573469b4ace8fd5866f0, type: 2}
+    - {fileID: 11400000, guid: 7a1c9663e8cfb6f45945d8274a86cdb0, type: 2}
+    - {fileID: 11400000, guid: d7d620c16f1169d4c840afa6ec2e4a25, type: 2}
+    - {fileID: 11400000, guid: e02fbe1339982b34dbcdd2ffe6cf26c3, type: 2}
+    - {fileID: 11400000, guid: 96ee3ef26fe694b43864fabc48c03590, type: 2}
+    - {fileID: 11400000, guid: ddfa5ac84cad573469b4ace8fd5866f0, type: 2}
+    - {fileID: 11400000, guid: f49d116ed24e22b45bf7ab0afc4e591c, type: 2}
+    - {fileID: 11400000, guid: 359022f1dad56f34aa713c06d7626bd7, type: 2}
   - name: Rocks
     props:
-    - {fileID: 11400000, guid: f3626ef36df2295449b0778ce45bfcc5, type: 2}
     - {fileID: 11400000, guid: fc0a762508bddb346a4ba965660e0b11, type: 2}
     - {fileID: 11400000, guid: 2c52f3de03ad8674e9d56f13dac1877b, type: 2}
     - {fileID: 11400000, guid: cf97c4a4a5229cb4e85ad22a28e56725, type: 2}
-    - {fileID: 11400000, guid: 4ffa29bf743920d4388d4f119c2f1dea, type: 2}
     - {fileID: 11400000, guid: bfe2de2f9be55064082718d4d4ddd1cb, type: 2}
-    - {fileID: 11400000, guid: 6aee491850aaee14fb88ba6197c96d81, type: 2}
   - name: Structures
-    props:
-    - {fileID: 11400000, guid: 6790f859c18f7954587f2bf29d63e034, type: 2}
-    - {fileID: 11400000, guid: b115dca37ec65874cac0b3eeaa85607e, type: 2}
+    props: []
   - name: Trees
     props:
-    - {fileID: 11400000, guid: 62d1f9db2c7a4f84aba403b920d96f9d, type: 2}
     - {fileID: 11400000, guid: 9f3e187d69c1b694f9a3f195ef878cb2, type: 2}
     - {fileID: 11400000, guid: 10e9dfba0cdb4ad488c809573fb40cdb, type: 2}
-    - {fileID: 11400000, guid: 16357addd4420a64bb924f6c95ec5ffb, type: 2}

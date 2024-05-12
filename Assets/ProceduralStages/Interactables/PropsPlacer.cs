@@ -151,7 +151,10 @@ namespace ProceduralStages
                         normal: prop.normal != Vector3.zero
                             ? prop.normal
                             : default(Vector3?),
-                        scale);
+                        scale,
+                        initialRotation: prop.initialRotation != Vector3.zero
+                            ? prop.initialRotation
+                            : default(Vector3?));
 
                     instance.transform.position += prop.offset;
 

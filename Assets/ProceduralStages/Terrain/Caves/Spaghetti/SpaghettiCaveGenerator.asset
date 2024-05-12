@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6224d4b2decd71c449e1d713bab665c4, type: 3}
   m_Name: SpaghettiCaveGenerator
   m_EditorClassIdentifier: 
-  size: {x: 175, y: 70, z: 200}
-  sizeIncreasePerStage: {x: 15, y: 10, z: 25}
+  size: {x: 165, y: 65, z: 185}
+  sizeIncreasePerStage: {x: 15, y: 8, z: 25}
   sizeVariation: {x: 0.1, y: 0.1, z: 0.05}
   fogPower: 1
+  fogIntensityCoefficient: 1
   vignetteInsentity: 0.2
   ambiantLightIntensity: 0.7
   waterLevel: 30

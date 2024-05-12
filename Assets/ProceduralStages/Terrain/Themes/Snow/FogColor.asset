@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FogColor
   m_EditorClassIdentifier: 
   minColor: {r: 0.20784314, g: 0.69803923, b: 0.6347077, a: 0}
-  maxColor: {r: 0.4954894, g: 0.21176471, b: 0.69803923, a: 0}
+  maxColor: {r: 0.4208193, g: 0.21176471, b: 0.69803923, a: 0}
   colorStartAlpha: 0
   colorMidAlpha: 0.175
   colorEndAlpha: 0.35

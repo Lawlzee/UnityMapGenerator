@@ -19,10 +19,13 @@ namespace ProceduralStages
             Material material,
             Color? color,
             Vector3? normal,
-            float scale)
+            float scale,
+            Vector3? initialRotation)
         {
             var rotation = Quaternion.FromToRotation(Vector3.up, normal ?? this.normal)
-                * prefab.transform.rotation;
+                * (initialRotation != null
+                    ? Quaternion.Euler(initialRotation.Value)
+                    : prefab.transform.rotation);
 
             GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
 

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WallColor
   m_EditorClassIdentifier: 
   minColor: {r: 0.21568628, g: 0.3019608, b: 0.29166257, a: 0}
-  maxColor: {r: 0.3, g: 0.3, b: 0.3, a: 0}
+  maxColor: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 0}

@@ -13,6 +13,7 @@ namespace ProceduralStages
         Desert,
         Snow,
         Void,
-        Plains
+        Plains,
+        Mushroom
     }
 }
