@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f021287e9fb8bd343875ef250c1ccb01, type: 3}
+  m_Name: PlainsColorPalette
+  m_EditorClassIdentifier: 
+  size: 256
+  floor: {fileID: 11400000, guid: 3490a8be1b545dc41a6fa783cfd1a654, type: 2}
+  walls: {fileID: 11400000, guid: 26dd3b4f04dd73a47916dbc946842ada, type: 2}
+  ceilling: {fileID: 11400000, guid: 6914bc657a3160943ac1b6213da2a80a, type: 2}
+  light: {fileID: 11400000, guid: 82576af310db0844e83d16c2de9eb530, type: 2}
+  fog: {fileID: 11400000, guid: c65993fdb085fa943a0d47ef4e440a2a, type: 2}
+  minNoise: 0.2
+  maxNoise: 0.25

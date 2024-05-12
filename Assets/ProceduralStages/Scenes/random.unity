@@ -1684,6 +1684,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 805d6808ab298af40a3f93a22b173232, type: 2}
   - {fileID: 11400000, guid: 3d804dcb07f96ef4e9628c3a5f55b464, type: 2}
   - {fileID: 11400000, guid: e202df0b8d98d3142a45fa47e538948d, type: 2}
+  - {fileID: 11400000, guid: 67a0a61bcf19e8e468053bc5e088fd92, type: 2}
   meshColorer:
     grassAngle: -0.15
     detailSize: 100
