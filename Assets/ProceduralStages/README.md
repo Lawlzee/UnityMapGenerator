@@ -53,17 +53,17 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image13.png)
 *Twisted canyons map with the plains theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image3.png)
-*Islands map with the desert theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image23.png)
+*Tunnel cave map with the void theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
 *Tunnel cave map with the snow theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image8.png)
-*Twisted canyons map with the void theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image18.png)
+*Islands map with the plains theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image10.png)
-*Open cave map with the plains theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image14.png)
+*Open cave map with the snow theme*
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
