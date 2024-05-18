@@ -74,7 +74,7 @@ namespace ProceduralStages
 
                 foreach (TerrainType terrainType in Enum.GetValues(typeof(TerrainType)))
                 {
-                    if (terrainType != TerrainType.Random)
+                    if (terrainType != TerrainType.Random && terrainType != TerrainType.Moon)
                     {
                         float defaultPercent = _defaultTerrainTypesPercents[(terrainType, stageIndex)];
 

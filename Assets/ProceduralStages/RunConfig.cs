@@ -45,7 +45,6 @@ namespace ProceduralStages
         [SyncVar]
         public int nextStageClearCount;
 
-        [SyncVar]
         private SyncListFloat _terrainTypesPercents;
 
         public TerrainTypePercent[] terrainTypesPercents

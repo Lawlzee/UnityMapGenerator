@@ -168,6 +168,7 @@ namespace ProceduralStages
                     if (!usedMonsters.Contains(monster))
                     {
                         cards[i] = card;
+                        usedMonsters.Add(monster);
                         i++;
                     }
                 }

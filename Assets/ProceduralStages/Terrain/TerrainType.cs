@@ -12,7 +12,8 @@ namespace ProceduralStages
         OpenCaves,
         Islands,
         TunnelCaves,
-        Mines
+        Mines,
+        Moon
     }
 
     public static class TerrainTypeExtensions
@@ -29,6 +30,8 @@ namespace ProceduralStages
                     return "Lonely Island";
                 case TerrainType.Mines:
                     return "Twisted Canyon";
+                case TerrainType.Moon:
+                    return "Moon";
                 default:
                     return "?";
             }
@@ -46,6 +49,8 @@ namespace ProceduralStages
                     return "Lost Horizons";
                 case TerrainType.Mines:
                     return "Spiral Abyss";
+                case TerrainType.Moon:
+                    return "TODO";
                 default:
                     return "?";
             }
@@ -63,6 +68,8 @@ namespace ProceduralStages
                     return "You dream of isolated paradises.";
                 case TerrainType.Mines:
                     return "You dream of towering canyons veiled in swirling mist.";
+                case TerrainType.Moon:
+                    return "TODO";
                 default:
                     return "?";
             }

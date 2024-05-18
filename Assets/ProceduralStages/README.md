@@ -90,7 +90,7 @@ Here are the default spawn rates for all terrain types:
 | Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons |
 |---------|------------|--------------|---------|-----------------|
 | Stage 1 | 40%        | 20%          | 20%     | 20%             |
-| Stage 2 | 40%        | 20%          | 40%     | 20%             |                 
+| Stage 2 | 20%        | 20%          | 40%     | 20%             |                 
 | Stage 3 | 10%        | 40%          | 10%     | 40%             |
 | Stage 4 | 20%        | 40%          | 20%     | 20%             |
 | Stage 5 | 20%        | 20%          | 20%     | 40%             |

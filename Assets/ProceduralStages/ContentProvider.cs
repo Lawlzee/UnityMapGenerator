@@ -66,8 +66,10 @@ namespace ProceduralStages
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
             {
-                runConfigPrefab = assets.First(a => a.name == "Run Config");
-                ClientScene.RegisterPrefab(runConfigPrefab);
+                foreach (var asset in assets)
+                {
+                    ClientScene.RegisterPrefab(runConfigPrefab);
+                }
             }));
 
             var seerRequest = Addressables.LoadAssetAsync<Material>("RoR2/Base/bazaar/matBazaarSeerWispgraveyard.mat");
