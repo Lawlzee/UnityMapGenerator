@@ -66,9 +66,11 @@ namespace ProceduralStages
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
             {
+                runConfigPrefab = assets.First(a => a.name == "Run Config");
+
                 foreach (var asset in assets)
                 {
-                    ClientScene.RegisterPrefab(runConfigPrefab);
+                    ClientScene.RegisterPrefab(asset);
                 }
             }));
 

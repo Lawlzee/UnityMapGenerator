@@ -28,7 +28,6 @@ namespace ProceduralStages
         public override Terrain Generate()
         {
             var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
-            NetworkServer.Spawn(moonObject);
             moonObject.SetActive(true);
 
             MoonArena.AddArena(new Vector3(-77, -205, -1));

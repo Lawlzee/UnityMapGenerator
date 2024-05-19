@@ -358,7 +358,7 @@ namespace ProceduralStages
             //    MapGenerator.instance.propsPlacer.instances.Add(gameObject);
             //}
 
-            MapGenerator.instance.propsPlacer.instances.Add(gameplaySpace);
+            //MapGenerator.instance.propsPlacer.instances.Add(gameplaySpace);
         }
     }
 }

@@ -25,7 +25,8 @@
         "R2API.Addressables.dll",
         "R2API.Director.dll",
         "RiskOfOptions.dll",
-        "R2API.Language.dll"
+        "R2API.Language.dll",
+        "Wwise.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
