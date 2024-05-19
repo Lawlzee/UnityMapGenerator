@@ -54,7 +54,7 @@ namespace ProceduralStages
                 //
                 for (int i = 0; i < 16; i++)
                 {
-                    var pillar = Object.Instantiate(pillarsPrefabs[i / 4], transform);
+                    var pillar = Instantiate(pillarsPrefabs[i / 4], transform);
 
                     //todo
                     pillar.transform.position = new Vector3(i * 20, 0, 0);
@@ -70,7 +70,7 @@ namespace ProceduralStages
 
                 for (int i = 0; i < 4; i++)
                 {
-                    var elevator = Object.Instantiate(elevatorPrefab, transform);
+                    var elevator = Instantiate(elevatorPrefab, transform);
 
                     //todo
                     elevator.transform.position = new Vector3(i * 20, 0, 50);

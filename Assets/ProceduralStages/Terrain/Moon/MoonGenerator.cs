@@ -34,7 +34,7 @@ namespace ProceduralStages
             
             if (NetworkServer.active)
             {
-                var dropship = MoonDropship.Place(new Vector3(100, 0, 0));
+                var dropship = MoonDropship.Place(new Vector3(100, 0, 0), moonObject);
 
                 moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>().dropshipZone = dropship;
             }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace ProceduralStages
 {
@@ -17,6 +18,7 @@ namespace ProceduralStages
         public Vector3 localEulerAngles;
         public Vector3 localScale = new Vector3(1, 1, 1);
         public bool active = true;
+        public bool spawnServer;
 
         public void Awake()
         {
@@ -27,6 +29,11 @@ namespace ProceduralStages
             gameObject.transform.localEulerAngles = localEulerAngles;
             gameObject.transform.localScale = localScale;
             gameObject.SetActive(active);
+
+            if (spawnServer && NetworkServer.active)
+            {
+                NetworkServer.Spawn(gameObject);
+            }
         }
     }
 }

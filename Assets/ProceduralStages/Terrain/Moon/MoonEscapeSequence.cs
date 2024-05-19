@@ -32,12 +32,10 @@ namespace ProceduralStages
 
                 escapeSequenceController.onCompleteEscapeSequenceServer.AddListener(() => globalEventMethodLibrary.RunBeginGameOverServer(mainEnding));
                 escapeSequenceController.onFailEscapeSequenceServer.AddListener(() => globalEventMethodLibrary.RunBeginGameOverServer(escapeSequenceFailed));
+                escapeSequenceController.scheduledEvents[1].onEnter.AddListener(() => dropshipZone.transform.Find("StragglerKiller").gameObject.SetActive(true));
+                escapeSequenceController.scheduledEvents[1].onExit.AddListener(() => dropshipZone.transform.Find("StragglerKiller").gameObject.SetActive(false));
 
-                GameObject brotherHauntMasterPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/BrotherHaunt/BrotherHauntMaster.prefab").WaitForCompletion();
-                var brotherHauntMaster = Instantiate(brotherHauntMasterPrefab, transform);
-                brotherHauntMaster.SetActive(false);
-
-                GameObject freeDropship = new GameObject();
+                GameObject freeDropship = new GameObject("FreeDropship");
                 freeDropship.transform.parent = escapeSequenceObjects.transform;
                 OnEnableEvent onEnableEvent = freeDropship.AddComponent<OnEnableEvent>();
                 onEnableEvent.action = new UnityEvent();
@@ -45,35 +43,24 @@ namespace ProceduralStages
 
                 GameObject frogSpawner = new GameObject("FrogSpawner");
                 frogSpawner.transform.parent = escapeSequenceObjects.transform;
-                frogSpawner.transform.position = new Vector3(1105.95f, -283.0119f, 1182.11f);
+                frogSpawner.transform.localPosition = new Vector3(1105.95f, -283.0119f, 1182.11f);
                 GenericSceneSpawnPoint frogSpawnPoint = frogSpawner.AddComponent<GenericSceneSpawnPoint>();
                 frogSpawnPoint.networkedObjectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/FrogInteractable.prefab").WaitForCompletion();
 
-                GameObject spawnMasters = new GameObject("SpawnMasters");
+                var brotherHauntMaster = transform.Find("BrotherHauntMaster").gameObject;
+                var brotherHauntCharacterMaster = brotherHauntMaster.GetComponent<CharacterMaster>();
+
+                var spawnMasters = new GameObject("SpawnMasters");
                 spawnMasters.transform.parent = escapeSequenceObjects.transform;
                 StartEvent startEvent = spawnMasters.AddComponent<StartEvent>();
                 startEvent.action = new UnityEvent();
-                startEvent.action.AddListener(() => brotherHauntMaster.GetComponent<CharacterMaster>().SpawnBodyHere());
+                startEvent.action.AddListener(brotherHauntCharacterMaster.SpawnBodyHere);
+
+                dropshipZone.transform.Find("States").Find("EscapeComplete").Find("ServerLogic").gameObject.GetComponent<OnEnableEvent>().action.AddListener(() => escapeSequenceController.CompleteEscapeSequence());
             }
 
-            //RunningOutOfTimePostProcess
-            //VoidReaverDirector
-            //LunarMonsterDirector
-            //LowRumbleShakeEmitter
-            //TiltEmitter
-            //TiltEmitter
-            //Post-Process
             //Rock Particles, Fast
             //Mega Glows
-            //SpawnMasters
-            GameObject musicObject = new GameObject("Music");
-            musicObject.transform.parent = escapeSequenceObjects.transform;
-            MusicTrackOverride musicTrackOverride = musicObject.AddComponent<MusicTrackOverride>();
-            musicTrackOverride.track = Addressables.LoadAssetAsync<MusicTrackDef>("RoR2/Base/Common/muEscape.asset").WaitForCompletion();
-            musicTrackOverride.priority = 3;
-
-            //FreeDropship
-            //ExitOrbHolders
         }
     }
 }

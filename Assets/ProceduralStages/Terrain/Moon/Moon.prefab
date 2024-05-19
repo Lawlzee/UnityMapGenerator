@@ -106,6 +106,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardVelocity: {x: 0, y: 0, z: 4.25}
   backwardVelocity: {x: 0, y: 0, z: -3.36}
+--- !u!1 &131927690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 131927691}
+  - component: {fileID: 131927692}
+  m_Layer: 0
+  m_Name: TiltEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &131927691
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131927690}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 4.8367e-41, y: 1.602944e-10, z: 8.14e-43}
+--- !u!114 &131927692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131927690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -565067572, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeOnStart: 1
+  shakeOnEnable: 0
+  wave:
+    amplitude: 0.5
+    frequency: 0.1
+    cycleOffset: 0.5
+  duration: Infinity
+  radius: Infinity
+  scaleShakeRadiusWithLocalScale: 0
+  amplitudeTimeDecay: 0
 --- !u!1 &136444812
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,6 +192,109 @@ Transform:
   m_Father: {fileID: 496057725}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 90.00001, z: 0}
+--- !u!1 &140888663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 140888664}
+  - component: {fileID: 140888667}
+  - component: {fileID: 140888666}
+  - component: {fileID: 140888665}
+  m_Layer: 20
+  m_Name: Post-Process
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &140888664
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140888663}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &140888667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140888663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 0}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 9999
+--- !u!114 &140888666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140888663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472164b427bca4f49b52fde7e8689bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  postProcessVolume: {fileID: 140888667}
+  asset: RoR2/Base/title/ppSceneMoonEscape.asset
+--- !u!114 &140888665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140888663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -432102721, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ppVolume: {fileID: 140888667}
+  ppWeightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxDuration: 3
+  destroyOnEnd: 0
 --- !u!1 &163056008
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,13 +732,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 234780887}
-  m_LocalRotation: {x: -0.5, y: 0.5, z: -0.5, w: 0.5}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -110.66, y: 296.3, z: 139.24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 496057725}
   m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: -180, y: -90, z: -7.730941e+11}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &234780910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -601,6 +757,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 0}
   localScale: {x: 1, y: 1, z: 1}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,6 +776,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -65.789}
   localScale: {x: 2.876048, y: 2.876048, z: 2.876048}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,9 +792,10 @@ MonoBehaviour:
   objectName: MoonArenaDynamicPillar
   asset: RoR2/Base/moon/MoonArenaDynamicPillar.prefab
   localPosition: {x: -28.86454, y: 0, z: -64.44868}
-  localEulerAngles: {x: -7.730941e+11, y: -5.337557e+10, z: -172.034}
+  localEulerAngles: {x: -90.00001, y: 0, z: 7.966001}
   localScale: {x: 4.77052, y: 4.770522, z: 4.770521}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,6 +814,7 @@ MonoBehaviour:
   localEulerAngles: {x: -89.99999, y: 180, z: -7.730941e+11}
   localScale: {x: 4.316903, y: 4.316903, z: 4.316904}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -673,6 +833,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 88.11201}
   localScale: {x: 4.406304, y: 4.406304, z: 4.406304}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -691,6 +852,7 @@ MonoBehaviour:
   localEulerAngles: {x: -89.99999, y: -7.730941e+11, z: 34.07999}
   localScale: {x: 6.09877, y: 6.09877, z: 6.09877}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,6 +871,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -174.136}
   localScale: {x: 4.718696, y: 4.718696, z: 4.718696}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780903
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,6 +890,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 9.98}
   localScale: {x: 4.263173, y: 4.263174, z: 4.263173}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -745,6 +909,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 132.724}
   localScale: {x: 5.4184, y: 5.418399, z: 5.418398}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,6 +928,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -105.474}
   localScale: {x: 1.158542, y: 1.158542, z: 1.158542}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -781,6 +947,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -144.325}
   localScale: {x: 4.37322, y: 4.373219, z: 4.373219}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780899
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -799,6 +966,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 100.806}
   localScale: {x: 5.866328, y: 5.866324, z: 5.866324}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,9 +982,10 @@ MonoBehaviour:
   objectName: MoonArenaDynamicPillar
   asset: RoR2/Base/moon/MoonArenaDynamicPillar.prefab
   localPosition: {x: 66.6531, y: 0, z: -2.379524}
-  localEulerAngles: {x: -7.730941e+11, y: 180, z: -14.17297}
+  localEulerAngles: {x: -90.00001, y: 0, z: 165.827}
   localScale: {x: 2.922203, y: 2.922204, z: 2.922202}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780897
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,6 +1004,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 131.251}
   localScale: {x: 1.462554, y: 1.462554, z: 1.462554}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -853,6 +1023,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 1.85}
   localScale: {x: 3.248402, y: 3.248402, z: 3.248402}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,6 +1042,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: -6.480216e+10, z: -41.168}
   localScale: {x: 2.360926, y: 2.360926, z: 2.360926}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -889,6 +1061,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 57.48}
   localScale: {x: 2.451298, y: 2.451298, z: 2.451298}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -907,6 +1080,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -25.276}
   localScale: {x: 3.096346, y: 3.096346, z: 3.096346}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,6 +1099,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: -5.391778e+10, z: 20.268}
   localScale: {x: 4.847903, y: 4.847903, z: 4.847903}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -943,6 +1118,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -93.30901}
   localScale: {x: 2.365851, y: 2.365851, z: 2.365851}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -961,6 +1137,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -54.069}
   localScale: {x: 6.259068, y: 6.259068, z: 6.259068}
   active: 0
+  spawnServer: 0
 --- !u!114 &234780889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -979,6 +1156,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: -173.868}
   localScale: {x: 1.377627, y: 1.377627, z: 1.377627}
   active: 0
+  spawnServer: 0
 --- !u!114 &6229434886037554933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -997,6 +1175,7 @@ MonoBehaviour:
   localEulerAngles: {x: -90.00001, y: 0, z: 0}
   localScale: {x: 0, y: 0, z: 0}
   active: 0
+  spawnServer: 0
 --- !u!1 &252835634
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +1191,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &252835635
 Transform:
   m_ObjectHideFlags: 0
@@ -1028,6 +1207,89 @@ Transform:
   - {fileID: 207505076}
   m_Father: {fileID: 1449380567}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &301009360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 301009361}
+  - component: {fileID: 301009362}
+  m_Layer: 0
+  m_Name: LowRumbleShakeEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &301009361
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301009360}
+  m_LocalRotation: {x: 0, y: 0, z: 0.70710677, w: -0.70710677}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: -180, y: 180, z: -7.730941e+11}
+--- !u!114 &301009362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301009360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -565067572, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeOnStart: 1
+  shakeOnEnable: 0
+  wave:
+    amplitude: 0.02
+    frequency: 30
+    cycleOffset: 0
+  duration: Infinity
+  radius: Infinity
+  scaleShakeRadiusWithLocalScale: 0
+  amplitudeTimeDecay: 0
+--- !u!1 &336751286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336751287}
+  m_Layer: 0
+  m_Name: OrbDestination
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &336751287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336751286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386276809580247}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &411354377
 GameObject:
@@ -1102,7 +1364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &425722944
 Transform:
   m_ObjectHideFlags: 0
@@ -1541,7 +1803,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &496057725
 Transform:
   m_ObjectHideFlags: 0
@@ -1550,8 +1812,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 496057724}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 82.2, y: 32.60069, z: -215.1}
+  m_LocalScale: {x: 1.542426, y: 1.542426, z: 1.542426}
   m_Children:
   - {fileID: 1258010541}
   - {fileID: 51970004}
@@ -2116,7 +2378,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754672672}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -349616682, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
   m_Name: 
@@ -2232,6 +2494,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicTrackOverride: {fileID: 759937883}
   asset: RoR2/Base/Common/muNone.asset
+--- !u!1 &772190694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 772190695}
+  - component: {fileID: 772190697}
+  - component: {fileID: 772190696}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &772190695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772190694}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 6e-45, z: 1.11148e-40}
+--- !u!114 &772190697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772190694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -318230426, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  track: {fileID: 0}
+  priority: 3
+--- !u!114 &772190696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772190694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8674bb4e373bbfd4bbf75e7e58b9b321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicTrackOverride: {fileID: 772190697}
+  asset: RoR2/Base/Common/muEscape.asset
 --- !u!1 &806296989
 GameObject:
   m_ObjectHideFlags: 0
@@ -7166,6 +7488,7 @@ MonoBehaviour:
   localEulerAngles: {x: 0, y: 4e-45, z: 4.7518e-41}
   localScale: {x: 1, y: 1, z: 1}
   active: 0
+  spawnServer: 0
 --- !u!114 &954331164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7345,7 +7668,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1000705618
 Transform:
   m_ObjectHideFlags: 0
@@ -7731,6 +8054,89 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardVelocity: {x: -0.001011331, y: -1.049423, z: 2.074295}
   backwardVelocity: {x: 0, y: 0, z: -1}
+--- !u!1 &1254326870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1254326871}
+  - component: {fileID: 1254326872}
+  m_Layer: 0
+  m_Name: LunarMonsterDirector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1254326871
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254326870}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 3.786545e-29, y: 0, z: 0}
+--- !u!114 &1254326872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254326870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 2.3333333
+  maxRerollSpawnInterval: 4.3333335
+  moneyWaveIntervals:
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  teamIndex: 2
+  creditMultiplier: 0.3
+  spawnDistanceMultiplier: 2
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 0
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 1
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
 --- !u!1 &1258010540
 GameObject:
   m_ObjectHideFlags: 0
@@ -7989,6 +8395,329 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 1307253616}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
+--- !u!1 &1363230656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1363230657}
+  - component: {fileID: 1363230658}
+  m_Layer: 0
+  m_Name: TiltEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1363230657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363230656}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1363230658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363230656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -565067572, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeOnStart: 1
+  shakeOnEnable: 0
+  wave:
+    amplitude: 0.5
+    frequency: 0.1
+    cycleOffset: 0
+  duration: Infinity
+  radius: Infinity
+  scaleShakeRadiusWithLocalScale: 0
+  amplitudeTimeDecay: 0
+--- !u!1 &1411120049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1411120050}
+  - component: {fileID: 4578927623548626192}
+  - component: {fileID: 1411120051}
+  - component: {fileID: 1411120052}
+  - component: {fileID: 1411120053}
+  - component: {fileID: 1411120054}
+  - component: {fileID: 1411120055}
+  - component: {fileID: 1411120056}
+  - component: {fileID: 1411120057}
+  - component: {fileID: 1411120058}
+  - component: {fileID: 1411120059}
+  - component: {fileID: 1411120060}
+  - component: {fileID: 1411120061}
+  m_Layer: 0
+  m_Name: ExitOrbHolders
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1411120050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -91, y: 501.5, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 0}
+--- !u!114 &4578927623548626192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 5.75
+  orbLocalPosition: {x: 33.3, y: 0.9325447, z: 3.320005}
+  orbLocalRotatiton: {x: 90.00001, y: 0, z: 0}
+  orbLocalScale: {x: 1.150437, y: 1.150437, z: 1.150437}
+  timeMax: 0.3
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 5.16
+  orbLocalPosition: {x: 144.8, y: 133.5327, z: 34.01962}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 2.411744, y: 2.411744, z: 2.411744}
+  timeMax: 0.3
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 3.01
+  orbLocalPosition: {x: 144.8, y: 133.5326, z: 3.319611}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.24323, y: 1.24323, z: 1.24323}
+  timeMax: 0.24
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 7.900433e-35, z: 6.45e-43}
+  rotatorSlowRoationSpeed: 6.25
+  orbLocalPosition: {x: 103.1, y: 215.8326, z: 3.319382}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
+  timeMax: 0.3
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: -6.358157e-28, y: 1e-45, z: 0}
+  rotatorSlowRoationSpeed: -7.82
+  orbLocalPosition: {x: -8.400002, y: 107.1325, z: -7.880318}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 0.9871553, y: 0.9871553, z: 0.9871553}
+  timeMax: 0.25
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: -3.031649e-13, y: 8.068748e-34, z: -3.031649e-13}
+  rotatorSlowRoationSpeed: 4.42
+  orbLocalPosition: {x: -100.8, y: 99.43257, z: 14.31972}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 2.389379, y: 2.389379, z: 2.389379}
+  timeMax: 0.22
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 1e-44, z: 1.07077e-40}
+  rotatorSlowRoationSpeed: -4.84
+  orbLocalPosition: {x: -116.7, y: -27.76746, z: 1.620077}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 2.454931, y: 2.454931, z: 2.454931}
+  timeMax: 0.5
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 5.23
+  orbLocalPosition: {x: -120, y: -143.8674, z: 8.620422}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
+  timeMax: 0.3
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: -2.65
+  orbLocalPosition: {x: -42.39999, y: -115.2675, z: -7.379669}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.311065, y: 1.311065, z: 1.311065}
+  timeMax: 0.45
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 5
+  orbLocalPosition: {x: 92.1, y: -134.2674, z: 11.62039}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
+  timeMax: 0.1
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: -4.43
+  orbLocalPosition: {x: -50.89999, y: 1.432524, z: -3.780003}
+  orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
+  orbLocalScale: {x: 1.21852, y: 1.21852, z: 1.21852}
+  timeMax: 0.3
+  explicitDestination: {fileID: 1411120050}
+--- !u!114 &1411120061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411120049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c962def95ac920f44bd17c9fe8bab16e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotatorLocalRotatiton: {x: 0, y: 0, z: 0}
+  rotatorSlowRoationSpeed: 8.16
+  orbLocalPosition: {x: -13.8, y: -56.46748, z: -3.379841}
+  orbLocalRotatiton: {x: 90.00001, y: 0, z: 0}
+  orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
+  timeMax: 0.25
+  explicitDestination: {fileID: 1411120050}
 --- !u!1 &1430198551
 GameObject:
   m_ObjectHideFlags: 0
@@ -8011,7 +8740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1430198552
 Transform:
   m_ObjectHideFlags: 0
@@ -8159,6 +8888,109 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47846ffc03714eb49bb4fedb15cadc64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1440134357
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440134358}
+  - component: {fileID: 1440134361}
+  - component: {fileID: 1440134360}
+  - component: {fileID: 1440134359}
+  m_Layer: 20
+  m_Name: RunningOutOfTimePostProcess
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1440134358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440134357}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1440134361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440134357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472164b427bca4f49b52fde7e8689bbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  postProcessVolume: {fileID: 1440134360}
+  asset: RoR2/Base/moon2/ppEscapeSequenceFailure.asset
+--- !u!114 &1440134360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440134357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 0}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 99
+--- !u!114 &1440134359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440134357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -432102721, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ppVolume: {fileID: 1440134360}
+  ppWeightCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  maxDuration: 5
+  destroyOnEnd: 0
 --- !u!1 &1449380566
 GameObject:
   m_ObjectHideFlags: 0
@@ -8180,7 +9012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1449380567
 Transform:
   m_ObjectHideFlags: 0
@@ -8765,6 +9597,104 @@ Transform:
   m_Father: {fileID: 1449380567}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1939569207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1939569208}
+  - component: {fileID: 1939569209}
+  - component: {fileID: 1939569210}
+  m_Layer: 0
+  m_Name: VoidReaverDirector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1939569208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939569207}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3223386277147805709}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 3.131011e-19, z: 8.11e-43}
+--- !u!114 &1939569209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939569207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 653292689, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customName: 
+  monsterCredit: 0
+  expRewardCoefficient: 0.2
+  goldRewardCoefficient: 1
+  minSeriesSpawnInterval: 0.1
+  maxSeriesSpawnInterval: 1
+  minRerollSpawnInterval: 2.3333333
+  maxRerollSpawnInterval: 4.3333335
+  moneyWaveIntervals:
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  - min: 0.2
+    max: 0.2
+  teamIndex: 4
+  creditMultiplier: 0.7
+  spawnDistanceMultiplier: 1
+  maxSpawnDistance: Infinity
+  minSpawnRange: 0
+  shouldSpawnOneWave: 0
+  targetPlayers: 1
+  skipSpawnIfTooCheap: 0
+  maxConsecutiveCheapSkips: 2147483647
+  resetMonsterCardIfFailed: 1
+  maximumNumberToSpawnBeforeSkipping: 1
+  eliteBias: 1
+  onSpawnedServer:
+    m_PersistentCalls:
+      m_Calls: []
+  combatSquad: {fileID: 0}
+  spawnEffectPrefab: {fileID: 0}
+  ignoreTeamSizeLimit: 0
+  _monsterCards: {fileID: 0}
+  fallBackToStageMonsterCards: 1
+  currentSpawnTarget: {fileID: 0}
+--- !u!114 &1939569210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939569207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80ac4253e69995243bd309d0620dd4f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combatDirector: {fileID: 1939569209}
+  asset: RoR2/Base/Common/dccsNullifiersOnly.asset
 --- !u!1 &1977096260
 GameObject:
   m_ObjectHideFlags: 0
@@ -9151,6 +10081,7 @@ Transform:
   - {fileID: 3223386276827644220}
   - {fileID: 496057725}
   - {fileID: 1458550160}
+  - {fileID: 336751287}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9215,13 +10146,14 @@ GameObject:
   - component: {fileID: 3223386276827644161}
   - component: {fileID: 3223386276827644166}
   - component: {fileID: 461531039}
+  - component: {fileID: 316080956}
   m_Layer: 0
   m_Name: MoonEscapeSequence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3223386276827644220
 Transform:
   m_ObjectHideFlags: 0
@@ -9304,7 +10236,7 @@ MonoBehaviour:
   onEnterMainEscapeSequence:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3223386276827644221}
+      - m_Target: {fileID: 3223386277147805710}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -9321,7 +10253,45 @@ MonoBehaviour:
   onFailEscapeSequenceServer:
     m_PersistentCalls:
       m_Calls: []
-  scheduledEvents: []
+  scheduledEvents:
+  - minSecondsRemaining: -10
+    maxSecondsRemaining: 5
+    onEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1440134357}
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+    onExit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1440134357}
+          m_MethodName: SetActive
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - minSecondsRemaining: -10
+    maxSecondsRemaining: 0.2
+    onEnter:
+      m_PersistentCalls:
+        m_Calls: []
+    onExit:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!114 &3223386276827644160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9388,6 +10358,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47846ffc03714eb49bb4fedb15cadc64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &316080956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3223386276827644221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a23be2b992992ce4a8bdf00782fe9628, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: BrotherHauntMaster
+  asset: RoR2/Base/BrotherHaunt/BrotherHauntMaster.prefab
+  localPosition: {x: 0, y: 0, z: 0}
+  localEulerAngles: {x: -180, y: 180, z: -7.730941e+11}
+  localScale: {x: 1, y: 1, z: 1}
+  active: 1
+  spawnServer: 1
 --- !u!1 &3223386277147805710
 GameObject:
   m_ObjectHideFlags: 0
@@ -9416,7 +10405,16 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1440134358}
+  - {fileID: 1939569208}
+  - {fileID: 1254326871}
+  - {fileID: 301009361}
+  - {fileID: 1363230657}
+  - {fileID: 131927691}
+  - {fileID: 140888664}
+  - {fileID: 772190695}
+  - {fileID: 1411120050}
   m_Father: {fileID: 3223386276827644220}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -26,7 +26,8 @@
         "R2API.Director.dll",
         "RiskOfOptions.dll",
         "R2API.Language.dll",
-        "Wwise.dll"
+        "Wwise.dll",
+        "Rewired_Core.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],
