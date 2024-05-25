@@ -31,6 +31,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: acd6590c88b22ba4fafda1f5f9be4af5, type: 2}
     - {fileID: 11400000, guid: 5e929ea2343924b468333fe576e6a8f5, type: 2}
     - {fileID: 11400000, guid: 08f5d2c570e911d4fbf1be7081eb9339, type: 2}
+    - {fileID: 11400000, guid: cd5dd619b2c2d554f984fb0b022c5b90, type: 2}
   - name: Plants
     props:
     - {fileID: 11400000, guid: 44e1b7488de590044a5bea76b3fedab6, type: 2}
@@ -50,6 +51,9 @@ MonoBehaviour:
     - {fileID: 11400000, guid: ddfa5ac84cad573469b4ace8fd5866f0, type: 2}
     - {fileID: 11400000, guid: f49d116ed24e22b45bf7ab0afc4e591c, type: 2}
     - {fileID: 11400000, guid: 359022f1dad56f34aa713c06d7626bd7, type: 2}
+    - {fileID: 11400000, guid: d60ee033f897ed242a8fe93b87072d09, type: 2}
+    - {fileID: 11400000, guid: 95def1971fe274845a93ffaa86158e19, type: 2}
+    - {fileID: 11400000, guid: f8b9c0ab0bd3b654392e561ad0699d99, type: 2}
   - name: Rocks
     props:
     - {fileID: 11400000, guid: fc0a762508bddb346a4ba965660e0b11, type: 2}

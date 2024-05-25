@@ -465,10 +465,8 @@ namespace ProceduralStages
                 var neighbours = kdTree.RadialSearch(airNode.position, airNodeMinDistance * airNodeMinDistance, airNodeMinDistance * airNodeMinDistance * 4);
 
                 uint linkCount = 0;
-                for (int j = 0; j < neighbours.Count; j++)
+                foreach (var neighbor in neighbours)
                 {
-                    var neighbor = neighbours[j];
-
                     int neighbourIndex = neighbor.Value;
                     if (neighbourIndex == i)
                     {
@@ -545,7 +543,7 @@ namespace ProceduralStages
                 return false;
             }
 
-            float nearestDistanceSqr = kdTree.GetNearestNeighboursDistanceSqr(targetPosition);
+            float nearestDistanceSqr = kdTree.GetNearestNeighbour(targetPosition).DistanceSqr;
 
             if (nearestDistanceSqr != float.MaxValue)
             {

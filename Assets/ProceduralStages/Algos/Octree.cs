@@ -117,20 +117,19 @@ namespace ProceduralStages
             }
         }
 
-        public float GetNearestNeighboursDistanceSqr(Vector3 position)
+        public (float DistanceSqr, Point Point) GetNearestNeighbour(Vector3 position)
         {
+            Point minPoint = default;
             float minDistance = float.MaxValue;
 
-            var queue = new PriorityQueue<Octree<T>, float>();
+            var queue = new PriorityQueue<Octree<T>, float>(8);
             queue.Enqueue(this, 0);
 
-            while (queue.Count > 0)
+            while (queue.TryDequeue(out Octree<T> octant, out float currentOctantMinDistanceSqr))
             {
-                queue.TryDequeue(out Octree<T> octant, out float currentOctantMinDistanceSqr);
-
                 if (currentOctantMinDistanceSqr > minDistance)
                 {
-                    return minDistance;
+                    return (minDistance, minPoint);
                 }
 
                 State state = octant.GetState();
@@ -160,13 +159,61 @@ namespace ProceduralStages
                         float distanceSqr = (point.Position - position).sqrMagnitude;
                         if (distanceSqr < minDistance)
                         {
+                            minPoint = point;
                             minDistance = distanceSqr;
                         }
                     }
                 }
             }
 
-            return minDistance;
+            return (minDistance, minPoint);
+        }
+
+        public IEnumerable<Point> GetNearestNeighbours(Vector3 position)
+        {            
+            var sortedPoints = new PriorityQueue<Point, float>(8);
+
+            var queue = new PriorityQueue<Octree<T>, float>(8);
+            queue.Enqueue(this, 0);
+
+            while (queue.TryDequeue(out Octree<T> octant, out float currentOctantMinDistanceSqr))
+            {
+                while (sortedPoints.TryPeek(out var p, out float pointPriority) && pointPriority <= currentOctantMinDistanceSqr)
+                {
+                    yield return sortedPoints.Dequeue();
+                }
+
+                State state = octant.GetState();
+
+                if (state == State.HasOctants)
+                {
+                    for (int i = 0; i < 8; i++)
+                    {
+                        var subOctant = octant._octants[i];
+                        if (subOctant.GetState() == State.HasPlaceInBucket && subOctant._pointCount == 0)
+                        {
+                            continue;
+                        }
+
+                        float octantDistance = subOctant._bounds.SqrDistance(position);
+                        queue.Enqueue(subOctant, octantDistance);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < octant._pointCount; i++)
+                    {
+                        var point = octant._points[i];
+                        float distanceSqr = (point.Position - position).sqrMagnitude;
+                        sortedPoints.Enqueue(point, distanceSqr);
+                    }
+                }
+            }
+
+            while (sortedPoints.TryDequeue(out var p, out float _))
+            {
+                yield return p;
+            }
         }
 
         public List<Point> RadialSearch(Vector3 position, float minDistance, float sqrtMaxDistance)

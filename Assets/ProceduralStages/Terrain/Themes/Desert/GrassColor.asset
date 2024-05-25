@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
-  m_Name: LightColor
+  m_Name: GrassColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.583201, g: 0.25882354, b: 0.84705883, a: 0}
-  maxColor: {r: 0.78756005, g: 0.2588235, b: 0.85882354, a: 0}
+  minColor: {r: 0.475, g: 0.27804878, b: 0.24329267, a: 0}
+  maxColor: {r: 0.581, g: 0.36906287, b: 0.2704025, a: 0}

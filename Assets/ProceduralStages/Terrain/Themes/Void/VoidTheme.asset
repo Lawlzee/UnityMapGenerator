@@ -29,6 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb3df9f4c24b3df468985b2918c283f4, type: 2}
   - {fileID: 11400000, guid: aefb0e0c40842ad4aba326e32d7ba474, type: 2}
   - {fileID: 11400000, guid: 722d6e4f9d30a0c429c09ca39905055e, type: 2}
+  - {fileID: 11400000, guid: 57366955bb1ac81429a65783e8e88a3a, type: 2}
   colorPalettes:
   - {fileID: 11400000, guid: 14c48846df3912442b86b8f32ef26a25, type: 2}
   skyboxes:

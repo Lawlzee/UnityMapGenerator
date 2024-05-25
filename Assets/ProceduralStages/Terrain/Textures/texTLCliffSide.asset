@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bae08a0b55152d428631c5b95418987, type: 3}
-  m_Name: texVoidTerrainPlatformDiffuse
+  m_Name: texTLCliffSide
   m_EditorClassIdentifier: 
-  textureAsset: RoR2/DLC1/voidstage/texVoidTerrainPlatformDiffuse.png
+  textureAsset: RoR2/CU8/lakes/texTLCliffSide.png
   normalAsset: 
   bias: 0
-  averageColor: {r: 0.3647059, g: 0.503865, b: 0.63529414, a: 0}
-  scale: 0.02
+  averageColor: {r: 0.46274513, g: 0.42352945, b: 0.38823533, a: 0}
+  scale: 0.03
   bumpScale: 0
   constrast: 1
   glossiness: 0.2

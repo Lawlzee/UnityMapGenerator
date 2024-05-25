@@ -33,6 +33,11 @@ namespace ProceduralStages
         {
             _samples = new float[sampleCount];
 
+            if (curve.keys.Length == 0)
+            {
+                return;
+            }
+
             _min = curve.keys[0].time;
             _max = curve.keys[curve.keys.Length - 1].time;
             float range = _max - _min;

@@ -1216,6 +1216,16 @@ MonoBehaviour:
   eliteBias: 2
   spawnDistanceMultiplier: 6
   teleporterInstance: {fileID: 0}
+  lumerianEgg:
+    spawnCard: {fileID: 0}
+    selectionWeight: 0
+    spawnDistance: 0
+    preventOverhead: 0
+    minimumStageCompletions: 0
+    requiredUnlockable: 
+    forbiddenUnlockable: 
+    requiredUnlockableDef: {fileID: 0}
+    forbiddenUnlockableDef: {fileID: 0}
 --- !u!114 &1466132693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1567,15 +1577,18 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 5
+  editorTerrainType: 2
   editorTheme: 6
   editorStageInLoop: 1
+  editorFloorTexture: {fileID: 0}
+  editorWallTexture: {fileID: 0}
+  editorSkybox: {fileID: 0}
   terrainGenerators:
   - {fileID: 11400000, guid: b1c7047386753f547af448012ee9a98d, type: 2}
-  - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
   - {fileID: 11400000, guid: a40990f859bb04d46a4db0d0caa01c1f, type: 2}
   - {fileID: 11400000, guid: 2ade82e555b1e5144adf8595b07b05c4, type: 2}
   - {fileID: 11400000, guid: 46fc1ad3d90acc447adcdbbe1bc5917f, type: 2}
+  - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
   themes:
   - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
   - {fileID: 11400000, guid: 805d6808ab298af40a3f93a22b173232, type: 2}

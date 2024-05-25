@@ -12,6 +12,7 @@ namespace ProceduralStages
     {
         public int size = 256;
         public SurfaceColor floor;
+        public SurfaceColor grass;
         public SurfaceColor walls;
         public SurfaceColor ceilling;
 
@@ -23,7 +24,17 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float maxNoise = 0.25f;
 
-        public Texture2D CreateTexture()
+        public Texture2D CreateGrassTexture()
+        {
+            return CreateTexture(grass);
+        }
+
+        public Texture2D CreateTerrainTexture()
+        {
+            return CreateTexture(floor);
+        }
+
+        private Texture2D CreateTexture(SurfaceColor floor)
         {
             Color[] colors = new Color[6];
 

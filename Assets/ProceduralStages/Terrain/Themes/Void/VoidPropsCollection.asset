@@ -28,6 +28,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: fb0ac0eb1b91cce4f907461317318561, type: 2}
     - {fileID: 11400000, guid: 08f5d2c570e911d4fbf1be7081eb9339, type: 2}
     - {fileID: 11400000, guid: 5e929ea2343924b468333fe576e6a8f5, type: 2}
+    - {fileID: 11400000, guid: cd5dd619b2c2d554f984fb0b022c5b90, type: 2}
   - name: Plants
     props:
     - {fileID: 11400000, guid: dc0193113f246cb4d9146f041e9becb9, type: 2}

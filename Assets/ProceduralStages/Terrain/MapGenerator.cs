@@ -35,6 +35,9 @@ namespace ProceduralStages
         public Theme editorTheme;
         [Range(1, 5)]
         public int editorStageInLoop = 1;
+        public SurfaceTexture editorFloorTexture;
+        public SurfaceTexture editorWallTexture;
+        public SkyboxDef editorSkybox;
 
         public TerrainGenerator[] terrainGenerators;
         public MapTheme[] themes;

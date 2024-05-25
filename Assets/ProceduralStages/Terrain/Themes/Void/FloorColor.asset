@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: FloorColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.22202896, g: 0.1387681, b: 0.383, a: 0}
+  minColor: {r: 0.2384386, g: 0.13725491, b: 0.38431373, a: 0}
   maxColor: {r: 0.343718, g: 0.21605127, b: 0.383, a: 0}

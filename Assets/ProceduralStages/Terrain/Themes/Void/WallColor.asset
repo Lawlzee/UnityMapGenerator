@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 434c5194ed44f0346ac6d701998a382e, type: 3}
   m_Name: WallColor
   m_EditorClassIdentifier: 
-  minColor: {r: 0.17178614, g: 0.16078432, b: 0.21568628, a: 0}
-  maxColor: {r: 0.16529995, g: 0.12766999, b: 0.1792453, a: 0}
+  minColor: {r: 0.18461575, g: 0.16078432, b: 0.21568628, a: 0}
+  maxColor: {r: 0.09064461, g: 0.080845, b: 0.095, a: 0}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 256
   floor: {fileID: 11400000, guid: 23e548c27291ab541a9a04a94c843ac1, type: 2}
+  grass: {fileID: 11400000, guid: 68070e0def10f304c9bc911e9ceb6b40, type: 2}
   walls: {fileID: 11400000, guid: 6905714c10a77744ab597ee55e39a9fb, type: 2}
   ceilling: {fileID: 11400000, guid: b400cccc4bc67c141955b8216c41b1c1, type: 2}
   light: {fileID: 11400000, guid: 81927e2a517eb2645a2d432c3984f1f8, type: 2}

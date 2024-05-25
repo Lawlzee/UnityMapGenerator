@@ -34,6 +34,11 @@ namespace ProceduralStages
             Texture2D colorGradiant = SetTexture(material, colorPalette);
             
             var skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
+            if (Application.isEditor)
+            {
+                skybox = MapGenerator.instance.editorSkybox?.material ?? skybox;
+            }
+
             RenderSettings.skybox = skybox;
 
             var water = waters[MapGenerator.rng.RangeInt(0, waters.Length)];
@@ -95,21 +100,31 @@ namespace ProceduralStages
 
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
 
-            return colorGradiant;
+            return colorPalette.grass != null
+                ? colorPalette.CreateGrassTexture()
+                : colorGradiant;
         }
 
         private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette)
         {
             var rng = MapGenerator.rng;
 
-            Texture2D colorGradiant = colorPalette.CreateTexture();
+            Texture2D colorGradiant = colorPalette.CreateTerrainTexture();
             material.SetTexture("_ColorTex", colorGradiant);
 
             int floorIndex = rng.RangeInt(0, floor.Length);
             int wallIndex = rng.RangeInt(0, walls.Length);
 
+ 
+
             SurfaceTexture floorTexture = floor[floorIndex];
             SurfaceTexture wallTexture = walls[wallIndex];
+
+            if (Application.isEditor)
+            {
+                floorTexture = MapGenerator.instance.editorFloorTexture ?? floorTexture;
+                wallTexture = MapGenerator.instance.editorWallTexture ?? wallTexture;
+            }
 
             material.mainTexture = wallTexture.texture;
             material.SetTexture("_WallNormalTex", wallTexture.normal);

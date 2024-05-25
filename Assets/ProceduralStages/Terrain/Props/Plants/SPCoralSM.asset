@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SPCoralSM
   m_EditorClassIdentifier: 
   asset: RoR2/DLC1/sulfurpools/SPCoralSM.prefab
-  minScale: 1
-  maxScale: 1
+  minScale: 2.5
+  maxScale: 3.5
   ground: 1
   count: 35
   changeColor: 0
@@ -23,3 +23,4 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 0
+  initialRotation: {x: 0, y: 0, z: 0}

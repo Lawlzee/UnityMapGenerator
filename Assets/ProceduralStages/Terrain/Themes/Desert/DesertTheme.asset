@@ -23,9 +23,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 90055f4f0181e1d41923dce78bdead8f, type: 2}
   - {fileID: 11400000, guid: 862a2130b26588046834bba54403e4ad, type: 2}
   - {fileID: 11400000, guid: 4904dce2d1c80af47ba25ad6a560e585, type: 2}
+  - {fileID: 11400000, guid: e0c207689d42b93418117374be5252f3, type: 2}
   floor:
   - {fileID: 11400000, guid: e3ca6c7b0083e234d814d961ee81df3f, type: 2}
   - {fileID: 11400000, guid: 2ff6218a3fd545445be8c53ecd3408c5, type: 2}
+  - {fileID: 11400000, guid: 57366955bb1ac81429a65783e8e88a3a, type: 2}
+  - {fileID: 11400000, guid: e22f513736b837f45a6bea40672f5940, type: 2}
   colorPalettes:
   - {fileID: 11400000, guid: 1f082bb1602b476479a24e3d47703c73, type: 2}
   skyboxes:

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e83b01d9d7116df4aae861cb4a291685, type: 3}
   m_Name: WeirdGenerator
   m_EditorClassIdentifier: 
-  size: {x: 175, y: 200, z: 200}
+  size: {x: 100, y: 100, z: 100}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0, z: 0.2}
   fogPower: 1.75
@@ -34,3 +34,8 @@ MonoBehaviour:
     smoothingInterations: 3
     forceWalls: 0
     forceFloor: 0
+  randomPoints: 70
+  bucketSize: 1
+  removeEdges: 1
+  lineDistanceToDensityCurve: {fileID: 11400000, guid: a789cb232299eaa41aa22a40529acc90,
+    type: 2}
