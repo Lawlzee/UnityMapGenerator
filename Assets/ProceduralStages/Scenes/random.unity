@@ -580,7 +580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &464249045
 Transform:
   m_ObjectHideFlags: 0
@@ -1578,7 +1578,7 @@ MonoBehaviour:
   loadPropsInEditor: 1
   editorSeed: 0
   editorTerrainType: 2
-  editorTheme: 6
+  editorTheme: 2
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
@@ -1588,6 +1588,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a40990f859bb04d46a4db0d0caa01c1f, type: 2}
   - {fileID: 11400000, guid: 2ade82e555b1e5144adf8595b07b05c4, type: 2}
   - {fileID: 11400000, guid: 46fc1ad3d90acc447adcdbbe1bc5917f, type: 2}
+  - {fileID: 11400000, guid: 82abb8e99569b504893ff2afb6d3cc3a, type: 2}
   - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
   themes:
   - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
