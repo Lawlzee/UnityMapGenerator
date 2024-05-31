@@ -11,7 +11,6 @@ using System.Diagnostics;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
 using TMPro;
-using static UnityEngine.Experimental.TerrainAPI.TerrainUtility;
 
 namespace ProceduralStages
 {
@@ -20,6 +19,7 @@ namespace ProceduralStages
     {
         public float minFloorAngle = 0.4f;
         public float airNodeMinDistance = 4f;
+        public float airNodeMaxDistance = 4f;
         public int airNodeSample = 20;
         //public float airNodeheight = 20f;
 
@@ -364,215 +364,230 @@ namespace ProceduralStages
             }
         }
 
-        private NodeGraph CreateAirGraph(Terrain terrain)
+        private struct AirNode
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            public int index;
+            public Vector3Int cellPos;
+            public NodeGraph.Node node;
 
-            float mapScale = MapGenerator.instance.mapScale;
-
-
-            bool[,] bounds = new bool[terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(2)];
-            Parallel.For(0, terrain.densityMap.GetLength(0), x =>
-            {
-                for (int z = 0; z < terrain.densityMap.GetLength(2); z++)
-                {
-                    for (int y = 0; y < terrain.densityMap.GetLength(1); y++)
-                    {
-                        if (terrain.densityMap[x, y, z] >= 0.5f)
-                        {
-                            bounds[x, z] = true;
-                            break;
-                        }
-                    }
-                }
-            });
-
-            Vector3 mapSize = new Vector3(
-                mapScale * terrain.densityMap.GetLength(0),
-                mapScale * terrain.densityMap.GetLength(1),
-                mapScale * terrain.densityMap.GetLength(2));
-
-            Octree<int> kdTree = new Octree<int>(new Bounds(mapSize / 2, mapSize), 4);
-            List<NodeGraph.Node> airNodes = new List<NodeGraph.Node>();
-
-            Queue<Vector3> positionsToProcess = new Queue<Vector3>();
-
-            int seedCount = 0;
-            for (int i = 0; i < 5000 && seedCount < 25; i++)
-            {
-                float initialX = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(0) * mapScale;
-                float initialY = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(1) * mapScale;
-                float initialZ = MapGenerator.rng.nextNormalizedFloat * terrain.densityMap.GetLength(2) * mapScale;
-
-                Vector3 initialPosition = new Vector3(initialX, initialY, initialZ);
-
-                float density = densityMap.GetDensity(terrain.densityMap, initialPosition / mapScale, bounds);
-
-                if (density < 0.25f)
-                {
-                    positionsToProcess.Enqueue(initialPosition);
-
-                    NodeGraph.Node airNode = new NodeGraph.Node();
-                    airNode.position = initialPosition;
-                    airNode.forbiddenHulls = HullMask.None;
-                    airNode.flags = NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoCeiling;
-
-                    kdTree.Add(new Octree<int>.Point
-                    {
-                        Position = initialPosition,
-                        Value = airNodes.Count
-                    });
-                    airNodes.Add(airNode);
-
-                    seedCount++;
-                }
-            }
-
-            LogStats("initialPosition");
-
-            while (positionsToProcess.Count > 0)
-            {
-                Vector3 seedPosition = positionsToProcess.Dequeue();
-
-                for (int i = 0; i < airNodeSample; i++)
-                {
-                    float directionX = MapGenerator.rng.RangeFloat(-1, 1);
-                    float directionY = MapGenerator.rng.RangeFloat(-1, 1);
-                    float directionZ = MapGenerator.rng.RangeFloat(-1, 1);
-
-                    Vector3 direction = new Vector3(directionX, directionY, directionZ).normalized;
-
-                    float distance = MapGenerator.rng.RangeFloat(airNodeMinDistance, airNodeMinDistance * 2);
-
-                    Vector3 targetPosition = seedPosition + direction * distance;
-
-                    if (IsValidAirNodePosition(terrain.densityMap, mapScale, bounds, kdTree, airNodes, targetPosition))
-                    {
-                        positionsToProcess.Enqueue(targetPosition);
-                    }
-                }
-            }
-            LogStats("nodes");
-
-            NodeGraph.Node[] airNodesArray = airNodes.ToArray();
-            List<NodeGraph.Link> airLinks = new List<NodeGraph.Link>();
-
-            Log.Debug("links");
-
-            for (int i = 0; i < airNodes.Count; i++)
-            {
-                ref NodeGraph.Node airNode = ref airNodesArray[i];
-                var neighbours = kdTree.RadialSearch(airNode.position, airNodeMinDistance * airNodeMinDistance, airNodeMinDistance * airNodeMinDistance * 4);
-
-                uint linkCount = 0;
-                foreach (var neighbor in neighbours)
-                {
-                    int neighbourIndex = neighbor.Value;
-                    if (neighbourIndex == i)
-                    {
-                        continue;
-                    }
-
-                    NodeGraph.Node neighbourAirNode = airNodes[neighbourIndex];
-
-                    float distance = (neighbourAirNode.position - airNode.position).magnitude;
-
-                    airLinks.Add(new NodeGraph.Link
-                    {
-                        nodeIndexA = new NodeGraph.NodeIndex(i),
-                        nodeIndexB = new NodeGraph.NodeIndex(neighbourIndex),
-                        distanceScore = distance,
-                        minJumpHeight = 0,
-                        hullMask = 0xFFFFFFF,
-                        jumpHullMask = 0xFFFFFFF,
-                        gateIndex = 0
-                    });
-
-                    linkCount++;
-                }
-
-                airNode.linkListIndex = new NodeGraph.LinkListIndex
-                {
-                    index = airLinks.Count - (int)linkCount,
-                    size = linkCount
-                };
-            }
-
-            LogStats("links");
-
-            NodeGraph airGraph = ScriptableObject.CreateInstance<NodeGraph>();
-            airGraph.nodes = airNodesArray;
-            airGraph.links = airLinks.ToArray();
-            airGraph.Awake();
-
-            Log.Debug($"nodes: {airNodesArray.Length}");
-            Log.Debug($"links: {airLinks.Count}");
-
-            return airGraph;
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
 
-        private bool IsValidAirNodePosition(float[,,] map3d, float mapScale, bool[,] bounds, Octree<int> kdTree, List<NodeGraph.Node> airNodes, Vector3 targetPosition)
+        private NodeGraph CreateAirGraph(Terrain terrain)
         {
-            float density = densityMap.GetDensity(map3d, targetPosition / mapScale, bounds);
+            float mapScale = MapGenerator.instance.mapScale;
 
-            HullMask forbiddenHulls = HullMask.None;
+            Vector3Int size = new Vector3Int(terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(1), terrain.densityMap.GetLength(2));
+            Vector3Int cellSize = new Vector3Int(
+                Mathf.FloorToInt(mapScale * size.x / airNodeMinDistance),
+                Mathf.FloorToInt(mapScale * size.y / airNodeMinDistance),
+                Mathf.FloorToInt(mapScale * size.z / airNodeMinDistance));
 
-            if (density > densityMap.air.maxHumanDensity)
+            AirNode?[,,] nodes = new AirNode?[cellSize.x, cellSize.y, cellSize.z];
+
+            int[] nodeCounts = new int[cellSize.x];
+
+            Parallel.For(0, cellSize.x, x =>
             {
-                forbiddenHulls |= HullMask.Human;
-            }
+                int nodeCount = 0;
 
-            if (density > densityMap.air.maxGolemDensity)
-            {
-                forbiddenHulls |= HullMask.Golem;
-            }
-
-            if (density > densityMap.air.maxBeetleQueenDensity)
-            {
-                forbiddenHulls |= HullMask.BeetleQueen;
-            }
-
-            if (forbiddenHulls == (HullMask)7)
-            {
-                return false;
-            }
-
-            float nearestDistanceSqr = kdTree.GetNearestNeighbour(targetPosition).DistanceSqr;
-
-            if (nearestDistanceSqr != float.MaxValue)
-            {
-                if (nearestDistanceSqr < (airNodeMinDistance * airNodeMinDistance))
+                float posX = x * airNodeMinDistance;
+                for (int y = 0; y < cellSize.y; y++)
                 {
-                    return false;
+                    float posY = y * airNodeMinDistance;
+                    for (int z = 0; z < cellSize.z; z++)
+                    {
+                        float posZ = z * airNodeMinDistance;
+
+                        Vector3 pointIntegral = new Vector3Int(
+                            Mathf.FloorToInt(posX),
+                            Mathf.FloorToInt(posY),
+                            Mathf.FloorToInt(posZ));
+                        //Vector3 pointFractional = new Vector3(posX, posY, posZ) - pointIntegral;
+
+                        Vector3 displacement = RandomPG.Random3(pointIntegral) * airNodeMinDistance;
+
+                        Vector3 nodePos = pointIntegral + displacement;
+
+                        float density = densityMap.GetDensity(terrain.densityMap, nodePos / mapScale, null);
+
+                        HullMask forbiddenHulls = HullMask.None;
+
+                        if (density > densityMap.air.maxHumanDensity)
+                        {
+                            forbiddenHulls |= HullMask.Human;
+                        }
+
+                        if (density > densityMap.air.maxGolemDensity)
+                        {
+                            forbiddenHulls |= HullMask.Golem;
+                        }
+
+                        if (density > densityMap.air.maxBeetleQueenDensity)
+                        {
+                            forbiddenHulls |= HullMask.BeetleQueen;
+                        }
+
+                        if (forbiddenHulls == (HullMask)7)
+                        {
+                            continue;
+                        }
+
+                        NodeGraph.Node airNode = new NodeGraph.Node();
+                        airNode.position = nodePos;
+                        airNode.forbiddenHulls = forbiddenHulls;
+                        airNode.flags = NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoCeiling;
+
+                        nodes[x, y, z] = new AirNode
+                        {
+                            cellPos = new Vector3Int(x, y, z),
+                            node = airNode
+                        };
+                        nodeCount++;
+                    }
                 }
 
-                if (nearestDistanceSqr > (airNodeMinDistance * airNodeMinDistance * 4))
-                {
-                    Log.Debug(data: "More than max!");
-                    Log.Debug(Mathf.Sqrt(nearestDistanceSqr));
-                    Log.Debug(airNodeMinDistance * 2);
-                    return false;
-                }
-            }
-
-            NodeGraph.Node airNode = new NodeGraph.Node();
-            airNode.position = targetPosition;
-            airNode.forbiddenHulls = forbiddenHulls;
-            airNode.flags = NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoCeiling;
-
-            kdTree.Add(new Octree<int>.Point
-            {
-                Position = targetPosition,
-                Value = airNodes.Count
+                nodeCounts[x] = nodeCount;
             });
-            airNodes.Add(airNode);
-            return true;
+
+            AirNode[] filteredNodes = new AirNode[nodeCounts.Sum()];
+
+            int currentNodeIndex = 0;
+            for (int x = 0; x < cellSize.x; x++)
+            {
+                for (int y = 0; y < cellSize.y; y++)
+                {
+                    for (int z = 0; z < cellSize.z; z++)
+                    {
+                        AirNode? maybeNode = nodes[x, y, z];
+                        if (maybeNode == null)
+                        {
+                            continue;
+                        }
+
+                        AirNode node = maybeNode.Value;
+                        node.index = currentNodeIndex;
+
+                        nodes[x, y, z] = node;
+                        filteredNodes[currentNodeIndex] = node;
+                        currentNodeIndex++;
+                    }
+                }
+            }
+
+            NodeGraph.Link?[] links = new NodeGraph.Link?[filteredNodes.Length * 26];
+
+            int bandCount = 8;
+            int elementPerBand = Mathf.CeilToInt(filteredNodes.Length / (float)bandCount);
+            int[] linkCounts = new int[bandCount];
+
+            NodeGraph.Node[] finalNodes = new NodeGraph.Node[filteredNodes.Length];
+
+            Parallel.For(0, bandCount, bandIndex =>
+            {
+                uint totalLinkCount = 0;
+
+                int minIndex = bandIndex * elementPerBand;
+                int maxIndex = Mathf.Min(filteredNodes.Length - 1, (bandIndex + 1) * elementPerBand);
+
+                for (int nodeIndex = minIndex; nodeIndex < maxIndex; nodeIndex++)
+                {
+                    AirNode airNode = filteredNodes[nodeIndex];
+                    NodeGraph.Node node = airNode.node;
+                    Vector3Int cellPos = airNode.cellPos;
+
+                    uint linkCount = 0;
+                    for (int i = -1; i <= 1; i++)
+                    {
+                        if (cellPos.x + i < 0 || cellPos.x + i >= cellSize.x)
+                        {
+                            continue;
+                        }
+
+                        for (int j = -1; j <= 1; j++)
+                        {
+                            if (cellPos.y + j < 0 || cellPos.y + j >= cellSize.y)
+                            {
+                                continue;
+                            }
+
+                            for (int k = -1; k <= 1; k++)
+                            {
+                                if (cellPos.z + k < 0 || cellPos.z + k >= cellSize.z)
+                                {
+                                    continue;
+                                }
+
+                                if (i == 0 && j == 0 && k == 0)
+                                {
+                                    continue;
+                                }
+
+                                AirNode? neighbord = nodes[cellPos.x + i, cellPos.y + j, cellPos.z + k];
+
+                                if (neighbord == null)
+                                {
+                                    continue;
+                                }
+
+                                float distance = (airNode.node.position - neighbord.Value.node.position).magnitude;
+                                if (airNodeMinDistance <= distance && distance < airNodeMaxDistance)
+                                {
+                                    links[nodeIndex * 26 + linkCount] = new NodeGraph.Link
+                                    {
+                                        nodeIndexA = new NodeGraph.NodeIndex(nodeIndex),
+                                        nodeIndexB = new NodeGraph.NodeIndex(neighbord.Value.index),
+                                        distanceScore = distance,
+                                        minJumpHeight = 0,
+                                        hullMask = 0xFFFFFFF,
+                                        jumpHullMask = 0xFFFFFFF,
+                                        gateIndex = 0
+                                    };
+
+                                    linkCount++;
+                                }
+                            }
+                        }
+                    }
+
+                    node.linkListIndex = new NodeGraph.LinkListIndex
+                    {
+                        size = linkCount
+                    };
+                    finalNodes[nodeIndex] = node;
+
+                    totalLinkCount += linkCount;
+                }
+
+                linkCounts[bandIndex] = (int)totalLinkCount;
+            });
+
+            NodeGraph.Link[] filteredLinks = new NodeGraph.Link[linkCounts.Sum()];
+
+            int linkIndex = 0;
+            for (int i = 0; i < finalNodes.Length; i++)
+            {
+                ref NodeGraph.Node node = ref finalNodes[i];
+
+                node.linkListIndex.index = linkIndex;
+
+                uint linkCount = node.linkListIndex.size;
+
+                for (int j = 0; j < linkCount; j++)
+                {
+                    filteredLinks[linkIndex] = links[i * 26 + j].Value;
+                    linkIndex++;
+                }
+            }
+
+            NodeGraph airGraph = ScriptableObject.CreateInstance<NodeGraph>();
+            airGraph.nodes = finalNodes;
+            airGraph.links = filteredLinks;
+            airGraph.Awake();
+
+            Log.Debug($"nodes: {finalNodes.Length}");
+            Log.Debug($"links: {filteredLinks.Length}");
+
+            return airGraph;
         }
     }
 }

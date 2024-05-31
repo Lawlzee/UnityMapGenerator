@@ -21,13 +21,19 @@ namespace ProceduralStages
         public ThreadSafeCurve heightMapCurve;
         public float floorMinHeigth;
         public float floorMaxHeigth;
+        [Range(0, 1)]
+        public float ellipsisDistancePower = 0.5f;
+
+        public FBM peaksHeightMap;
+        public ThreadSafeCurve peaksHeightCurve;
 
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             //float[,,] map3d = RandomWalk(MapGenerator.instance.stageSize);
-            float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
+            //float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
+            float[,,] map3d = GenerateIsland(MapGenerator.instance.stageSize);
             LogStats("GenerateVoronoi");
             //float[,,] map3d = AngleRandomWalk(MapGenerator.instance.stageSize);
 
@@ -61,6 +67,49 @@ namespace ProceduralStages
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
             }
+        }
+
+        private float[,,] GenerateIsland(Vector3Int size)
+        {
+            float[,,] map = new float[size.x, size.y, size.z];
+
+            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            Vector2 center = new Vector3(size.x / 2f, size.z / 2f);
+
+            Parallel.For(0, size.x, x =>
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    float dx = x - center.x;
+                    float dz = z - center.y;
+
+                    float ellipsisDistance = Mathf.Pow((dx * dx) / (center.x * center.x) + (dz * dz) / (center.y * center.y), ellipsisDistancePower);
+                    float heightMapNoise = 0.5f * (heightMap.Evaluate(x + seedX, z + seedZ) + 1);
+                    float scaledNoise = heightMapNoise * (1 - Mathf.Clamp01(ellipsisDistance));
+
+                    float floorHeight = heightMapCurve.Evaluate(scaledNoise);
+                    float islandScaledFloorHeight = floorMinHeigth + floorHeight * (floorMaxHeigth - floorMinHeigth);
+
+                    float peaksHeightScale = floorHeight * ellipsisDistance;
+                    float peaksScaledFloorHeight = size.y * peaksHeightCurve.Evaluate(peaksHeightScale * 0.5f * (peaksHeightMap.Evaluate(x + seedX, z + seedZ) + 1));
+
+                    float scaledFloorHeight = Mathf.Max(islandScaledFloorHeight, peaksScaledFloorHeight);
+
+                    for (int y = 0; y < size.y; y++)
+                    {
+                        float noise = Mathf.Clamp01((scaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
+                        if (noise == 0f)
+                        {
+                            break;
+                        }
+                        map[x, y, z] = noise;
+                    }
+                }
+            });
+
+            return map;
         }
 
         private float[,,] GenerateVoronoi(Vector3Int size)
@@ -104,7 +153,7 @@ namespace ProceduralStages
                         {
                             Vector2 neighbor = new Vector2(i, j);
                             Vector2 pos = uvIntergral + neighbor;
-                            Vector2 displacement = Random2(pos);
+                            Vector2 displacement = RandomPG.Random2(pos);
                             Vector2 diff = neighbor + displacement - uvFractional;
                             float dist = diff.sqrMagnitude;
                             if (dist < minDistance1)
@@ -146,16 +195,7 @@ namespace ProceduralStages
 
             return map;
 
-            //https://github.com/patriciogonzalezvivo/lygia/blob/main/generative/random.hlsl
-            Vector2 Random2(Vector2 point)
-            {
-                Vector3 randomScale = new Vector3(443.897f, 441.423f, 0.0973f);
-
-                Vector3 point2 = (new Vector3(point.x * randomScale.x, point.y * randomScale.y, point.x * randomScale.z)).Frac();
-                var dot = Vector3.Dot(point2, new Vector3(point2.y + 19.19f, point2.z + 19.19f, point2.x + 19.19f));
-                Vector3 point3 = new Vector3(point2.x + dot, point2.y + dot, point2.z + dot);
-                return ((new Vector2(point3.x, point3.x) + new Vector2(point3.y, point3.z)) * new Vector2(point3.z, point3.y)).Frac();
-            }
+            
         }
     }
 }

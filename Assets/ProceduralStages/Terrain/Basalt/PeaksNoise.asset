@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 482c7e6432979ba40b31fb31e5e28639, type: 3}
-  m_Name: HeightMapNoise
+  m_Name: PeaksNoise
   m_EditorClassIdentifier: 
   amplitude: 1
-  frequency: 0.1
-  octaves: 4
+  frequency: 0.02
+  octaves: 3
   persistence: 0.5
   lacunarity: 2

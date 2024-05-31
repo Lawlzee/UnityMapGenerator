@@ -1,6 +1,8 @@
 ### 1.13
 1. Fix underwater occlusion culling
-1. 
+1. Improved themes
+1. Fixed DCCS pool selecting the same ennemies multiple times
+1. Air node generation is now ~20x faster
 
 ### 1.12
 

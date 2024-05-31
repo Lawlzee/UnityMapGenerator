@@ -42,6 +42,7 @@ namespace ProceduralStages
             LogStats("waller.AddFloor");
 
             float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
+            LogStats("floorWallsMixer");
 
             densityMap = map3dNoiser.AddNoise(densityMap);
             LogStats("map3dNoiser");

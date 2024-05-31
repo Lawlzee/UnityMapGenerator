@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda2a8e440d02d144a2a8e8bba60afea, type: 3}
   m_Name: BasaltGenerator
   m_EditorClassIdentifier: 
-  size: {x: 225, y: 65, z: 200}
+  size: {x: 300, y: 100, z: 300}
   sizeIncreasePerStage: {x: 25, y: 5, z: 35}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
@@ -22,8 +22,14 @@ MonoBehaviour:
   waterLevel: 8.5
   terrainType: 2
   ceillingPropsWeight: 0.3
-  voronoiScale: 0.12
-  heightMap: {fileID: 11400000, guid: 666c233e0a001a946ae1bd110645c887, type: 2}
+  voronoiScale: 0.15
+  heightMap: {fileID: 11400000, guid: 1e1133ac663812f4a92ec2bf7bdb7646, type: 2}
+  derivativeDisplacementStrength: 0.9
+  derivativeMax: 1
   voronoirBlendFactor: 0.015
-  floorMinHeigth: 0
-  floorMaxHeigth: 50
+  heightMapCurve: {fileID: 11400000, guid: a3b0af31679c0f24ab594ab8b10b3332, type: 2}
+  floorMinHeigth: -1
+  floorMaxHeigth: 12
+  ellipsisDistancePower: 0.4
+  peaksHeightMap: {fileID: 11400000, guid: 5d0d749658b24604489bcc976aa90ced, type: 2}
+  peaksHeightCurve: {fileID: 11400000, guid: 1eeba1873348bf04c9142465c6749037, type: 2}
