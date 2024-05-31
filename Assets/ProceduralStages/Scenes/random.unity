@@ -1577,7 +1577,7 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 1
+  editorTerrainType: 2
   editorTheme: 2
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}

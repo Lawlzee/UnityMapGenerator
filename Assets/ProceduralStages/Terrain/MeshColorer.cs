@@ -31,12 +31,15 @@ namespace ProceduralStages
                 MapGenerator.rng.RangeInt(0, short.MaxValue));
 
             var uvs = new Vector2[meshResult.vertices.Length];
-            Parallel.For(0, meshResult.vertices.Length, i =>
+            ParallelPG.For(0, meshResult.vertices.Length, 8, (band, min, max) =>
             {
-                var vertex = meshResult.vertices[i];
-                var normal = meshResult.normals[i];
+                for (int i = min; i < max; i++)
+                {
+                    var vertex = meshResult.vertices[i];
+                    var normal = meshResult.normals[i];
 
-                uvs[i] = GetUV(vertex, normal, seed);
+                    uvs[i] = GetUV(vertex, normal, seed);
+                }
             });
 
             meshResult.mesh.uv = uvs;

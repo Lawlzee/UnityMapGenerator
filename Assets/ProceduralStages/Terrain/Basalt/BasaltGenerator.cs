@@ -23,9 +23,12 @@ namespace ProceduralStages
         public float floorMaxHeigth;
         [Range(0, 1)]
         public float ellipsisDistancePower = 0.5f;
+        public ThreadSafeCurve floorMinNoiseByEclipseDistanceCurve;
+        public ThreadSafeCurve floorMaxNoiseByEclipseDistanceCurve;
 
         public FBM peaksHeightMap;
         public ThreadSafeCurve peaksHeightCurve;
+        public ThreadSafeCurve peaksHeightBonusByDistanceCurve;
 
         public override Terrain Generate()
         {
@@ -40,23 +43,17 @@ namespace ProceduralStages
             //map3d = smoother.SmoothMap(map3d);
             LogStats("smoother.SmoothMap");
 
-            var unOptimisedMesh = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
+            var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
-            MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
-            var optimisedMesh = simplifier.ToMesh();
-            LogStats("MeshSimplifier");
+            //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
+            //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
+            //var optimisedMesh = simplifier.ToMesh();
+            //LogStats("MeshSimplifier");
 
             return new Terrain
             {
-                meshResult = new MeshResult
-                {
-                    mesh = optimisedMesh,
-                    normals = optimisedMesh.normals,
-                    triangles = optimisedMesh.triangles,
-                    vertices = optimisedMesh.vertices
-                },
+                meshResult = meshResult,
                 floorlessDensityMap = map3d,
                 densityMap = map3d,
                 maxGroundheight = float.MaxValue
@@ -82,18 +79,51 @@ namespace ProceduralStages
             {
                 for (int z = 0; z < size.z; z++)
                 {
-                    float dx = x - center.x;
-                    float dz = z - center.y;
+                    var islandFloor = ComputeIslandFloor(new Vector2(x, z));
 
-                    float ellipsisDistance = Mathf.Pow((dx * dx) / (center.x * center.x) + (dz * dz) / (center.y * center.y), ellipsisDistancePower);
-                    float heightMapNoise = 0.5f * (heightMap.Evaluate(x + seedX, z + seedZ) + 1);
-                    float scaledNoise = heightMapNoise * (1 - Mathf.Clamp01(ellipsisDistance));
+                    float islandScaledFloorHeight = floorMinHeigth + islandFloor.floorHeight * (floorMaxHeigth - floorMinHeigth);
 
-                    float floorHeight = heightMapCurve.Evaluate(scaledNoise);
-                    float islandScaledFloorHeight = floorMinHeigth + floorHeight * (floorMaxHeigth - floorMinHeigth);
+                    Vector2 uv = new Vector2(
+                        x * voronoiScale,
+                        z * voronoiScale);
 
-                    float peaksHeightScale = floorHeight * ellipsisDistance;
-                    float peaksScaledFloorHeight = size.y * peaksHeightCurve.Evaluate(peaksHeightScale * 0.5f * (peaksHeightMap.Evaluate(x + seedX, z + seedZ) + 1));
+                    Vector2 uvIntegral = new Vector2Int(Mathf.FloorToInt(uv.x), Mathf.FloorToInt(uv.y));
+                    Vector2 uvFractional = uv - uvIntegral;
+
+                    float minDistance = float.MaxValue;
+                    Vector2 minPeakPos = new Vector2();
+
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            Vector2 neighbor = new Vector2(i, j);
+                            Vector2 pos = uvIntegral + neighbor;
+                            Vector2 displacement = RandomPG.Random2(pos);
+                            Vector2 diff = neighbor + displacement - uvFractional;
+                            float dist = diff.sqrMagnitude;
+                            if (dist < minDistance)
+                            {
+                                //bestPos2 = bestPos1;
+                                //minDistance2 = minDistance1;
+
+                                minPeakPos = pos + displacement;
+                                minDistance = dist;
+                            }
+                            //else if (dist < minDistance2)
+                            //{
+                            //    bestPos2 = pos + displacement;
+                            //    minDistance2 = dist;
+                            //}
+                        }
+                    }
+
+                    Vector2 peakPosition = minPeakPos / voronoiScale;
+
+                    var peakFloorHeight = ComputeIslandFloor(peakPosition);
+
+                    float peaksHeightScale = peakFloorHeight.ellipsisDistance * peakFloorHeight.floorHeight + peaksHeightBonusByDistanceCurve.Evaluate(peakFloorHeight.ellipsisDistance);
+                    float peaksScaledFloorHeight = size.y * peaksHeightCurve.Evaluate(peaksHeightScale * 0.5f * (peaksHeightMap.Evaluate(peakPosition.x + seedX, peakPosition.y + seedZ) + 1));
 
                     float scaledFloorHeight = Mathf.Max(islandScaledFloorHeight, peaksScaledFloorHeight);
 
@@ -105,6 +135,23 @@ namespace ProceduralStages
                             break;
                         }
                         map[x, y, z] = noise;
+                    }
+
+                    (float ellipsisDistance, float floorHeight) ComputeIslandFloor(Vector2 pos)
+                    {
+                        float dx = pos.x - center.x;
+                        float dz = pos.y - center.y;
+
+                        float ellipsisDistance = Mathf.Pow((dx * dx) / (center.x * center.x) + (dz * dz) / (center.y * center.y), ellipsisDistancePower);
+                        float heightMapNoise = 0.5f * (heightMap.Evaluate(pos.x + seedX, pos.y + seedZ) + 1);
+                        //float scaledNoise = heightMapNoise * (1 - Mathf.Clamp01(ellipsisDistance));
+                        float min = floorMinNoiseByEclipseDistanceCurve.Evaluate(ellipsisDistance);
+                        float max = floorMaxNoiseByEclipseDistanceCurve.Evaluate(ellipsisDistance);
+                        float scaledNoise = Mathf.Lerp(min, max, heightMapNoise);
+
+                        float floorHeight = heightMapCurve.Evaluate(scaledNoise);
+
+                        return (ellipsisDistance, floorHeight);
                     }
                 }
             });
@@ -138,8 +185,8 @@ namespace ProceduralStages
                         x * voronoiScale + derivativeNormalised.x * (1 - noiseHeight) * derivativeDisplacementStrength,
                         z * voronoiScale + derivativeNormalised.z * (1 - noiseHeight) * derivativeDisplacementStrength);
 
-                    Vector2 uvIntergral = new Vector2Int(Mathf.FloorToInt(uv.x), Mathf.FloorToInt(uv.y));
-                    Vector2 uvFractional = uv - uvIntergral;
+                    Vector2 uvIntegral = new Vector2Int(Mathf.FloorToInt(uv.x), Mathf.FloorToInt(uv.y));
+                    Vector2 uvFractional = uv - uvIntegral;
 
                     float minDistance1 = float.MaxValue;
                     Vector2 bestPos1 = new Vector2();
@@ -152,7 +199,7 @@ namespace ProceduralStages
                         for (int i = -1; i <= 1; i++)
                         {
                             Vector2 neighbor = new Vector2(i, j);
-                            Vector2 pos = uvIntergral + neighbor;
+                            Vector2 pos = uvIntegral + neighbor;
                             Vector2 displacement = RandomPG.Random2(pos);
                             Vector2 diff = neighbor + displacement - uvFractional;
                             float dist = diff.sqrMagnitude;

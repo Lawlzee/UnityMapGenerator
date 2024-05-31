@@ -72,23 +72,17 @@ namespace ProceduralStages
             //map3d = smoother.SmoothMap(map3d);
             LogStats("smoother.SmoothMap");
 
-            var unOptimisedMesh = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
+            var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
-            MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
-            var optimisedMesh = simplifier.ToMesh();
-            LogStats("MeshSimplifier");
+            //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
+            //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
+            //var optimisedMesh = simplifier.ToMesh();
+            //LogStats("MeshSimplifier");
 
             return new Terrain
             {
-                meshResult = new MeshResult
-                {
-                    mesh = optimisedMesh,
-                    normals = optimisedMesh.normals,
-                    triangles = optimisedMesh.triangles,
-                    vertices = optimisedMesh.vertices
-                },
+                meshResult = meshResult,
                 floorlessDensityMap = map3d,
                 densityMap = map3d,
                 maxGroundheight = float.MaxValue

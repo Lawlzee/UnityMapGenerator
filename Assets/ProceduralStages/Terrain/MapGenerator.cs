@@ -181,6 +181,7 @@ namespace ProceduralStages
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
 
             Terrain terrain = terrainGenerator.Generate();
+            LogStats("terrainGenerator.Generate");
 
             var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
             oobZone.size = scaledSize;

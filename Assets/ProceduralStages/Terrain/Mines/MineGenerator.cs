@@ -67,24 +67,18 @@ namespace ProceduralStages
             float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
             LogStats("floorDensityMap");
 
-            var unOptimisedMesh = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
+            var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
-            MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
-            var optimisedMesh = simplifier.ToMesh();
-            LogStats("MeshSimplifier");
+            //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
+            //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
+            //var optimisedMesh = simplifier.ToMesh();
+            //LogStats("MeshSimplifier");
 
 
             return new Terrain
             {
-                meshResult = new MeshResult
-                {
-                    mesh = optimisedMesh,
-                    normals = optimisedMesh.normals,
-                    triangles = optimisedMesh.triangles,
-                    vertices = optimisedMesh.vertices
-                },
+                meshResult = meshResult,
                 floorlessDensityMap = floorDensityMap,
                 densityMap = map3d,
                 maxGroundheight = float.MaxValue

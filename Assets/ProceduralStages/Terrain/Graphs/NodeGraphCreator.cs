@@ -477,17 +477,13 @@ namespace ProceduralStages
             NodeGraph.Link?[] links = new NodeGraph.Link?[filteredNodes.Length * 26];
 
             int bandCount = 8;
-            int elementPerBand = Mathf.CeilToInt(filteredNodes.Length / (float)bandCount);
             int[] linkCounts = new int[bandCount];
 
             NodeGraph.Node[] finalNodes = new NodeGraph.Node[filteredNodes.Length];
 
-            Parallel.For(0, bandCount, bandIndex =>
+            ParallelPG.For(0, bandCount, bandCount, (bandIndex, minIndex, maxIndex) =>
             {
                 uint totalLinkCount = 0;
-
-                int minIndex = bandIndex * elementPerBand;
-                int maxIndex = Mathf.Min(filteredNodes.Length - 1, (bandIndex + 1) * elementPerBand);
 
                 for (int nodeIndex = minIndex; nodeIndex < maxIndex; nodeIndex++)
                 {

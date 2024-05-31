@@ -12,24 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda2a8e440d02d144a2a8e8bba60afea, type: 3}
   m_Name: BasaltGenerator
   m_EditorClassIdentifier: 
-  size: {x: 300, y: 100, z: 300}
+  size: {x: 400, y: 100, z: 400}
   sizeIncreasePerStage: {x: 25, y: 5, z: 35}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
-  waterLevel: 8.5
+  waterLevel: 15
   terrainType: 2
   ceillingPropsWeight: 0.3
-  voronoiScale: 0.15
+  voronoiScale: 0.2
   heightMap: {fileID: 11400000, guid: 1e1133ac663812f4a92ec2bf7bdb7646, type: 2}
   derivativeDisplacementStrength: 0.9
   derivativeMax: 1
   voronoirBlendFactor: 0.015
   heightMapCurve: {fileID: 11400000, guid: a3b0af31679c0f24ab594ab8b10b3332, type: 2}
-  floorMinHeigth: -1
+  floorMinHeigth: -0.5
   floorMaxHeigth: 12
   ellipsisDistancePower: 0.4
+  floorMinNoiseByEclipseDistanceCurve: {fileID: 11400000, guid: fe14198b1acd01c4e9f0e6f810514561,
+    type: 2}
+  floorMaxNoiseByEclipseDistanceCurve: {fileID: 11400000, guid: f316d9bc93b941244a4138bf7ad2e7ec,
+    type: 2}
   peaksHeightMap: {fileID: 11400000, guid: 5d0d749658b24604489bcc976aa90ced, type: 2}
   peaksHeightCurve: {fileID: 11400000, guid: 1eeba1873348bf04c9142465c6749037, type: 2}
+  peaksHeightBonusByDistanceCurve: {fileID: 11400000, guid: 17084c06176d1414eb529217c33cd2ff,
+    type: 2}
