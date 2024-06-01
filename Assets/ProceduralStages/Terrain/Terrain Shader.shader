@@ -4,30 +4,40 @@
     Properties
     {
         _MainTex("Wall Texture", 2D) = "white" {}
-        _WallNormalTex("Wall Normal Texture", 2D) = "bump" {}
+        //_WallNormalTex("Wall Normal Texture", 2D) = "bump" {}
         _WallBias("Wall Bias",  Range(0, 1)) = 1
         _WallColor ("Wall Average Color", Color) = (1,1,1,1)
         _WallScale("Wall Texture Scale",  float) = 1
-        _WallBumpScale("Wall Bump Scale",  float) = 1
+        //_WallBumpScale("Wall Bump Scale",  float) = 1
         _WallContrast("Wall Texture Contrast",  float) = 1
+        
         _WallGlossiness("Wall Glossiness", Range(0, 1)) = 0.5
         [Gamma] _WallMetallic("Wall Metallic", Range(0, 1)) = 0
 
         _FloorTex("Floor Texture", 2D) = "white" {}
-        _FloorNormalTex("Floor Normal Texture", 2D) = "bump" {}
+        //_FloorNormalTex("Floor Normal Texture", 2D) = "bump" {}
         _FloorBias("Floor Bias",  Range(0, 1)) = 1
         _FloorColor ("Floor Average Color", Color) = (1,1,1,1)
         _FloorScale("Floor Texture Scale",  float) = 1
-        _FloorBumpScale("Floor Bump Scale",  float) = 1
+        //_FloorBumpScale("Floor Bump Scale",  float) = 1
         _FloorContrast("Floor Texture Contrast",  float) = 1
-        _FloorGlossiness("Floor Glossiness", Range(0, 1)) = 0.5
-        [Gamma] _FloorMetallic("Floor Metallic", Range(0, 1)) = 0
+        //_FloorGlossiness("Floor Glossiness", Range(0, 1)) = 0.5
+        //[Gamma] _FloorMetallic("Floor Metallic", Range(0, 1)) = 0
+
+        _DetailTex("Detail Texture", 2D) = "white" {}
+        _DetailBias("Detail Bias",  Range(0, 1)) = 1
+        _DetailColor ("Detail Average Color", Color) = (1,1,1,1)
+        _DetailScale("Detail Texture Scale",  float) = 1
+        _DetailContrast("Detail Texture Contrast",  float) = 1
+
+        _DetailScaleCoefficient("Detail Scale Coefficient",  float) = 1
+        _DetailIntensity("Detail Intensity",  float) = 1
 
         _ColorTex("Color Texture", 2D) = "white" {}
 
         //_Glossiness("Glossiness", Range(0, 1)) = 0.5
         
-        _Intensity("Internsity", Float) = 1
+        _Intensity("Intensity", Float) = 1
 
 
 
@@ -41,11 +51,15 @@
     }
     SubShader
     {
-        Tags { "LIGHTMODE" = "DEFERRED" "PreviewType" = "Plane" "RenderType" = "Opaque" }
+        Tags { 
+            "LIGHTMODE" = "DEFERRED" 
+            "PreviewType" = "Plane" 
+            "RenderType" = "Opaque" 
+        }
 
         CGPROGRAM
 
-        #pragma surface surf Standard vertex:vert fullforwardshadows addshadow
+        #pragma surface surf Standard vertex:vert// fullforwardshadows addshadow
 
         //#pragma shader_feature _WallNormalTex
         //#pragma shader_feature _FloorTex
@@ -53,24 +67,36 @@
         #pragma target 3.5
 
         sampler2D _MainTex;
-        sampler2D _WallNormalTex;
+        //sampler2D _WallNormalTex;
         half _WallBias;
         float4 _WallColor;
         float _WallScale;
-        float _WallBumpScale;
+        //float _WallBumpScale;
         float _WallContrast;
         half _WallGlossiness;
         half _WallMetallic;
 
         sampler2D _FloorTex;
-        sampler2D _FloorNormalTex;
+        //sampler2D _FloorNormalTex;
         half _FloorBias;
         float4 _FloorColor;
         float _FloorScale;
-        float _FloorBumpScale;
-        float _FloorGlossiness;
+        //float _FloorBumpScale;
         half _FloorContrast;
-        half _FloorMetallic;
+        //float _FloorGlossiness;
+        //half _FloorMetallic;
+
+        sampler2D _DetailTex;
+        //sampler2D _FloorNormalTex;
+        half _DetailBias;
+        float4 _DetailColor;
+        float _DetailScale;
+        //float _FloorBumpScale;
+        half _DetailContrast;
+        half _DetailScaleCoefficient;
+        half _DetailIntensity;
+        //float _FloorGlossiness;
+        //half _FloorMetallic;
 
         half _Intensity;
 
@@ -107,6 +133,25 @@
             return c.z * lerp( K.xxx, saturate( p - K.xxx ), c.y );
         }
 
+        float3 getColor(float2 tx, float2 ty, float2 tz, float4 averageColor, float3 blendingFactor, float3 hsv, sampler2D tex, float scale, float contrast, half bias)
+        {
+            float4 colorX = tex2D(tex, tx * scale) * blendingFactor.x;
+            float4 colorY = tex2D(tex, ty * scale) * blendingFactor.y;
+            float4 colorZ = tex2D(tex, tz * scale) * blendingFactor.z;
+            float4 color = colorX + colorY + colorZ;
+
+            float3 colorHsv = RGBToHSV(color);
+            
+            float3 averageColorHsv = RGBToHSV(averageColor);
+            float hue = frac((colorHsv.x - averageColorHsv.x) + hsv.x);
+            float saturation = lerp(saturate((((colorHsv.y / averageColorHsv.y) - 1) * contrast + 1) * hsv.y), colorHsv.y, bias);
+            float value = lerp(saturate((((colorHsv.z / averageColorHsv.z) - 1) * contrast + 1) * hsv.z), colorHsv.z, bias);
+            
+            float3 newColorHsv = float3(hue, saturation, value);
+            float3 newColor = HSVToRGB(newColorHsv);
+            return newColor;
+        }
+
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
             // Blending factor of triplanar mapping
@@ -116,77 +161,21 @@
             // Color
             half4 color = tex2D(_ColorTex, IN.uv_MainTex);
             float3 hsv = RGBToHSV(color);
-
+            
             float2 tx = IN.localCoord.zy;
             float2 ty = IN.localCoord.zx;
             float2 tz = IN.localCoord.xy;
-
-            half4 wallColorX = tex2D(_MainTex, tx * _WallScale) * blendingFactor.x;
-            half4 wallColorY = tex2D(_MainTex, ty * _WallScale) * blendingFactor.y;
-            half4 wallColorZ = tex2D(_MainTex, tz * _WallScale) * blendingFactor.z;
-            half4 wallColor = wallColorX + wallColorY + wallColorZ;
             
-            float3 wallColorHsv = RGBToHSV(wallColor);
-            float3 averageWallColorHsv = RGBToHSV(_WallColor);
-
-            float wallHue = frac((wallColorHsv.x - averageWallColorHsv.x) + hsv.x);
-            float wallSaturation = lerp(saturate((((wallColorHsv.y / averageWallColorHsv.y) - 1) * _WallContrast + 1) * hsv.y), wallColorHsv.y, _WallBias);
-            float wallValue = lerp(saturate((((wallColorHsv.z / averageWallColorHsv.z) - 1) * _WallContrast + 1) * hsv.z), wallColorHsv.z, _WallBias);
-            //float wallSaturation = hsv.y;
-            //float wallValue = hsv.z;
-            float3 newWallColorHsv = float3(wallHue, wallSaturation, wallValue);
-            float3 newWallColor = HSVToRGB(newWallColorHsv);
-
+            
+            float3 wallColor = getColor(tx, ty, tz, _WallColor, blendingFactor, hsv, _MainTex, _WallScale, _WallContrast, _WallBias); 
+            float3 detailColor = getColor(tx, ty, tz, _DetailColor, blendingFactor, hsv, _DetailTex, _DetailScaleCoefficient * _DetailScale, _DetailContrast, _DetailBias); 
+            float3 floorColor = getColor(tx, ty, tz, _FloorColor, blendingFactor, hsv, _FloorTex, _FloorScale, _FloorContrast, _FloorBias);
+            
             float floorIntensity = saturate(dot(normalize(IN.localNormal), float3(0, 1, 0)));
-            half4 floorColorX = tex2D(_FloorTex, tx * _FloorScale) * blendingFactor.x;
-            half4 floorColorY = tex2D(_FloorTex, ty * _FloorScale) * blendingFactor.y;
-            half4 floorColorZ = tex2D(_FloorTex, tz * _FloorScale) * blendingFactor.z;
-            half4 floorColor = floorColorX + floorColorY + floorColorZ;
-
-            float3 floorColorHsv = RGBToHSV(floorColor);
-            float3 averageFloorColorHsv = RGBToHSV(_FloorColor);
-
-            float floorHue = frac((floorColorHsv.x - averageFloorColorHsv.x) + hsv.x);
-            float floorSaturation = lerp(saturate((((floorColorHsv.y / averageFloorColorHsv.y) - 1) * _FloorContrast + 1) * hsv.y), floorColorHsv.y, _FloorBias);
-            float floorValue = lerp(saturate((((floorColorHsv.z / averageFloorColorHsv.z) - 1) * _FloorContrast + 1) * hsv.z), floorColorHsv.z, _FloorBias);
-            //float floorSaturation = hsv.y;
-            //float floorValue = hsv.z;
-            float3 newFloorColorHsv = float3(floorHue, floorSaturation, floorValue);
-            float3 newFloorColor = HSVToRGB(newFloorColorHsv);
-
-            float3 finalColor = lerp(newWallColor, newFloorColor, floorIntensity) * _Intensity;
-            //float3 finalColor = HSVToRGB(textureColorHsv);
-
+            float3 finalColor = lerp(wallColor, floorColor, floorIntensity) * _Intensity;
             
-            //float3 textureColorHsv = RGBToHSV(textureColor);
-            //textureColorHsv.x = hsv.x;
-            //textureColorHsv.y *= hsv.y;
-            //textureColorHsv.z *= hsv.z;
-
-            //float3 snowColor = tex2D(_SnowTex, IN.uv_MainTex).rgb; // Change this line to tex2D(_SnowTex, IN.uv1).rgb;
-            //
-
-            //float3 finalColor = newFloorColorHsv;//HSVToRGB(textureColorHsv);// * _Intensity;
-            o.Albedo = finalColor;
+            o.Albedo = (finalColor + detailColor * _DetailIntensity) / (1 + _DetailIntensity);
             o.Alpha = 1;
-
-            ////#ifdef _WallNormalTex
-            //    // Normal map
-            //    half4 nx = tex2D(_WallNormalTex, tx * _WallScale) * blendingFactor.x;
-            //    half4 ny = tex2D(_WallNormalTex, ty * _WallScale) * blendingFactor.y;
-            //    half4 nz = tex2D(_WallNormalTex, tz * _WallScale) * blendingFactor.z;
-            //    o.Normal = UnpackScaleNormal(nx + ny + nz, _WallBumpScale);
-            ////#endif
-        //
-        //#ifdef _OCCLUSIONMAP
-        //    // Occlusion map
-        //    half ox = tex2D(_OcclusionMap, tx).g * bf.x;
-        //    half oy = tex2D(_OcclusionMap, ty).g * bf.y;
-        //    half oz = tex2D(_OcclusionMap, tz).g * bf.z;
-        //    o.Occlusion = lerp((half4)1, ox + oy + oz, _OcclusionStrength);
-        //#endif
-
-            // Misc parameters
             o.Metallic = _WallMetallic;
             o.Smoothness = _WallGlossiness;
         }

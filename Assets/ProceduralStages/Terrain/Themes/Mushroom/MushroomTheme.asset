@@ -31,6 +31,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb3df9f4c24b3df468985b2918c283f4, type: 2}
   - {fileID: 11400000, guid: aefb0e0c40842ad4aba326e32d7ba474, type: 2}
   - {fileID: 11400000, guid: 57366955bb1ac81429a65783e8e88a3a, type: 2}
+  detail:
+  - {fileID: 11400000, guid: ef89ee10445badd4eb8ca5a86956b7e8, type: 2}
+  - {fileID: 11400000, guid: 68b1797054d3a8045955ee687b02bc0a, type: 2}
+  - {fileID: 11400000, guid: a98197d750f4ac84bb92ca0d8370a1bf, type: 2}
+  - {fileID: 11400000, guid: c238bde98e4ba384ab117afaa6da489f, type: 2}
+  - {fileID: 11400000, guid: e18ba0533fa9b2c439cd726a84ce63b5, type: 2}
+  - {fileID: 11400000, guid: 122bd99acd6ca46469ab70bca268a178, type: 2}
+  - {fileID: 11400000, guid: e3ca6c7b0083e234d814d961ee81df3f, type: 2}
+  - {fileID: 11400000, guid: d8b9fc158abdac34197be60b7dcb293f, type: 2}
+  - {fileID: 11400000, guid: 862a2130b26588046834bba54403e4ad, type: 2}
+  - {fileID: 11400000, guid: aefb0e0c40842ad4aba326e32d7ba474, type: 2}
+  - {fileID: 11400000, guid: 57366955bb1ac81429a65783e8e88a3a, type: 2}
+  - {fileID: 11400000, guid: e22f513736b837f45a6bea40672f5940, type: 2}
+  - {fileID: 11400000, guid: 722d6e4f9d30a0c429c09ca39905055e, type: 2}
   colorPalettes:
   - {fileID: 11400000, guid: f7ce01e783ae38d468387b6a162c9894, type: 2}
   skyboxes:

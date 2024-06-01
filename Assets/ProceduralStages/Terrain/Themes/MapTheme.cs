@@ -16,6 +16,7 @@ namespace ProceduralStages
         public Theme Theme;
         public SurfaceTexture[] walls = new SurfaceTexture[0];
         public SurfaceTexture[] floor = new SurfaceTexture[0];
+        public SurfaceTexture[] detail = new SurfaceTexture[0];
         public ThemeColorPalettes[] colorPalettes;
         public SkyboxDef[] skyboxes = new SkyboxDef[0];
         public WaterDef[] waters = new WaterDef[0];
@@ -114,37 +115,38 @@ namespace ProceduralStages
 
             int floorIndex = rng.RangeInt(0, floor.Length);
             int wallIndex = rng.RangeInt(0, walls.Length);
-
- 
+            int detailIndex = rng.RangeInt(0, walls.Length);
 
             SurfaceTexture floorTexture = floor[floorIndex];
             SurfaceTexture wallTexture = walls[wallIndex];
+            SurfaceTexture detailTexture = detail[detailIndex];
 
             if (Application.isEditor)
             {
                 floorTexture = MapGenerator.instance.editorFloorTexture ?? floorTexture;
                 wallTexture = MapGenerator.instance.editorWallTexture ?? wallTexture;
+                detailTexture = MapGenerator.instance.editorDetailTexture ?? detailTexture;
             }
 
             material.mainTexture = wallTexture.texture;
-            material.SetTexture("_WallNormalTex", wallTexture.normal);
             material.SetFloat("_WallBias", wallTexture.bias);
             material.SetColor("_WallColor", wallTexture.averageColor);
             material.SetFloat("_WallScale", wallTexture.scale);
-            material.SetFloat("_WallBumpScale", wallTexture.bumpScale);
             material.SetFloat("_WallContrast", wallTexture.constrast);
             material.SetFloat("_WallGlossiness", wallTexture.glossiness);
             material.SetFloat("_WallMetallic", wallTexture.metallic);
 
             material.SetTexture("_FloorTex", floorTexture.texture);
-            material.SetTexture("_FloorNormalTex", floorTexture.normal);
             material.SetFloat("_FloorBias", floorTexture.bias);
             material.SetColor("_FloorColor", floorTexture.averageColor);
             material.SetFloat("_FloorScale", floorTexture.scale);
-            material.SetFloat("_FloorBumpScale", floorTexture.bumpScale);
             material.SetFloat("_FloorContrast", floorTexture.constrast);
-            material.SetFloat("_FloorGlossiness", floorTexture.glossiness);
-            material.SetFloat("_FloorMetallic", floorTexture.metallic);
+
+            material.SetTexture("_DetailTex", detailTexture.texture);
+            material.SetFloat("_DetailBias", detailTexture.bias);
+            material.SetColor("_DetailColor", detailTexture.averageColor);
+            material.SetFloat("_DetailScale", detailTexture.scale);
+            material.SetFloat("_DetailContrast", detailTexture.constrast);
 
             return colorGradiant;
         }
