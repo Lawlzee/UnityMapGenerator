@@ -14,6 +14,12 @@ namespace ProceduralStages
 {
     public class MarchingCubes
     {
+        private static readonly Vector3[] edgeVertices = new Vector3[12];
+
+        private MarchingCubes()
+        {
+        }
+
         public static MeshResult CreateMesh(float[,,] voxels, float scale)
         {
             return new MarchingCubes().Generate(voxels, scale);
@@ -28,13 +34,12 @@ namespace ProceduralStages
             int depth = voxels.GetLength(2);
 
             int[] triangleCounts = new int[width - 1];
-            Cube[,,] cubes = new Cube[width - 1, height - 1, depth - 1];
+            byte[,,] cubeIndices = new byte[width - 1, height - 1, depth - 1];
             LogStats("Marching cubes");
 
             Parallel.For(0, width - 1, x =>
             {
                 int triangleCount = 0;
-
                 for (int y = 0; y < height - 1; y++)
                 {
                     for (int z = 0; z < depth - 1; z++)
@@ -52,61 +57,8 @@ namespace ProceduralStages
                             }
                         }
 
-                        int edgeFlags = CubeEdgeFlags[cubeIndex];
-
-                        //If the cube is entirely inside or outside of the surface, then there will be no intersections
-                        if (edgeFlags == 0)
-                        {
-                            continue;
-                        }
-
-                        Cube cube = new Cube()
-                        {
-                            cubeIndex = cubeIndex
-                        };
-
-                        //Find the point of intersection of the surface with each edge
-                        for (int i = 0; i < 12; i++)
-                        {
-                            //if there is an intersection on this edge
-                            if ((edgeFlags & (1 << i)) != 0)
-                            {
-                                int edgeConnection0 = EdgeConnection[i, 0];
-                                int edgeConnection1 = EdgeConnection[i, 1];
-
-                                float noise0 = voxels[
-                                    x + VertexOffset[edgeConnection0, 0],
-                                    y + VertexOffset[edgeConnection0, 1],
-                                    z + VertexOffset[edgeConnection0, 2]];
-
-                                float noise1 = voxels[
-                                    x + VertexOffset[edgeConnection1, 0],
-                                    y + VertexOffset[edgeConnection1, 1],
-                                    z + VertexOffset[edgeConnection1, 2]];
-
-                                cube[i] = GetOffset(noise0, noise1);
-                                //float offset = 0.5f;
-
-                                //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
-                                //{
-                                //    Debug.Log(offset);
-                                //}
-                                //float offset = 0.5f;
-                            }
-                        }
-
-                        //todo: optimise
-                        for (int i = 0; i < 5; i++)
-                        {
-                            if (TriangleConnectionTable[cubeIndex, 3 * i] < 0)
-                            {
-                                break;
-                            }
-
-                            triangleCount++;
-                        }
-
-                        cubes[x, y, z] = cube;
+                        cubeIndices[x, y, z] = (byte)cubeIndex;
+                        triangleCount += TriangleConnectionTableTriangleCount[cubeIndex];
                     }
                 }
 
@@ -114,9 +66,6 @@ namespace ProceduralStages
             });
 
             LogStats("Marching Parallel.For");
-
-            //private readonly List<Vector3> _vertices;
-            //private readonly List<int> _triangles;
 
             int trianglesCount = triangleCounts.Sum();
             int[] triangles = new int[trianglesCount * 3];
@@ -129,30 +78,57 @@ namespace ProceduralStages
             int triangleIndex = 0;
             int vectorIndex = 0;
 
+            //Parallel.For(0, width - 1, x =>
             for (int x = 0; x < width - 1; x++)
             {
                 for (int y = 0; y < height - 1; y++)
                 {
                     for (int z = 0; z < depth - 1; z++)
                     {
-                        ref Cube cube = ref cubes[x, y, z];
+                        byte cubeIndex = cubeIndices[x, y, z];
 
-                        int edgeFlags = CubeEdgeFlags[cube.cubeIndex];
+                        //Find which edges are intersected by the surface
+                        int edgeFlags = CubeEdgeFlags[cubeIndex];
+
+                        //If the cube is entirely inside or outside of the surface, then there will be no intersections
                         if (edgeFlags == 0)
                         {
                             continue;
                         }
 
-                        for (int i = 0; i < 5; i++)
+                        //Find the point of intersection of the surface with each edge
+                        for (int i = 0; i < 12; i++)
                         {
-                            if (TriangleConnectionTable[cube.cubeIndex, 3 * i] < 0)
+                            //if there is an intersection on this edge
+                            if ((edgeFlags & (1 << i)) != 0)
                             {
-                                break;
-                            }
+                                int edgeConnection0 = EdgeConnection[i, 0];
+                                int edgeConnection1 = EdgeConnection[i, 1];
 
-                            triangles[triangleIndex + 0] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 2, in cube);
-                            triangles[triangleIndex + 1] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 1, in cube);
-                            triangles[triangleIndex + 2] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 0, in cube);
+                                float noise1 = voxels[
+                                    x + VertexOffset[edgeConnection0, 0],
+                                    y + VertexOffset[edgeConnection0, 1],
+                                    z + VertexOffset[edgeConnection0, 2]];
+
+                                float noise2 = voxels[
+                                    x + VertexOffset[edgeConnection1, 0],
+                                    y + VertexOffset[edgeConnection1, 1],
+                                    z + VertexOffset[edgeConnection1, 2]];
+
+                                float offset = GetOffset(noise1, noise2);
+
+                                edgeVertices[i] = new Vector3(
+                                    scale * (x + VertexOffset[edgeConnection0, 0] + offset * EdgeDirection[i, 0]),
+                                    scale * (y + VertexOffset[edgeConnection0, 1] + offset * EdgeDirection[i, 1]),
+                                    scale * (z + VertexOffset[edgeConnection0, 2] + offset * EdgeDirection[i, 2]));
+                            }
+                        }
+
+                        for (int i = 0; i < TriangleConnectionTableTriangleCount[cubeIndex]; i++)
+                        {
+                            triangles[triangleIndex + 0] = AddVertex(edgeVertices[TriangleConnectionTable[cubeIndex, 3 * i + 2]]);
+                            triangles[triangleIndex + 1] = AddVertex(edgeVertices[TriangleConnectionTable[cubeIndex, 3 * i + 1]]);
+                            triangles[triangleIndex + 2] = AddVertex(edgeVertices[TriangleConnectionTable[cubeIndex, 3 * i + 0]]);
 
                             triangleIndex += 3;
                         }
@@ -160,7 +136,6 @@ namespace ProceduralStages
                 }
             }
             //});
-
             LogStats("Marching For");
 
             Mesh mesh = new Mesh();
@@ -169,7 +144,6 @@ namespace ProceduralStages
             mesh.SetTriangles(triangles, 0);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
-            LogStats("Marching Mesh");
 
             return new MeshResult
             {
@@ -180,18 +154,16 @@ namespace ProceduralStages
                 verticesLength = vectorIndex
             };
 
-            int AddVertex(int x, int y, int z, int cubeIndex, int i, in Cube cube)
+            void LogStats(string name)
             {
-                int j = TriangleConnectionTable[cube.cubeIndex, i];
-                int edgeConnection0 = EdgeConnection[j, 0];
-                float offset = cube[j];
+                Log.Debug($"{name}: {stopwatch.Elapsed}");
+                stopwatch.Restart();
+            }
 
-                Vector3 vector = new Vector3(
-                    /*0.01f * Mathf.Round(100f * */scale * (x + VertexOffset[edgeConnection0, 0] + offset * EdgeDirection[j, 0]),
-                    /*0.01f * Mathf.Round(100f * */ scale * (y + VertexOffset[edgeConnection0, 1] + offset * EdgeDirection[j, 1]),
-                    /*0.01f * Mathf.Round(100f * */ scale * (z + VertexOffset[edgeConnection0, 2] + offset * EdgeDirection[j, 2]));
-
+            int AddVertex(Vector3 vector)
+            {
                 Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 10), Mathf.Round(vector.y * 10), Mathf.Round(vector.z * 10));
+                //Vector3 roundedVector = vector;
 
                 if (verticesIndexes.TryGetValue(roundedVector, out var index))
                 {
@@ -203,90 +175,6 @@ namespace ProceduralStages
 
                 vectorIndex++;
                 return vectorIndex - 1;
-            }
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
-        }
-
-        private struct Edge
-        {
-            public byte index;
-            public float offset;
-        }
-
-        private struct Cube
-        {
-            public int cubeIndex;
-
-            public float value0;
-            public float value1;
-            public float value2;
-            public float value3;
-            public float value4;
-            public float value5;
-            public float value6;
-            public float value7;
-
-            public float this[int index]
-            {
-                get
-                {
-                    switch (index)
-                    {
-                        case 0:
-                            return value0;
-                        case 1:
-                            return value1;
-                        case 2:
-                            return value2;
-                        case 3:
-                            return value3;
-                        case 4:
-                            return value4;
-                        case 5:
-                            return value5;
-                        case 6:
-                            return value6;
-                        case 7:
-                            return value7;
-                    }
-
-                    return default;
-                }
-                set
-                {
-                    switch (index)
-                    {
-                        case 0:
-                            value0 = value;
-                            break;
-                        case 1:
-                            value1 = value;
-                            break;
-                        case 2:
-                            value2 = value;
-                            break;
-                        case 3:
-                            value3 = value;
-                            break;
-                        case 4:
-                            value4 = value;
-                            break;
-                        case 5:
-                            value5 = value;
-                            break;
-                        case 6:
-                            value6 = value;
-                            break;
-                        case 7:
-                            value7 = value;
-                            break;
-                    }
-                }
             }
         }
 
@@ -632,6 +520,265 @@ namespace ProceduralStages
             {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}
         };
 
-    }
+        int[] TriangleConnectionTableTriangleCount = new int[]
+        {
+            0,
+            1,
+            1,
+            2,
+            1,
+            2,
+            2,
+            3,
+            1,
+            2,
+            2,
+            3,
+            2,
+            3,
+            3,
+            2,
+            1,
+            2,
+            2,
+            3,
+            2,
+            3,
+            3,
+            4,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            3,
+            1,
+            2,
+            2,
+            3,
+            2,
+            3,
+            3,
+            4,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            3,
+            2,
+            3,
+            3,
+            2,
+            3,
+            4,
+            4,
+            3,
+            3,
+            4,
+            4,
+            3,
+            4,
+            5,
+            5,
+            2,
+            1,
+            2,
+            2,
+            3,
+            2,
+            3,
+            3,
+            4,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            3,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            5,
+            3,
+            4,
+            4,
+            5,
+            4,
+            5,
+            5,
+            4,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            2,
+            3,
+            3,
+            4,
+            4,
+            5,
+            4,
+            5,
+            3,
+            2,
+            3,
+            4,
+            4,
+            3,
+            4,
+            5,
+            3,
+            2,
+            4,
+            5,
+            5,
+            4,
+            5,
+            2,
+            4,
+            1,
+            1,
+            2,
+            2,
+            3,
+            2,
+            3,
+            3,
+            4,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            3,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            5,
+            3,
+            2,
+            4,
+            3,
+            4,
+            3,
+            5,
+            2,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            5,
+            3,
+            4,
+            4,
+            5,
+            4,
+            5,
+            5,
+            4,
+            3,
+            4,
+            4,
+            3,
+            4,
+            5,
+            5,
+            4,
+            4,
+            3,
+            5,
+            2,
+            5,
+            4,
+            2,
+            1,
+            2,
+            3,
+            3,
+            4,
+            3,
+            4,
+            4,
+            5,
+            3,
+            4,
+            4,
+            5,
+            2,
+            3,
+            3,
+            2,
+            3,
+            4,
+            4,
+            5,
+            4,
+            5,
+            5,
+            2,
+            4,
+            3,
+            5,
+            4,
+            3,
+            2,
+            4,
+            1,
+            3,
+            4,
+            4,
+            5,
+            4,
+            5,
+            3,
+            4,
+            4,
+            5,
+            5,
+            2,
+            3,
+            4,
+            2,
+            1,
+            2,
+            3,
+            3,
+            2,
+            3,
+            4,
+            2,
+            1,
+            3,
+            2,
+            4,
+            1,
+            2,
+            1,
+            1,
+            0
+        };
+}
 
 }
