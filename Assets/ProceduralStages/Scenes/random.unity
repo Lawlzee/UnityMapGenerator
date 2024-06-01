@@ -1573,7 +1573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageSize: {x: 0, y: 0, z: 0}
   mapScale: 2.5
-  meshQuality: 0.2
+  meshQuality: 1
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0

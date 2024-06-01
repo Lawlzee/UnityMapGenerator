@@ -19,6 +19,7 @@ namespace ProceduralStages
     {
         public Mesh mesh;
         public Vector3[] vertices;
+        public int verticesLength;
         public int[] triangles;
         public Vector3[] normals;
     }

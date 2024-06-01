@@ -1,221 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.XR.WSA;
 
 //https://github.com/Scrawk/Marching-Cubes/tree/master
 namespace ProceduralStages
 {
     public class MarchingCubes
     {
+        private readonly List<Vector3> _vertices;
+        private readonly Dictionary<Vector3, int> _verticesIndexes;
+        private readonly List<int> _triangles;
+
+        private MarchingCubes()
+        {
+            _vertices = new List<Vector3>();
+            _verticesIndexes = new Dictionary<Vector3, int>();
+            _triangles = new List<int>();
+        }
+
         public static MeshResult CreateMesh(float[,,] voxels, float scale)
         {
             return new MarchingCubes().Generate(voxels, scale);
-        }
-
-        public MeshResult Generate(float[,,] voxels, float scale)
-        {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            int width = voxels.GetLength(0);
-            int height = voxels.GetLength(1);
-            int depth = voxels.GetLength(2);
-
-            int[] triangleCounts = new int[width - 1];
-            Cube[,,] cubes = new Cube[width - 1, height - 1, depth - 1];
-            LogStats("Marching cubes");
-
-            Parallel.For(0, width - 1, x =>
-            {
-                int triangleCount = 0;
-
-                for (int y = 0; y < height - 1; y++)
-                {
-                    for (int z = 0; z < depth - 1; z++)
-                    {
-                        int cubeIndex = 0;
-                        for (int i = 0; i < 8; i++)
-                        {
-                            int ix = x + VertexOffset[i, 0];
-                            int iy = y + VertexOffset[i, 1];
-                            int iz = z + VertexOffset[i, 2];
-
-                            if (voxels[ix, iy, iz] > 0.5f)
-                            {
-                                cubeIndex |= 1 << i;
-                            }
-                        }
-
-                        int edgeFlags = CubeEdgeFlags[cubeIndex];
-
-                        //If the cube is entirely inside or outside of the surface, then there will be no intersections
-                        if (edgeFlags == 0)
-                        {
-                            continue;
-                        }
-
-                        Cube cube = new Cube()
-                        {
-                            cubeIndex = cubeIndex
-                        };
-
-                        //Find the point of intersection of the surface with each edge
-                        for (int i = 0; i < 12; i++)
-                        {
-                            //if there is an intersection on this edge
-                            if ((edgeFlags & (1 << i)) != 0)
-                            {
-                                int edgeConnection0 = EdgeConnection[i, 0];
-                                int edgeConnection1 = EdgeConnection[i, 1];
-
-                                float noise0 = voxels[
-                                    x + VertexOffset[edgeConnection0, 0],
-                                    y + VertexOffset[edgeConnection0, 1],
-                                    z + VertexOffset[edgeConnection0, 2]];
-
-                                float noise1 = voxels[
-                                    x + VertexOffset[edgeConnection1, 0],
-                                    y + VertexOffset[edgeConnection1, 1],
-                                    z + VertexOffset[edgeConnection1, 2]];
-
-                                cube[i] = GetOffset(noise0, noise1);
-                                //float offset = 0.5f;
-
-                                //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
-                                //{
-                                //    Debug.Log(offset);
-                                //}
-                                //float offset = 0.5f;
-                            }
-                        }
-
-                        //todo: optimise
-                        for (int i = 0; i < 5; i++)
-                        {
-                            if (TriangleConnectionTable[cubeIndex, 3 * i] < 0)
-                            {
-                                break;
-                            }
-
-                            triangleCount++;
-                        }
-
-                        cubes[x, y, z] = cube;
-                    }
-                }
-
-                triangleCounts[x] = triangleCount;
-            });
-
-            LogStats("Marching Parallel.For");
-
-            //private readonly List<Vector3> _vertices;
-            //private readonly List<int> _triangles;
-
-            int trianglesCount = triangleCounts.Sum();
-            int[] triangles = new int[trianglesCount * 3];
-            Vector3[] vertices = new Vector3[trianglesCount * 3];
-            Dictionary<Vector3, int> verticesIndexes = new Dictionary<Vector3, int>(trianglesCount * 3);
-            LogStats("Marching allocations");
-
-            Log.Debug(trianglesCount);
-
-            int triangleIndex = 0;
-            int vectorIndex = 0;
-
-            for (int x = 0; x < width - 1; x++)
-            {
-                for (int y = 0; y < height - 1; y++)
-                {
-                    for (int z = 0; z < depth - 1; z++)
-                    {
-                        ref Cube cube = ref cubes[x, y, z];
-
-                        int edgeFlags = CubeEdgeFlags[cube.cubeIndex];
-                        if (edgeFlags == 0)
-                        {
-                            continue;
-                        }
-
-                        for (int i = 0; i < 5; i++)
-                        {
-                            if (TriangleConnectionTable[cube.cubeIndex, 3 * i] < 0)
-                            {
-                                break;
-                            }
-
-                            triangles[triangleIndex + 0] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 2, in cube);
-                            triangles[triangleIndex + 1] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 1, in cube);
-                            triangles[triangleIndex + 2] = AddVertex(x, y, z, cube.cubeIndex, 3 * i + 0, in cube);
-
-                            triangleIndex += 3;
-                        }
-                    }
-                }
-            }
-            //});
-
-            LogStats("Marching For");
-
-            Mesh mesh = new Mesh();
-            mesh.indexFormat = IndexFormat.UInt32;
-            mesh.SetVertices(vertices, 0, vectorIndex);
-            mesh.SetTriangles(triangles, 0);
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
-            LogStats("Marching Mesh");
-
-            return new MeshResult
-            {
-                mesh = mesh,
-                normals = mesh.normals,
-                triangles = triangles,
-                vertices = vertices,
-                verticesLength = vectorIndex
-            };
-
-            int AddVertex(int x, int y, int z, int cubeIndex, int i, in Cube cube)
-            {
-                int j = TriangleConnectionTable[cube.cubeIndex, i];
-                int edgeConnection0 = EdgeConnection[j, 0];
-                float offset = cube[j];
-
-                Vector3 vector = new Vector3(
-                    /*0.01f * Mathf.Round(100f * */scale * (x + VertexOffset[edgeConnection0, 0] + offset * EdgeDirection[j, 0]),
-                    /*0.01f * Mathf.Round(100f * */ scale * (y + VertexOffset[edgeConnection0, 1] + offset * EdgeDirection[j, 1]),
-                    /*0.01f * Mathf.Round(100f * */ scale * (z + VertexOffset[edgeConnection0, 2] + offset * EdgeDirection[j, 2]));
-
-                Vector3 roundedVector = new Vector3(Mathf.Round(vector.x * 10), Mathf.Round(vector.y * 10), Mathf.Round(vector.z * 10));
-
-                if (verticesIndexes.TryGetValue(roundedVector, out var index))
-                {
-                    return index;
-                }
-
-                verticesIndexes[roundedVector] = vectorIndex;
-                vertices[vectorIndex] = vector;
-
-                vectorIndex++;
-                return vectorIndex - 1;
-            }
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
-        }
-
-        private struct Edge
-        {
-            public byte index;
-            public float offset;
         }
 
         private struct Cube
@@ -255,7 +66,7 @@ namespace ProceduralStages
                             return value7;
                     }
 
-                    return default;
+                    return -1;
                 }
                 set
                 {
@@ -290,11 +101,445 @@ namespace ProceduralStages
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public MeshResult Generate(float[,,] voxels, float scale)
+        {
+            int width = voxels.GetLength(0) - 1;
+            int height = voxels.GetLength(1) - 1;
+            int depth = voxels.GetLength(2) - 1;
+
+            Vector3[,,,] vertices = new Vector3[width + 1, height + 1, depth + 1, 3];
+            Parallel.For(0, width, x =>
+            {
+                for (int y = 0; y <= height; y++)
+                {
+                    for (int z = 0; z <= depth; z++)
+                    {
+                        float noise = voxels[x, y, z];
+
+                        if (x < width)
+                        {
+                            vertices[x, y, z, 0] = new Vector3(
+                                scale * x + GetOffset(noise, voxels[x + 1, y, z]),
+                                scale * y,
+                                scale * z);
+                        }
+
+                        if (y < height)
+                        {
+                            vertices[x, y, z, 1] = new Vector3(
+                                scale * x,
+                                scale * y + GetOffset(noise, voxels[x, y + 1, z]),
+                                scale * z);
+                        }
+
+                        if (z < depth)
+                        {
+                            vertices[x, y, z, 2] = new Vector3(
+                                scale * x,
+                                scale * y,
+                                scale * z + GetOffset(noise, voxels[x, y, z + 1]));
+                        }
+                    }
+                }
+            });
+
+            bool[,,,] usedVertices = new bool[width + 1, height + 1, depth + 1, 3];
+
+            int[] triangleCounts = new int[width];
+            Triangle?[,,,] triangles = new Triangle?[width, height, depth, 5];
+
+            Parallel.For(0, width, x =>
+            {
+                int triangleCount = 0;
+                for (int y = 0; y < height; y++)
+                {
+                    for (int z = 0; z < depth; z++)
+                    {
+                        int edgeFlags = 0;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            int ix = x + VertexOffset[i, 0];
+                            int iy = y + VertexOffset[i, 1];
+                            int iz = z + VertexOffset[i, 2];
+
+                            if (voxels[ix, iy, iz] > 0.5f)
+                            {
+                                edgeFlags |= 1 << i;
+                            }
+                        }
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            if (TriangleConnectionTable[edgeFlags, 3 * i] < 0)
+                            {
+                                break;
+                            }
+
+                            int i1 = TriangleConnectionTable[edgeFlags, 3 * i + 0];
+                            int i2 = TriangleConnectionTable[edgeFlags, 3 * i + 1];
+                            int i3 = TriangleConnectionTable[edgeFlags, 3 * i + 2];
+
+                            var triangle = new Triangle
+                            {
+                                vertex1 = new Vector4Int(
+                                    x + VertexOffset[EdgeConnection[i1, 0], 0] + EdgeDirection[i1, 0],
+                                    y + VertexOffset[EdgeConnection[i1, 0], 1] + EdgeDirection[i1, 1],
+                                    z + VertexOffset[EdgeConnection[i1, 0], 2] + EdgeDirection[i1, 2],
+                                    EdgeDirectionAxis[i1]),
+                                vertex2 = new Vector4Int(
+                                    x + VertexOffset[EdgeConnection[i2, 0], 0] + EdgeDirection[i2, 0],
+                                    y + VertexOffset[EdgeConnection[i2, 0], 1] + EdgeDirection[i2, 1],
+                                    z + VertexOffset[EdgeConnection[i2, 0], 2] + EdgeDirection[i2, 2],
+                                    EdgeDirectionAxis[i2]),
+                                vertex3 = new Vector4Int(
+                                    x + VertexOffset[EdgeConnection[i3, 0], 0] + EdgeDirection[i3, 0],
+                                    y + VertexOffset[EdgeConnection[i3, 0], 1] + EdgeDirection[i3, 1],
+                                    z + VertexOffset[EdgeConnection[i3, 0], 2] + EdgeDirection[i3, 2],
+                                    EdgeDirectionAxis[i3])
+                            };
+
+                            triangles[x, y, z, i] = triangle;
+
+                            usedVertices[triangle.vertex1.x, triangle.vertex1.y, triangle.vertex1.z, triangle.vertex1.w] = true;
+                            usedVertices[triangle.vertex2.x, triangle.vertex2.y, triangle.vertex2.z, triangle.vertex2.w] = true;
+                            usedVertices[triangle.vertex3.x, triangle.vertex3.y, triangle.vertex3.z, triangle.vertex3.w] = true;
+
+                            triangleCount++;
+                        }
+                    }
+                }
+
+                triangleCounts[x] = triangleCount;
+            });
+
+            Vector3[] flattenVertices = new Vector3[(width + 1) * (height + 1) * (depth + 1) * 3];
+            int[,,,] verticesIndex = new int[width + 1, height + 1, depth + 1, 3];
+
+            int vertexIndex = 0;
+            for (int x = 0; x <= width; x++)
+            {
+                for (int y = 0; y <= height; y++)
+                {
+                    for (int z = 0; z <= depth; z++)
+                    {
+                        for (int w = 0; w < 3; w++)
+                        {
+                            if (usedVertices[x, y, z, w])
+                            {
+                                flattenVertices[vertexIndex] = vertices[x, y, z, w];
+                                verticesIndex[x, y, z, w] = vertexIndex;
+                                vertexIndex++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            int[] flattenTriangles = new int[triangleCounts.Sum()];
+
+            int triangleIndex = 0;
+            for (int x = 0; x <= width; x++)
+            {
+                for (int y = 0; y <= height; y++)
+                {
+                    for (int z = 0; z <= depth; z++)
+                    {
+                        for (int w = 0; w < 5; w++)
+                        {
+                            Triangle? triangle = triangles[x, y, z, w];
+                            if (triangle == null)
+                            {
+                                continue;
+                            }
+
+                            flattenTriangles[triangleIndex + 0] = verticesIndex[
+                                triangle.Value.vertex1.x,
+                                triangle.Value.vertex1.y,
+                                triangle.Value.vertex1.z,
+                                triangle.Value.vertex1.w];
+
+                            flattenTriangles[triangleIndex + 1] = verticesIndex[
+                                triangle.Value.vertex2.x,
+                                triangle.Value.vertex2.y,
+                                triangle.Value.vertex2.z,
+                                triangle.Value.vertex2.w];
+
+                            flattenTriangles[triangleIndex + 2] = verticesIndex[
+                                triangle.Value.vertex3.x,
+                                triangle.Value.vertex3.y,
+                                triangle.Value.vertex3.z,
+                                triangle.Value.vertex3.w];
+
+                            triangleIndex += 3;
+                        }
+                    }
+                }
+            }
+
+
+            //Cube[,,] cubes = new Cube[width, height, depth];
+            //
+            //Parallel.For(0, width, x =>
+            //{
+            //    for (int y = 0; y < height; y++)
+            //    {
+            //        for (int z = 0; z < depth; z++)
+            //        {
+            //            int cubeIndex = 0;
+            //            for (int i = 0; i < 8; i++)
+            //            {
+            //                int ix = x + VertexOffset[i, 0];
+            //                int iy = y + VertexOffset[i, 1];
+            //                int iz = z + VertexOffset[i, 2];
+            //
+            //
+            //                cubes[x, y, z][i] = voxels[ix, iy, iz];
+            //
+            //                if (voxels[ix, iy, iz] > 0.5f)
+            //                {
+            //                    cubeIndex |= 1 << i;
+            //                }
+            //            }
+            //
+            //            cubes[x, y, z].cubeIndex = cubeIndex;
+            //        }
+            //    }
+            //});
+            //
+            //
+            //
+            //
+            ////Vector3[,,,] vertices = new Vector3[width, height, depth, 12];
+            //int[,,,] verticesIndices = new int[width, height, depth, 12];
+            //
+            ////Parallel.For(0, width - 1, x =>
+            //for (int x = 0; x < width; x++)
+            //{
+            //    for (int y = 0; y < height; y++)
+            //    {
+            //        for (int z = 0; z < depth; z++)
+            //        {
+            //            ref Cube cube = ref cubes[x, y, z];
+            //
+            //            if (cube.cubeIndex != 0)
+            //            {
+            //                March(x, y, z, scale, ref cube);
+            //            }
+            //        }
+            //    }
+            //}
+            ////});
+
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = IndexFormat.UInt32;
+            mesh.SetVertices(flattenVertices);
+            mesh.SetTriangles(flattenTriangles, 0);
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+
+            return new MeshResult
+            {
+                mesh = mesh,
+                triangles = flattenTriangles,
+                vertices = flattenVertices,
+                normals = mesh.normals
+            };
+        }
+
+        private struct Array12<T>
+        {
+            private T v0;
+            private T v1;
+            private T v2;
+            private T v3;
+            private T v4;
+            private T v5;
+            private T v6;
+            private T v7;
+            private T v8;
+            private T v9;
+            private T v10;
+            private T v11;
+
+            public T this[int index]
+            {
+                get
+                {
+                    switch (index)
+                    {
+                        case 0: return v0;
+                        case 1: return v1;
+                        case 2: return v2;
+                        case 3: return v3;
+                        case 4: return v4;
+                        case 5: return v5;
+                        case 6: return v6;
+                        case 7: return v7;
+                        case 8: return v8;
+                        case 9: return v9;
+                        case 10: return v10;
+                        case 11: return v11;
+                    }
+
+                    return default;
+                }
+                set
+                {
+                    switch (index)
+                    {
+                        case 0:
+                            v0 = value;
+                            break;
+                        case 1:
+                            v1 = value;
+                            break;
+                        case 2:
+                            v2 = value;
+                            break;
+                        case 3:
+                            v3 = value;
+                            break;
+                        case 4:
+                            v4 = value;
+                            break;
+                        case 5:
+                            v5 = value;
+                            break;
+                        case 6:
+                            v6 = value;
+                            break;
+                        case 7:
+                            v7 = value;
+                            break;
+                        case 8:
+                            v8 = value;
+                            break;
+                        case 9:
+                            v9 = value;
+                            break;
+                        case 10:
+                            v10 = value;
+                            break;
+                        case 11:
+                            v11 = value;
+                            break;
+                    }
+                }
+            }
+        }
+
+        private struct Triangle
+        {
+            public Vector4Int vertex1;
+            public Vector4Int vertex2;
+            public Vector4Int vertex3;
+        }
+
+        public struct Vector4Int
+        {
+            public int x;
+            public int y;
+            public int z;
+            public int w;
+
+            public Vector4Int(int x, int y, int z, int w)
+            {
+                this.x = x;
+                this.y = y;
+                this.z = z;
+                this.w = w;
+            }
+        }
+        /*
+        private void March(int x, int y, int z, float scale, ref Cube cube, Triangle?[] triangles, int triangleIndex)
+        {
+
+
+            //Find which edges are intersected by the surface
+            int edgeFlags = CubeEdgeFlags[cube.cubeIndex];
+
+            //If the cube is entirely inside or outside of the surface, then there will be no intersections
+            if (edgeFlags == 0)
+            {
+                return;
+            }
+
+            Array12<Vector3> edgeVertices = new Array12<Vector3>();
+
+            //Find the point of intersection of the surface with each edge
+            for (int i = 0; i < 12; i++)
+            {
+                //if there is an intersection on this edge
+                if ((edgeFlags & (1 << i)) != 0)
+                {
+                    int edgeConnection0 = EdgeConnection[i, 0];
+
+                    float offset = GetOffset(cube[edgeConnection0], cube[EdgeConnection[i, 1]]);
+                    //float offset = 0.5f;
+
+                    //if (x % 20 == 0 && y % 20 == 0 && z % 20 == 0)
+                    //{
+                    //    Debug.Log(offset);
+                    //}
+                    //float offset = 0.5f;
+
+                    int posX = x + VertexOffset[edgeConnection0, 0] + EdgeDirection[i, 0];
+                    int posY = x + VertexOffset[edgeConnection0, 1] + EdgeDirection[i, 1];
+                    int posZ = x + VertexOffset[edgeConnection0, 2] + EdgeDirection[i, 2];
+
+                    edgeVertices[i] = new Vector3(
+                        0.1f * Mathf.Round(10 * scale * (x + VertexOffset[edgeConnection0, 0] + offset * EdgeDirection[i, 0])),
+                        0.1f * Mathf.Round(10 * scale * (y + VertexOffset[edgeConnection0, 1] + offset * EdgeDirection[i, 1])),
+                        0.1f * Mathf.Round(10 * scale * (z + VertexOffset[edgeConnection0, 2] + offset * EdgeDirection[i, 2])));
+                }
+            }
+
+            //_triangleLock.Wait();
+            for (int i = 0; i < 5; i++)
+            {
+                if (TriangleConnectionTable[cube.cubeIndex, 3 * i] < 0)
+                {
+                    break;
+                }
+
+                //int idx = _vertices.Count;
+
+                int index1 = AddVertex(edgeVertices[]);
+                int index2 = AddVertex(edgeVertices[TriangleConnectionTable[cube.cubeIndex, 3 * i + 1]]);
+                int index3 = AddVertex(edgeVertices[TriangleConnectionTable[cube.cubeIndex, 3 * i + 2]]);
+
+                triangles[triangleIndex + i] = new Triangle
+                {
+                    vertex1 = TriangleConnectionTable[cube.cubeIndex, 3 * i + 0],
+                    index2 = TriangleConnectionTable[cube.cubeIndex, 3 * i + 1],
+                    index3 = TriangleConnectionTable[cube.cubeIndex, 3 * i + 2]
+                };
+
+                _triangles.Add(index3);
+                _triangles.Add(index2);
+                _triangles.Add(index1);
+            }
+            //_triangleLock.Release();
+        }
+        */
         private float GetOffset(float v1, float v2)
         {
             float delta = v2 - v1;
             return (delta == 0.0f) ? 0 : (0.5f - v1) / delta;
+        }
+
+        private int AddVertex(Vector3 vector)
+        {
+            if (_verticesIndexes.TryGetValue(vector, out var index))
+            {
+                return index;
+            }
+
+            index = _vertices.Count;
+            _verticesIndexes[vector] = index;
+            _vertices.Add(vector);
+
+            return index;
         }
 
         /// <summary>
@@ -324,11 +569,18 @@ namespace ProceduralStages
         /// edgeDirection lists the direction vector (vertex1-vertex0) for each edge in the cube.
         /// edgeDirection[12][3]
         /// </summary>
-        private static readonly float[,] EdgeDirection = new float[,]
+        private static readonly int[,] EdgeDirection = new int[,]
         {
-            {1.0f, 0.0f, 0.0f},{0.0f, 1.0f, 0.0f},{-1.0f, 0.0f, 0.0f},{0.0f, -1.0f, 0.0f},
-            {1.0f, 0.0f, 0.0f},{0.0f, 1.0f, 0.0f},{-1.0f, 0.0f, 0.0f},{0.0f, -1.0f, 0.0f},
-            {0.0f, 0.0f, 1.0f},{0.0f, 0.0f, 1.0f},{ 0.0f, 0.0f, 1.0f},{0.0f,  0.0f, 1.0f}
+            {1, 0, 0},{0, 1, 0},{-1, 0, 0},{0, -1, 0},
+            {1, 0, 0},{0, 1, 0},{-1, 0, 0},{0, -1, 0},
+            {0, 0, 1},{0, 0, 1},{ 0, 0, 1},{0,  0, 1}
+        };
+
+        private static readonly int[] EdgeDirectionAxis = new int[]
+        {
+            0, 1, 0, 1,
+            0, 1, 0, 1,
+            2, 2, 2, 2
         };
 
 

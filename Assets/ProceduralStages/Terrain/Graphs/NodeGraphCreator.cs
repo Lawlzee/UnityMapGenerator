@@ -69,10 +69,10 @@ namespace ProceduralStages
             List<PropsNode> floorProps = new List<PropsNode>();
             List<PropsNode> ceilingProps = new List<PropsNode>();
 
-            var nodes = new NodeGraph.Node[vertices.Length];
+            var nodes = new NodeGraph.Node[terrain.meshResult.verticesLength];
 
             int index = 0;
-            for (int i = 0; i < vertices.Length; i++)
+            for (int i = 0; i < terrain.meshResult.verticesLength; i++)
             {
                 var vertex = vertices[i];
                 var normal = normals[i];

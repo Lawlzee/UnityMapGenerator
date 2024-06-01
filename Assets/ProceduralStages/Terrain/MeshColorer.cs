@@ -30,8 +30,8 @@ namespace ProceduralStages
                 MapGenerator.rng.RangeInt(0, short.MaxValue), 
                 MapGenerator.rng.RangeInt(0, short.MaxValue));
 
-            var uvs = new Vector2[meshResult.vertices.Length];
-            ParallelPG.For(0, meshResult.vertices.Length, 8, (band, min, max) =>
+            var uvs = new Vector2[meshResult.verticesLength];
+            ParallelPG.For(0, meshResult.verticesLength, 8, (band, min, max) =>
             {
                 for (int i = min; i < max; i++)
                 {
