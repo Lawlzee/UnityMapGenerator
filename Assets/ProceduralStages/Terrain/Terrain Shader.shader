@@ -38,6 +38,7 @@
         //_Glossiness("Glossiness", Range(0, 1)) = 0.5
         
         _Intensity("Intensity", Float) = 1
+        _HeightblendFactor("Height Blend Factor", Float) = 1
 
 
 
@@ -99,6 +100,7 @@
         //half _FloorMetallic;
 
         half _Intensity;
+        half _HeightblendFactor;
 
         sampler2D _ColorTex;
 
@@ -133,7 +135,24 @@
             return c.z * lerp( K.xxx, saturate( p - K.xxx ), c.y );
         }
 
-        float3 getColor(float2 tx, float2 ty, float2 tz, float4 averageColor, float3 blendingFactor, float3 hsv, sampler2D tex, float scale, float contrast, half bias)
+        float4 heightblend(float4 input1, float4 input2)
+        {
+            float height_start = max(input1.a, input2.a) - _HeightblendFactor;
+            float level1 = max(input1.a - height_start, 0);
+            float level2 = max(input2.a - height_start, 0);
+            return ((input1 * level1) + (input2 * level2)) / (level1 + level2);
+        }
+
+        //http://untitledgam.es/2017/01/height-blending-shader/
+        float4 heightlerp(float4 input1, float4 input2, float t)
+        {
+            t = clamp(t, 0, 1);
+            input1.a *= (1 - t); 
+            input2.a *= t; 
+            return heightblend(input1, input2);
+        }
+
+        float4 getColor(float2 tx, float2 ty, float2 tz, float4 averageColor, float3 blendingFactor, float3 hsv, sampler2D tex, float scale, float contrast, half bias)
         {
             float4 colorX = tex2D(tex, tx * scale) * blendingFactor.x;
             float4 colorY = tex2D(tex, ty * scale) * blendingFactor.y;
@@ -149,7 +168,7 @@
             
             float3 newColorHsv = float3(hue, saturation, value);
             float3 newColor = HSVToRGB(newColorHsv);
-            return newColor;
+            return float4(newColor.x, newColor.y, newColor.z, color.a);
         }
 
         void surf(Input IN, inout SurfaceOutputStandard o)
@@ -167,14 +186,16 @@
             float2 tz = IN.localCoord.xy;
             
             
-            float3 wallColor = getColor(tx, ty, tz, _WallColor, blendingFactor, hsv, _MainTex, _WallScale, _WallContrast, _WallBias); 
-            float3 detailColor = getColor(tx, ty, tz, _DetailColor, blendingFactor, hsv, _DetailTex, _DetailScaleCoefficient * _DetailScale, _DetailContrast, _DetailBias); 
-            float3 floorColor = getColor(tx, ty, tz, _FloorColor, blendingFactor, hsv, _FloorTex, _FloorScale, _FloorContrast, _FloorBias);
+            float4 wallColor = getColor(tx, ty, tz, _WallColor, blendingFactor, hsv, _MainTex, _WallScale, _WallContrast, _WallBias); 
+            float4 detailColor = getColor(tx, ty, tz, _DetailColor, blendingFactor, hsv, _DetailTex, _DetailScaleCoefficient * _DetailScale, _DetailContrast, _DetailBias); 
+            float4 floorColor = getColor(tx, ty, tz, _FloorColor, blendingFactor, hsv, _FloorTex, _FloorScale, _FloorContrast, _FloorBias);
             
             float floorIntensity = saturate(dot(normalize(IN.localNormal), float3(0, 1, 0)));
-            float3 finalColor = lerp(wallColor, floorColor, floorIntensity) * _Intensity;
+            float4 surfaceColor = heightlerp(wallColor, floorColor, floorIntensity) * _Intensity;
             
-            o.Albedo = (finalColor + detailColor * _DetailIntensity) / (1 + _DetailIntensity);
+            float4 finalColor = heightlerp(surfaceColor, detailColor, _DetailIntensity);
+
+            o.Albedo = finalColor.rgb;//(surfaceColor + detailColor.xyz * _DetailIntensity) / (1 + _DetailIntensity);
             o.Alpha = 1;
             o.Metallic = _WallMetallic;
             o.Smoothness = _WallGlossiness;
