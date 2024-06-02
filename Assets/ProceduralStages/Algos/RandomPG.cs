@@ -12,6 +12,15 @@ namespace ProceduralStages
     {
         private static readonly Vector3 _randomScale = new Vector3(443.897f, 441.423f, 0.0973f);
 
+        public static float Random(Vector2 point)
+        {
+            Vector3 point2 = (new Vector3(point.x * _randomScale.x, point.y * _randomScale.y, point.x * _randomScale.z)).Frac();
+            var dot = Vector3.Dot(point2, new Vector3(point2.y + 33.33f, point2.z + 33.33f, point2.x + 33.33f));
+            Vector3 point3 = new Vector3(point2.x + dot, point2.y + dot, point2.z + dot);
+            float result = (point3.x + point3.y) * point3.z;
+            return result - Mathf.Floor(result);
+        }
+
         public static Vector2 Random2(Vector2 point)
         {
             Vector3 point2 = (new Vector3(point.x * _randomScale.x, point.y * _randomScale.y, point.x * _randomScale.z)).Frac();

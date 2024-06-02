@@ -39,6 +39,7 @@ namespace ProceduralStages
             RoR2Content.Artifacts.SingleMonsterType = RoR2Content.Artifacts.Sacrifice;
             RoR2Content.Artifacts.MixEnemy = RoR2Content.Artifacts.Sacrifice;
             RoR2Content.Artifacts.EliteOnly = RoR2Content.Artifacts.Sacrifice;
+            CU8Content.Artifacts.Devotion = RoR2Content.Artifacts.Sacrifice;
 
             DebugRun debugRun = gameObject.AddComponent<DebugRun>();
             debugRun.runRNG = new Xoroshiro128Plus(debugRun.seed);

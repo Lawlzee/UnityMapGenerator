@@ -30,13 +30,24 @@ namespace ProceduralStages
         public ThreadSafeCurve peaksHeightCurve;
         public ThreadSafeCurve peaksHeightBonusByDistanceCurve;
 
+        public FBM volcanoHeightMap;
+        public ThreadSafeCurve volcanoHeightCurve;
+        public ThreadSafeCurve volcanoMinHeightByDistanceCurve;
+        public ThreadSafeCurve volcanoMaxHeightByDistanceCurve;
+
+        public FBM volcanoRoomHeightMap;
+        public ThreadSafeCurve volcanoRoomHeightCurve;
+        public ThreadSafeCurve volcanoRoomHeightByDistanceCurve;
+        public float volcanoMinRoomHeight;
+        public float volcanoMinColumnHeight;
+
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             //float[,,] map3d = RandomWalk(MapGenerator.instance.stageSize);
             //float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
-            float[,,] map3d = GenerateIsland(MapGenerator.instance.stageSize);
+            (float[,,] map3d, float[,,] floorlessMap) = GenerateIsland(MapGenerator.instance.stageSize);
             LogStats("GenerateVoronoi");
             //float[,,] map3d = AngleRandomWalk(MapGenerator.instance.stageSize);
 
@@ -54,7 +65,7 @@ namespace ProceduralStages
             return new Terrain
             {
                 meshResult = meshResult,
-                floorlessDensityMap = map3d,
+                floorlessDensityMap = floorlessMap,
                 densityMap = map3d,
                 maxGroundheight = float.MaxValue
             };
@@ -66,12 +77,24 @@ namespace ProceduralStages
             }
         }
 
-        private float[,,] GenerateIsland(Vector3Int size)
+        private (float[,,] map, float[,,] floorlessMap) GenerateIsland(Vector3Int size)
         {
-            float[,,] map = new float[size.x, size.y, size.z];
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
-            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
-            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            float[,,] map = new float[size.x, size.y, size.z];
+            bool[,] wallMap = new bool[size.x, size.z];
+
+            int heightMapSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int heightMapSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            int peekSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int peekSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            int volcanoSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int volcanoSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            int volcanoRoomSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int volcanoRoomSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
             Vector2 center = new Vector3(size.x / 2f, size.z / 2f);
 
@@ -104,17 +127,9 @@ namespace ProceduralStages
                             float dist = diff.sqrMagnitude;
                             if (dist < minDistance)
                             {
-                                //bestPos2 = bestPos1;
-                                //minDistance2 = minDistance1;
-
                                 minPeakPos = pos + displacement;
                                 minDistance = dist;
                             }
-                            //else if (dist < minDistance2)
-                            //{
-                            //    bestPos2 = pos + displacement;
-                            //    minDistance2 = dist;
-                            //}
                         }
                     }
 
@@ -123,18 +138,102 @@ namespace ProceduralStages
                     var peakFloorHeight = ComputeIslandFloor(peakPosition);
 
                     float peaksHeightScale = peakFloorHeight.ellipsisDistance * peakFloorHeight.floorHeight + peaksHeightBonusByDistanceCurve.Evaluate(peakFloorHeight.ellipsisDistance);
-                    float peaksScaledFloorHeight = size.y * peaksHeightCurve.Evaluate(peaksHeightScale * 0.5f * (peaksHeightMap.Evaluate(peakPosition.x + seedX, peakPosition.y + seedZ) + 1));
+                    float peaksScaledFloorHeight = size.y * peaksHeightCurve.Evaluate(peaksHeightScale * 0.5f * (peaksHeightMap.Evaluate(peakPosition.x + peekSeedX, peakPosition.y + peekSeedZ) + 1));
 
-                    float scaledFloorHeight = Mathf.Max(islandScaledFloorHeight, peaksScaledFloorHeight);
+                    float volcanoNoise = volcanoHeightCurve.Evaluate(0.5f * (volcanoHeightMap.Evaluate(peakPosition.x + volcanoSeedX, peakPosition.y + volcanoSeedZ) + 1));
+                    float volcanoScaledNoise = Mathf.Lerp(
+                        volcanoMinHeightByDistanceCurve.Evaluate(peakFloorHeight.ellipsisDistance),
+                        volcanoMaxHeightByDistanceCurve.Evaluate(peakFloorHeight.ellipsisDistance),
+                        volcanoNoise);
 
-                    for (int y = 0; y < size.y; y++)
+                    float volcanoScaledFloorHeight = size.y * volcanoScaledNoise;
+
+                    float basaltScaledFloorHeight = Math.Max(peaksScaledFloorHeight, volcanoScaledFloorHeight);
+
+                    float roomNoise = 0.5f * (volcanoRoomHeightMap.Evaluate(peakPosition.x + volcanoRoomSeedX, peakPosition.y + volcanoRoomSeedZ) + 1);
+                    float roomDistanceCoefficient = volcanoRoomHeightByDistanceCurve.Evaluate(peakFloorHeight.ellipsisDistance);
+                    float basaltScaledCeilHeight = size.y * roomDistanceCoefficient * volcanoRoomHeightCurve.Evaluate(roomNoise);
+
+                    if (basaltScaledCeilHeight < volcanoMinRoomHeight)
                     {
-                        float noise = Mathf.Clamp01((scaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
-                        if (noise == 0f)
+                        basaltScaledCeilHeight = 0;
+                    }
+
+                    if (basaltScaledFloorHeight - basaltScaledCeilHeight < volcanoMinColumnHeight)
+                    {
+                        basaltScaledFloorHeight = 0;
+                    }
+
+                    bool isWall;
+                    if (basaltScaledFloorHeight < islandScaledFloorHeight || basaltScaledCeilHeight > basaltScaledFloorHeight)
+                    {
+                        isWall = false;
+
+                        for (int y = 0; y < size.y - 1; y++)
                         {
-                            break;
+                            float floorNoise = Mathf.Clamp01((islandScaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
+                            if (floorNoise == 0f)
+                            {
+                                break;
+                            }
+                            map[x, y, z] = floorNoise;
                         }
-                        map[x, y, z] = noise;
+                    }
+                    else
+                    {
+                        isWall = basaltScaledCeilHeight < islandScaledFloorHeight;
+                        if (isWall)
+                        {
+                            for (int y = 0; y < size.y - 1; y++)
+                            {
+                                float basaltNoise = Mathf.Clamp01((basaltScaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
+                                if (basaltNoise == 0f)
+                                {
+                                    break;
+                                }
+                                map[x, y, z] = basaltNoise;
+                            }
+                        }
+                        else
+                        {
+                            float airCenter = (islandScaledFloorHeight + basaltScaledCeilHeight) / 2f;
+                            float basaltCenterY = (basaltScaledCeilHeight + basaltScaledFloorHeight) / 2f;
+
+                            for (int y = 0; y < size.y - 1; y++)
+                            {
+                                if (y < airCenter)
+                                {
+                                    map[x, y, z] = Mathf.Clamp01((islandScaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
+                                }
+                                else if (y < basaltCenterY)
+                                {
+                                    map[x, y, z] = Mathf.Clamp01((y - basaltScaledCeilHeight) * voronoirBlendFactor + 0.5f);
+                                }
+                                else
+                                {
+                                    float basaltNoise = Mathf.Clamp01((basaltScaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
+                                    if (basaltNoise == 0f)
+                                    {
+                                        break;
+                                    }
+
+                                    map[x, y, z] = basaltNoise;
+                                }
+                            }
+                        }
+                    }
+
+                    if (isWall)
+                    {
+                        //for (int i = -2; i <= 2; i++)
+                        //{
+                        //    int posX = Mathf.Clamp(x + i, 0, size.x - 1);
+                        //    for (int j = -2; j <= 2; j++)
+                        //    {
+                        //        int posZ = Mathf.Clamp(z + j, 0, size.z - 1);
+                        wallMap[x, z] = true;
+                        //    }
+                        //}
                     }
 
                     (float ellipsisDistance, float floorHeight) ComputeIslandFloor(Vector2 pos)
@@ -143,7 +242,7 @@ namespace ProceduralStages
                         float dz = pos.y - center.y;
 
                         float ellipsisDistance = Mathf.Pow((dx * dx) / (center.x * center.x) + (dz * dz) / (center.y * center.y), ellipsisDistancePower);
-                        float heightMapNoise = 0.5f * (heightMap.Evaluate(pos.x + seedX, pos.y + seedZ) + 1);
+                        float heightMapNoise = 0.5f * (heightMap.Evaluate(pos.x + heightMapSeedX, pos.y + heightMapSeedZ) + 1);
                         //float scaledNoise = heightMapNoise * (1 - Mathf.Clamp01(ellipsisDistance));
                         float min = floorMinNoiseByEclipseDistanceCurve.Evaluate(ellipsisDistance);
                         float max = floorMaxNoiseByEclipseDistanceCurve.Evaluate(ellipsisDistance);
@@ -156,7 +255,33 @@ namespace ProceduralStages
                 }
             });
 
-            return map;
+            LogStats("heightmap");
+
+            float[,,] floorlessMap = new float[size.x, size.y, size.z];
+
+            Parallel.For(0, size.x, x =>
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    for (int y = 0; y < size.y; y++)
+                    {
+                        //todo: something better
+                        floorlessMap[x, y, z] = wallMap[x, z]
+                            ? 1
+                            : 0.5f * RandomPG.Random(new Vector2(x, z));
+                    }
+                }
+            });
+
+            LogStats("floorlessMap");
+
+            return (map, floorlessMap);
+
+            void LogStats(string name)
+            {
+                Log.Debug($"{name}: {stopwatch.Elapsed}");
+                stopwatch.Restart();
+            }
         }
 
         private float[,,] GenerateVoronoi(Vector3Int size)
@@ -227,7 +352,6 @@ namespace ProceduralStages
 
                     for (int y = 0; y < size.y; y++)
                     {
-
                         float noise = Mathf.Clamp01((scaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
                         if (noise == 0f)
                         {
@@ -242,7 +366,7 @@ namespace ProceduralStages
 
             return map;
 
-            
+
         }
     }
 }

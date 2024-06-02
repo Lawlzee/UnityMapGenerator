@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bda2a8e440d02d144a2a8e8bba60afea, type: 3}
   m_Name: BasaltGenerator
   m_EditorClassIdentifier: 
-  size: {x: 400, y: 100, z: 400}
+  size: {x: 300, y: 120, z: 300}
   sizeIncreasePerStage: {x: 25, y: 5, z: 35}
   sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
-  waterLevel: 15
+  waterLevel: 7
   terrainType: 2
   ceillingPropsWeight: 0.3
   voronoiScale: 0.2
@@ -29,7 +29,7 @@ MonoBehaviour:
   voronoirBlendFactor: 0.015
   heightMapCurve: {fileID: 11400000, guid: a3b0af31679c0f24ab594ab8b10b3332, type: 2}
   floorMinHeigth: -0.5
-  floorMaxHeigth: 12
+  floorMaxHeigth: 7
   ellipsisDistancePower: 0.4
   floorMinNoiseByEclipseDistanceCurve: {fileID: 11400000, guid: fe14198b1acd01c4e9f0e6f810514561,
     type: 2}
@@ -39,3 +39,17 @@ MonoBehaviour:
   peaksHeightCurve: {fileID: 11400000, guid: 1eeba1873348bf04c9142465c6749037, type: 2}
   peaksHeightBonusByDistanceCurve: {fileID: 11400000, guid: 17084c06176d1414eb529217c33cd2ff,
     type: 2}
+  volcanoHeightMap: {fileID: 11400000, guid: 8d6635b835612704b884581d03f560c8, type: 2}
+  volcanoHeightCurve: {fileID: 11400000, guid: bb9a4e08d12a5c34ca1f0b05eb7cb843, type: 2}
+  volcanoMinHeightByDistanceCurve: {fileID: 11400000, guid: 92500067408943643989089b0a8300e5,
+    type: 2}
+  volcanoMaxHeightByDistanceCurve: {fileID: 11400000, guid: e3a67e06355d7f2499329ee87cacba35,
+    type: 2}
+  volcanoRoomHeightMap: {fileID: 11400000, guid: 2636ac928045a6c4896fc4d86567e174,
+    type: 2}
+  volcanoRoomHeightCurve: {fileID: 11400000, guid: 1b9126bbf9421a644ae46f6c49d072cb,
+    type: 2}
+  volcanoRoomHeightByDistanceCurve: {fileID: 11400000, guid: 39e86641500d89d4ab7a48ceb9b21fb2,
+    type: 2}
+  volcanoMinRoomHeight: 15
+  volcanoMinColumnHeight: 7
