@@ -18,6 +18,7 @@ namespace ProceduralStages
     public class NodeGraphCreator
     {
         public float minFloorAngle = 0.4f;
+        public float airNodeCellSize = 4f;
         public float airNodeMinDistance = 4f;
         public float airNodeMaxDistance = 4f;
         public int airNodeSample = 20;
@@ -378,9 +379,9 @@ namespace ProceduralStages
 
             Vector3Int size = new Vector3Int(terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(1), terrain.densityMap.GetLength(2));
             Vector3Int cellSize = new Vector3Int(
-                Mathf.FloorToInt(mapScale * size.x / airNodeMinDistance),
-                Mathf.FloorToInt(mapScale * size.y / airNodeMinDistance),
-                Mathf.FloorToInt(mapScale * size.z / airNodeMinDistance));
+                Mathf.FloorToInt(mapScale * size.x / airNodeCellSize),
+                Mathf.FloorToInt(mapScale * size.y / airNodeCellSize),
+                Mathf.FloorToInt(mapScale * size.z / airNodeCellSize));
 
             AirNode?[,,] nodes = new AirNode?[cellSize.x, cellSize.y, cellSize.z];
 
@@ -390,13 +391,13 @@ namespace ProceduralStages
             {
                 int nodeCount = 0;
 
-                float posX = x * airNodeMinDistance;
+                float posX = x * airNodeCellSize;
                 for (int y = 0; y < cellSize.y; y++)
                 {
-                    float posY = y * airNodeMinDistance;
+                    float posY = y * airNodeCellSize;
                     for (int z = 0; z < cellSize.z; z++)
                     {
-                        float posZ = z * airNodeMinDistance;
+                        float posZ = z * airNodeCellSize;
 
                         Vector3 pointIntegral = new Vector3Int(
                             Mathf.FloorToInt(posX),
@@ -404,7 +405,7 @@ namespace ProceduralStages
                             Mathf.FloorToInt(posZ));
                         //Vector3 pointFractional = new Vector3(posX, posY, posZ) - pointIntegral;
 
-                        Vector3 displacement = RandomPG.Random3(pointIntegral) * airNodeMinDistance;
+                        Vector3 displacement = RandomPG.Random3(pointIntegral) * airNodeCellSize;
 
                         Vector3 nodePos = pointIntegral + displacement;
 
@@ -481,7 +482,7 @@ namespace ProceduralStages
 
             NodeGraph.Node[] finalNodes = new NodeGraph.Node[filteredNodes.Length];
 
-            ParallelPG.For(0, bandCount, bandCount, (bandIndex, minIndex, maxIndex) =>
+            ParallelPG.For(0, filteredNodes.Length, bandCount, (bandIndex, minIndex, maxIndex) =>
             {
                 uint totalLinkCount = 0;
 

@@ -1172,7 +1172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullMask: 1
-  nodeFlags: 2
+  nodeFlags: 1
   showGroundMesh: 0
   showAirMesh: 0
   groundMeshObject: {fileID: 68506087}
@@ -1582,13 +1582,12 @@ MonoBehaviour:
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
+  editorDetailTexture: {fileID: 0}
   editorSkybox: {fileID: 0}
   terrainGenerators:
   - {fileID: 11400000, guid: b1c7047386753f547af448012ee9a98d, type: 2}
   - {fileID: 11400000, guid: a40990f859bb04d46a4db0d0caa01c1f, type: 2}
   - {fileID: 11400000, guid: 2ade82e555b1e5144adf8595b07b05c4, type: 2}
-  - {fileID: 11400000, guid: 46fc1ad3d90acc447adcdbbe1bc5917f, type: 2}
-  - {fileID: 11400000, guid: 82abb8e99569b504893ff2afb6d3cc3a, type: 2}
   - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
   themes:
   - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
@@ -1605,7 +1604,8 @@ MonoBehaviour:
     amplitude: 0.2
   nodeGraphCreator:
     minFloorAngle: 0.35
-    airNodeMinDistance: 10
+    airNodeCellSize: 10
+    airNodeMinDistance: 5
     airNodeMaxDistance: 15
     airNodeSample: 6
     densityMap:
