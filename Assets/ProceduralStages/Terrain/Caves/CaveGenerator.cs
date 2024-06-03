@@ -57,7 +57,7 @@ namespace ProceduralStages
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
                 densityMap = smoothMap3d,
-                maxGroundheight = waller.floor.maxThickness * MapGenerator.instance.mapScale
+                maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
 
             void LogStats(string name)

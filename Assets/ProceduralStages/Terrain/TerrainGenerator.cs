@@ -12,7 +12,8 @@ namespace ProceduralStages
         public MeshResult meshResult;
         public float[,,] floorlessDensityMap;
         public float[,,] densityMap;
-        public float maxGroundheight;
+        public float maxGroundHeight;
+        public float minInteractableHeight;
     }
 
     public class MeshResult

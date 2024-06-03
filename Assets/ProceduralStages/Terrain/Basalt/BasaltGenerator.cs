@@ -49,6 +49,9 @@ namespace ProceduralStages
             //float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
             (float[,,] map3d, float[,,] floorlessMap) = GenerateIsland(MapGenerator.instance.stageSize);
             LogStats("GenerateVoronoi");
+
+            RemoveHoles(map3d, MapGenerator.instance.stageSize);
+            LogStats("GenerateVoronoi");
             //float[,,] map3d = AngleRandomWalk(MapGenerator.instance.stageSize);
 
             //map3d = smoother.SmoothMap(map3d);
@@ -67,7 +70,8 @@ namespace ProceduralStages
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
                 densityMap = map3d,
-                maxGroundheight = float.MaxValue
+                maxGroundHeight = float.MaxValue,
+                minInteractableHeight = waterLevel
             };
 
             void LogStats(string name)
@@ -281,6 +285,81 @@ namespace ProceduralStages
             {
                 Log.Debug($"{name}: {stopwatch.Elapsed}");
                 stopwatch.Restart();
+            }
+        }
+
+        private void RemoveHoles(float[,,] map, Vector3Int size)
+        {
+            Vector2Int[] neighbors = new Vector2Int[]
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+
+            bool[,] visitedCells = new bool[size.x, size.z];
+            List<List<Vector2Int>> holes = new List<List<Vector2Int>>();
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
+
+            float min = float.MaxValue;
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    min = Mathf.Min(min, map[x, 0, z]);
+                    if (!visitedCells[x, z] && map[x, 0, z] <= 0.5f)
+                    {
+                        List<Vector2Int> currentHole = new List<Vector2Int>();
+
+                        visitedCells[x, z] = true;
+                        queue.Enqueue(new Vector2Int(x, z));
+
+                        while (queue.Count > 0)
+                        {
+                            Vector2Int currentPos = queue.Dequeue();
+                            currentHole.Add(currentPos);
+
+                            for (int i = 0; i < neighbors.Length; i++)
+                            {
+                                int posX = currentPos.x + neighbors[i].x;
+                                int posZ = currentPos.y + neighbors[i].y;
+
+                                if (posX < 0
+                                    || posZ < 0
+                                    || posX >= size.x
+                                    || posZ >= size.z)
+                                {
+                                    continue;
+                                }
+
+                                if (!visitedCells[posX, posZ] && map[posX, 0, posZ] <= 0.5f)
+                                {
+                                    visitedCells[posX, posZ] = true;
+                                    queue.Enqueue(new Vector2Int(posX, posZ));
+                                }
+                            }
+
+                        }
+
+                        holes.Add(currentHole);
+                    }
+                }
+            }
+
+            Log.Debug("min " + min);
+            Log.Debug("holes.Count " + holes.Count);
+
+            var holesToRemove = holes
+                .OrderByDescending(x => x.Count)
+                .Skip(1)
+                .SelectMany(x => x)
+                .ToList();
+
+            for (int i = 0; i < holesToRemove.Count; i++)
+            {
+                var pos = holesToRemove[i];
+                map[pos.x, 0, pos.y] = 0.501f;
             }
         }
 

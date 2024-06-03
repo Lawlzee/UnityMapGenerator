@@ -1399,7 +1399,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708339108}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
   m_LocalScale: {x: 100000, y: 100000.05, z: 100000.05}
   m_Children: []
   m_Father: {fileID: 1024460309}
@@ -1577,7 +1577,7 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 1
+  editorTerrainType: 2
   editorTheme: 2
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}

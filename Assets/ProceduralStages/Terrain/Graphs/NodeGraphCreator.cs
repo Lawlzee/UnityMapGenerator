@@ -332,28 +332,31 @@ namespace ProceduralStages
 
                 float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale, bounds: null);
 
-                if (node.position.y <= terrain.maxGroundheight)
+                if (node.position.y <= terrain.maxGroundHeight)
                 {
-                    if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
+                    if (terrain.minInteractableHeight <= node.position.y)
                     {
-                        flags |= NodeFlags.TeleporterOK;
-                    }
+                        if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
+                        {
+                            flags |= NodeFlags.TeleporterOK;
+                        }
 
-                    if (density < densityMap.maxChestDensity)
-                    {
-                        flags &= ~NodeFlags.NoChestSpawn;
-                    }
+                        if (density < densityMap.maxChestDensity)
+                        {
+                            flags &= ~NodeFlags.NoChestSpawn;
+                        }
 
-                    if (density < densityMap.maxChestDensity)
-                    {
-                        flags &= ~NodeFlags.NoShrineSpawn;
-                    }
+                        if (density < densityMap.maxChestDensity)
+                        {
+                            flags &= ~NodeFlags.NoShrineSpawn;
+                        }
 
-                    if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
-                    {
-                        flags |= NodeFlagsExt.Newt;
+                        if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
+                        {
+                            flags |= NodeFlagsExt.Newt;
+                        }
                     }
-
+                    
                     if (density < densityMap.maxSpawnDensity)
                     {
                         flags &= ~NodeFlags.NoCharacterSpawn;

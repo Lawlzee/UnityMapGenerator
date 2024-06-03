@@ -63,7 +63,7 @@ namespace ProceduralStages
                 meshResult = meshResult,
                 floorlessDensityMap = maps.floorlessMap,
                 densityMap = smoothMap3d,
-                maxGroundheight = float.MaxValue
+                maxGroundHeight = float.MaxValue
             };
 
             void LogStats(string name)
