@@ -28,6 +28,7 @@ namespace ProceduralStages
         public static Texture texTunnelCavesPreview;
         public static Texture texIslandPreview;
         public static Texture texCanyonsPreview;
+        public static Texture texBasaltPreview;
         public static GameObject runConfigPrefab;
 
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
@@ -62,6 +63,7 @@ namespace ProceduralStages
                 texTunnelCavesPreview = assets.First(a => a.name == "texTunnelCavesPreview");
                 texIslandPreview = assets.First(a => a.name == "texIslandPreview");
                 texCanyonsPreview = assets.First(a => a.name == "texCanyonsPreview");
+                texBasaltPreview = assets.First(a => a.name == "texBasaltPreview");
             }));
 
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
@@ -84,6 +86,7 @@ namespace ProceduralStages
             AddSeerMaterial(texTunnelCavesPreview, TerrainType.TunnelCaves);
             AddSeerMaterial(texIslandPreview, TerrainType.Islands);
             AddSeerMaterial(texCanyonsPreview, TerrainType.Mines);
+            AddSeerMaterial(texBasaltPreview, TerrainType.Basalt);
 
             SceneDef[] sceneDefs = new SceneDef[6];
 

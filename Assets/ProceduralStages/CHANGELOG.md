@@ -1,9 +1,11 @@
 ### 1.13
-1. Fix underwater occlusion culling
-1. Improved themes
-1. Fixed DCCS pool selecting the same ennemies multiple times
-1. Air node generation is now ~20x faster
-1. Marching cube ~2x faster
+
+1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.
+6. **Stage Generation Performance:** Improved map generation by ~2x
+2. **Enhanced Visuals:** Detailed textures and refined blending techniques for improved visual aesthetics.
+4. **Theme Enhancements:** Tweaked the textures and color palettes for better visuals.
+3. **Culling Issue:** Fixed an issue where decorations would be culled when underwater.
+5. **Enemy Pool Fix:** Addressed an issue where an enemy could be selected multiple times in the enemy pool, causing enemies to be less varied.
 
 ### 1.12
 

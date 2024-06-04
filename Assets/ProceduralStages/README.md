@@ -6,7 +6,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 ## Features
 
-- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons and tunnel caves, each dynamically generated for a fresh adventure.
+- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle and tunnel caves, each dynamically generated for a fresh adventure.
 - **Dynamic Map Themes**: Experience different visual themes with every stage, including Plains, Desert, Snow, Void, Mushroom, and the old "random" theme.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
@@ -17,29 +17,27 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 - **Random Decoration Placement:** Discover unique environments with randomly placed decorations.
 - **Randomized Enemy Pool:** Experience a dynamically curated assortment of enemies.
 - **Varied Music Selection:** Immerse yourself in randomly selected music tracks.
-- **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 - **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
+- **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
 
 ## Stages
 
 Each stage is randomly generated, featuring unique terrain types and themes:
 
-- **Terrain Types:** Encounter islands, open caves, twisted canyons, and tunnel caves.
+- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle and tunnel caves.
 - **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the classic "Random" theme.
 
 ### Screenshots
 
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image8.png)
+*Basalt isle map with the snow theme*
+
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image12.png)
 *Twisted canyons map with the desert theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image4.png)
-*Tunnel cave map with the mushroom theme*
-
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
 *Open cave map with the legacy "random" theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image1.png)
-*Islands map with the void theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image6.png)
 *Twisted canyons map with the snow theme*
@@ -50,6 +48,9 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image15.png)
 *Islands map with the desert theme*
 
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image13.png)
+*Basalt isle map with the desert theme*
+
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image13.png)
 *Twisted canyons map with the plains theme*
 
@@ -58,6 +59,9 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
 *Tunnel cave map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image20.png)
+*Basalt isle map with the void theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image18.png)
 *Islands map with the plains theme*
@@ -87,13 +91,13 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 
 Here are the default spawn rates for all terrain types:
 
-| Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons |
-|---------|------------|--------------|---------|-----------------|
-| Stage 1 | 40%        | 20%          | 20%     | 20%             |
-| Stage 2 | 20%        | 20%          | 40%     | 20%             |                 
-| Stage 3 | 10%        | 40%          | 10%     | 40%             |
-| Stage 4 | 20%        | 40%          | 20%     | 20%             |
-| Stage 5 | 20%        | 20%          | 20%     | 40%             |
+| Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons | Basalt Isle |
+|---------|------------|--------------|---------|-----------------|-------------|
+| Stage 1 | 40%        | 15%          | 15%     | 15%             | 15%         |
+| Stage 2 | 15%        | 15%          | 40%     | 15%             | 15%         |
+| Stage 3 | 15%        | 15%          | 15%     | 15%             | 40%         |
+| Stage 4 | 15%        | 40%          | 15%     | 15%             | 15%         |
+| Stage 5 | 15%        | 15%          | 15%     | 40%             | 15%         |
 
 ## Report an issue
 
@@ -115,12 +119,9 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 - Add props clustering
 - Add floating island map?
 - Improve compatibility with Ro2API.DirectorAPI
-- Randomize more terrain settings
 - Create a random DccsPool instead of reusing the DccsPools from the game
 - Replace the moon with a procedurally generated stage
 - Address the issue of getting stuck in holes in the map.
-- Enhance stage creation performance.
-- Enhance the uniqueness of stages.
 - Improve the enemy pool algorithm.
 - Add theme spawn rate config
 
@@ -129,7 +130,7 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 
 This section includes the algorithms utilized for implementing procedural terrain generation. If you are not a programmer, feel free to skip this section.
 
-- [Spaghetti caves, Fractional Brownian Motion, domain mapping and more](https://www.youtube.com/watch?v=ob3VwY4JyzE)
+- [Spaghetti caves, Fractional Brownian Motion, domain warping and more](https://www.youtube.com/watch?v=ob3VwY4JyzE)
 - [2D / 3D Cellular Automata](https://www.youtube.com/watch?v=v7yyZZjF1z4&list=PLFt_AvWsXl0eZgMK_DT5_biRkWXftAOf9)
 - [2D / 3D Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise)
 - [Marching Cubes](https://www.youtube.com/watch?v=M3iI2l0ltbE)

@@ -20,7 +20,7 @@ MonoBehaviour:
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.8
   waterLevel: 4
-  terrainType: 2
+  terrainType: 5
   ceillingPropsWeight: 0.3
   voronoiScale: 0.3
   heightMap: {fileID: 11400000, guid: 1e1133ac663812f4a92ec2bf7bdb7646, type: 2}
