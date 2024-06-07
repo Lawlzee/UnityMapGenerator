@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,52 @@ namespace ProceduralStages
 {
     public class OcclusionCulling : MonoBehaviour
     {
+        private struct Index4
+        {
+            public int value0;
+            public int value1;
+            public int value2;
+            public int value3;
+
+            public int this[int index]
+            {
+                get
+                {
+                    switch (index)
+                    {
+                        case 0:
+                            return value0;
+                        case 1:
+                            return value1;
+                        case 2:
+                            return value2;
+                        case 3:
+                            return value3;
+                    }
+
+                    return -1;
+                }
+                set
+                {
+                    switch (index)
+                    {
+                        case 0:
+                            value0 = value;
+                            break;
+                        case 1:
+                            value1 = value;
+                            break;
+                        case 2:
+                            value2 = value;
+                            break;
+                        case 3:
+                            value3 = value;
+                            break;
+                    }
+                }
+            }
+        }
+
         private static readonly Vector3Int[] _verticesIndexes = {
             new Vector3Int (0, 0, 0),
             new Vector3Int (1, 0, 0),
@@ -36,7 +83,7 @@ namespace ProceduralStages
             0, 1, 6
         };
 
-        [Range(1, 50)]
+        [Range(1, 60)]
         public int updateFrameDelay;
 
         public int clusterCount = 100;
@@ -53,8 +100,19 @@ namespace ProceduralStages
         private MeshFilter _meshFilter;
         private MeshRenderer _meshRenderer;
 
+        private Index4[,,] _clusterIndexByPos;
+        private Vector3Int _clustersLength;
+
+        public float cellSize = 1;
+        private float cellSizeReciprocal;
+
         public void Awake()
         {
+            if (!Application.isEditor)
+            {
+                updateFrameDelay = ModConfig.OcclusionCullingDelay.Value;
+            }
+
             _meshFilter = GetComponent<MeshFilter>();
             _meshRenderer = GetComponent<MeshRenderer>();
         }
@@ -105,8 +163,12 @@ namespace ProceduralStages
             return mesh;
         }
 
-        public void SetTargets(List<GameObject> gameObjects)
+        public void SetTargets(List<GameObject> gameObjects, Vector3 mapSize)
         {
+            cellSizeReciprocal = 1 / cellSize;
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             MeshRenderer[][] meshRenderers = new MeshRenderer[gameObjects.Count][];
             Bounds[] bounds = new Bounds[gameObjects.Count];
             Vector3[] boundsCenter = new Vector3[gameObjects.Count];
@@ -128,7 +190,10 @@ namespace ProceduralStages
                 boundsCenter[i] = bound.center;
             }
 
+            LogStats("bounds");
+
             int[][] clusters = KMeans.Cluster(boundsCenter, clusterCount, clusterMaxIterations, 0);
+            LogStats("KMeans");
 
             Bounds[] boundsByCluster = new Bounds[clusterCount];
             _meshRenderersByClusterIndex = new MeshRenderer[clusterCount][];
@@ -174,6 +239,71 @@ namespace ProceduralStages
                 _meshRenderersByClusterIndex[i] = clusterRenderers;
             }
 
+            LogStats("Encapsulate");
+
+            int sizeX = Mathf.CeilToInt(mapSize.x * cellSizeReciprocal);
+            int sizeY = Mathf.CeilToInt(mapSize.y * cellSizeReciprocal);
+            int sizeZ = Mathf.CeilToInt(mapSize.z * cellSizeReciprocal);
+
+            _clustersLength = new Vector3Int(sizeX, sizeY, sizeZ);
+            _clusterIndexByPos = new Index4[sizeX, sizeY, sizeZ];
+
+            LogStats("Index4 0");
+
+            Parallel.For(0, sizeX, x =>
+            {
+                for (int y = 0; y < sizeY; y++)
+                {
+                    for (int z = 0; z < sizeZ; z++)
+                    {
+                        _clusterIndexByPos[x, y, z] = new Index4
+                        {
+                            value0 = -1,
+                            value1 = -1,
+                            value2 = -1,
+                            value3 = -1
+                        };
+                    }
+                }
+            });
+
+            LogStats("Index4");
+
+            for (int i = 0; i < clusterCount; i++)
+            {
+                Bounds bound = boundsByCluster[i];
+
+                int startX = Math.Max(0, Mathf.FloorToInt(bound.min.x * cellSizeReciprocal));
+                int startY = Math.Max(0, Mathf.FloorToInt(bound.min.y * cellSizeReciprocal));
+                int startZ = Math.Max(0, Mathf.FloorToInt(bound.min.z * cellSizeReciprocal));
+
+                int endX = Math.Min(sizeX - 1, Mathf.CeilToInt(bound.max.x * cellSizeReciprocal));
+                int endY = Math.Min(sizeY - 1, Mathf.CeilToInt(bound.max.y * cellSizeReciprocal));
+                int endZ = Math.Min(sizeZ - 1, Mathf.CeilToInt(bound.max.z * cellSizeReciprocal));
+
+                for (int x = startX; x <= endX; x++)
+                {
+                    for (int y = startY; y <= endY; y++)
+                    {
+                        for (int z = startZ; z <= endZ; z++)
+                        {
+                            ref Index4 index = ref _clusterIndexByPos[x, y, z];
+
+                            for (int j = 0; j < 4; j++)
+                            {
+                                if (index[j] == -1)
+                                {
+                                    index[j] = i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            LogStats("Index4 2");
+
             _meshFilter.mesh = GenerateMesh(boundsByCluster);
 
             _visibleClusters = new uint[clusterCount];
@@ -186,6 +316,13 @@ namespace ProceduralStages
             _meshRenderer.material.SetInt("_Debug", Convert.ToInt32(debug));
 
             enabled = true;
+            LogStats("Index4 2");
+
+            void LogStats(string name)
+            {
+                Log.Debug($"{name}: {stopwatch.Elapsed}");
+                stopwatch.Restart();
+            }
         }
 
         public void Update()
@@ -197,9 +334,39 @@ namespace ProceduralStages
 
             _visibleClustersBuffer.GetData(_visibleClusters);
 
+
+            Vector3 cameraPostion = Camera.main.transform.position;
+
+            int cellX = Mathf.FloorToInt(cameraPostion.x * cellSizeReciprocal);
+            int cellY = Mathf.FloorToInt(cameraPostion.y * cellSizeReciprocal);
+            int cellZ = Mathf.FloorToInt(cameraPostion.z * cellSizeReciprocal);
+
+            Index4 currentClusterIndex = new Index4
+            {
+                value0 = -1,
+                value1 = -1,
+                value2 = -1,
+                value3 = -1,
+            };
+
+            if (cellX >= 0
+                && cellY >= 0
+                && cellZ >= 0
+                && cellX < _clustersLength.x
+                && cellY < _clustersLength.y
+                && cellZ < _clustersLength.z)
+            {
+                currentClusterIndex = _clusterIndexByPos[cellX, cellY, cellZ];
+            }
+
             for (int i = 0; i < _meshRenderersByClusterIndex.Length; i++)
             {
-                bool visible = _visibleClusters[i] != 0;
+                bool visible = _visibleClusters[i] != 0
+                    || i == currentClusterIndex.value0
+                    || i == currentClusterIndex.value1
+                    || i == currentClusterIndex.value2
+                    || i == currentClusterIndex.value3;
+
                 _visibleClusters[i] = 0;
 
                 for (int j = 0; j < _meshRenderersByClusterIndex[i].Length; j++)

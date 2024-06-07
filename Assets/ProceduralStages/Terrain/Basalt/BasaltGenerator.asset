@@ -21,7 +21,7 @@ MonoBehaviour:
   ambiantLightIntensity: 0.8
   waterLevel: 4
   terrainType: 5
-  ceillingPropsWeight: 0.3
+  ceillingPropsWeight: 0.2
   voronoiScale: 0.3
   heightMap: {fileID: 11400000, guid: 1e1133ac663812f4a92ec2bf7bdb7646, type: 2}
   derivativeDisplacementStrength: 0.9
@@ -53,3 +53,4 @@ MonoBehaviour:
     type: 2}
   volcanoMinRoomHeight: 10
   volcanoMinColumnHeight: 8
+  volcanoRoomMinCenterHeight: 0.9

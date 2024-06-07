@@ -1,6 +1,7 @@
 ﻿using RoR2;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -177,7 +178,7 @@ namespace ProceduralStages
                 }
             }
 
-            occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances);
+            occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances, MapGenerator.instance.mapScale * (Vector3)MapGenerator.instance.stageSize);
         }
 
         void SetLayer(GameObject gameObject, int layer)

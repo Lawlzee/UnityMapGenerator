@@ -40,6 +40,8 @@ namespace ProceduralStages
         public ThreadSafeCurve volcanoRoomHeightByDistanceCurve;
         public float volcanoMinRoomHeight;
         public float volcanoMinColumnHeight;
+        [Range(0, 1)]
+        public float volcanoRoomMinCenterHeight;
 
         public override Terrain Generate()
         {
@@ -97,10 +99,27 @@ namespace ProceduralStages
             int volcanoSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int volcanoSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
 
-            int volcanoRoomSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
-            int volcanoRoomSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int volcanoRoomSeedX = 0;
+            int volcanoRoomSeedZ = 0;
 
             Vector2 center = new Vector3(size.x / 2f, size.z / 2f);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                volcanoRoomSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+                volcanoRoomSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+                float roomNoise = 0.5f * (volcanoRoomHeightMap.Evaluate(center.x + volcanoRoomSeedX, center.y + volcanoRoomSeedZ) + 1);
+                float noise = volcanoRoomHeightCurve.Evaluate(roomNoise);
+
+                if (noise > volcanoRoomMinCenterHeight)
+                {
+                    Log.Debug("Center found after " + i);
+                    break;
+                }
+            }
+
+            LogStats("Center");
 
             Parallel.For(0, size.x, x =>
             {

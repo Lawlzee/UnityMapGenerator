@@ -1,14 +1,17 @@
-### 1.13
+### 1.14
+1. The basalt isle are now garantied to have a cave leeding to center of the center mountain
+2. Fixed decoration popping when close
+3. Added occlusion culling delay config 
 
+### 1.13
 1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.
-6. **Stage Generation Performance:** Improved map generation by ~2x
-2. **Enhanced Visuals:** Detailed textures and refined blending techniques for improved visual aesthetics.
+2. **Stage Generation Performance:** Improved map generation by ~2x
+3. **Enhanced Visuals:** Detailed textures and refined blending techniques for improved visual aesthetics.
 4. **Theme Enhancements:** Tweaked the textures and color palettes for better visuals.
-3. **Culling Issue:** Fixed an issue where decorations would be culled when underwater.
-5. **Enemy Pool Fix:** Addressed an issue where an enemy could be selected multiple times in the enemy pool, causing enemies to be less varied.
+5. **Culling Issue:** Fixed an issue where decorations would be culled when underwater.
+6. **Enemy Pool Fix:** Addressed an issue where an enemy could be selected multiple times in the enemy pool, causing enemies to be less varied.
 
 ### 1.12
-
 1. **New Themes**: Introduced five new themes: Plains, Desert, Snow, Void, and Mushroom. The old "random" theme will still be able to spawn.
 2. **Stage Size Adjustments**: Balanced the sizes of different stages. Increased the size of Islands and Open caves, while reducing the size of tunnel caves and Twisted canyons.
 3. **Theme-based Updates**: Altered stage names, descriptions, and dream messages to match the terrain type.

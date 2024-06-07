@@ -57,6 +57,7 @@ namespace ProceduralStages
 
         public static ConfigEntry<string> StageSeed;
         public static ConfigEntry<bool> InfiniteMapScaling;
+        public static ConfigEntry<int> OcclusionCullingDelay;
 
         public static List<TerrainTypePercentConfig> TerrainTypesPercents;
 
@@ -69,6 +70,9 @@ namespace ProceduralStages
 
             InfiniteMapScaling = config.Bind("Configuration", "Infinite map scaling", false, "If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate.");
             ModSettingsManager.AddOption(new CheckBoxOption(InfiniteMapScaling));
+
+            OcclusionCullingDelay = config.Bind("Performance", "Occlusion culling frame delay", 6, "The number of frames between each occlusion culling check impacts performance. A shorter delay decreases FPS, while a longer delay causes decorations to flicker more when moving quickly. The game operates at 60 frames per second. Any changes to this configuration will take effect at the start of the next stage.");
+            ModSettingsManager.AddOption(new IntSliderOption(OcclusionCullingDelay, new IntSliderConfig { min = 0, max = 60 }));
 
             TerrainTypesPercents = new List<TerrainTypePercentConfig>();
 
