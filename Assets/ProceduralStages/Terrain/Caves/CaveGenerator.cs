@@ -12,6 +12,7 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "caveGenerator", menuName = "ProceduralStages/CaveGenerator", order = 2)]
     public class CaveGenerator : TerrainGenerator
     {
+        public VoronoiWallGenerator voronoiWallGenerator;
         public Map2dGenerator wallGenerator = new Map2dGenerator();
         public Carver carver = new Carver();
         public Waller waller = new Waller();
@@ -22,9 +23,12 @@ namespace ProceduralStages
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            //float[,,] map3d = voronoiWallGenerator.Create(MapGenerator.instance.stageSize);
+            //LogStats("voronoiWallGenerator");
+
             float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
             LogStats("wallGenerator");
-
+            
             carver.CarveWalls(map3d);
             LogStats("carver");
 

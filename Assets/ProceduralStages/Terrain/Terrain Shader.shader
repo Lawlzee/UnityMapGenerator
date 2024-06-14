@@ -175,7 +175,8 @@
         {
             // Blending factor of triplanar mapping
             float3 blendingFactor = normalize(abs(IN.localNormal));
-            blendingFactor /= dot(blendingFactor, (float3)1);
+            float dotL = dot(blendingFactor, (float3)1);
+            blendingFactor /= dotL;
 
             // Color
             half4 color = tex2D(_ColorTex, IN.uv_MainTex);
@@ -193,7 +194,7 @@
             float floorIntensity = saturate(dot(normalize(IN.localNormal), float3(0, 1, 0)));
             float4 surfaceColor = heightlerp(wallColor, floorColor, floorIntensity) * _Intensity;
             
-            float4 finalColor = heightlerp(surfaceColor, detailColor, _DetailIntensity);
+            float4 finalColor = saturate(heightlerp(surfaceColor, detailColor, _DetailIntensity));
 
             o.Albedo = finalColor.rgb;//(surfaceColor + detailColor.xyz * _DetailIntensity) / (1 + _DetailIntensity);
             o.Alpha = 1;

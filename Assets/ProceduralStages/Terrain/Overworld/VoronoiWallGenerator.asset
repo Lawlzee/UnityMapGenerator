@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b27b04ada7af043850a4d9e474e7fe, type: 3}
+  m_Name: VoronoiWallGenerator
+  m_EditorClassIdentifier: 
+  wallNoiseFBM: {fileID: 11400000, guid: bedb70cbe3e75c641b77704479e1def0, type: 2}
+  wallSurfaceLevel: 0.45
+  wallCurve: {fileID: 11400000, guid: 72f7fa23573036744a6453e1bd3bb581, type: 2}
+  carverNoiseFBM: {fileID: 11400000, guid: e16539ed9f7c96145bc9b559532308f6, type: 2}
+  carverSurfaceLevel: 0.6
+  carverCurve: {fileID: 11400000, guid: 3a0ee4e2ba00fab4c9768a6e8485e070, type: 2}
+  carverVerticalScale: 0.3
+  finalCurve: {fileID: 11400000, guid: 866bbe7922a6a374787e3d7b7f882e17, type: 2}
+  voronoiHorizontalScale: 0.5
+  voronoiVerticalScale: 0.15

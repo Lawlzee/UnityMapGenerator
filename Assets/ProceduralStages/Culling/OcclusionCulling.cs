@@ -13,12 +13,12 @@ namespace ProceduralStages
     {
         private struct Index4
         {
-            public int value0;
-            public int value1;
-            public int value2;
-            public int value3;
+            public short value0;
+            public short value1;
+            public short value2;
+            public short value3;
 
-            public int this[int index]
+            public short this[int index]
             {
                 get
                 {
@@ -293,7 +293,7 @@ namespace ProceduralStages
                             {
                                 if (index[j] == -1)
                                 {
-                                    index[j] = i;
+                                    index[j] = (short)i;
                                     break;
                                 }
                             }

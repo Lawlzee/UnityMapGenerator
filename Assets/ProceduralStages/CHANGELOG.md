@@ -2,6 +2,9 @@
 1. The basalt isle are now garantied to have a cave leeding to center of the center mountain
 2. Fixed decoration popping when close
 3. Added occlusion culling delay config 
+4. Fixed crazy flickering white triangle
+5. Added shadows 
+6. Only add monster in dccs if stageCount >= minStageCount 
 
 ### 1.13
 1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.

@@ -13,6 +13,7 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "overworldGenerator", menuName = "ProceduralStages/OverworldGenerator", order = 2)]
     public class OverworldGenerator : TerrainGenerator
     {
+        public VoronoiWallGenerator voronoiWallGenerator;
         public Map2dGenerator wallGenerator = new Map2dGenerator();
         public Carver carver = new Carver();
         public Waller waller = new Waller();
@@ -25,11 +26,15 @@ namespace ProceduralStages
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             var stageSize = MapGenerator.instance.stageSize;
-            float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
-            LogStats("wallGenerator");
 
-            carver.CarveWalls(wallOnlyMap);
-            LogStats("carver");
+            float[,,] wallOnlyMap = voronoiWallGenerator.Create(stageSize);
+            LogStats("voronoiWallGenerator");
+
+            //float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
+            //LogStats("wallGenerator");
+            //
+            //carver.CarveWalls(wallOnlyMap);
+            //LogStats("carver");
 
             //waller.AddCeilling(map3d);
             //LogStats("waller.AddCeilling");

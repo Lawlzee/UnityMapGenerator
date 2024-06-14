@@ -30,7 +30,8 @@ namespace ProceduralStages
 
         public DccsPool GenerateMonstersDccs(bool hasDLC1)
         {
-            int currentStageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
+            int stageCleared = Run.instance?.stageClearCount ?? 0;
+            int currentStageInLoop = (stageCleared % Run.stagesPerLoop) + 1;
 
             var validPools = DccsPoolItem.All
                 .Where(x => x.StageType == StageType.Regular)
@@ -114,6 +115,7 @@ namespace ProceduralStages
 
                         return dccsCategory.cards
                             .Where(x => x?.spawnCard?.name != null)
+                            .Where(x => x.minimumStageCompletions <= stageCleared)
                             .Select(card => new
                             {
                                 stage.Info.StageIndex,

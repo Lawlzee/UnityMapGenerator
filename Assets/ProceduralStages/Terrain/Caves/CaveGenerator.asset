@@ -22,6 +22,7 @@ MonoBehaviour:
   waterLevel: 8.5
   terrainType: 1
   ceillingPropsWeight: 1
+  voronoiWallGenerator: {fileID: 0}
   wallGenerator:
     frequency: 28
     wallSurface: 0.3
