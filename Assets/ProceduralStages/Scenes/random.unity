@@ -654,7 +654,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateFrameDelay: 6
-  clusterCount: 500
+  clusterCount: 512
   clusterMaxIterations: 1000
   debug: 0
   boundsBuffer: {x: 5, y: 5, z: 5}
@@ -1578,8 +1578,8 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 2
-  editorTheme: 5
+  editorTerrainType: 0
+  editorTheme: 0
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}

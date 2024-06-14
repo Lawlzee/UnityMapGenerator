@@ -169,6 +169,11 @@ namespace ProceduralStages
                         }
                     }
 
+                    foreach (var renderer in instance.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    }
+                    
                     if (prop.isSolid)
                     {
                         SetLayer(instance, LayerIndex.world.intVal);

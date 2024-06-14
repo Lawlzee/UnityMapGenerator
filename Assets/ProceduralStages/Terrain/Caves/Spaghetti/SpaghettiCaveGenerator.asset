@@ -18,7 +18,7 @@ MonoBehaviour:
   fogPower: 1
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.2
-  ambiantLightIntensity: 0.7
+  ambiantLightIntensity: 0.6
   waterLevel: 30
   terrainType: 3
   ceillingPropsWeight: 1
