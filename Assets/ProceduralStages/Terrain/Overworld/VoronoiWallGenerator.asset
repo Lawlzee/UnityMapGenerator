@@ -20,5 +20,4 @@ MonoBehaviour:
   carverCurve: {fileID: 11400000, guid: 3a0ee4e2ba00fab4c9768a6e8485e070, type: 2}
   carverVerticalScale: 0.3
   finalCurve: {fileID: 11400000, guid: 866bbe7922a6a374787e3d7b7f882e17, type: 2}
-  voronoiHorizontalScale: 0.5
-  voronoiVerticalScale: 0.15
+  voronoi: {fileID: 11400000, guid: 74682f8d60d641f48ab3bb692bec0866, type: 2}
