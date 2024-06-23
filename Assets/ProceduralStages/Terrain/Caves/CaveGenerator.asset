@@ -40,11 +40,6 @@ MonoBehaviour:
       noise: 43.7
       minThickness: 1
       maxThickness: 11
-    ceilling:
-      enabled: 1
-      noise: 28
-      minThickness: 1
-      maxThickness: 19
     walls:
       enabled: 1
       noise: 33.7
@@ -62,3 +57,5 @@ MonoBehaviour:
     enabled: 1
     frequency: 0.434
     amplitude: 0.02
+  stalactitesGenerator: {fileID: 11400000, guid: 55d617331d85f6a4f9ead2bcc819b0a0,
+    type: 2}

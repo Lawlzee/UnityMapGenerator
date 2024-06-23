@@ -5,6 +5,8 @@
 4. Fixed crazy flickering white triangle
 5. Added shadows 
 6. Only add monster in dccs if stageCount >= minStageCount 
+7. Improved islands walls to be more rocky
+8. Added "Stalactites" to open caves
 
 ### 1.13
 1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.

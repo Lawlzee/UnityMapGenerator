@@ -41,11 +41,6 @@ MonoBehaviour:
       noise: 70
       minThickness: 5
       maxThickness: 20
-    ceilling:
-      enabled: 1
-      noise: 28
-      minThickness: 1
-      maxThickness: 18
     walls:
       enabled: 1
       noise: 33.7
@@ -65,7 +60,7 @@ MonoBehaviour:
     roofFrequency: 30
     roofVerticalScale: 1
     roofCarvingRelativeMinHeight: 0.4
-    roofCarvingRelativeMaxHeight: 0.95
+    roofCarvingRelativeMaxHeight: 0.975
     ellipsisDistancePower: 0.35
     cullingFalloff: {fileID: 11400000, guid: 21244efa2b95ebe4d88b83e0ea00fe9d, type: 2}
   cave3d:

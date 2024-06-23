@@ -8,7 +8,6 @@ namespace ProceduralStages
     public class Waller
     {
         public Wall floor = new Wall();
-        public Wall ceilling = new Wall();
         public Wall walls = new Wall();
         public float wallRoundingFactor;
         public float blendFactor = 0.1f;
@@ -57,43 +56,6 @@ namespace ProceduralStages
             });
 
             return floorMap;
-        }
-
-        public void AddCeilling(float[,,] map)
-        {
-            if (ceilling.enabled)
-            {
-                return;
-            }
-
-            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
-            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
-
-            int width3d = map.GetLength(0);
-            int height3d = map.GetLength(1);
-            int depth3d = map.GetLength(2);
-
-            Parallel.For(0, width3d, x =>
-            {
-                for (int z = 0; z < depth3d; z++)
-                {
-                    float ceillingNoise = Mathf.Clamp01(Mathf.PerlinNoise(x / ceilling.noise + seedX, z / ceilling.noise + seedZ));
-
-                    float ceillingHeigth = ceilling.minThickness + ceillingNoise * (ceilling.maxThickness - ceilling.minThickness);
-
-                    for (int y = 0; y < height3d; y++)
-                    {
-                        float noise = Mathf.Clamp01((ceillingHeigth - y) * blendFactor + 0.5f);
-                        if (noise == 0f)
-                        {
-                            break;
-                        }
-
-                        int posY = height3d - y - 1;
-                        map[x, posY, z] = Mathf.Max(noise, map[x, posY, z]);
-                    }
-                }
-            });
         }
 
         [Serializable]

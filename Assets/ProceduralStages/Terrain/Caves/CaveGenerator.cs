@@ -18,6 +18,7 @@ namespace ProceduralStages
         public Waller waller = new Waller();
         public CellularAutomata3d cave3d = new CellularAutomata3d();
         public Map3dNoiser map3dNoiser = new Map3dNoiser();
+        public StalactitesGenerator stalactitesGenerator;
 
         public override Terrain Generate()
         {
@@ -32,11 +33,11 @@ namespace ProceduralStages
             carver.CarveWalls(map3d);
             LogStats("carver");
 
-            waller.AddCeilling(map3d);
-            LogStats("waller.AddCeilling");
-
             waller.AddWalls(map3d);
             LogStats("waller.AddWalls");
+
+            stalactitesGenerator.AddStalactites(map3d);
+            LogStats("stalactitesGenerator.AddStalactites");
 
             var floorlessMap = map3d;
             map3d = waller.AddFloor(map3d);
@@ -46,7 +47,7 @@ namespace ProceduralStages
             LogStats("map3dNoiser");
 
             float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
-            LogStats("cave3d");
+            LogStats("SmoothMap");
 
             var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
