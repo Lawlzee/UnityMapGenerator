@@ -51,7 +51,7 @@ namespace ProceduralStages
                         Vector3 uvwFractional = uvw - uvwIntegral;
 
                         float minDistance1 = float.MaxValue;
-                        Vector3 minDistanceDisplacement = default;
+                        Vector3 minDistanceDisplacement1 = default;
 
                         float minDistance2 = float.MaxValue;
                         Vector3 minDistanceDisplacement2 = default;
@@ -74,10 +74,10 @@ namespace ProceduralStages
                                     float dist = diff.sqrMagnitude;
                                     if (dist < minDistance1)
                                     {
-                                        minDistanceDisplacement2 = minDistanceDisplacement;
+                                        minDistanceDisplacement2 = minDistanceDisplacement1;
                                         minDistance2 = minDistance1;
 
-                                        minDistanceDisplacement = diff;
+                                        minDistanceDisplacement1 = diff;
                                         minDistance1 = dist;
                                     }
                                     else if (dist < minDistance2)
@@ -89,17 +89,25 @@ namespace ProceduralStages
                             }
                         }
 
-                        float weigth = minDistance1 / (minDistance1 + minDistance2);
+                        Vector3 displacement1 = new Vector3(
+                            scaleReciprocal.x * minDistanceDisplacement1.x,
+                            scaleReciprocal.y * minDistanceDisplacement1.y,
+                            scaleReciprocal.z * minDistanceDisplacement1.z);
+
+                        Vector3 displacement2 = new Vector3(
+                            scaleReciprocal.x * minDistanceDisplacement2.x,
+                            scaleReciprocal.y * minDistanceDisplacement2.y,
+                            scaleReciprocal.z * minDistanceDisplacement2.z);
+
+                        //https://www.youtube.com/watch?v=PMltMdi1Wzg
+                        Vector3 pa = -minDistanceDisplacement1;
+                        Vector3 ba = minDistanceDisplacement2 - minDistanceDisplacement1;
+
+                        float weigth = Mathf.Clamp01(Vector3.Dot(pa, ba) / (Vector3.Dot(ba, ba)));
                         voronoi[x * size.y * size.z + y * size.z + z] = new Voronoi3DResult
                         {
-                            displacement1 = new Vector3(
-                                scaleReciprocal.x * minDistanceDisplacement.x,
-                                scaleReciprocal.y * minDistanceDisplacement.y,
-                                scaleReciprocal.z * minDistanceDisplacement.z),
-                            displacement2 = new Vector3(
-                                scaleReciprocal.x * minDistanceDisplacement2.x,
-                                scaleReciprocal.y * minDistanceDisplacement2.y,
-                                scaleReciprocal.z * minDistanceDisplacement2.z),
+                            displacement1 = displacement1,
+                            displacement2 = displacement2,
                             weight = weigth
                         };
                     }
