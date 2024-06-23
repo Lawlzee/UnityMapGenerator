@@ -39,8 +39,8 @@ namespace ProceduralStages
             //waller.AddCeilling(map3d);
             //LogStats("waller.AddCeilling");
 
-            waller.AddWalls(wallOnlyMap);
-            LogStats("waller.AddWalls");
+            //waller.AddWalls(wallOnlyMap);
+            //LogStats("waller.AddWalls");
 
             float[,,] floorOnlyMap = new float[stageSize.x, stageSize.y, stageSize.z];
             floorOnlyMap = waller.AddFloor(floorOnlyMap);
@@ -49,13 +49,13 @@ namespace ProceduralStages
             float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
             LogStats("floorWallsMixer");
 
-            densityMap = map3dNoiser.AddNoise(densityMap);
-            LogStats("map3dNoiser");
+            //densityMap = map3dNoiser.AddNoise(densityMap);
+            //LogStats("map3dNoiser");
 
-            float[,,] smoothMap3d = cave3d.SmoothMap(densityMap);
-            LogStats("cave3d");
+            //float[,,] smoothMap3d = cave3d.SmoothMap(densityMap);
+            //LogStats("cave3d");
 
-            var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
+            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
@@ -67,7 +67,7 @@ namespace ProceduralStages
             {
                 meshResult = meshResult,
                 floorlessDensityMap = wallOnlyMap,
-                densityMap = smoothMap3d,
+                densityMap = densityMap,
                 maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
 

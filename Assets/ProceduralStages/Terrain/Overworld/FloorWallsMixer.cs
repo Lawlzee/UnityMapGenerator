@@ -28,6 +28,8 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float ellipsisDistancePower = 0.5f;
 
+        public ThreadSafeCurve cullingFalloff;
+
         public float[,,] Mix(float[,,] floor, float[,,] walls)
         {
             Vector3Int size = new Vector3Int(
@@ -77,10 +79,21 @@ namespace ProceduralStages
                         //var minWallDistance = Mathf.Min(relativePosition.x, 1 - relativePosition.x, relativePosition.y, 1 - relativePosition.y);
 
                         var minWallNoise = (ellipsisDistance - wallsCarvingRelativeMinDistance) / (1 - wallsCarvingRelativeMinDistance);
+                        float outerWallFinalBlendNoise = outerWallBlendNoise - wallsBlendNoiseBonus;
 
-                        if (minWallNoise > 0 && outerWallBlendNoise - wallsBlendNoiseBonus < minWallNoise)
+                        if (minWallNoise > 0 && outerWallFinalBlendNoise < minWallNoise)
                         {
-                            resultMap[x, y, z] = wallNoise > 0.5f ? 1 - wallNoise : wallNoise;
+                            //resultMap[x, y, z] = wallNoise > 0.5f ? 1 - wallNoise : wallNoise;
+                            resultMap[x, y, z] = Mathf.Min(wallNoise, cullingFalloff.Evaluate(minWallNoise - outerWallFinalBlendNoise));
+
+                            float maxHeight = Mathf.PerlinNoise(x / roofFrequency + roofSeedX, z / roofFrequency + roofSeedZ);
+                            var scaledMaxHeight = roofCarvingRelativeMinHeight + maxHeight * (roofCarvingRelativeMaxHeight - roofCarvingRelativeMinHeight);
+
+                            if (scaledMaxHeight < relativeHeight)
+                            {
+                                resultMap[x, y, z] = Mathf.Min(resultMap[x, y, z], cullingFalloff.Evaluate(relativeHeight - scaledMaxHeight));
+                                //resultMap[x, y, z] = wallNoise > 0.5f ? 1 - wallNoise : wallNoise;
+                            }
 
                             //float outerWallNoise = (PerlinNoise.Get(new Vector3(x + wallsSeedX, y * wallsVerticalScale + wallsSeedY, z + wallsSeedZ), wallsFrequency) + 1) / 2;
                             //
@@ -103,7 +116,8 @@ namespace ProceduralStages
 
                             if (scaledMaxHeight < relativeHeight)
                             {
-                                resultMap[x, y, z] = wallNoise > 0.5f ? 1 - wallNoise : wallNoise;
+                                resultMap[x, y, z] = Mathf.Min(wallNoise, cullingFalloff.Evaluate(relativeHeight - scaledMaxHeight));
+                                //resultMap[x, y, z] = wallNoise > 0.5f ? 1 - wallNoise : wallNoise;
                             }
                             else
                             {
