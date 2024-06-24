@@ -24,6 +24,8 @@ namespace ProceduralStages
         public ThreadSafeCurve finalCurve;
 
         public Voronoi3D voronoi;
+        public CubicHoneycomb cubicHoneycomb;
+        public bool test;
 
         public float[,,] Create(Vector3Int size)
         {
@@ -42,7 +44,18 @@ namespace ProceduralStages
                 {
                     for (int z = 0; z < size.z; z++)
                     {
+                        if (test)
+                        {
+                            float wallNoise = 0.5f * (wallNoiseFBM.Evaluate(x + wallSeedX, z + wallSeedZ) + 1);
+                            float carverNoise = 0.5f * (carverNoiseFBM.Evaluate(x + carverSeedX, carverVerticalScale * y + carverSeedY, z + carverSeedZ) + 1);
+
+                            map[x, y, z] = Mathf.Min(wallNoise, carverNoise);
+
+                            continue;
+                        }
+
                         Voronoi3DResult voronoiResult = voronoi[x, y, z];
+                        //Voronoi3DResult voronoiResult = cubicHoneycomb[x, y, z];
                         Vector3 pos1 = new Vector3(x, y, z) + voronoiResult.displacement1;
                         Vector3 pos2 = new Vector3(x, y, z) + voronoiResult.displacement2;
 

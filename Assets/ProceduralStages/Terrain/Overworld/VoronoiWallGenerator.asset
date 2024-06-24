@@ -21,3 +21,5 @@ MonoBehaviour:
   carverVerticalScale: 0.3
   finalCurve: {fileID: 11400000, guid: 866bbe7922a6a374787e3d7b7f882e17, type: 2}
   voronoi: {fileID: 11400000, guid: 74682f8d60d641f48ab3bb692bec0866, type: 2}
+  cubicHoneycomb: {fileID: 11400000, guid: 82631d1179e09cd4f8f8cdfcdf4b893f, type: 2}
+  test: 0
