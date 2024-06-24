@@ -21,3 +21,4 @@ MonoBehaviour:
   constrast: 0.5
   glossiness: 0.2
   metallic: 0
+  material: 0

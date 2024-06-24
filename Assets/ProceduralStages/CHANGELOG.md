@@ -1,4 +1,7 @@
-### 1.14
+## 1.15
+1. Improved footstep sounds. Walking now make a sound based on the material you are walking now. This also removes the `X  is missing surface def` from the logs.
+
+## 1.14
 1. **Basalt Isle Cave:** The basalt isle now features a guaranteed cave leading to the center of the central mountain.
 2. **Rocky Island Walls:** Enhanced the island walls to appear more rocky and realistic.
 3. **Stalactites in Caves:** Added Stalactites to open caves ceilling.
@@ -8,7 +11,7 @@
 7. **White Triangle Flicker Fix:** Fixed the issue causing a flickering white triangle.
 8. **Enemy Pool Fix:** Corrected an issue where enemies were being selected for the pool before reaching the minimum stage required for them to spawn. This resolves the problem of having too few monster types in the enemy pool.
 
-### 1.13
+## 1.13
 1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.
 2. **Stage Generation Performance:** Improved map generation by ~2x
 3. **Enhanced Visuals:** Detailed textures and refined blending techniques for improved visual aesthetics.
@@ -16,7 +19,7 @@
 5. **Culling Issue:** Fixed an issue where decorations would be culled when underwater.
 6. **Enemy Pool Fix:** Addressed an issue where an enemy could be selected multiple times in the enemy pool, causing enemies to be less varied.
 
-### 1.12
+## 1.12
 1. **New Themes**: Introduced five new themes: Plains, Desert, Snow, Void, and Mushroom. The old "random" theme will still be able to spawn.
 2. **Stage Size Adjustments**: Balanced the sizes of different stages. Increased the size of Islands and Open caves, while reducing the size of tunnel caves and Twisted canyons.
 3. **Theme-based Updates**: Altered stage names, descriptions, and dream messages to match the terrain type.

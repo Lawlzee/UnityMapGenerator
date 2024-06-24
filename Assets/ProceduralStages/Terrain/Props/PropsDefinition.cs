@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace ProceduralStages
         public int count;
         public bool changeColor;
         public bool isRock;
+        public MaterialType material = MaterialType.Stone;
         public Vector3 normal;
         public Vector3 offset;
         public bool isSolid;
@@ -28,5 +30,10 @@ namespace ProceduralStages
         public GameObject prefab => _prefab
             ? _prefab
             : (_prefab = Addressables.LoadAssetAsync<GameObject>(asset).WaitForCompletion());
+
+        private SurfaceDef _surfaceDef;
+        public SurfaceDef surfaceDef => _surfaceDef
+            ? _surfaceDef
+            : (_surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sd" + material + ".asset").WaitForCompletion());
     }
 }

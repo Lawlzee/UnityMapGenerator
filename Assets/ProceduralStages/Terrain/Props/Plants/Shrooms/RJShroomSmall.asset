@@ -19,6 +19,7 @@ MonoBehaviour:
   count: 15
   changeColor: 0
   isRock: 0
+  material: 0
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,8 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float metallic;
 
+        public MaterialType material = MaterialType.Stone;
+
         private Texture2D _texture;
         public Texture2D texture => _texture 
             ? _texture
@@ -40,5 +43,10 @@ namespace ProceduralStages
             : _normal
                 ? _normal        
                 : (_normal = Addressables.LoadAssetAsync<Texture2D>(normalAsset).WaitForCompletion());
+
+        private SurfaceDef _surfaceDef;
+        public SurfaceDef surfaceDef => _surfaceDef
+            ? _surfaceDef
+            : (_surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sd" + material + ".asset").WaitForCompletion());
     }
 }

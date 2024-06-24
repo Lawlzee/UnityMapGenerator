@@ -19,7 +19,9 @@ MonoBehaviour:
   count: 30
   changeColor: 0
   isRock: 0
+  material: 1
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 0
+  initialRotation: {x: 0, y: 0, z: 0}

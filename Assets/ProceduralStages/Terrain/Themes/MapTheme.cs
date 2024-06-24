@@ -29,10 +29,11 @@ namespace ProceduralStages
             Vignette vignette,
             MeshRenderer waterMeshRenderer,
             ColorGrading waterColorGrading,
-            MeshRenderer seaFloorMeshRenderer)
+            MeshRenderer seaFloorMeshRenderer,
+            SurfaceDefProvider terrainSurfaceDefProvider)
         {
             ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
-            Texture2D colorGradiant = SetTexture(material, colorPalette);
+            Texture2D colorGradiant = SetTexture(material, colorPalette, terrainSurfaceDefProvider);
             
             var skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
             if (Application.isEditor)
@@ -106,7 +107,7 @@ namespace ProceduralStages
                 : colorGradiant;
         }
 
-        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette)
+        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette, SurfaceDefProvider terrainSurfaceDefProvider)
         {
             var rng = MapGenerator.rng;
 
@@ -127,6 +128,9 @@ namespace ProceduralStages
                 wallTexture = MapGenerator.instance.editorWallTexture ?? wallTexture;
                 detailTexture = MapGenerator.instance.editorDetailTexture ?? detailTexture;
             }
+
+
+            terrainSurfaceDefProvider.surfaceDef = floorTexture.surfaceDef;
 
             material.mainTexture = wallTexture.texture;
             material.SetFloat("_WallBias", wallTexture.bias);

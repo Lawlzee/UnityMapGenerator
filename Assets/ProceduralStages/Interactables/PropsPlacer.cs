@@ -161,19 +161,26 @@ namespace ProceduralStages
 
                     if (prop.addCollision)
                     {
-                        instance.AddComponent<MeshCollider>();
-
                         foreach (var meshRenderer in instance.GetComponentsInChildren<MeshRenderer>(includeInactive: true))
                         {
                             meshRenderer.gameObject.AddComponent<MeshCollider>();
                         }
                     }
 
-                    foreach (var renderer in instance.GetComponentsInChildren<Renderer>())
+                    foreach (var renderer in instance.GetComponentsInChildren<Renderer>(includeInactive: true))
                     {
                         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                     }
-                    
+
+                    foreach (var collider in instance.GetComponentsInChildren<Collider>(includeInactive: true))
+                    {
+                        if (collider.gameObject.GetComponent<SurfaceDefProvider>() == null)
+                        {
+                            SurfaceDefProvider surfaceDefProvider = collider.gameObject.AddComponent<SurfaceDefProvider>();
+                            surfaceDefProvider.surfaceDef = prop.surfaceDef;
+                        }
+                    }
+
                     if (prop.isSolid)
                     {
                         SetLayer(instance, LayerIndex.world.intVal);

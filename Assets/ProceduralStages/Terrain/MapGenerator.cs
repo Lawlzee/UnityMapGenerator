@@ -54,6 +54,7 @@ namespace ProceduralStages
         public PostProcessVolume postProcessVolume;
 
         public MeshRenderer waterRenderer;
+        public GameObject waterController;
         public MeshRenderer seaFloorRenderer;
         public GameObject waterPostProcessingObject;
 
@@ -162,7 +163,7 @@ namespace ProceduralStages
                 //terrainType = TerrainType.Moon;
 
             }
-
+            //RoR2/Base/Common/sdWater.asset
             Log.Debug(terrainType);
 
             TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
@@ -171,10 +172,16 @@ namespace ProceduralStages
             PostProcessVolume waterPPV = waterPostProcessingObject.GetComponent<PostProcessVolume>();
             ColorGrading waterColorGrading = waterPPV.profile.GetSetting<ColorGrading>();
             BoxCollider waterPPCollider = waterPostProcessingObject.GetComponent<BoxCollider>();
+            BoxCollider waterControllerBoxController = waterController.GetComponent<BoxCollider>();
 
             waterRenderer.gameObject.transform.position = new Vector3(0, terrainGenerator.waterLevel, 0);
             waterPPCollider.center = new Vector3(0, terrainGenerator.waterLevel / 2, 0);
             waterPPCollider.size = new Vector3(10000, terrainGenerator.waterLevel, 10000);
+
+            waterControllerBoxController.center = waterPPCollider.center;
+            waterControllerBoxController.size = waterPPCollider.size;
+
+            waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAsset<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
 
             stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
             stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
@@ -213,9 +220,16 @@ namespace ProceduralStages
             RampFog fog = profile.GetSetting<RampFog>();
             Vignette vignette = profile.GetSetting<Vignette>();
 
-            Texture2D colorGradiant = theme.ApplyTheme(terrainGenerator, terrainMaterial, fog, vignette, waterRenderer, waterColorGrading, seaFloorRenderer);
+            Texture2D colorGradiant = theme.ApplyTheme(
+                terrainGenerator, 
+                terrainMaterial, 
+                fog, 
+                vignette, 
+                waterRenderer, 
+                waterColorGrading, 
+                seaFloorRenderer,
+                GetComponent<SurfaceDefProvider>());
 
-            GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sdStone.asset").WaitForCompletion();
             LogStats("surfaceDef");
 
             GetComponent<MeshCollider>().sharedMesh = terrain.meshResult.mesh;

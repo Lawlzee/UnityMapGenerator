@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: AncientLoftGrass
   m_EditorClassIdentifier: 
   asset: RoR2/DLC1/ancientloft/AncientLoftGrass.spm
-  scale: 1
   minScale: 1
   maxScale: 1.25
   ground: 1
   count: 300
   changeColor: 1
   isRock: 0
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 0
   addCollision: 0
+  initialRotation: {x: 0, y: 0, z: 0}

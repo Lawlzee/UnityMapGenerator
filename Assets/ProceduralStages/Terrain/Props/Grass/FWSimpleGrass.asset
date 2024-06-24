@@ -13,14 +13,15 @@ MonoBehaviour:
   m_Name: FWSimpleGrass
   m_EditorClassIdentifier: 
   asset: RoR2/Base/frozenwall/FWSimpleGrass.prefab
-  scale: 2
   minScale: 2
   maxScale: 3
   ground: 1
   count: 300
   changeColor: 1
   isRock: 0
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 0
   addCollision: 0
+  initialRotation: {x: 0, y: 0, z: 0}
