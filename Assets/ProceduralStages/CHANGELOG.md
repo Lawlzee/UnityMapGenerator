@@ -1,12 +1,12 @@
 ### 1.14
-1. The basalt isle are now garantied to have a cave leeding to center of the center mountain
-2. Fixed decoration popping when close
-3. Added occlusion culling delay config 
-4. Fixed crazy flickering white triangle
-5. Added shadows 
-6. Only add monster in dccs if stageCount >= minStageCount 
-7. Improved islands walls to be more rocky
-8. Added "Stalactites" to open caves
+1. **Basalt Isle Cave:** The basalt isle now features a guaranteed cave leading to the center of the central mountain.
+2. **Rocky Island Walls:** Enhanced the island walls to appear more rocky and realistic.
+3. **Stalactites in Caves:** Added Stalactites to open caves ceilling.
+4. **Stage Shadows:** Added shadows to the stages for improved visual depth.
+5. **Decoration Pop Fix:** Resolved an issue where decorations would pop when close to the camera.
+6. **Occlusion Culling Configuration:** Introduced a configurable delay for occlusion culling.
+7. **White Triangle Flicker Fix:** Fixed the issue causing a flickering white triangle.
+8. **Enemy Pool Fix:** Corrected an issue where enemies were being selected for the pool before reaching the minimum stage required for them to spawn. This resolves the problem of having too few monster types in the enemy pool.
 
 ### 1.13
 1. **Basalt Isle:** Introducing a new stage type named Basalt Isle.
