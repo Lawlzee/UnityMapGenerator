@@ -14,6 +14,7 @@ namespace ProceduralStages
         TunnelCaves,
         Mines,
         Basalt,
+        Towers,
         Moon
     }
 
@@ -35,6 +36,8 @@ namespace ProceduralStages
                     return "Moon";
                 case TerrainType.Basalt:
                     return "Basalt Isle";
+                case TerrainType.Towers:
+                    return "Towers TODO";
                 default:
                     return "?";
             }
@@ -56,6 +59,8 @@ namespace ProceduralStages
                     return "TODO";
                 case TerrainType.Basalt:
                     return "Volcanic Pillars";
+                case TerrainType.Towers:
+                    return "Towers TODO";
                 default:
                     return "?";
             }
@@ -77,6 +82,8 @@ namespace ProceduralStages
                     return "TODO";
                 case TerrainType.Basalt:
                     return "You dream of towering basalt columns and the roar of distant volcanoes.";
+                case TerrainType.Towers:
+                    return "Towers TODO";
                 default:
                     return "?";
             }

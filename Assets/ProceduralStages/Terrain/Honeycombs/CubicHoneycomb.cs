@@ -16,13 +16,12 @@ namespace ProceduralStages
         public Vector3Int size;
 
         public Vector3Int blockGrid;
-        public BlockShape[] blockShapes;
+        public BlockShape3[] blockShapes;
         public int blockFillMaxIterations;
         public int maxBlockInsert;
         public int autofillBlocksLeft;
 
-
-        public Vector3Int debugPos;
+        public ThreadSafeCurve roundingCurve;
 
         public ulong seed;
 
@@ -126,7 +125,6 @@ namespace ProceduralStages
                 }
             }
 
-
             Log.Debug("blockCenters.Count: " + blockCenters.Count);
             Log.Debug("i: " + i);
             Log.Debug("blocksLeft: " + blocksLeft);
@@ -186,35 +184,13 @@ namespace ProceduralStages
                         Vector3 blockCenter = DemoduloVector(blockCenters[blockIndex], uvw, blockGrid);
                         Vector3 blockSize = blockSizes[blockIndex];
 
-
-                        //for (int sign = -1; sign <= 1; sign += 2)
-                        //{
-                        //    for (int dimension = 0; dimension < 3; dimension++)
-                        //    {
-                        //        for (int offset = 1; offset < blockGrid[dimension]; offset++)
-                        //        {
-                        //            int neighborBlockIndex = blockMap[(uvwIntegral[dimension] + sign * offset) % blockGrid.x, y, z];
-                        //            if (neighborBlockIndex != blockIndex)
-                        //            {
-                        //                Vector3 neighborBlockCenter = blockCenters[neighborBlockIndex];
-                        //                float distance = 1 - (sign * offset - uvwIntegral[dimension]) / (uvwIntegral[dimension] + offset - neighborBlockCenter.x);
-                        //                break;
-                        //            }
-                        //        }
-                        //    }
-                        //}
-
-
                         Vector3 delta = uvw - blockCenter;
 
                         float distanceX = Mathf.Abs(delta.x) / blockSize.x;
                         float distanceY = Mathf.Abs(delta.y) / blockSize.y;
                         float distanceZ = Mathf.Abs(delta.z) / blockSize.z;
 
-                        float distance = Mathf.Max(
-                            distanceX,
-                            distanceY,
-                            distanceZ);
+                        Sort3(distanceX, distanceY, distanceZ, out float _, out float midDistance, out float distance);
 
                         int neighborBlockIndex = 0;
 
@@ -304,172 +280,7 @@ namespace ProceduralStages
                         }
 
 
-                        float minDistance = distance;
                         Vector3 neighborCenter = DemoduloVector(blockCenters[neighborBlockIndex], uvw, blockGrid);
-
-                        //for (int xOffset = 1; xOffset < blockGrid.x; xOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[(uvwIntegral.x + xOffset) % blockGrid.x, uvwIntegral.y, uvwIntegral.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        neighborCenter = blockCenters[neighborBlockIndex];
-                        //        minDistance = (xOffset - uvwFractional.x) / (uvwIntegral.x + xOffset - blockCenter.x);
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + minDistance);
-                        //        }
-                        //
-                        //        //if (x == 0 && y == 0 && z == 0)
-                        //        //{
-                        //        //    Log.Debug("xOffset: " + xOffset);
-                        //        //    Log.Debug("uvwFractional.x: " + uvwFractional.x);
-                        //        //    Log.Debug("uvwIntegral.x: " + uvwIntegral.x);
-                        //        //    Log.Debug("blockCenter.x: " + blockCenter.x);
-                        //        //    Log.Debug("blockCenter: " + blockCenter);
-                        //        //    Log.Debug("minDistance: " + minDistance);
-                        //        //}
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //for (int xOffset = 1; xOffset < blockGrid.x; xOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[(((uvwIntegral.x - xOffset) % blockGrid.x) + blockGrid.x) % blockGrid.x, uvwIntegral.y, uvwIntegral.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        float distance = (uvwFractional.x - xOffset + 1) / (uvwIntegral.x + blockCenter.x - xOffset + 1);
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + distance);
-                        //        }
-                        //
-                        //        //if (x == 0 && y == 0 && z == 0)
-                        //        //{
-                        //        //    Log.Debug("xOffset: " + xOffset);
-                        //        //    Log.Debug("uvwFractional.x: " + uvwFractional.x);
-                        //        //    Log.Debug("uvwIntegral.x: " + uvwIntegral.x);
-                        //        //    Log.Debug("blockCenter.x: " + blockCenter.x);
-                        //        //    Log.Debug("blockCenter: " + blockCenter);
-                        //        //    Log.Debug("distance: " + distance);
-                        //        //}
-                        //
-                        //        if (distance < minDistance)
-                        //        {
-                        //            minDistance = distance;
-                        //            neighborCenter = blockCenters[neighborBlockIndex];
-                        //        }
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //
-                        //for (int yOffset = 1; yOffset < blockGrid.y; yOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[uvwIntegral.x, (uvwIntegral.y + yOffset) % blockGrid.y, uvwIntegral.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        float distance = (yOffset - uvwFractional.y) / (uvwIntegral.y + yOffset - blockCenter.y);
-                        //
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + distance);
-                        //        }
-                        //
-                        //        if (distance < minDistance)
-                        //        {
-                        //            minDistance = distance;
-                        //            neighborCenter = blockCenters[neighborBlockIndex];
-                        //        }
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //for (int yOffset = 1; yOffset < blockGrid.y; yOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[uvwIntegral.x, (((uvwIntegral.y - yOffset) % blockGrid.y) + blockGrid.y) % blockGrid.y, uvwIntegral.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        float distance = (uvwFractional.y - yOffset + 1) / (uvwIntegral.y + blockCenter.y - yOffset + 1);
-                        //
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + distance);
-                        //        }
-                        //
-                        //        if (distance < minDistance)
-                        //        {
-                        //            minDistance = distance;
-                        //            neighborCenter = blockCenters[neighborBlockIndex];
-                        //        }
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //for (int zOffset = 1; zOffset < blockGrid.z; zOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[uvwIntegral.x, uvwIntegral.y, (uvwIntegral.z + zOffset) % blockGrid.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        float distance = (zOffset - uvwFractional.z) / (uvwIntegral.z + zOffset - blockCenter.z);
-                        //
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + distance);
-                        //        }
-                        //
-                        //        if (distance < minDistance)
-                        //        {
-                        //            minDistance = distance;
-                        //            neighborCenter = blockCenters[neighborBlockIndex];
-                        //        }
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //for (int zOffset = 1; zOffset < blockGrid.z; zOffset++)
-                        //{
-                        //    int neighborBlockIndex = blockMap[uvwIntegral.x, uvwIntegral.y, (((uvwIntegral.z - zOffset) % blockGrid.z) + blockGrid.z) % blockGrid.z];
-                        //    if (neighborBlockIndex != blockIndex)
-                        //    {
-                        //        //float distance = (uvwFractional.z - zOffset + 1) / (uvwIntegral.z - blockCenter.z - zOffset + 1);
-                        //        float distance = (uvw.z - blockCenter.z) / (zOffset - blockCenter.z % 1);
-                        //
-                        //
-                        //        if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //        {
-                        //            Log.Debug("distance: " + distance);
-                        //            Log.Debug("zOffset: " + zOffset);
-                        //            Log.Debug("uvwFractional.z: " + uvwFractional.z);
-                        //            Log.Debug("uvwIntegral.z: " + uvwIntegral.z);
-                        //            Log.Debug("blockCenter.z: " + blockCenter.z);
-                        //            Log.Debug("blockCenter: " + blockCenter);
-                        //            Log.Debug("distance: " + distance);
-                        //        }
-                        //
-                        //        if (distance < minDistance)
-                        //        {
-                        //            minDistance = distance;
-                        //            neighborCenter = blockCenters[neighborBlockIndex];
-                        //        }
-                        //
-                        //        break;
-                        //    }
-                        //}
-                        //
-                        //if (x == debugPos.x && y == debugPos.y && z == debugPos.z)
-                        //{
-                        //    Log.Debug("minDistance: " + minDistance);
-                        //}
 
                         Vector3 displacement1 = new Vector3(
                             scaleReciprocal.x * (blockCenter.x - uvw.x),
@@ -481,19 +292,41 @@ namespace ProceduralStages
                             scaleReciprocal.y * (neighborCenter.y - uvw.y),
                             scaleReciprocal.z * (neighborCenter.z - uvw.z));
 
-                        float weight = 0.5f * (1 - minDistance);
+                        float weight = distance + roundingCurve.Evaluate(midDistance / distance);
 
                         voronoi[x * size.y * size.z + y * size.z + z] = new Voronoi3DResult
                         {
                             displacement1 = displacement1,
                             displacement2 = displacement2,
-                            weight = minDistance
+                            weight = weight
                         };
                     }
                 }
             });
 
             Log.Debug("Voronoi baked");
+        }
+
+        private void Sort3(float a, float b, float c, out float min, out float mid, out float max)
+        {
+            if (a > c)
+            {
+                (a, c) = (c, a);
+            }
+
+            if (a > b)
+            {
+                (a, b) = (b, a);
+            }
+
+            if (b > c)
+            {
+                (b, c) = (c, b);
+            }
+
+            min = a;
+            mid = b;
+            max = c;
         }
 
         private Vector3 DemoduloVector(Vector3 vector, Vector3 basis, Vector3 spaceSize)

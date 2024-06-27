@@ -1637,7 +1637,7 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 2
+  editorTerrainType: 6
   editorTheme: 0
   editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}
@@ -1650,6 +1650,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2ade82e555b1e5144adf8595b07b05c4, type: 2}
   - {fileID: 11400000, guid: 82abb8e99569b504893ff2afb6d3cc3a, type: 2}
   - {fileID: 11400000, guid: 1c5cf492b1029844eacf8f2b749d4cc2, type: 2}
+  - {fileID: 11400000, guid: 8a433ab5ecad72a44a3495783665d275, type: 2}
   themes:
   - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
   - {fileID: 11400000, guid: 805d6808ab298af40a3f93a22b173232, type: 2}

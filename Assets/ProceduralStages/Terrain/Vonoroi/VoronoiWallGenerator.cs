@@ -81,11 +81,11 @@ namespace ProceduralStages
                         }
                         else if (isWall1)
                         {
-                            map[x, y, z] = 1 - voronoiResult.weight;
+                            map[x, y, z] = Mathf.Clamp(1 - voronoiResult.weight, 0.5f, 1);
                         }
                         else if (isWall2)
                         {
-                            map[x, y, z] = voronoiResult.weight;
+                            map[x, y, z] = Mathf.Clamp(voronoiResult.weight, 0, 0.5f);
                         }
                     }
                 }
