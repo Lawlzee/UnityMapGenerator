@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProceduralStages
 {
-    [CreateAssetMenu(fileName = "ThreadSafeCurve", menuName = "ProceduralStages/ThreadSafeCurve", order = 10)]
+    [CreateAssetMenu(fileName = "ThreadSafeCurve", menuName = "ProceduralStages/ThreadSafeCurve", order = -1)]
     public class ThreadSafeCurve : ScriptableObject
     {
         public AnimationCurve curve;

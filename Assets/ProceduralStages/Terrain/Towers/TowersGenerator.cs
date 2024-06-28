@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityMeshSimplifier;
-using static Rewired.ComponentControls.Effects.RotateAroundAxis;
 
 namespace ProceduralStages
 {

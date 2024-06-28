@@ -28,6 +28,7 @@ namespace ProceduralStages
             [(TerrainType.Mines, 0)] = 0.15f,
             [(TerrainType.Basalt, 0)] = 0.15f,
             [(TerrainType.Towers, 0)] = 0.00f,
+            [(TerrainType.Temple, 0)] = 0.00f,
 
             [(TerrainType.OpenCaves, 1)] = 0.15f,
             [(TerrainType.TunnelCaves, 1)] = 0.15f,
@@ -35,6 +36,7 @@ namespace ProceduralStages
             [(TerrainType.Mines, 1)] = 0.15f,
             [(TerrainType.Basalt, 1)] = 0.15f,
             [(TerrainType.Towers, 1)] = 0.00f,
+            [(TerrainType.Temple, 1)] = 0.00f,
 
             [(TerrainType.OpenCaves, 2)] = 0.15f,
             [(TerrainType.TunnelCaves, 2)] = 0.15f,
@@ -42,6 +44,7 @@ namespace ProceduralStages
             [(TerrainType.Mines, 2)] = 0.15f,
             [(TerrainType.Basalt, 2)] = 0.4f,
             [(TerrainType.Towers, 2)] = 0.00f,
+            [(TerrainType.Temple, 2)] = 0.00f,
 
             [(TerrainType.OpenCaves, 3)] = 0.15f,
             [(TerrainType.TunnelCaves, 3)] = 0.4f,
@@ -49,6 +52,7 @@ namespace ProceduralStages
             [(TerrainType.Mines, 3)] = 0.15f,
             [(TerrainType.Basalt, 3)] = 0.15f,
             [(TerrainType.Towers, 3)] = 0.00f,
+            [(TerrainType.Temple, 3)] = 0.00f,
 
             [(TerrainType.OpenCaves, 4)] = 0.15f,
             [(TerrainType.TunnelCaves, 4)] = 0.15f,
@@ -56,6 +60,7 @@ namespace ProceduralStages
             [(TerrainType.Mines, 4)] = 0.4f,
             [(TerrainType.Basalt, 4)] = 0.15f,
             [(TerrainType.Towers, 4)] = 0.00f,
+            [(TerrainType.Temple, 4)] = 0.00f,
         };
 
         public static ConfigEntry<string> ConfigVersion;

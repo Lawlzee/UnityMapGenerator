@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ProceduralStages
 {
-    [CreateAssetMenu(fileName = "FBM", menuName = "ProceduralStages/FBM", order = 2)]
+    [CreateAssetMenu(fileName = "FBM", menuName = "ProceduralStages/FBM", order = -1)]
     public class FBM : ScriptableObject
     {
         public float amplitude = 1f;

@@ -1,0 +1,121 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df913b0a59ffac14eb1d72534937d19b, type: 3}
+  m_Name: TempleGenerator
+  m_EditorClassIdentifier: 
+  size: {x: 200, y: 85, z: 200}
+  sizeIncreasePerStage: {x: 25, y: 0, z: 25}
+  sizeVariation: {x: 0.1, y: 0, z: 0.1}
+  fogPower: 0.75
+  fogIntensityCoefficient: 1
+  vignetteInsentity: 0.12
+  ambiantLightIntensity: 0.7
+  waterLevel: 8.5
+  terrainType: 7
+  ceillingPropsWeight: 1
+  towerWidth:
+    min: 4
+    max: 10
+  towerSegmentsHeight:
+    min: 2
+    max: 8
+  towersCubicHoneycomb: {fileID: 11400000, guid: cbf849615877954449ebb6e04871c5e1,
+    type: 2}
+  floorFBM: {fileID: 11400000, guid: 263e7b8cdacf7d0499b51141b7bac471, type: 2}
+  floorCurve: {fileID: 11400000, guid: 62dbc87ff9152f54bbacfc39b9018f53, type: 2}
+  floorHeightByDistanceCurve: {fileID: 11400000, guid: 80b2a174944a5bb4e90c6cca24f35619,
+    type: 2}
+  floorMaxHeight: 22
+  floorBlendFactor: 0.015
+  ringYOffsetFBM: {fileID: 11400000, guid: ee2fefa45f58ba9439f82d175392f5e0, type: 2}
+  ringYOffsetCurve: {fileID: 11400000, guid: 1be9fdf2d3e589d43a5358512bf54fe8, type: 2}
+  ringHeightFBM: {fileID: 11400000, guid: be65467b1ae4d5844aa34e4a7f7cbeb9, type: 2}
+  ringHeightCurve: {fileID: 11400000, guid: d4f1b79d60222e54bbb7c4732dcdfc78, type: 2}
+  crystalFBM: {fileID: 11400000, guid: e4a963ef50623a447a59e1a3c163a829, type: 2}
+  crystalCurve: {fileID: 11400000, guid: 87e136ecd3e410a439547cf8d59eba45, type: 2}
+  crystalRadiusByHeightCurve: {fileID: 11400000, guid: c3075893089e48940bfb7e861189aef4,
+    type: 2}
+  crystalVoronoi: {fileID: 11400000, guid: ceb520ba76a7b164ab26bb05481f3890, type: 2}
+  crystalCubicHoneycomb: {fileID: 11400000, guid: 451c4f010d4072746b4be24819c82b73,
+    type: 2}
+  stoneWalls:
+  - distance:
+      min: 0.9
+      max: 0.96
+    towerCount: 13
+    towerHeight:
+      min: 35
+      max: 45
+    rings:
+    - heigth:
+        min: 0
+        max: 10
+      addPath: 0
+      seedZ: 16098
+    - heigth:
+        min: 25
+        max: 29
+      addPath: 0
+      seedZ: 9003
+    ringPathWidth: 0
+  - distance:
+      min: 0.65
+      max: 0.75
+    towerCount: 7
+    towerHeight:
+      min: 40
+      max: 45
+    rings:
+    - heigth:
+        min: 0
+        max: 15
+      addPath: 1
+      seedZ: 2209
+    - heigth:
+        min: 35
+        max: 39
+      addPath: 0
+      seedZ: 3579
+    ringPathWidth: 0.1
+  - distance:
+      min: 0.35
+      max: 0.45
+    towerCount: 5
+    towerHeight:
+      min: 50
+      max: 60
+    rings:
+    - heigth:
+        min: 0
+        max: 20
+      addPath: 1
+      seedZ: 22301
+    - heigth:
+        min: 45
+        max: 49
+      addPath: 0
+      seedZ: 5858
+    ringPathWidth: 0.12
+  - distance:
+      min: 0.1
+      max: 0.2
+    towerCount: 0
+    towerHeight:
+      min: 0
+      max: 0
+    rings:
+    - heigth:
+        min: 0
+        max: 22
+      addPath: 0
+      seedZ: 26455
+    ringPathWidth: 0

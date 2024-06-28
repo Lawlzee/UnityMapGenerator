@@ -1,0 +1,207 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2fb2a9a6b211440b615361587bfc75, type: 3}
+  m_Name: FloorHeightByDistanceCurve
+  m_EditorClassIdentifier: 
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0033721924
+      value: 0
+      inSlope: -1.0481375
+      outSlope: -1.0481375
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.2709476
+    - serializedVersion: 3
+      time: 0.13363254
+      value: 1.0026009
+      inSlope: 2.1668458
+      outSlope: 2.1668458
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.28392413
+      outWeight: 0.34748265
+    - serializedVersion: 3
+      time: 0.2
+      value: 0.8
+      inSlope: -2.0591912
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.33
+      value: 0.8
+      inSlope: -0
+      outSlope: -1.2503057
+      tangentMode: 5
+      weightedMode: 2
+      inWeight: 0.33333334
+      outWeight: 0.5084688
+    - serializedVersion: 3
+      time: 0.47
+      value: 0.5
+      inSlope: -0.20886394
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 1
+      inWeight: 0.35707894
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.63
+      value: 0.5
+      inSlope: -0
+      outSlope: -0.6976955
+      tangentMode: 5
+      weightedMode: 2
+      inWeight: 0.33333334
+      outWeight: 0.50843585
+    - serializedVersion: 3
+      time: 0.77
+      value: 0.25
+      inSlope: -0.34091645
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 1
+      inWeight: 0.41593423
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9
+      value: 0.25
+      inSlope: -0
+      outSlope: -7.499998
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: -0.5
+      inSlope: -7.499998
+      outSlope: -7.499998
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sampleCount: 100
+  _samples:
+  - 0
+  - 0.006499953
+  - 0.043669637
+  - 0.10635914
+  - 0.18941854
+  - 0.287698
+  - 0.39604753
+  - 0.5093173
+  - 0.62235737
+  - 0.7300179
+  - 0.8271488
+  - 0.90860033
+  - 0.9692226
+  - 1.0038589
+  - 1.0078156
+  - 0.9860147
+  - 0.94709086
+  - 0.89967847
+  - 0.8524122
+  - 0.8139267
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.8
+  - 0.79265195
+  - 0.7774332
+  - 0.75948113
+  - 0.73857903
+  - 0.71459144
+  - 0.68756545
+  - 0.65789497
+  - 0.6265226
+  - 0.5950694
+  - 0.5656847
+  - 0.5405193
+  - 0.52109265
+  - 0.5080019
+  - 0.5010767
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.49402463
+  - 0.4838193
+  - 0.47066522
+  - 0.45417497
+  - 0.43404067
+  - 0.41022366
+  - 0.38327667
+  - 0.3546719
+  - 0.326732
+  - 0.3018726
+  - 0.2816791
+  - 0.2666344
+  - 0.2564628
+  - 0.2505665
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.25
+  - 0.17951871
+  - 0.104016334
+  - 0.028514415
+  - -0.046987504
+  - -0.1224899
+  - -0.19799182
+  - -0.27349377
+  - -0.3489961
+  - -0.42449808
+  - -0.5
+  _min: 0.0033721924
+  _max: 1
+  _inverseRange: 1.0033836
+  _step: 0.010066948
