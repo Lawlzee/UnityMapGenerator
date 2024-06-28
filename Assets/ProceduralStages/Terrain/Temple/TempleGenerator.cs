@@ -33,6 +33,8 @@ namespace ProceduralStages
         public ThreadSafeCurve crystalRadiusByHeightCurve;
         public Voronoi3D crystalVoronoi;
         public CubicHoneycomb crystalCubicHoneycomb;
+        public GameObject crystalParticleSystemPrefab;
+        public float crystalParticleSystemRadius;
 
         public StoneWall[] stoneWalls;
 
@@ -284,7 +286,7 @@ namespace ProceduralStages
                 rng.RangeInt(0, short.MaxValue),
                 rng.RangeInt(0, short.MaxValue),
                 rng.RangeInt(0, short.MaxValue));
-
+            
             Parallel.For(0, stageSize.x, x =>
             {
                 for (int y = 0; y < stageSize.y; y++)
@@ -292,33 +294,33 @@ namespace ProceduralStages
                     for (int z = 0; z < stageSize.z; z++)
                     {
                         Vector3 position = new Vector3(x, y, z);
-
+            
                         Voronoi3DResult voronoiResult = crystalCubicHoneycomb[x, y, z];
-
+            
                         Vector3 pos1 = position + voronoiResult.displacement1;
                         Vector3 delta1 = pos1 - center3;
                         float radius1 = circleRadius * crystalRadiusByHeightCurve.Evaluate(pos1.y / stageSize.y);
-
+            
                         float ellipsisDistance1 = Mathf.Sqrt(
                             (delta1.x * delta1.x) / (radius1 * radius1)
                             + (delta1.z * delta1.z) / (radius1 * radius1));
-
+            
                         float noise1Bonus = crystalCurve.Evaluate(0.5f * (crystalFBM.Evaluate(pos1 + crystalSeed) + 1));
                         float noise1 = 1 - ellipsisDistance1 + noise1Bonus;
                         bool isWall1 = noise1 > 0.5f;
-
+            
                         Vector3 pos2 = position + voronoiResult.displacement1;
                         Vector3 delta2 = pos2 - center3;
                         float radius2 = circleRadius * crystalRadiusByHeightCurve.Evaluate(pos2.y / stageSize.y);
-
+            
                         float ellipsisDistance2 = Mathf.Sqrt(
                             (delta2.x * delta2.x) / (radius2 * radius2)
                             + (delta2.z * delta2.z) / (radius2 * radius2));
-
+            
                         float noise2Bonus = crystalCurve.Evaluate(0.5f * (crystalFBM.Evaluate(pos2 + crystalSeed) + 1));
                         float noise2 = 1 - ellipsisDistance2 + noise2Bonus;
                         bool isWall2 = noise2 > 0.5f;
-
+            
                         if (isWall1 && isWall2)
                         {
                             floorlessMap[x, y, z] = 1;
@@ -354,23 +356,29 @@ namespace ProceduralStages
                     int y = 0;
                     for (; y < stageSize.y; y++)
                     {
-                        float noise = Mathf.Clamp01((floorHeight - y) * floorBlendFactor + 0.5f);
-                        if (noise == 0f)
+                        float noise = (floorHeight - y) * floorBlendFactor + 0.5f;
+                        if (noise <= 0f)
                         {
                             break;
                         }
-                        densityMap[x, y, z] = Mathf.Max(noise, floorlessMap[x, y, z]);
+                        densityMap[x, y, z] = Mathf.Clamp01(Mathf.Max(noise, floorlessMap[x, y, z]));
                     }
 
 
                     for (; y < stageSize.y; y++)
                     {
-                        densityMap[x, y, z] = floorlessMap[x, y, z];
+                        densityMap[x, y, z] = Mathf.Clamp01(floorlessMap[x, y, z]);
                     }
                 }
             });
 
             LogStats("densityMap");
+
+            GameObject crystalParticleSystem = Instantiate(crystalParticleSystemPrefab);
+            crystalParticleSystem.transform.position = MapGenerator.instance.mapScale * new Vector3(center3.x, 0, center3.z);
+            ParticleSystem particleSystem = crystalParticleSystem.GetComponent<ParticleSystem>();
+            ParticleSystem.ShapeModule particleSystemShape = particleSystem.shape;
+            particleSystemShape.radius = MapGenerator.instance.mapScale * circleRadius * crystalParticleSystemRadius;
 
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
@@ -380,7 +388,11 @@ namespace ProceduralStages
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
                 densityMap = densityMap,
-                maxGroundHeight = float.MaxValue
+                maxGroundHeight = float.MaxValue,
+                customObjects = new GameObject[]
+                {
+                    crystalParticleSystem
+                }
             };
 
             void LogStats(string name)

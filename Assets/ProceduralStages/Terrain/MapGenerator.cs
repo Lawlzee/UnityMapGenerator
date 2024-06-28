@@ -70,6 +70,7 @@ namespace ProceduralStages
         public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
 
+        private GameObject[] terrainCustomObject;
         private void Awake()
         {
             instance = this;
@@ -101,6 +102,11 @@ namespace ProceduralStages
                     Destroy(propsPlacer.instances[i]);
                 }
                 propsPlacer.instances.Clear();
+
+                for (int i = 0; i < terrainCustomObject.Length; i++)
+                {
+                    Destroy(terrainCustomObject[i]);
+                }
 
                 if (Input.GetKeyDown(KeyCode.F2))
                 {
@@ -189,6 +195,7 @@ namespace ProceduralStages
             stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
 
             Terrain terrain = terrainGenerator.Generate();
+            terrainCustomObject = terrain.customObjects;
             LogStats("terrainGenerator.Generate");
 
             var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);

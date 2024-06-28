@@ -47,6 +47,9 @@ MonoBehaviour:
   crystalVoronoi: {fileID: 11400000, guid: ceb520ba76a7b164ab26bb05481f3890, type: 2}
   crystalCubicHoneycomb: {fileID: 11400000, guid: 451c4f010d4072746b4be24819c82b73,
     type: 2}
+  crystalParticleSystemPrefab: {fileID: 4332721001260483821, guid: d39f30fa07ebb7a4ca8657e4e578ed51,
+    type: 3}
+  crystalParticleSystemRadius: 0.14
   stoneWalls:
   - distance:
       min: 0.9
@@ -60,12 +63,12 @@ MonoBehaviour:
         min: 0
         max: 10
       addPath: 0
-      seedZ: 16098
+      seedZ: 23916
     - heigth:
         min: 25
         max: 29
       addPath: 0
-      seedZ: 9003
+      seedZ: 8081
     ringPathWidth: 0
   - distance:
       min: 0.65
@@ -79,12 +82,12 @@ MonoBehaviour:
         min: 0
         max: 15
       addPath: 1
-      seedZ: 2209
+      seedZ: 21626
     - heigth:
         min: 35
         max: 39
       addPath: 0
-      seedZ: 3579
+      seedZ: 10408
     ringPathWidth: 0.1
   - distance:
       min: 0.35
@@ -98,12 +101,12 @@ MonoBehaviour:
         min: 0
         max: 20
       addPath: 1
-      seedZ: 22301
+      seedZ: 20871
     - heigth:
         min: 45
         max: 49
       addPath: 0
-      seedZ: 5858
+      seedZ: 18414
     ringPathWidth: 0.12
   - distance:
       min: 0.1
@@ -117,5 +120,5 @@ MonoBehaviour:
         min: 0
         max: 22
       addPath: 0
-      seedZ: 26455
+      seedZ: 6102
     ringPathWidth: 0

@@ -14,6 +14,7 @@ namespace ProceduralStages
         public float[,,] densityMap;
         public float maxGroundHeight;
         public float minInteractableHeight;
+        public GameObject[] customObjects = new GameObject[0];
     }
 
     public class MeshResult
