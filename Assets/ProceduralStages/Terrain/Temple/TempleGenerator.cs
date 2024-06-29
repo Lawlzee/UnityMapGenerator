@@ -32,6 +32,7 @@ namespace ProceduralStages
         public FBM crystalFBM;
         public ThreadSafeCurve crystalCurve;
         public ThreadSafeCurve crystalRadiusByHeightCurve;
+        public float crystalMaxRadius;
         public Voronoi3D crystalVoronoi;
         public CubicHoneycomb crystalCubicHoneycomb;
         public GameObject crystalParticleSystemPrefab;
@@ -301,7 +302,7 @@ namespace ProceduralStages
             
                         Vector3 pos1 = position + voronoiResult.displacement1;
                         Vector3 delta1 = pos1 - center3;
-                        float radius1 = circleRadius * crystalRadiusByHeightCurve.Evaluate(pos1.y / stageSize.y);
+                        float radius1 = crystalMaxRadius * crystalRadiusByHeightCurve.Evaluate(pos1.y / stageSize.y);
             
                         float ellipsisDistance1 = Mathf.Sqrt(
                             (delta1.x * delta1.x) / (radius1 * radius1)
@@ -313,7 +314,7 @@ namespace ProceduralStages
             
                         Vector3 pos2 = position + voronoiResult.displacement1;
                         Vector3 delta2 = pos2 - center3;
-                        float radius2 = circleRadius * crystalRadiusByHeightCurve.Evaluate(pos2.y / stageSize.y);
+                        float radius2 = crystalMaxRadius * crystalRadiusByHeightCurve.Evaluate(pos2.y / stageSize.y);
             
                         float ellipsisDistance2 = Mathf.Sqrt(
                             (delta2.x * delta2.x) / (radius2 * radius2)

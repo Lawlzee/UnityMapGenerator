@@ -44,10 +44,11 @@ MonoBehaviour:
   crystalCurve: {fileID: 11400000, guid: 87e136ecd3e410a439547cf8d59eba45, type: 2}
   crystalRadiusByHeightCurve: {fileID: 11400000, guid: c3075893089e48940bfb7e861189aef4,
     type: 2}
+  crystalMaxRadius: 95
   crystalVoronoi: {fileID: 11400000, guid: ceb520ba76a7b164ab26bb05481f3890, type: 2}
   crystalCubicHoneycomb: {fileID: 11400000, guid: 451c4f010d4072746b4be24819c82b73,
     type: 2}
-  crystalParticleSystemPrefab: {fileID: 4332721001260483821, guid: d39f30fa07ebb7a4ca8657e4e578ed51,
+  crystalParticleSystemPrefab: {fileID: 7152948814488917674, guid: a00455a74343b1b4e9f1d074d7788143,
     type: 3}
   crystalParticleSystemRadius: 0.14
   crystalParticleMaterialKey: RoR2/Base/Common/VFX/matGenericFlash.mat
@@ -64,12 +65,12 @@ MonoBehaviour:
         min: 0
         max: 10
       addPath: 0
-      seedZ: 13135
+      seedZ: 24397
     - heigth:
         min: 25
         max: 29
       addPath: 0
-      seedZ: 274
+      seedZ: 30217
     ringPathWidth: 0
   - distance:
       min: 0.65
@@ -83,12 +84,12 @@ MonoBehaviour:
         min: 0
         max: 15
       addPath: 1
-      seedZ: 4511
+      seedZ: 14602
     - heigth:
         min: 35
         max: 39
       addPath: 0
-      seedZ: 8930
+      seedZ: 32445
     ringPathWidth: 0.1
   - distance:
       min: 0.35
@@ -102,12 +103,12 @@ MonoBehaviour:
         min: 0
         max: 20
       addPath: 1
-      seedZ: 25193
+      seedZ: 4295
     - heigth:
         min: 45
         max: 49
       addPath: 0
-      seedZ: 32392
+      seedZ: 6429
     ringPathWidth: 0.12
   - distance:
       min: 0.1
@@ -121,5 +122,5 @@ MonoBehaviour:
         min: 0
         max: 22
       addPath: 0
-      seedZ: 26215
+      seedZ: 14926
     ringPathWidth: 0
