@@ -54,3 +54,7 @@ MonoBehaviour:
   volcanoMinRoomHeight: 10
   volcanoMinColumnHeight: 8
   volcanoRoomMinCenterHeight: 0.9
+  volcanoParticleSystemPrefab: {fileID: 1201892229246120659, guid: 280f341605bd8c0469c1b94e558dfdb0,
+    type: 3}
+  volcanoParticleSystemHeight: 1.1
+  volcanoParticleSystemWidth: 0.1

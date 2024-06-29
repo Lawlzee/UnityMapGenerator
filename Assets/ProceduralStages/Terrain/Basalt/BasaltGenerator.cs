@@ -43,29 +43,37 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float volcanoRoomMinCenterHeight;
 
+        public GameObject volcanoParticleSystemPrefab;
+        public float volcanoParticleSystemHeight;
+        public float volcanoParticleSystemWidth;
+
         public override Terrain Generate()
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            //float[,,] map3d = RandomWalk(MapGenerator.instance.stageSize);
-            //float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
-            (float[,,] map3d, float[,,] floorlessMap) = GenerateIsland(MapGenerator.instance.stageSize);
+            Vector3Int stageSize = MapGenerator.instance.stageSize;
+            (float[,,] map3d, float[,,] floorlessMap) = GenerateIsland(stageSize);
             LogStats("GenerateVoronoi");
 
-            RemoveHoles(map3d, MapGenerator.instance.stageSize);
+            RemoveHoles(map3d, stageSize);
             LogStats("GenerateVoronoi");
-            //float[,,] map3d = AngleRandomWalk(MapGenerator.instance.stageSize);
 
-            //map3d = smoother.SmoothMap(map3d);
-            LogStats("smoother.SmoothMap");
 
             var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
-            //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
-            //var optimisedMesh = simplifier.ToMesh();
-            //LogStats("MeshSimplifier");
+            GameObject volcanoParticleSystem = Instantiate(volcanoParticleSystemPrefab);
+
+            float height = volcanoParticleSystemHeight * stageSize.y * MapGenerator.instance.mapScale;
+            volcanoParticleSystem.transform.position = new Vector3(
+                MapGenerator.instance.mapScale * stageSize.x / 2f,
+                height,
+                MapGenerator.instance.mapScale * stageSize.z / 2f);
+
+            ParticleSystem particleSystem = volcanoParticleSystem.GetComponent<ParticleSystem>();
+            var shape = particleSystem.shape;
+            shape.length = height;
+            shape.angle = Mathf.Rad2Deg * Mathf.Atan2(MapGenerator.instance.mapScale * (stageSize.x + stageSize.z) * volcanoParticleSystemWidth, height);
 
             return new Terrain
             {
@@ -73,7 +81,11 @@ namespace ProceduralStages
                 floorlessDensityMap = floorlessMap,
                 densityMap = map3d,
                 maxGroundHeight = float.MaxValue,
-                minInteractableHeight = waterLevel
+                minInteractableHeight = waterLevel,
+                customObjects = new GameObject[]
+                {
+                    volcanoParticleSystem
+                }
             };
 
             void LogStats(string name)
@@ -321,12 +333,10 @@ namespace ProceduralStages
             List<List<Vector2Int>> holes = new List<List<Vector2Int>>();
             Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
-            float min = float.MaxValue;
             for (int x = 0; x < size.x; x++)
             {
                 for (int z = 0; z < size.z; z++)
                 {
-                    min = Mathf.Min(min, map[x, 0, z]);
                     if (!visitedCells[x, z] && map[x, 0, z] <= 0.5f)
                     {
                         List<Vector2Int> currentHole = new List<Vector2Int>();
@@ -366,7 +376,6 @@ namespace ProceduralStages
                 }
             }
 
-            Log.Debug("min " + min);
             Log.Debug("holes.Count " + holes.Count);
 
             var holesToRemove = holes
@@ -380,91 +389,6 @@ namespace ProceduralStages
                 var pos = holesToRemove[i];
                 map[pos.x, 0, pos.y] = 0.501f;
             }
-        }
-
-        private float[,,] GenerateVoronoi(Vector3Int size)
-        {
-            float[,,] map = new float[size.x, size.y, size.z];
-
-            int seedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
-            int seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
-
-            float max = float.MinValue;
-
-            Parallel.For(0, size.x, x =>
-            {
-                for (int z = 0; z < size.z; z++)
-                {
-                    var noiseWithDerivative = heightMap.EvaluateWithDerivative(x * voronoiScale, 0, z * voronoiScale);
-                    float noiseHeight = heightMapCurve.Evaluate(noiseWithDerivative.Noise);
-
-                    //Vector2 uv = new Vector2(
-                    //    x * voronoiScale + noiseHeight * derivativeDisplacementStrength * (derivativeMax - noiseWithDerivative.Derivative.x), 
-                    //    z * voronoiScale + noiseHeight * derivativeDisplacementStrength * (derivativeMax - noiseWithDerivative.Derivative.z));
-
-                    var derivativeNormalised = noiseWithDerivative.Derivative.normalized;
-
-                    Vector2 uv = new Vector2(
-                        x * voronoiScale + derivativeNormalised.x * (1 - noiseHeight) * derivativeDisplacementStrength,
-                        z * voronoiScale + derivativeNormalised.z * (1 - noiseHeight) * derivativeDisplacementStrength);
-
-                    Vector2 uvIntegral = new Vector2Int(Mathf.FloorToInt(uv.x), Mathf.FloorToInt(uv.y));
-                    Vector2 uvFractional = uv - uvIntegral;
-
-                    float minDistance1 = float.MaxValue;
-                    Vector2 bestPos1 = new Vector2();
-
-                    //float minDistance2 = float.MaxValue;
-                    //Vector2 bestPos2 = new Vector2();
-
-                    for (int j = -1; j <= 1; j++)
-                    {
-                        for (int i = -1; i <= 1; i++)
-                        {
-                            Vector2 neighbor = new Vector2(i, j);
-                            Vector2 pos = uvIntegral + neighbor;
-                            Vector2 displacement = RandomPG.Random2(pos);
-                            Vector2 diff = neighbor + displacement - uvFractional;
-                            float dist = diff.sqrMagnitude;
-                            if (dist < minDistance1)
-                            {
-                                //bestPos2 = bestPos1;
-                                //minDistance2 = minDistance1;
-
-                                bestPos1 = pos + displacement;
-                                minDistance1 = dist;
-                            }
-                            //else if (dist < minDistance2)
-                            //{
-                            //    bestPos2 = pos + displacement;
-                            //    minDistance2 = dist;
-                            //}
-                        }
-                    }
-
-                    //float voronoiNoise = Mathf.Sqrt(minDistance2) / (Mathf.Sqrt(minDistance2) + Mathf.Sqrt(minDistance1));
-
-                    max = Math.Max(max, 0.5f * (heightMap.Evaluate(bestPos1.x + seedX, 0, bestPos1.y + seedZ) + 1));
-                    float floorHeight = heightMapCurve.Evaluate(0.5f * (heightMap.Evaluate(bestPos1.x + seedX, 0, bestPos1.y + seedZ) + 1));
-                    float scaledFloorHeight = floorMinHeigth + Mathf.Clamp01(floorHeight) * (floorMaxHeigth - floorMinHeigth);
-
-                    for (int y = 0; y < size.y; y++)
-                    {
-                        float noise = Mathf.Clamp01((scaledFloorHeight - y) * voronoirBlendFactor + 0.5f);
-                        if (noise == 0f)
-                        {
-                            break;
-                        }
-                        map[x, y, z] = noise;
-                    }
-                }
-            });
-
-            Log.Debug("MAX: " + max);
-
-            return map;
-
-
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   size: {x: 200, y: 85, z: 200}
   sizeIncreasePerStage: {x: 25, y: 0, z: 25}
   sizeVariation: {x: 0.1, y: 0, z: 0.1}
-  fogPower: 0.75
+  fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.7
@@ -64,12 +64,12 @@ MonoBehaviour:
         min: 0
         max: 10
       addPath: 0
-      seedZ: 26092
+      seedZ: 13135
     - heigth:
         min: 25
         max: 29
       addPath: 0
-      seedZ: 1664
+      seedZ: 274
     ringPathWidth: 0
   - distance:
       min: 0.65
@@ -83,12 +83,12 @@ MonoBehaviour:
         min: 0
         max: 15
       addPath: 1
-      seedZ: 30230
+      seedZ: 4511
     - heigth:
         min: 35
         max: 39
       addPath: 0
-      seedZ: 27879
+      seedZ: 8930
     ringPathWidth: 0.1
   - distance:
       min: 0.35
@@ -102,12 +102,12 @@ MonoBehaviour:
         min: 0
         max: 20
       addPath: 1
-      seedZ: 4868
+      seedZ: 25193
     - heigth:
         min: 45
         max: 49
       addPath: 0
-      seedZ: 527
+      seedZ: 32392
     ringPathWidth: 0.12
   - distance:
       min: 0.1
@@ -121,5 +121,5 @@ MonoBehaviour:
         min: 0
         max: 22
       addPath: 0
-      seedZ: 6245
+      seedZ: 26215
     ringPathWidth: 0

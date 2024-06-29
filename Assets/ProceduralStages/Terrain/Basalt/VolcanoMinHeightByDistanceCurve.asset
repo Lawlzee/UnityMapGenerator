@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c2fb2a9a6b211440b615361587bfc75, type: 3}
-  m_Name: VolcanoMinHeightByDistanceCurve 1
+  m_Name: VolcanoMinHeightByDistanceCurve
   m_EditorClassIdentifier: 
   curve:
     serializedVersion: 2

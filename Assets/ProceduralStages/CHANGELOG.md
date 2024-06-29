@@ -3,7 +3,7 @@
 2. Added temple
 3. Added towers
 4. Improved open cave terrain
-5. 
+5. Volcano particles
 
 ## 1.14
 1. **Basalt Isle Cave:** The basalt isle now features a guaranteed cave leading to the center of the central mountain.
