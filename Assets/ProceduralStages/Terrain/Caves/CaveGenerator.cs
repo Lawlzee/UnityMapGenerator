@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityMeshSimplifier;
+using static Rewired.ComponentControls.Effects.RotateAroundAxis;
 
 namespace ProceduralStages
 {
@@ -16,6 +17,15 @@ namespace ProceduralStages
         public Map2dGenerator wallGenerator = new Map2dGenerator();
         public Carver carver = new Carver();
         public Waller waller = new Waller();
+
+        public Interval floorThickness;
+        public FBM floorFBM;
+        public ThreadSafeCurve floorCurve;
+
+        public float stalagmitesMaxHeight;
+        public FBM stalagmitesFBM;
+        public ThreadSafeCurve stalagmitesCurve;
+
         public CellularAutomata3d cave3d = new CellularAutomata3d();
         public Map3dNoiser map3dNoiser = new Map3dNoiser();
         public StalactitesGenerator stalactitesGenerator;
@@ -27,29 +37,84 @@ namespace ProceduralStages
             //float[,,] map3d = voronoiWallGenerator.Create(MapGenerator.instance.stageSize);
             //LogStats("voronoiWallGenerator");
 
-            float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
+            Vector3Int stageSize = MapGenerator.instance.stageSize;
+            float[,,] floorlessMap = wallGenerator.Create(stageSize);
             LogStats("wallGenerator");
             
-            carver.CarveWalls(map3d);
+            carver.CarveWalls(floorlessMap);
             LogStats("carver");
 
-            waller.AddWalls(map3d);
+            waller.AddWalls(floorlessMap);
             LogStats("waller.AddWalls");
 
-            stalactitesGenerator.AddStalactites(map3d);
+            stalactitesGenerator.AddStalactites(floorlessMap);
             LogStats("stalactitesGenerator.AddStalactites");
 
-            var floorlessMap = map3d;
-            map3d = waller.AddFloor(map3d);
+            int floorSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int floorSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            
+            float[,,] densityMap = new float[stageSize.x, stageSize.y, stageSize.z];
+            Parallel.For(0, stageSize.x, x =>
+            {
+                for (int z = 0; z < stageSize.z; z++)
+                {
+                    float floorNoise = floorCurve.Evaluate(0.5f * (floorFBM.Evaluate(x + floorSeedX, z + floorSeedZ) + 1));
+                    float floorHeight = floorThickness.min + floorNoise * (floorThickness.max - floorThickness.min);
+
+                    int y = 0;
+                    for (; y < stageSize.y; y++)
+                    {
+                        float noise = Mathf.Clamp01((floorHeight - y) * waller.blendFactor + 0.5f);
+                        if (noise == 0f)
+                        {
+                            break;
+                        }
+                        densityMap[x, y, z] = Mathf.Max(noise, floorlessMap[x, y, z]);
+                    }
+
+                    for (; y < stageSize.y; y++)
+                    {
+                        densityMap[x, y, z] = floorlessMap[x, y, z];
+                    }
+                }
+            });
             LogStats("waller.AddFloor");
 
-            float[,,] noiseMap3d = map3dNoiser.AddNoise(map3d);
+            densityMap = map3dNoiser.AddNoise(densityMap);
             LogStats("map3dNoiser");
 
-            float[,,] smoothMap3d = cave3d.SmoothMap(noiseMap3d);
+            densityMap = cave3d.SmoothMap(densityMap);
             LogStats("SmoothMap");
 
-            var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
+            int stalagmitesSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
+            int stalagmitesSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
+
+            Parallel.For(0, stageSize.x, x =>
+            {
+                for (int z = 0; z < stageSize.z; z++)
+                {
+                    float stalagmitesNoise = stalagmitesCurve.Evaluate(0.5f * (stalagmitesFBM.Evaluate(x + stalagmitesSeedX, z + stalagmitesSeedZ) + 1));
+                    float stalagmitesHeight = stalagmitesNoise * stalagmitesMaxHeight;
+
+                    int y = 0;
+                    for (; y < stageSize.y; y++)
+                    {
+                        float noise = Mathf.Clamp01((stalagmitesHeight - y) * waller.blendFactor + 0.5f);
+                        if (noise == 0f)
+                        {
+                            break;
+                        }
+                        densityMap[x, y, z] = Mathf.Max(noise, densityMap[x, y, z]);
+                    }
+
+                    for (; y < stageSize.y; y++)
+                    {
+                        densityMap[x, y, z] = densityMap[x, y, z];
+                    }
+                }
+            });
+
+            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
@@ -61,7 +126,7 @@ namespace ProceduralStages
             {
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
-                densityMap = smoothMap3d,
+                densityMap = densityMap,
                 maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
 

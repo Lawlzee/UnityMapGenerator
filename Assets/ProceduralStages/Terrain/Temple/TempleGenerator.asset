@@ -50,6 +50,7 @@ MonoBehaviour:
   crystalParticleSystemPrefab: {fileID: 4332721001260483821, guid: d39f30fa07ebb7a4ca8657e4e578ed51,
     type: 3}
   crystalParticleSystemRadius: 0.14
+  crystalParticleMaterialKey: RoR2/Base/Common/VFX/matGenericFlash.mat
   stoneWalls:
   - distance:
       min: 0.9
@@ -63,12 +64,12 @@ MonoBehaviour:
         min: 0
         max: 10
       addPath: 0
-      seedZ: 23916
+      seedZ: 26092
     - heigth:
         min: 25
         max: 29
       addPath: 0
-      seedZ: 8081
+      seedZ: 1664
     ringPathWidth: 0
   - distance:
       min: 0.65
@@ -82,12 +83,12 @@ MonoBehaviour:
         min: 0
         max: 15
       addPath: 1
-      seedZ: 21626
+      seedZ: 30230
     - heigth:
         min: 35
         max: 39
       addPath: 0
-      seedZ: 10408
+      seedZ: 27879
     ringPathWidth: 0.1
   - distance:
       min: 0.35
@@ -101,12 +102,12 @@ MonoBehaviour:
         min: 0
         max: 20
       addPath: 1
-      seedZ: 20871
+      seedZ: 4868
     - heigth:
         min: 45
         max: 49
       addPath: 0
-      seedZ: 18414
+      seedZ: 527
     ringPathWidth: 0.12
   - distance:
       min: 0.1
@@ -120,5 +121,5 @@ MonoBehaviour:
         min: 0
         max: 22
       addPath: 0
-      seedZ: 6102
+      seedZ: 6245
     ringPathWidth: 0

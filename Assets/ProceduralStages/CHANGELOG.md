@@ -1,5 +1,9 @@
 ## 1.15
 1. Improved footstep sounds. Walking now make a sound based on the material you are walking now. This also removes the `X  is missing surface def` from the logs.
+2. Added temple
+3. Added towers
+4. Improved open cave terrain
+5. 
 
 ## 1.14
 1. **Basalt Isle Cave:** The basalt isle now features a guaranteed cave leading to the center of the central mountain.

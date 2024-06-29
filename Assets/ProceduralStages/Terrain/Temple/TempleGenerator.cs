@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace ProceduralStages
 {
@@ -35,6 +36,7 @@ namespace ProceduralStages
         public CubicHoneycomb crystalCubicHoneycomb;
         public GameObject crystalParticleSystemPrefab;
         public float crystalParticleSystemRadius;
+        public string crystalParticleMaterialKey;
 
         public StoneWall[] stoneWalls;
 
@@ -380,6 +382,13 @@ namespace ProceduralStages
             ParticleSystem.ShapeModule particleSystemShape = particleSystem.shape;
             particleSystemShape.radius = MapGenerator.instance.mapScale * circleRadius * crystalParticleSystemRadius;
 
+            if (!string.IsNullOrEmpty(crystalParticleMaterialKey))
+            {
+                var crytalParticleMaterial = Addressables.LoadAssetAsync<Material>(crystalParticleMaterialKey).WaitForCompletion();
+                ParticleSystemRenderer crytalParticleRenderer = particleSystem.GetComponent<ParticleSystemRenderer>();
+                crytalParticleRenderer.material = crytalParticleMaterial;
+            }
+            
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             LogStats("marchingCubes");
 

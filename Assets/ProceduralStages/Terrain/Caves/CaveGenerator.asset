@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7c41629529ca084e94b1e9b1b0e4ca1, type: 3}
   m_Name: CaveGenerator
   m_EditorClassIdentifier: 
-  size: {x: 200, y: 80, z: 225}
+  size: {x: 200, y: 60, z: 225}
   sizeIncreasePerStage: {x: 15, y: 0, z: 25}
-  sizeVariation: {x: 0.1, y: 0.5, z: 0.05}
+  sizeVariation: {x: 0.1, y: 0.25, z: 0.05}
   fogPower: 0.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.25
   ambiantLightIntensity: 0.6
-  waterLevel: 8.5
+  waterLevel: 10
   terrainType: 1
   ceillingPropsWeight: 1
   voronoiWallGenerator: {fileID: 0}
@@ -48,9 +48,17 @@ MonoBehaviour:
     wallRoundingFactor: 8
     blendFactor: 0.015
     roundWallsToCeilling: 1
+  floorThickness:
+    min: 1
+    max: 30
+  floorFBM: {fileID: 11400000, guid: 6b4461d04f5a68a4aad7008fde3e9fa2, type: 2}
+  floorCurve: {fileID: 11400000, guid: b1665659a7943e14c97bc1556b065c5f, type: 2}
+  stalagmitesMaxHeight: 60
+  stalagmitesFBM: {fileID: 11400000, guid: 3779f58874f1ec849822a76491e848d4, type: 2}
+  stalagmitesCurve: {fileID: 11400000, guid: 657ee77c8ab815241ae76677c3095f40, type: 2}
   cave3d:
     enabled: 1
-    smoothingInterations: 2
+    smoothingInterations: 1
     forceWalls: 1
     forceFloor: 0
   map3dNoiser:
