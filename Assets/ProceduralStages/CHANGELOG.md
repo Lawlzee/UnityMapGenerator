@@ -1,9 +1,9 @@
 ## 1.15
-1. Improved footstep sounds. Walking now make a sound based on the material you are walking now. This also removes the `X  is missing surface def` from the logs.
-2. Added temple
-3. Added towers
-4. Improved open cave terrain
-5. Volcano particles
+1. **New Terrain Type: Temple:** Introducing a circular ruin as a new terrain type.
+2. **New Terrain Type: Block Maze:** Added a blocky maze as a new terrain variant.
+3. **Enhanced Open Caves:** Open caves now feature varied topography instead of being flat, making the caves more interesting.
+4. **Volcanic Particles:** Added volcanic particles to the basalt isle's volcano for enhanced visual effects.
+5. **Improved Footstep Sounds:** Walking now produces sounds based on the material you are walking on, resolving the `X is missing surface def` log issue.
 
 ## 1.14
 1. **Basalt Isle Cave:** The basalt isle now features a guaranteed cave leading to the center of the central mountain.

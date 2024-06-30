@@ -6,7 +6,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 ## Features
 
-- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle and tunnel caves, each dynamically generated for a fresh adventure.
+- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle tunnel caves, temple and block maze, each dynamically generated for a fresh adventure.
 - **Dynamic Map Themes**: Experience different visual themes with every stage, including Plains, Desert, Snow, Void, Mushroom, and the old "random" theme.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
@@ -24,29 +24,38 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 Each stage is randomly generated, featuring unique terrain types and themes:
 
-- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle and tunnel caves.
+- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle, tunnel caves, temple and block maze.
 - **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the classic "Random" theme.
 
 ### Screenshots
 
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image8.png)
-*Basalt isle map with the snow theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image20.png)
+*Temple map with the plains theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image12.png)
 *Twisted canyons map with the desert theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.5/Image2.png)
-*Open cave map with the legacy "random" theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image2.png)
+*Open cave map with the void theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image6.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image8.png)
+*Basalt isle map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image26.png)
+*Block maze map with the mushroom theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image16.png)
 *Twisted canyons map with the snow theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image11.png)
 *Tunnel cave map with the mushroom theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image15.png)
-*Islands map with the desert theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image21.png)
+*Temple map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image13.png)
+*Islands map with the mushroom theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image13.png)
 *Basalt isle map with the desert theme*
@@ -60,14 +69,14 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
 *Tunnel cave map with the snow theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image20.png)
-*Basalt isle map with the void theme*
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image12.png)
+*Islands map with the void theme*
 
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image18.png)
-*Islands map with the plains theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image14.png)
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image6.png)
 *Open cave map with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image25.png)
+*Block maze map with the void theme*
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
@@ -87,18 +96,18 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 |---------------|----------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|                                        
 | Configuration | Infinite map scaling | Disabled         | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
 | Performance | Occlusion culling frame delay | 6 | The number of frames between each occlusion culling check impacts performance. A shorter delay decreases FPS, while a longer delay causes decorations to flicker more when moving quickly. The game operates at 60 frames per second. Any changes to this configuration will take effect at the start of the next stage.|
-| Stage `[1,5]` | `<Terrain type>` map spawn rate | See table below | Specifies the percentage of maps that will be generated with the `<Terrain type>` for stage 1. If the total percentage for stage `X` is less than 100%, normal stages may also spawn. If the total percentage for stage `X` is 0%, only normal stages will spawn.|
+| Stage `[1,5]` | `<Terrain type>` map spawn rate | See table below | Specifies the percentage of maps that will be generated with the `<Terrain type>` for stage 1. If the total percentage for stage `X` is less than 15% , normal stages may also spawn. If the total percentage for stage `X` is 0%, only normal stages will spawn.|
 | Debug         | Stage seed           |                  | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
 
 Here are the default spawn rates for all terrain types:
 
-| Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons | Basalt Isle |
-|---------|------------|--------------|---------|-----------------|-------------|
-| Stage 1 | 40%        | 15%          | 15%     | 15%             | 15%         |
-| Stage 2 | 15%        | 15%          | 40%     | 15%             | 15%         |
-| Stage 3 | 15%        | 15%          | 15%     | 15%             | 40%         |
-| Stage 4 | 15%        | 40%          | 15%     | 15%             | 15%         |
-| Stage 5 | 15%        | 15%          | 15%     | 40%             | 15%         |
+| Stage   | Open Caves | Tunnel Caves | Islands | Twisted Canyons | Basalt Isle | Temple | Block maze |
+|---------|------------|--------------|---------|-----------------|-------------|--------|------------|
+| Stage 1 | 5%         | 5%           | 25%     | 10%             | 25%         | 25%    | 5%         |
+| Stage 2 | 25%        | 25%          | 5%      | 10%             | 5%          | 5%     | 25%        |
+| Stage 3 | 10%        | 10%          | 15%     | 25%             | 10%         | 15%    | 15%        |
+| Stage 4 | 15%        | 5%           | 20%     | 10%             | 10%         | 20%    | 20%        |
+| Stage 5 | 15%        | 25%          | 5%      | 20%             | 25%         | 5%     | 5%         |
 
 ## Report an issue
 
@@ -113,19 +122,6 @@ If you encounter any issues, feel free to reach out to me on Discord (@Lawlzee) 
 |3|375|210|
 |4|425|240|
 |5|500|270|
-
-## Todo list
-
-- Fix the bug where the player sometime gets stuck in the drop pod.
-- Add props clustering
-- Add floating island map?
-- Improve compatibility with Ro2API.DirectorAPI
-- Create a random DccsPool instead of reusing the DccsPools from the game
-- Replace the moon with a procedurally generated stage
-- Address the issue of getting stuck in holes in the map.
-- Improve the enemy pool algorithm.
-- Add theme spawn rate config
-
 
 ## Algorithms used
 

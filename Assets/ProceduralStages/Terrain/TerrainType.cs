@@ -38,9 +38,9 @@ namespace ProceduralStages
                 case TerrainType.Basalt:
                     return "Basalt Isle";
                 case TerrainType.Towers:
-                    return "Towers TODO";
+                    return "Block maze";
                 case TerrainType.Temple:
-                    return "Temple TODO";
+                    return "Temple";
                 default:
                     return "?";
             }
@@ -63,9 +63,9 @@ namespace ProceduralStages
                 case TerrainType.Basalt:
                     return "Volcanic Pillars";
                 case TerrainType.Towers:
-                    return "Towers TODO";
+                    return "Enigmatic Towers";
                 case TerrainType.Temple:
-                    return "Temple TODO";
+                    return "Ancient Sanctuary";
                 default:
                     return "?";
             }
@@ -88,9 +88,9 @@ namespace ProceduralStages
                 case TerrainType.Basalt:
                     return "You dream of towering basalt columns and the roar of distant volcanoes.";
                 case TerrainType.Towers:
-                    return "Towers TODO";
+                    return "You dream of diamonds.";
                 case TerrainType.Temple:
-                    return "Temple TODO";
+                    return "You dream of mystical energies flowing through ancient ruins.";
                 default:
                     return "?";
             }
