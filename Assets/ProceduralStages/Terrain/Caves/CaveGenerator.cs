@@ -127,7 +127,7 @@ namespace ProceduralStages
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
                 densityMap = densityMap,
-                maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
+                maxGroundHeight = float.MaxValue
             };
 
             void LogStats(string name)

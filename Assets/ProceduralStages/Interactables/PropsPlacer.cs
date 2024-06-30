@@ -91,7 +91,7 @@ namespace ProceduralStages
                     MapGenerator.rng.RangeInt(0, short.MaxValue),
                     MapGenerator.rng.RangeInt(0, short.MaxValue));
 
-                List<PropsNode> graph = prop.ground
+                PropsNode[] graph = prop.ground
                     ? graphs.floorProps
                     : graphs.ceilingProps;
 
@@ -101,7 +101,7 @@ namespace ProceduralStages
 
                 for (int i = 0; i < prop.count; i++)
                 {
-                    if (graph.Count == 0)
+                    if (graph.Length == 0)
                     {
                         continue;
                     }
@@ -110,7 +110,7 @@ namespace ProceduralStages
                     int index;
                     do
                     {
-                        index = MapGenerator.rng.RangeInt(0, graph.Count);
+                        index = MapGenerator.rng.RangeInt(0, graph.Length);
                         attempt++;
                     }
                     while (usedIndexes.Contains(index) && attempt <= 5);

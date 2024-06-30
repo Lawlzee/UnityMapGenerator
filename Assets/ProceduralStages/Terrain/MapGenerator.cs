@@ -93,8 +93,16 @@ namespace ProceduralStages
             rng = null;
         }
 
+        private bool generateNextFrame;
+
         private void Update()
         {
+            if (generateNextFrame)
+            {
+                generateNextFrame = false;
+                GenerateMap();
+            }
+
             if (Application.isEditor && (Input.GetKeyDown(KeyCode.F2) || Input.GetKeyDown(KeyCode.F3)))
             {
                 for (int i = 0; i < propsPlacer.instances.Count; i++)
@@ -117,7 +125,7 @@ namespace ProceduralStages
                     rng = new Xoroshiro128Plus(lastSeed);
                 }
 
-                GenerateMap();
+                generateNextFrame = true;
             }
         }
 

@@ -42,27 +42,47 @@ namespace ProceduralStages
             maxBeetleQueenDensity = 0.6f
         };
 
-        public float GetDensity(float[,,] map, Vector3 position, bool[,] bounds)
+        public float GetDensity(float[,,] map, Vector3 position)
         {
-            int x = Mathf.RoundToInt(position.x);
-            int y = Mathf.RoundToInt(position.y);
-            int z = Mathf.RoundToInt(position.z);
+            int x = Mathf.FloorToInt(position.x);
+            int y = Mathf.FloorToInt(position.y);
+            int z = Mathf.FloorToInt(position.z);
+
+            float dx = position.x - x;
+            float dy = position.y - y;
+            float dz = position.z - z;
 
             int width = map.GetLength(0);
             int height = map.GetLength(1);
             int depth = map.GetLength(2);
 
-            if (x < 0 || y < 0 || z < 0 || x >= width || y >= height || z >= depth)
+            if (x < 0 || y < 0 || z < 0 || x + 1 >= width || y + 1 >= height || z + 1 >= depth)
             {
                 return 1f;
             }
 
-            if (bounds != null && !bounds[x, z])
-            {
-                return 1f;
-            }
-
-            return map[x, y, z];
+            return Mathf.Lerp(
+                Mathf.Lerp(
+                    Mathf.Lerp(
+                        map[x, y, z],
+                        map[x + 1, y, z],
+                        dx),
+                    Mathf.Lerp(
+                        map[x, y + 1, z],
+                        map[x + 1, y + 1, z],
+                        dx),
+                    dy),
+                Mathf.Lerp(
+                    Mathf.Lerp(
+                        map[x, y, z + 1],
+                        map[x + 1, y, z + 1],
+                        dx),
+                    Mathf.Lerp(
+                        map[x, y + 1, z + 1],
+                        map[x + 1, y + 1, z + 1],
+                        dx),
+                    dy),
+                dz);
         }
 
         [Serializable]

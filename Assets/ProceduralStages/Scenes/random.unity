@@ -1232,7 +1232,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hullMask: 1
+  ignoreHullMask: 0
   nodeFlags: 1
+  ignoreNodeFlags: 0
   showGroundMesh: 0
   showAirMesh: 0
   groundMeshObject: {fileID: 68506087}
@@ -1637,7 +1639,7 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 7
+  editorTerrainType: 3
   editorTheme: 0
   editorStageInLoop: 2
   editorFloorTexture: {fileID: 0}
@@ -1667,10 +1669,16 @@ MonoBehaviour:
     amplitude: 0.2
   nodeGraphCreator:
     minFloorAngle: 0.35
+    maxFloorLinkAngle: 90
+    groundNodeHorizontalCellSize: 6
+    groundNodeVerticalCellSize: 3
+    groundNodeDisplacementStrength: 0.8
+    groundNodeMinDistance: 0
+    groundNodeMaxDistance: 9999
+    groundNodeRayLength: 3.2
     airNodeCellSize: 10
     airNodeMinDistance: 5
     airNodeMaxDistance: 15
-    airNodeSample: 6
     densityMap:
       maxChestDensity: 0.45
       maxShrineDensity: 0.45

@@ -7,7 +7,9 @@ using UnityEngine;
 public class NodeGraphRenderer : MonoBehaviour
 {
     public HullMask hullMask;
+    public bool ignoreHullMask;
     public NodeFlags nodeFlags;
+    public bool ignoreNodeFlags;
 
     public bool showGroundMesh;
     public bool showAirMesh;
@@ -77,10 +79,15 @@ public class NodeGraphRenderer : MonoBehaviour
                     var nodeA = nodeGraph.nodes[link.nodeIndexA.nodeIndex];
                     var nodeB = nodeGraph.nodes[link.nodeIndexB.nodeIndex];
 
-                    if ((nodeA.flags & nodeFlags) != NodeFlags.None
-                        && (nodeB.flags & nodeFlags) != NodeFlags.None
-                        && (nodeA.forbiddenHulls & hullMask) == HullMask.None
-                        && (nodeB.forbiddenHulls & hullMask) == HullMask.None)
+                    bool hasNodeFlags = ignoreNodeFlags
+                        || ((nodeA.flags & nodeFlags) != NodeFlags.None
+                            && (nodeB.flags & nodeFlags) != NodeFlags.None);
+
+                    bool hasHull = ignoreHullMask
+                        || ((nodeA.forbiddenHulls & hullMask) == HullMask.None
+                            && (nodeB.forbiddenHulls & hullMask) == HullMask.None);
+
+                    if (hasNodeFlags && hasHull)
                     {
                         Vector3 position1 = nodeGraph.nodes[link.nodeIndexA.nodeIndex].position;
                         Vector3 position2 = nodeGraph.nodes[link.nodeIndexB.nodeIndex].position;

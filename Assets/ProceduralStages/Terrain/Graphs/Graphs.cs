@@ -13,8 +13,8 @@ namespace ProceduralStages
     {
         public NodeGraph ground;
         public NodeGraph air;
-        public List<PropsNode> floorProps;
-        public List<PropsNode> ceilingProps;
+        public PropsNode[] floorProps;
+        public PropsNode[] ceilingProps;
 
         public Dictionary<Vector3, PropsNode> nodeInfoByPosition;
         public Dictionary<Vector3, int> groundNodeIndexByPosition;
@@ -25,7 +25,7 @@ namespace ProceduralStages
             {
                 ref var node = ref ground.nodes[index];
 
-                node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoChestSpawn;
+                node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoShrineSpawn | NodeFlags.NoChestSpawn | (node.flags & NodeFlags.NoCeiling);
 
                 if (solid)
                 {
