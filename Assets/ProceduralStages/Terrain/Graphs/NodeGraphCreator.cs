@@ -6,14 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
-using System.Diagnostics;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
-using TMPro;
-using UnityEditor.Graphs;
 using UnityEngine.SocialPlatforms;
-using static Rewired.Utils.GUITools;
 
 namespace ProceduralStages
 {
@@ -70,349 +63,365 @@ namespace ProceduralStages
             public int index;
             public Vector3Int cellPos;
             public Vector3 normal;
-            public bool valid;
             public NodeGraph.Node node;
 
         }
 
         private Graphs CreateGroundNodes2(Terrain terrain)
         {
-            float mapScale = MapGenerator.instance.mapScale;
-
-            Vector3Int size = new Vector3Int(terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(1), terrain.densityMap.GetLength(2));
-            Vector3Int cellSize = new Vector3Int(
-                Mathf.FloorToInt(mapScale * size.x / groundNodeHorizontalCellSize),
-                Mathf.FloorToInt(mapScale * size.y / groundNodeVerticalCellSize),
-                Mathf.FloorToInt(mapScale * size.z / groundNodeHorizontalCellSize));
-
-            FloorNode?[,,] floorNodes = new FloorNode?[cellSize.x, cellSize.y, cellSize.z];
-            PropsNode?[,,] ceilNodes = new PropsNode?[cellSize.x, cellSize.y, cellSize.z];
-
-            int[] floorNodeCounts = new int[cellSize.x];
-            int[] validFloorNodeCounts = new int[cellSize.x];
-            int[] ceilNodeCounts = new int[cellSize.x];
-
-            int worldLayerMask = 1 << LayerIndex.world.intVal;
-
-            for (int x = 0; x < cellSize.x; x++)
+            using (ProfilerLog.CreateScope("CreateGroundNodes2"))
             {
-                int floorNodeCount = 0;
-                int validFloorNodeCount = 0;
-                int ceilNodeCount = 0;
+                float mapScale = MapGenerator.instance.mapScale;
 
-                float posX = x * groundNodeHorizontalCellSize;
-                for (int y = 0; y < cellSize.y; y++)
+                Vector3Int size = new Vector3Int(terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(1), terrain.densityMap.GetLength(2));
+                Vector3Int cellSize = new Vector3Int(
+                    Mathf.FloorToInt(mapScale * size.x / groundNodeHorizontalCellSize),
+                    Mathf.FloorToInt(mapScale * size.y / groundNodeVerticalCellSize),
+                    Mathf.FloorToInt(mapScale * size.z / groundNodeHorizontalCellSize));
+
+                FloorNode?[,,] floorNodes = new FloorNode?[cellSize.x, cellSize.y, cellSize.z];
+                Vector3?[,,] ceilNodes = new Vector3?[cellSize.x, cellSize.y, cellSize.z];
+
+                int[] floorNodeCounts = new int[cellSize.x];
+                int[] ceilNodeCounts = new int[cellSize.x];
+
+                Parallel.For(0, cellSize.x, x => 
                 {
-                    float posY = y * groundNodeVerticalCellSize;
-                    for (int z = 0; z < cellSize.z; z++)
+                    int floorNodeCount = 0;
+                    int ceilNodeCount = 0;
+
+                    float posX = x * groundNodeHorizontalCellSize;
+                    for (int y = 0; y < cellSize.y; y++)
                     {
-                        float posZ = z * groundNodeHorizontalCellSize;
-
-                        Vector3 pointIntegral = new Vector3Int(
-                            Mathf.FloorToInt(posX),
-                            Mathf.FloorToInt(posY),
-                            Mathf.FloorToInt(posZ));
-
-                        Vector3 displacement = groundNodeDisplacementStrength * RandomPG.Random3(pointIntegral) * groundNodeHorizontalCellSize;
-                        displacement.y = 0;
-
-                        Vector3 nodePos = pointIntegral + displacement;
-
-                        Vector3 samplePos = nodePos / mapScale;
-                        float density = densityMap.GetDensity(terrain.densityMap, samplePos);
-
-                        if (density >= 0.5f)
+                        float posY = y * groundNodeVerticalCellSize;
+                        for (int z = 0; z < cellSize.z; z++)
                         {
-                            continue;
-                        }
+                            float posZ = z * groundNodeHorizontalCellSize;
 
-                        float floorDensity = densityMap.GetDensity(terrain.densityMap, samplePos + Vector3.down * groundNodeRayLength);
-                        if (floorDensity >= 0.5f && Physics.Raycast(nodePos, Vector3.down, out RaycastHit floorHit, groundNodeRayLength, worldLayerMask))
-                        {
-                            float angle = Vector3.Dot(Vector3.up, floorHit.normal);
-                            if (angle > minFloorAngle)
-                            {
-                                float actualDensity = densityMap.GetDensity(terrain.floorlessDensityMap, floorHit.point / mapScale);
+                            Vector3 pointIntegral = new Vector3Int(
+                                Mathf.FloorToInt(posX),
+                                Mathf.FloorToInt(posY),
+                                Mathf.FloorToInt(posZ));
 
-                                HullMask forbiddenHulls = HullMask.None;
-                                if (actualDensity > densityMap.ground.maxHumanDensity)
-                                {
-                                    forbiddenHulls |= HullMask.Human;
-                                }
+                            Vector3 displacement = groundNodeDisplacementStrength * RandomPG.Random3(pointIntegral) * groundNodeHorizontalCellSize;
+                            displacement.y = 0;
 
-                                if (actualDensity > densityMap.ground.maxGolemDensity)
-                                {
-                                    forbiddenHulls |= HullMask.Golem;
-                                }
+                            Vector3 nodePos = pointIntegral + displacement;
 
-                                if (actualDensity > densityMap.ground.maxBeetleQueenDensity)
-                                {
-                                    forbiddenHulls |= HullMask.BeetleQueen;
-                                }
+                            Vector3 samplePos = nodePos / mapScale;
+                            float density = densityMap.GetDensity(terrain.densityMap, samplePos);
 
-                                NodeGraph.Node node = new NodeGraph.Node();
-                                node.position = floorHit.point;
-                                node.forbiddenHulls = forbiddenHulls;
-                                node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
-
-                                bool valid = forbiddenHulls != (HullMask)7;
-                                floorNodes[x, y, z] = new FloorNode
-                                {
-                                    cellPos = new Vector3Int(x, y, z),
-                                    node = node,
-                                    normal = floorHit.normal,
-                                    valid = valid
-                                };
-
-                                floorNodeCount++;
-                                if (valid)
-                                {
-                                    validFloorNodeCount++;
-                                }
-                            }
-                        }
-
-                        float ceilDensity = densityMap.GetDensity(terrain.densityMap, samplePos + Vector3.up * groundNodeRayLength);
-                        if (ceilDensity >= 0.5f && Physics.Raycast(nodePos, Vector3.up, out RaycastHit ceilHit, groundNodeRayLength, worldLayerMask))
-                        {
-                            float angle = Vector3.Dot(Vector3.up, ceilHit.normal);
-                            if (angle < -minFloorAngle)
-                            {
-                                ceilNodes[x, y, z] = new PropsNode
-                                {
-                                    normal = ceilHit.normal,
-                                    position = ceilHit.point,
-                                };
-
-                                ceilNodeCount++;
-                            }
-                        }
-                    }
-                }
-
-                floorNodeCounts[x] = floorNodeCount;
-                validFloorNodeCounts[x] = validFloorNodeCount;
-                ceilNodeCounts[x] = ceilNodeCount;
-            }
-
-            Log.Debug($"ceilNodeCounts.Sum(): {ceilNodeCounts.Sum()}");
-
-            PropsNode[] flattenCeilNodes = new PropsNode[ceilNodeCounts.Sum()];
-
-            int currentCeilNodeIndex = 0;
-            for (int x = 0; x < cellSize.x; x++)
-            {
-                for (int y = 0; y < cellSize.y; y++)
-                {
-                    for (int z = 0; z < cellSize.z; z++)
-                    {
-                        PropsNode? maybeNode = ceilNodes[x, y, z];
-                        if (maybeNode == null)
-                        {
-                            continue;
-                        }
-
-                        flattenCeilNodes[currentCeilNodeIndex] = maybeNode.Value;
-                        currentCeilNodeIndex++;
-                    }
-                }
-            }
-
-            Dictionary<Vector3, PropsNode> nodeInfoByPosition = new Dictionary<Vector3, PropsNode>();
-
-            int floorNodesCount = floorNodeCounts.Sum();
-            int validFloorNodesCount = validFloorNodeCounts.Sum();
-
-            Log.Debug($"floorNodesCount: {floorNodesCount}");
-            Log.Debug($"validFloorNodesCount: {validFloorNodesCount}");
-
-            PropsNode[] flattenFloorNodes = new PropsNode[floorNodesCount];
-            FloorNode[] filteredFloorNodes = new FloorNode[validFloorNodesCount];
-
-            int currentNodeIndex = 0;
-            int currentValidNodeIndex = 0;
-            for (int x = 0; x < cellSize.x; x++)
-            {
-                for (int y = 0; y < cellSize.y; y++)
-                {
-                    for (int z = 0; z < cellSize.z; z++)
-                    {
-                        FloorNode? maybeNode = floorNodes[x, y, z];
-                        if (maybeNode == null)
-                        {
-                            continue;
-                        }
-
-                        FloorNode node = maybeNode.Value;
-
-                        nodeInfoByPosition[node.node.position] = new PropsNode
-                        {
-                            position = node.node.position,
-                            normal = node.normal
-                        };
-
-                        flattenFloorNodes[currentNodeIndex] = new PropsNode
-                        {
-                            position = node.node.position,
-                            normal = node.normal
-                        };
-
-                        currentNodeIndex++;
-
-                        if (node.valid)
-                        {
-                            node.index = currentValidNodeIndex;
-                            floorNodes[x, y, z] = node;
-                            filteredFloorNodes[currentValidNodeIndex] = node;
-                            currentValidNodeIndex++;
-                        }
-
-                    }
-                }
-            }
-
-            NodeGraph.Link?[] links = new NodeGraph.Link?[filteredFloorNodes.Length * 26];
-
-            int bandCount = 8;
-            int[] linkCounts = new int[bandCount];
-
-            NodeGraph.Node[] finalNodes = new NodeGraph.Node[filteredFloorNodes.Length];
-
-            float max = float.MinValue;
-            float min = float.MaxValue;
-            ParallelPG.For(0, filteredFloorNodes.Length, bandCount, (bandIndex, minIndex, maxIndex) =>
-            {
-                uint totalLinkCount = 0;
-
-                for (int nodeIndex = minIndex; nodeIndex < maxIndex; nodeIndex++)
-                {
-                    FloorNode floorNode = filteredFloorNodes[nodeIndex];
-                    NodeGraph.Node node = floorNode.node;
-                    Vector3Int cellPos = floorNode.cellPos;
-
-                    uint linkCount = 0;
-                    for (int i = -1; i <= 1; i++)
-                    {
-                        if (cellPos.x + i < 0 || cellPos.x + i >= cellSize.x)
-                        {
-                            continue;
-                        }
-
-                        for (int j = -1; j <= 1; j++)
-                        {
-                            if (cellPos.y + j < 0 || cellPos.y + j >= cellSize.y)
+                            if (density >= 0.5f)
                             {
                                 continue;
                             }
 
-                            for (int k = -1; k <= 1; k++)
+                            float floorDensity = densityMap.GetDensity(terrain.densityMap, samplePos + Vector3.down * groundNodeRayLength);
+                            if (floorDensity >= 0.5f)
                             {
-                                if (cellPos.z + k < 0 || cellPos.z + k >= cellSize.z)
+                                NodeGraph.Node node = new NodeGraph.Node();
+                                node.position = nodePos;
+                                node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
+
+                                floorNodes[x, y, z] = new FloorNode
                                 {
-                                    continue;
-                                }
+                                    cellPos = new Vector3Int(x, y, z),
+                                    node = node
+                                };
 
-                                if (i == 0 && j == 0 && k == 0)
-                                {
-                                    continue;
-                                }
+                                floorNodeCount++;
+                            }
 
-                                FloorNode? neighbord = floorNodes[cellPos.x + i, cellPos.y + j, cellPos.z + k];
-
-                                if (neighbord == null || !neighbord.Value.valid)
-                                {
-                                    continue;
-                                }
-
-                                Vector3 delta = floorNode.node.position - neighbord.Value.node.position;
-                                float angle = Mathf.Rad2Deg * Mathf.Atan2(delta.y, Mathf.Sqrt(delta.x * delta.x + delta.z * delta.z));
-
-                                min = Mathf.Min(angle, min);
-                                max = Mathf.Max(angle, max);
-
-                                if (Mathf.Abs(angle) > maxFloorLinkAngle)
-                                {
-                                    continue;
-                                }
-
-                                float distance = delta.magnitude;
-                                if (groundNodeMinDistance <= distance && distance < groundNodeMaxDistance)
-                                {
-                                    links[nodeIndex * 26 + linkCount] = new NodeGraph.Link
-                                    {
-                                        nodeIndexA = new NodeGraph.NodeIndex(nodeIndex),
-                                        nodeIndexB = new NodeGraph.NodeIndex(neighbord.Value.index),
-                                        distanceScore = distance,
-                                        minJumpHeight = 0,
-                                        hullMask = 0xFFFFFFF,
-                                        jumpHullMask = 0xFFFFFFF,
-                                        gateIndex = 0
-                                    };
-
-                                    linkCount++;
-                                }
+                            float ceilDensity = densityMap.GetDensity(terrain.densityMap, samplePos + Vector3.up * groundNodeRayLength);
+                            if (ceilDensity >= 0.5f)
+                            {
+                                ceilNodes[x, y, z] = nodePos;
+                                ceilNodeCount++;
                             }
                         }
                     }
 
-                    node.linkListIndex = new NodeGraph.LinkListIndex
-                    {
-                        size = linkCount
-                    };
-                    finalNodes[nodeIndex] = node;
+                    floorNodeCounts[x] = floorNodeCount;
+                    ceilNodeCounts[x] = ceilNodeCount;
+                });
 
-                    totalLinkCount += linkCount;
-                }
+                int worldLayerMask = 1 << LayerIndex.world.intVal;
 
-                linkCounts[bandIndex] = (int)totalLinkCount;
-            });
+                int floorNodesCount = floorNodeCounts.Sum();
+                ProfilerLog.Debug($"floorNodesCount: {floorNodesCount}");
 
-            Log.Debug($"min: {min}");
-            Log.Debug($"max: {max}");
-            Log.Debug($"linkCounts.Sum(): {linkCounts.Sum()}");
-            NodeGraph.Link[] filteredLinks = new NodeGraph.Link[linkCounts.Sum()];
+                int ceilsNodeCount = ceilNodeCounts.Sum();
+                ProfilerLog.Debug($"ceilsNodeCount: {ceilsNodeCount}");
 
-            int linkIndex = 0;
-            for (int i = 0; i < finalNodes.Length; i++)
-            {
-                ref NodeGraph.Node node = ref finalNodes[i];
+                Dictionary<Vector3, PropsNode> nodeInfoByPosition = new Dictionary<Vector3, PropsNode>();
+                PropsNode[] flattenCeilNodes = new PropsNode[ceilsNodeCount];
+                PropsNode[] flattenFloorNodes = new PropsNode[floorNodesCount];
+                FloorNode[] filteredFloorNodes = new FloorNode[floorNodesCount];
 
-                node.linkListIndex.index = linkIndex;
-
-                uint linkCount = node.linkListIndex.size;
-
-                for (int j = 0; j < linkCount; j++)
+                int currentCeilNodeIndex = 0;
+                int currentFloorNodeIndex = 0;
+                int currentValidFloorNodeIndex = 0;
+                for (int x = 0; x < cellSize.x; x++)
                 {
-                    filteredLinks[linkIndex] = links[i * 26 + j].Value;
-                    linkIndex++;
+                    for (int y = 0; y < cellSize.y; y++)
+                    {
+                        for (int z = 0; z < cellSize.z; z++)
+                        {
+                            Vector3? maybeCeilPos = ceilNodes[x, y, z];
+                            if (maybeCeilPos != null)
+                            {
+                                Vector3 ceilPos = maybeCeilPos.Value;
+
+                                if (Physics.Raycast(ceilPos, Vector3.up, out RaycastHit ceilHit, groundNodeRayLength, worldLayerMask))
+                                {
+                                    float angle = Vector3.Dot(Vector3.up, ceilHit.normal);
+                                    if (angle < -minFloorAngle)
+                                    {
+                                        flattenCeilNodes[currentCeilNodeIndex] = new PropsNode
+                                        {
+                                            position = ceilHit.point,
+                                            normal = ceilHit.normal
+                                        };
+                                        currentCeilNodeIndex++;
+                                    }
+                                }
+                            }
+
+                            FloorNode? maybeNode = floorNodes[x, y, z];
+                            if (maybeNode == null)
+                            {
+                                floorNodes[x, y, z] = null;
+                                continue;
+                            }
+
+
+                            FloorNode node = maybeNode.Value;
+
+                            if (Physics.Raycast(node.node.position, Vector3.down, out RaycastHit floorHit, groundNodeRayLength, worldLayerMask))
+                            {
+                                float angle = Vector3.Dot(Vector3.up, floorHit.normal);
+                                if (angle > minFloorAngle)
+                                {
+                                    float actualDensity = densityMap.GetDensity(terrain.floorlessDensityMap, floorHit.point / mapScale);
+
+                                    HullMask forbiddenHulls = HullMask.None;
+                                    if (actualDensity > densityMap.ground.maxHumanDensity)
+                                    {
+                                        forbiddenHulls |= HullMask.Human;
+                                    }
+
+                                    if (actualDensity > densityMap.ground.maxGolemDensity)
+                                    {
+                                        forbiddenHulls |= HullMask.Golem;
+                                    }
+
+                                    if (actualDensity > densityMap.ground.maxBeetleQueenDensity)
+                                    {
+                                        forbiddenHulls |= HullMask.BeetleQueen;
+                                    }
+
+                                    bool valid = forbiddenHulls != (HullMask)7;
+
+                                    nodeInfoByPosition[floorHit.point] = new PropsNode
+                                    {
+                                        position = floorHit.point,
+                                        normal = floorHit.normal
+                                    };
+
+                                    flattenFloorNodes[currentFloorNodeIndex] = new PropsNode
+                                    {
+                                        position = floorHit.point,
+                                        normal = floorHit.normal
+                                    };
+
+                                    currentFloorNodeIndex++;
+
+                                    if (forbiddenHulls != (HullMask)7)
+                                    {
+                                        node.index = currentValidFloorNodeIndex;
+                                        node.node.position = floorHit.point;
+                                        node.node.forbiddenHulls = forbiddenHulls;
+                                        node.normal = floorHit.normal;
+                                        floorNodes[x, y, z] = node;
+                                        filteredFloorNodes[currentValidFloorNodeIndex] = node;
+                                        currentValidFloorNodeIndex++;
+                                    }
+                                    else
+                                    {
+                                        floorNodes[x, y, z] = null;
+                                    }
+                                }
+                                else
+                                {
+                                    floorNodes[x, y, z] = null;
+                                }
+                            }
+                            else
+                            {
+                                floorNodes[x, y, z] = null;
+                            }
+                        }
+                    }
                 }
+
+                ProfilerLog.Debug($"currentCeilNodeIndex: {currentCeilNodeIndex} / {ceilsNodeCount}");
+                ProfilerLog.Debug($"currentFloorNodeIndex: {currentFloorNodeIndex} / {floorNodesCount}");
+                ProfilerLog.Debug($"currentValidFloorNodeIndex: {currentValidFloorNodeIndex} / {floorNodesCount}");
+
+                Array.Resize(ref flattenCeilNodes, currentCeilNodeIndex);
+                ProfilerLog.Debug($"Array.Resize(flattenCeilNodes)");
+
+                Array.Resize(ref flattenFloorNodes, currentFloorNodeIndex);
+                ProfilerLog.Debug($"Array.Resize(flattenFloorNodes)");
+
+                NodeGraph.Link?[] links = new NodeGraph.Link?[currentValidFloorNodeIndex * 26];
+
+                int bandCount = 8;
+                int[] linkCounts = new int[bandCount];
+
+                NodeGraph.Node[] finalNodes = new NodeGraph.Node[currentValidFloorNodeIndex];
+
+                float max = float.MinValue;
+                float min = float.MaxValue;
+                ParallelPG.For(0, currentValidFloorNodeIndex, bandCount, (bandIndex, minIndex, maxIndex) =>
+                {
+                    uint totalLinkCount = 0;
+
+                    for (int nodeIndex = minIndex; nodeIndex < maxIndex; nodeIndex++)
+                    {
+                        FloorNode floorNode = filteredFloorNodes[nodeIndex];
+                        NodeGraph.Node node = floorNode.node;
+                        Vector3Int cellPos = floorNode.cellPos;
+
+                        uint linkCount = 0;
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            if (cellPos.x + i < 0 || cellPos.x + i >= cellSize.x)
+                            {
+                                continue;
+                            }
+
+                            for (int j = -1; j <= 1; j++)
+                            {
+                                if (cellPos.y + j < 0 || cellPos.y + j >= cellSize.y)
+                                {
+                                    continue;
+                                }
+
+                                for (int k = -1; k <= 1; k++)
+                                {
+                                    if (cellPos.z + k < 0 || cellPos.z + k >= cellSize.z)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (i == 0 && j == 0 && k == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    FloorNode? neighbord = floorNodes[cellPos.x + i, cellPos.y + j, cellPos.z + k];
+
+                                    if (neighbord == null)
+                                    {
+                                        continue;
+                                    }
+
+                                    Vector3 delta = floorNode.node.position - neighbord.Value.node.position;
+                                    float angle = Mathf.Rad2Deg * Mathf.Atan2(delta.y, Mathf.Sqrt(delta.x * delta.x + delta.z * delta.z));
+
+                                    min = Mathf.Min(angle, min);
+                                    max = Mathf.Max(angle, max);
+
+                                    if (Mathf.Abs(angle) > maxFloorLinkAngle)
+                                    {
+                                        continue;
+                                    }
+
+                                    float distance = delta.magnitude;
+                                    if (groundNodeMinDistance <= distance && distance < groundNodeMaxDistance)
+                                    {
+                                        links[nodeIndex * 26 + linkCount] = new NodeGraph.Link
+                                        {
+                                            nodeIndexA = new NodeGraph.NodeIndex(nodeIndex),
+                                            nodeIndexB = new NodeGraph.NodeIndex(neighbord.Value.index),
+                                            distanceScore = distance,
+                                            minJumpHeight = 0,
+                                            hullMask = 0xFFFFFFF,
+                                            jumpHullMask = 0xFFFFFFF,
+                                            gateIndex = 0
+                                        };
+
+                                        linkCount++;
+                                    }
+                                }
+                            }
+                        }
+
+                        node.linkListIndex = new NodeGraph.LinkListIndex
+                        {
+                            size = linkCount
+                        };
+                        finalNodes[nodeIndex] = node;
+
+                        totalLinkCount += linkCount;
+                    }
+
+                    linkCounts[bandIndex] = (int)totalLinkCount;
+                });
+
+                ProfilerLog.Debug($"min: {min}");
+                ProfilerLog.Debug($"max: {max}");
+                ProfilerLog.Debug($"linkCounts.Sum(): {linkCounts.Sum()}");
+                NodeGraph.Link[] filteredLinks = new NodeGraph.Link[linkCounts.Sum()];
+
+                int linkIndex = 0;
+                for (int i = 0; i < finalNodes.Length; i++)
+                {
+                    ref NodeGraph.Node node = ref finalNodes[i];
+
+                    node.linkListIndex.index = linkIndex;
+
+                    uint linkCount = node.linkListIndex.size;
+
+                    for (int j = 0; j < linkCount; j++)
+                    {
+                        filteredLinks[linkIndex] = links[i * 26 + j].Value;
+                        linkIndex++;
+                    }
+                }
+
+                ProfilerLog.Debug("filteredLinks");
+
+                var nodeByPosition = finalNodes
+                    .Select((x, i) => (
+                        Index: i,
+                        Position: x.position
+                    ))
+                    .ToDictionary(
+                        x => x.Position,
+                        x => x.Index);
+
+                ProfilerLog.Debug("nodeByPosition");
+
+                NodeGraph groundGraph = ScriptableObject.CreateInstance<NodeGraph>();
+                groundGraph.nodes = finalNodes;
+                groundGraph.links = filteredLinks;
+                groundGraph.Awake();
+
+                ProfilerLog.Debug($"nodes: {finalNodes.Length}");
+                ProfilerLog.Debug($"links: {filteredLinks.Length}");
+
+                return new Graphs
+                {
+                    ground = groundGraph,
+                    floorProps = flattenFloorNodes,
+                    ceilingProps = flattenCeilNodes,
+                    groundNodeIndexByPosition = nodeByPosition,
+                    nodeInfoByPosition = nodeInfoByPosition
+                };
             }
 
-            var nodeByPosition = finalNodes
-                .Select((x, i) => (
-                    Index: i,
-                    Position: x.position
-                ))
-                .ToDictionary(
-                    x => x.Position,
-                    x => x.Index);
-
-            NodeGraph groundGraph = ScriptableObject.CreateInstance<NodeGraph>();
-            groundGraph.nodes = finalNodes;
-            groundGraph.links = filteredLinks;
-            groundGraph.Awake();
-
-            Log.Debug($"nodes: {finalNodes.Length}");
-            Log.Debug($"links: {filteredLinks.Length}");
-
-            return new Graphs
-            {
-                ground = groundGraph,
-                floorProps = flattenFloorNodes,
-                ceilingProps = flattenCeilNodes,
-                groundNodeIndexByPosition = nodeByPosition,
-                nodeInfoByPosition = nodeInfoByPosition
-            };
         }
 
         private Graphs CreateGroundNodes(Terrain terrain)

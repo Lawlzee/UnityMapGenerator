@@ -173,10 +173,7 @@ namespace ProceduralStages
                         ? selection.Evaluate(rng.nextNormalizedFloat)
                         : TerrainType.OpenCaves;
 
-                    //terrainType = TerrainType.Moon;
-
                 }
-                //RoR2/Base/Common/sdWater.asset
                 Log.Debug(terrainType);
 
                 TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
@@ -213,14 +210,30 @@ namespace ProceduralStages
                 oobZone.center = scaledSize / 2;
 
                 Theme themeType = Theme.LegacyRandom;
-                if (Application.isEditor && editorTheme != Theme.Random)
+                if (Application.isEditor)
                 {
-                    themeType = editorTheme;
+                    if (editorTheme == Theme.Random)
+                    {
+                        themeType = themes[rng.RangeInt(1, themes.Length)].Theme;
+                    }
+                    else
+                    {
+                        themeType = editorTheme;
+                    }
                 }
                 else
                 {
-                    //todo: add to config
-                    themeType = themes[rng.RangeInt(0, themes.Length)].Theme;
+                    WeightedSelection<Theme> selection = new WeightedSelection<Theme>(RunConfig.instance.themePercents.Length);
+
+                    for (int i = 0; i < RunConfig.instance.themePercents.Length; i++)
+                    {
+                        var config = RunConfig.instance.themePercents[i];
+                        selection.AddChoice(config.Theme, config.Percent);
+                    }
+
+                    themeType = selection.totalWeight > 0
+                        ? selection.Evaluate(rng.nextNormalizedFloat)
+                        : Theme.Plains;
                 }
 
                 Log.Debug(themeType);

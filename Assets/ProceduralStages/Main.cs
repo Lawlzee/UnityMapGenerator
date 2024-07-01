@@ -38,7 +38,8 @@ namespace ProceduralStages
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
             ModSettingsManager.SetModIcon(sprite);
-            
+            ModSettingsManager.SetModDescription("Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.");
+
             PauseMenu.Init();
 
             BazaarHooks.Init();

@@ -15,6 +15,12 @@ namespace ProceduralStages
         public float Percent;
     }
 
+    public struct ThemePercent
+    {
+        public Theme Theme;
+        public float Percent;
+    }
+
     [DefaultExecutionOrder(-100)]
     public class RunConfig : NetworkBehaviour
     {
@@ -59,7 +65,7 @@ namespace ProceduralStages
 
                     resultConfig.StageIndex = config.StageIndex;
                     resultConfig.TerrainType = config.TerrainType;
-                    resultConfig.Percent = config.Config.Value;
+                    resultConfig.Percent = _terrainTypesPercents[i];
                 }
 
                 return result;
@@ -67,6 +73,28 @@ namespace ProceduralStages
         }
 
         private EventHandler[] _terrainTypesPercentsSettingChanged;
+
+        private SyncListFloat _themePercents;
+
+        public ThemePercent[] themePercents
+        {
+            get
+            {
+                var result = new ThemePercent[ModConfig.ThemeConfigs.Count];
+                for (int i = 0; i < ModConfig.ThemeConfigs.Count; i++)
+                {
+                    var config = ModConfig.ThemeConfigs[i];
+                    ref var resultConfig = ref result[i];
+
+                    resultConfig.Theme = config.Theme;
+                    resultConfig.Percent = _themePercents[i];
+                }
+
+                return result;
+            }
+        }
+
+        private EventHandler[] _themePercentsSettingChanged;
 
         public Xoroshiro128Plus stageRng;
         public Xoroshiro128Plus seerRng;
@@ -106,6 +134,12 @@ namespace ProceduralStages
                     var config = ModConfig.TerrainTypesPercents[i];
                     config.Config.SettingChanged -= _terrainTypesPercentsSettingChanged[i];
                 }
+
+                for (int i = 0; i < ModConfig.ThemeConfigs.Count; i++)
+                {
+                    var config = ModConfig.ThemeConfigs[i];
+                    config.Config.SettingChanged -= _themePercentsSettingChanged[i];
+                }
             }
         }
 
@@ -136,6 +170,24 @@ namespace ProceduralStages
 
                 config.Config.SettingChanged += settingsChanged;
                 _terrainTypesPercentsSettingChanged[i] = settingsChanged;
+            }
+
+            _themePercentsSettingChanged = new EventHandler[ModConfig.ThemeConfigs.Count];
+
+            for (int i = 0; i < ModConfig.ThemeConfigs.Count; i++)
+            {
+                var config = ModConfig.ThemeConfigs[i];
+
+                _themePercents.Add(config.Config.Value);
+
+                int index = i;
+                EventHandler settingsChanged = (object o, EventArgs e) =>
+                {
+                    _themePercents[index] = config.Config.Value;
+                };
+
+                config.Config.SettingChanged += settingsChanged;
+                _themePercentsSettingChanged[i] = settingsChanged;
             }
         }
 
