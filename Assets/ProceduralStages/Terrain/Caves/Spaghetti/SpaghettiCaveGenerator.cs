@@ -22,10 +22,8 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             var maps = spaghettiCaver.Create(MapGenerator.instance.stageSize);
-            LogStats("spaghettiCaver");
+            ProfilerLog.Debug("spaghettiCaver");
             //float[,,] map3d = sin.Create(MapGenerator.instance.stageSize);
 
             //float[,,] map3d = wallGenerator.Create(MapGenerator.instance.stageSize);
@@ -48,10 +46,10 @@ namespace ProceduralStages
             //LogStats("map3dNoiser");
             //
             float[,,] smoothMap3d = maps.map;//cave3d.SmoothMap(maps.map);
-            LogStats("cave3d");
+            ProfilerLog.Debug("cave3d");
 
             var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -65,12 +63,6 @@ namespace ProceduralStages
                 densityMap = smoothMap3d,
                 maxGroundHeight = float.MaxValue
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
     }
 }

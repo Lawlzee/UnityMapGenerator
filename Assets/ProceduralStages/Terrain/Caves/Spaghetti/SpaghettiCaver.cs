@@ -39,8 +39,6 @@ namespace ProceduralStages
 
         public (float[,,] map, float[,,] floorlessMap) Create(Vector3Int size)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             int seed1X = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int seed1Y = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int seed1Z = MapGenerator.rng.RangeInt(0, short.MaxValue);
@@ -142,22 +140,16 @@ namespace ProceduralStages
                 //airPositions[x] = currentAirPositions;
             });
 
-            LogStats("caves");
+            ProfilerLog.Debug("caves");
 
             //HashSet<Vector3Int> airPositionsNotUsed = new HashSet<Vector3Int>(airPositions.SelectMany(x => x));
             //LogStats("airPositionsNotUsed");
             var zones = GetZones(airNodes, size);
-            LogStats("GetZones");
+            ProfilerLog.Debug("GetZones");
             RemoveInaccessibleZones(map, zones);
-            LogStats("RemoveInaccessibleZones");
+            ProfilerLog.Debug("RemoveInaccessibleZones");
 
             return (map, floorlessMap);
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
 
         private List<List<Vector3Int>> GetZones(bool[,,] airPositionsNotUsed, Vector3Int size)

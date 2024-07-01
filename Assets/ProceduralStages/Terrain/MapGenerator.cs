@@ -131,243 +131,238 @@ namespace ProceduralStages
 
         private void GenerateMap()
         {
-            int stageClearCount = RunConfig.instance.nextStageClearCount;
-            int stageInLoop = Application.isEditor
-                ? editorStageInLoop
-                : (stageClearCount % Run.stagesPerLoop) + 1;
-
-            int stageScaling = RunConfig.instance.infiniteMapScaling
-                ? stageClearCount + 1
-                : stageInLoop;
-
-            Stopwatch totalStopwatch = Stopwatch.StartNew();
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            TerrainType terrainType = RunConfig.instance.selectedTerrainType;
-            if (Application.isEditor)
+            ProfilerLog.Reset();
+            using (ProfilerLog.CreateScope("total"))
             {
-                if (editorTerrainType == TerrainType.Random)
+                int stageClearCount = RunConfig.instance.nextStageClearCount;
+                int stageInLoop = Application.isEditor
+                    ? editorStageInLoop
+                    : (stageClearCount % Run.stagesPerLoop) + 1;
+
+                int stageScaling = RunConfig.instance.infiniteMapScaling
+                    ? stageClearCount + 1
+                    : stageInLoop;
+
+                TerrainType terrainType = RunConfig.instance.selectedTerrainType;
+                if (Application.isEditor)
                 {
-                    terrainType = terrainGenerators[rng.RangeInt(1, terrainGenerators.Length)].terrainType;
+                    if (editorTerrainType == TerrainType.Random)
+                    {
+                        terrainType = terrainGenerators[rng.RangeInt(1, terrainGenerators.Length)].terrainType;
+                    }
+                    else
+                    {
+                        terrainType = editorTerrainType;
+                    }
+                }
+                else if (terrainType == TerrainType.Random)
+                {
+                    var typesWeights = RunConfig.instance.terrainTypesPercents
+                        .Where(x => x.StageIndex + 1 == stageInLoop)
+                        .ToList();
+
+                    WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                    for (int i = 0; i < typesWeights.Count; i++)
+                    {
+                        var config = typesWeights[i];
+                        selection.AddChoice(config.TerrainType, config.Percent);
+                    }
+
+                    terrainType = selection.totalWeight > 0
+                        ? selection.Evaluate(rng.nextNormalizedFloat)
+                        : TerrainType.OpenCaves;
+
+                    //terrainType = TerrainType.Moon;
+
+                }
+                //RoR2/Base/Common/sdWater.asset
+                Log.Debug(terrainType);
+
+                TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
+                RunConfig.instance.selectedTerrainType = TerrainType.Random;
+
+                PostProcessVolume waterPPV = waterPostProcessingObject.GetComponent<PostProcessVolume>();
+                ColorGrading waterColorGrading = waterPPV.profile.GetSetting<ColorGrading>();
+                BoxCollider waterPPCollider = waterPostProcessingObject.GetComponent<BoxCollider>();
+                BoxCollider waterControllerBoxController = waterController.GetComponent<BoxCollider>();
+
+                waterRenderer.gameObject.transform.position = new Vector3(0, terrainGenerator.waterLevel, 0);
+                waterPPCollider.center = new Vector3(0, terrainGenerator.waterLevel / 2, 0);
+                waterPPCollider.size = new Vector3(10000, terrainGenerator.waterLevel, 10000);
+
+                waterControllerBoxController.center = waterPPCollider.center;
+                waterControllerBoxController.size = waterPPCollider.size;
+
+                waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAsset<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
+
+                stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
+                stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
+                stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
+                stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
+
+                Terrain terrain;
+                using (ProfilerLog.CreateScope("terrainGenerator.Generate"))
+                {
+                    terrain = terrainGenerator.Generate();
+                }
+                terrainCustomObject = terrain.customObjects;
+
+                var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
+                oobZone.size = scaledSize;
+                oobZone.center = scaledSize / 2;
+
+                Theme themeType = Theme.LegacyRandom;
+                if (Application.isEditor && editorTheme != Theme.Random)
+                {
+                    themeType = editorTheme;
                 }
                 else
                 {
-                    terrainType = editorTerrainType;
+                    //todo: add to config
+                    themeType = themes[rng.RangeInt(0, themes.Length)].Theme;
                 }
-            }
-            else if (terrainType == TerrainType.Random)
-            {
-                var typesWeights = RunConfig.instance.terrainTypesPercents
-                    .Where(x => x.StageIndex + 1 == stageInLoop)
-                    .ToList();
 
-                WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                Log.Debug(themeType);
+                MapTheme theme = themes.First(x => x.Theme == themeType);
 
-                for (int i = 0; i < typesWeights.Count; i++)
+                meshColorer.ColorMesh(terrain.meshResult);
+                ProfilerLog.Debug("meshColorer");
+
+                GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
+                ProfilerLog.Debug("MeshFilter");
+
+                Material terrainMaterial = GetComponent<MeshRenderer>().material;
+                var profile = postProcessVolume.profile;
+                RampFog fog = profile.GetSetting<RampFog>();
+                Vignette vignette = profile.GetSetting<Vignette>();
+
+                Texture2D colorGradiant = theme.ApplyTheme(
+                    terrainGenerator,
+                    terrainMaterial,
+                    fog,
+                    vignette,
+                    waterRenderer,
+                    waterColorGrading,
+                    seaFloorRenderer,
+                    GetComponent<SurfaceDefProvider>());
+
+                ProfilerLog.Debug("surfaceDef");
+
+                GetComponent<MeshCollider>().sharedMesh = terrain.meshResult.mesh;
+                ProfilerLog.Debug("MeshCollider");
+
+                graphs = nodeGraphCreator.CreateGraphs(terrain);
+                ProfilerLog.Debug("nodeGraphs");
+
+                SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
+                sceneInfo.groundNodes = graphs.ground;
+                sceneInfo.airNodes = graphs.air;
+
+                ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
+
+                SetDCCS(stageInfo);
+                ProfilerLog.Debug("SetDCCS");
+
+                var combatDirectors = directorObject.GetComponents<CombatDirector>();
+                if (IsSimulacrum() || Application.isEditor)
                 {
-                    var config = typesWeights[i];
-                    selection.AddChoice(config.TerrainType, config.Percent);
+                    foreach (var combatDirector in combatDirectors)
+                    {
+                        combatDirector.monsterCredit = float.MinValue;
+                        combatDirector.moneyWaveIntervals = new RangeFloat[0];
+                        combatDirector.moneyWaves = new CombatDirector.DirectorMoneyWave[0];
+                    }
                 }
 
-                terrainType = selection.totalWeight > 0
-                    ? selection.Evaluate(rng.nextNormalizedFloat)
-                    : TerrainType.OpenCaves;
-
-                //terrainType = TerrainType.Moon;
-
-            }
-            //RoR2/Base/Common/sdWater.asset
-            Log.Debug(terrainType);
-
-            TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
-            RunConfig.instance.selectedTerrainType = TerrainType.Random;
-
-            PostProcessVolume waterPPV = waterPostProcessingObject.GetComponent<PostProcessVolume>();
-            ColorGrading waterColorGrading = waterPPV.profile.GetSetting<ColorGrading>();
-            BoxCollider waterPPCollider = waterPostProcessingObject.GetComponent<BoxCollider>();
-            BoxCollider waterControllerBoxController = waterController.GetComponent<BoxCollider>();
-
-            waterRenderer.gameObject.transform.position = new Vector3(0, terrainGenerator.waterLevel, 0);
-            waterPPCollider.center = new Vector3(0, terrainGenerator.waterLevel / 2, 0);
-            waterPPCollider.size = new Vector3(10000, terrainGenerator.waterLevel, 10000);
-
-            waterControllerBoxController.center = waterPPCollider.center;
-            waterControllerBoxController.size = waterPPCollider.size;
-
-            waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAsset<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
-
-            stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
-            stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
-            stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
-            stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
-
-            Terrain terrain = terrainGenerator.Generate();
-            terrainCustomObject = terrain.customObjects;
-            LogStats("terrainGenerator.Generate");
-
-            var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
-            oobZone.size = scaledSize;
-            oobZone.center = scaledSize / 2;
-
-            Theme themeType = Theme.LegacyRandom;
-            if (Application.isEditor && editorTheme != Theme.Random)
-            {
-                themeType = editorTheme;
-            }
-            else
-            {
-                //todo: add to config
-                themeType = themes[rng.RangeInt(0, themes.Length)].Theme;
-            }
-
-            Log.Debug(themeType);
-            MapTheme theme = themes.First(x => x.Theme == themeType);
-
-            meshColorer.ColorMesh(terrain.meshResult);
-            LogStats("meshColorer");
-
-            GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
-            LogStats("MeshFilter");
-
-            Material terrainMaterial = GetComponent<MeshRenderer>().material;
-            var profile = postProcessVolume.profile;
-            RampFog fog = profile.GetSetting<RampFog>();
-            Vignette vignette = profile.GetSetting<Vignette>();
-
-            Texture2D colorGradiant = theme.ApplyTheme(
-                terrainGenerator, 
-                terrainMaterial, 
-                fog, 
-                vignette, 
-                waterRenderer, 
-                waterColorGrading, 
-                seaFloorRenderer,
-                GetComponent<SurfaceDefProvider>());
-
-            LogStats("surfaceDef");
-
-            GetComponent<MeshCollider>().sharedMesh = terrain.meshResult.mesh;
-            LogStats("MeshCollider");
-
-            graphs = nodeGraphCreator.CreateGraphs(terrain);
-            LogStats("nodeGraphs");
-
-            SceneInfo sceneInfo = sceneInfoObject.GetComponent<SceneInfo>();
-            sceneInfo.groundNodes = graphs.ground;
-            sceneInfo.airNodes = graphs.air;
-
-            ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
-
-            SetDCCS(stageInfo);
-            LogStats("SetDCCS");
-
-            var combatDirectors = directorObject.GetComponents<CombatDirector>();
-            if (IsSimulacrum() || Application.isEditor)
-            {
-                foreach (var combatDirector in combatDirectors)
-                {
-                    combatDirector.monsterCredit = float.MinValue;
-                    combatDirector.moneyWaveIntervals = new RangeFloat[0];
-                    combatDirector.moneyWaves = new CombatDirector.DirectorMoneyWave[0];
-                }
-            }
-
-            if (!IsSimulacrum())
-            {
-                stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
-            }
-
-            if (!IsSimulacrum() || Application.isEditor)
-            {
-                stageInfo.sceneDirectorInteractibleCredits = 75 * (stageScaling + 2);
-            }
-
-            SceneDirector sceneDirector = directorObject.GetComponent<SceneDirector>();
-
-            bool useLunarPortal = stageInLoop == Run.stagesPerLoop;
-            string portalPath = useLunarPortal
-                ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
-                : "RoR2/Base/Teleporters/iscTeleporter.asset";
-
-            if (!Application.isEditor || loadResourcesInEditor)
-            {
                 if (!IsSimulacrum())
                 {
-                    sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+                    stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
                 }
 
-                if (NetworkServer.active)
+                if (!IsSimulacrum() || Application.isEditor)
                 {
-                    Action<SceneDirector> placeInteractables = null;
-                    placeInteractables = _ =>
-                    {
-                        SceneDirector.onPostPopulateSceneServer -= placeInteractables;
+                    stageInfo.sceneDirectorInteractibleCredits = 75 * (stageScaling + 2);
+                }
 
-                        SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum());
+                SceneDirector sceneDirector = directorObject.GetComponent<SceneDirector>();
+
+                bool useLunarPortal = stageInLoop == Run.stagesPerLoop;
+                string portalPath = useLunarPortal
+                    ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
+                    : "RoR2/Base/Teleporters/iscTeleporter.asset";
+
+                if (!Application.isEditor || loadResourcesInEditor)
+                {
+                    if (!IsSimulacrum())
+                    {
+                        sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+                    }
+
+                    if (NetworkServer.active)
+                    {
+                        Action<SceneDirector> placeInteractables = null;
+                        placeInteractables = _ =>
+                        {
+                            SceneDirector.onPostPopulateSceneServer -= placeInteractables;
+
+                            SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum());
+                        };
+
+                        SceneDirector.onPostPopulateSceneServer += placeInteractables;
+                    }
+                }
+
+                if (!Application.isEditor || loadPropsInEditor)
+                {
+                    PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
+                    propsPlacer.PlaceAll(
+                        graphs,
+                        propsCollection,
+                        meshColorer,
+                        colorGradiant,
+                        terrainMaterial,
+                        terrainGenerator.ceillingPropsWeight);
+                    ProfilerLog.Debug("propsPlacer");
+                }
+
+                if (!Application.isEditor)
+                {
+                    var stages = SceneCatalog.allStageSceneDefs
+                        .Where(x => x.cachedName != Main.SceneName)
+                        .ToList();
+
+                    var mainTracks = stages
+                        .Select(x => x.mainTrack)
+                        .Where(x => x)
+                        .Distinct()
+                        .ToList();
+
+                    var bossTracks = stages
+                        .Select(x => x.bossTrack)
+                        .Distinct()
+                        .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
+                        .ToList();
+
+                    var mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
+                    var bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
+
+                    Action<SceneDef> onSceneChanged = null;
+                    onSceneChanged = scene =>
+                    {
+                        SceneCatalog.onMostRecentSceneDefChanged -= onSceneChanged;
+                        if (scene.cachedName == Main.SceneName)
+                        {
+                            scene.mainTrack = mainTrack;
+                            scene.bossTrack = bossTrack;
+                            scene.nameToken = terrainType.GetName();
+                            scene.subtitleToken = terrainType.GetSubTitle();
+                        }
                     };
 
-                    SceneDirector.onPostPopulateSceneServer += placeInteractables;
+                    SceneCatalog.onMostRecentSceneDefChanged += onSceneChanged;
+                    ProfilerLog.Debug("music");
                 }
-            }
-
-            if (!Application.isEditor || loadPropsInEditor)
-            {
-                PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
-                propsPlacer.PlaceAll(
-                    graphs,
-                    propsCollection,
-                    meshColorer,
-                    colorGradiant,
-                    terrainMaterial,
-                    terrainGenerator.ceillingPropsWeight);
-                LogStats("propsPlacer");
-            }
-
-            if (!Application.isEditor)
-            {
-                var stages = SceneCatalog.allStageSceneDefs
-                    .Where(x => x.cachedName != Main.SceneName)
-                    .ToList();
-
-                var mainTracks = stages
-                    .Select(x => x.mainTrack)
-                    .Where(x => x)
-                    .Distinct()
-                    .ToList();
-
-                var bossTracks = stages
-                    .Select(x => x.bossTrack)
-                    .Distinct()
-                    .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
-                    .ToList();
-
-                var mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
-                var bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
-
-                Action<SceneDef> onSceneChanged = null;
-                onSceneChanged = scene =>
-                {
-                    SceneCatalog.onMostRecentSceneDefChanged -= onSceneChanged;
-                    if (scene.cachedName == Main.SceneName)
-                    {
-                        scene.mainTrack = mainTrack;
-                        scene.bossTrack = bossTrack;
-                        scene.nameToken = terrainType.GetName();
-                        scene.subtitleToken = terrainType.GetSubTitle();
-                    }
-                };
-
-                SceneCatalog.onMostRecentSceneDefChanged += onSceneChanged;
-                LogStats("music");
-            }
-
-            Log.Debug($"total: " + totalStopwatch.Elapsed.ToString());
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
             }
         }
 

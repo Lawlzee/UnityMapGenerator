@@ -165,163 +165,158 @@ namespace ProceduralStages
 
         public void SetTargets(List<GameObject> gameObjects, Vector3 mapSize)
         {
-            cellSizeReciprocal = 1 / cellSize;
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            MeshRenderer[][] meshRenderers = new MeshRenderer[gameObjects.Count][];
-            Bounds[] bounds = new Bounds[gameObjects.Count];
-            Vector3[] boundsCenter = new Vector3[gameObjects.Count];
-
-            for (int i = 0; i < gameObjects.Count; i++)
+            using (ProfilerLog.CreateScope("OcclusionCulling.SetTargets"))
             {
-                GameObject gameObject = gameObjects[i];
-                MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
-                if (renderers.Length == 0)
+                cellSizeReciprocal = 1 / cellSize;
+
+                MeshRenderer[][] meshRenderers = new MeshRenderer[gameObjects.Count][];
+                Bounds[] bounds = new Bounds[gameObjects.Count];
+                Vector3[] boundsCenter = new Vector3[gameObjects.Count];
+
+                for (int i = 0; i < gameObjects.Count; i++)
                 {
+                    GameObject gameObject = gameObjects[i];
+                    MeshRenderer[] renderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+                    if (renderers.Length == 0)
+                    {
+                        meshRenderers[i] = renderers;
+                        continue;
+                    }
+
+                    Bounds bound = GetBounds(renderers);
+
                     meshRenderers[i] = renderers;
-                    continue;
+                    bounds[i] = bound;
+                    boundsCenter[i] = bound.center;
                 }
 
-                Bounds bound = GetBounds(renderers);
+                ProfilerLog.Debug("bounds");
 
-                meshRenderers[i] = renderers;
-                bounds[i] = bound;
-                boundsCenter[i] = bound.center;
-            }
+                int[][] clusters = KMeans.Cluster(boundsCenter, clusterCount, clusterMaxIterations, 0);
+                ProfilerLog.Debug("KMeans");
 
-            LogStats("bounds");
+                Bounds[] boundsByCluster = new Bounds[clusterCount];
+                _meshRenderersByClusterIndex = new MeshRenderer[clusterCount][];
 
-            int[][] clusters = KMeans.Cluster(boundsCenter, clusterCount, clusterMaxIterations, 0);
-            LogStats("KMeans");
-
-            Bounds[] boundsByCluster = new Bounds[clusterCount];
-            _meshRenderersByClusterIndex = new MeshRenderer[clusterCount][];
-
-            for (int i = 0; i < clusterCount; i++)
-            {
-                int[] cluster = clusters[i];
-
-                int rendererCount = 0;
-                for (int j = 0; j < cluster.Length; j++)
+                for (int i = 0; i < clusterCount; i++)
                 {
-                    rendererCount += meshRenderers[cluster[j]].Length;
-                }
+                    int[] cluster = clusters[i];
 
-                MeshRenderer[] clusterRenderers = new MeshRenderer[rendererCount];
-
-                Bounds clusterBounds = default;
-
-                int rendererIndex = 0;
-                for (int j = 0; j < cluster.Length; j++)
-                {
-                    int index = cluster[j];
-
-                    if (j == 0)
+                    int rendererCount = 0;
+                    for (int j = 0; j < cluster.Length; j++)
                     {
-                        clusterBounds = bounds[index];
-                    }
-                    else
-                    {
-                        clusterBounds.Encapsulate(bounds[index]);
+                        rendererCount += meshRenderers[cluster[j]].Length;
                     }
 
-                    var renderers = meshRenderers[index];
+                    MeshRenderer[] clusterRenderers = new MeshRenderer[rendererCount];
 
-                    for (int k = 0; k < renderers.Length; k++)
+                    Bounds clusterBounds = default;
+
+                    int rendererIndex = 0;
+                    for (int j = 0; j < cluster.Length; j++)
                     {
-                        clusterRenderers[rendererIndex] = renderers[k];
-                        rendererIndex++;
-                    }
-                }
+                        int index = cluster[j];
 
-                boundsByCluster[i] = clusterBounds;
-                _meshRenderersByClusterIndex[i] = clusterRenderers;
-            }
-
-            LogStats("Encapsulate");
-
-            int sizeX = Mathf.CeilToInt(mapSize.x * cellSizeReciprocal);
-            int sizeY = Mathf.CeilToInt(mapSize.y * cellSizeReciprocal);
-            int sizeZ = Mathf.CeilToInt(mapSize.z * cellSizeReciprocal);
-
-            _clustersLength = new Vector3Int(sizeX, sizeY, sizeZ);
-            _clusterIndexByPos = new Index4[sizeX, sizeY, sizeZ];
-
-            LogStats("Index4 0");
-
-            Parallel.For(0, sizeX, x =>
-            {
-                for (int y = 0; y < sizeY; y++)
-                {
-                    for (int z = 0; z < sizeZ; z++)
-                    {
-                        _clusterIndexByPos[x, y, z] = new Index4
+                        if (j == 0)
                         {
-                            value0 = -1,
-                            value1 = -1,
-                            value2 = -1,
-                            value3 = -1
-                        };
-                    }
-                }
-            });
-
-            LogStats("Index4");
-
-            for (int i = 0; i < clusterCount; i++)
-            {
-                Bounds bound = boundsByCluster[i];
-
-                int startX = Math.Max(0, Mathf.FloorToInt(bound.min.x * cellSizeReciprocal));
-                int startY = Math.Max(0, Mathf.FloorToInt(bound.min.y * cellSizeReciprocal));
-                int startZ = Math.Max(0, Mathf.FloorToInt(bound.min.z * cellSizeReciprocal));
-
-                int endX = Math.Min(sizeX - 1, Mathf.CeilToInt(bound.max.x * cellSizeReciprocal));
-                int endY = Math.Min(sizeY - 1, Mathf.CeilToInt(bound.max.y * cellSizeReciprocal));
-                int endZ = Math.Min(sizeZ - 1, Mathf.CeilToInt(bound.max.z * cellSizeReciprocal));
-
-                for (int x = startX; x <= endX; x++)
-                {
-                    for (int y = startY; y <= endY; y++)
-                    {
-                        for (int z = startZ; z <= endZ; z++)
+                            clusterBounds = bounds[index];
+                        }
+                        else
                         {
-                            ref Index4 index = ref _clusterIndexByPos[x, y, z];
+                            clusterBounds.Encapsulate(bounds[index]);
+                        }
 
-                            for (int j = 0; j < 4; j++)
+                        var renderers = meshRenderers[index];
+
+                        for (int k = 0; k < renderers.Length; k++)
+                        {
+                            clusterRenderers[rendererIndex] = renderers[k];
+                            rendererIndex++;
+                        }
+                    }
+
+                    boundsByCluster[i] = clusterBounds;
+                    _meshRenderersByClusterIndex[i] = clusterRenderers;
+                }
+
+                ProfilerLog.Debug("Encapsulate");
+
+                int sizeX = Mathf.CeilToInt(mapSize.x * cellSizeReciprocal);
+                int sizeY = Mathf.CeilToInt(mapSize.y * cellSizeReciprocal);
+                int sizeZ = Mathf.CeilToInt(mapSize.z * cellSizeReciprocal);
+
+                _clustersLength = new Vector3Int(sizeX, sizeY, sizeZ);
+                _clusterIndexByPos = new Index4[sizeX, sizeY, sizeZ];
+
+                ProfilerLog.Debug("Index4 0");
+
+                Parallel.For(0, sizeX, x =>
+                {
+                    for (int y = 0; y < sizeY; y++)
+                    {
+                        for (int z = 0; z < sizeZ; z++)
+                        {
+                            _clusterIndexByPos[x, y, z] = new Index4
                             {
-                                if (index[j] == -1)
+                                value0 = -1,
+                                value1 = -1,
+                                value2 = -1,
+                                value3 = -1
+                            };
+                        }
+                    }
+                });
+
+                ProfilerLog.Debug("Index4");
+
+                for (int i = 0; i < clusterCount; i++)
+                {
+                    Bounds bound = boundsByCluster[i];
+
+                    int startX = Math.Max(0, Mathf.FloorToInt(bound.min.x * cellSizeReciprocal));
+                    int startY = Math.Max(0, Mathf.FloorToInt(bound.min.y * cellSizeReciprocal));
+                    int startZ = Math.Max(0, Mathf.FloorToInt(bound.min.z * cellSizeReciprocal));
+
+                    int endX = Math.Min(sizeX - 1, Mathf.CeilToInt(bound.max.x * cellSizeReciprocal));
+                    int endY = Math.Min(sizeY - 1, Mathf.CeilToInt(bound.max.y * cellSizeReciprocal));
+                    int endZ = Math.Min(sizeZ - 1, Mathf.CeilToInt(bound.max.z * cellSizeReciprocal));
+
+                    for (int x = startX; x <= endX; x++)
+                    {
+                        for (int y = startY; y <= endY; y++)
+                        {
+                            for (int z = startZ; z <= endZ; z++)
+                            {
+                                ref Index4 index = ref _clusterIndexByPos[x, y, z];
+
+                                for (int j = 0; j < 4; j++)
                                 {
-                                    index[j] = (short)i;
-                                    break;
+                                    if (index[j] == -1)
+                                    {
+                                        index[j] = (short)i;
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            };
+                };
 
-            LogStats("Index4 2");
+                ProfilerLog.Debug("Index4 2");
 
-            _meshFilter.mesh = GenerateMesh(boundsByCluster);
+                _meshFilter.mesh = GenerateMesh(boundsByCluster);
 
-            _visibleClusters = new uint[clusterCount];
-            _visibleClustersBuffer = new ComputeBuffer(clusterCount, 4, ComputeBufferType.Default);
+                _visibleClusters = new uint[clusterCount];
+                _visibleClustersBuffer = new ComputeBuffer(clusterCount, 4, ComputeBufferType.Default);
 
-            Graphics.ClearRandomWriteTargets();
-            Graphics.SetRandomWriteTarget(1, _visibleClustersBuffer, false);
+                Graphics.ClearRandomWriteTargets();
+                Graphics.SetRandomWriteTarget(1, _visibleClustersBuffer, false);
 
-            _meshRenderer.material.SetBuffer("_VisibleClusters", _visibleClustersBuffer);
-            _meshRenderer.material.SetInt("_Debug", Convert.ToInt32(debug));
+                _meshRenderer.material.SetBuffer("_VisibleClusters", _visibleClustersBuffer);
+                _meshRenderer.material.SetInt("_Debug", Convert.ToInt32(debug));
 
-            enabled = true;
-            LogStats("Index4 2");
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
+                enabled = true;
+                ProfilerLog.Debug("Index4 2");
             }
         }
 

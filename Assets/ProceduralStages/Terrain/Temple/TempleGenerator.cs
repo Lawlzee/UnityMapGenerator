@@ -80,7 +80,6 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             var rng = MapGenerator.rng;
 
             var stageSize = MapGenerator.instance.stageSize;
@@ -149,7 +148,7 @@ namespace ProceduralStages
                 }
             }
 
-            LogStats("towers");
+            ProfilerLog.Debug("towers");
 
             bool[,,] towerBitMap = new bool[stageSize.x, stageSize.y, stageSize.z];
 
@@ -243,7 +242,7 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("towerBitMap");
+            ProfilerLog.Debug("towerBitMap");
 
             float[,,] floorlessMap = new float[stageSize.x, stageSize.y, stageSize.z];
             int stoneSeedX = rng.RangeInt(0, short.MaxValue);
@@ -375,7 +374,7 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("densityMap");
+            ProfilerLog.Debug("densityMap");
 
             GameObject crystalParticleSystem = Instantiate(crystalParticleSystemPrefab);
             crystalParticleSystem.transform.position = MapGenerator.instance.mapScale * new Vector3(center3.x, 0, center3.z);
@@ -391,7 +390,7 @@ namespace ProceduralStages
             }
             
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             return new Terrain
             {
@@ -404,12 +403,6 @@ namespace ProceduralStages
                     crystalParticleSystem
                 }
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
     }
 }

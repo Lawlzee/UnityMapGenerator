@@ -51,7 +51,6 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             var rng = MapGenerator.rng;
 
             var stageSize = MapGenerator.instance.stageSize;
@@ -131,7 +130,7 @@ namespace ProceduralStages
             //    };
             //}
 
-            LogStats("towers");
+            ProfilerLog.Debug("towers");
 
             bool[,,] towerBitMap = new bool[stageSize.x, stageSize.y, stageSize.z];
 
@@ -201,7 +200,7 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("towerBitMap");
+            ProfilerLog.Debug("towerBitMap");
 
             Parallel.For(0, outerWallDepth, i =>
             {
@@ -229,7 +228,7 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("outerWall");
+            ProfilerLog.Debug("outerWall");
 
             float[,,] floorlessMap = new float[stageSize.x, stageSize.y, stageSize.z];
 
@@ -268,7 +267,7 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("densityMap");
+            ProfilerLog.Debug("densityMap");
 
             float[,,] densityMap = new float[stageSize.x, stageSize.y, stageSize.z];
 
@@ -305,10 +304,10 @@ namespace ProceduralStages
                 }
             });
 
-            LogStats("floor");
+            ProfilerLog.Debug("floor");
 
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             return new Terrain
             {
@@ -317,12 +316,6 @@ namespace ProceduralStages
                 densityMap = densityMap,
                 maxGroundHeight = float.MaxValue
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
     }
 }

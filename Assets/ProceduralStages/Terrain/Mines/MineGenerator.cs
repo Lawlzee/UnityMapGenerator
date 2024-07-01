@@ -42,18 +42,16 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             (Vector2Int seed, Vector3Int size) = FindSeed(MapGenerator.instance.stageSize);
-            LogStats("FindSeed");
+            ProfilerLog.Debug("FindSeed");
             MapGenerator.instance.stageSize = size;
 
             (float[,] map2d, float min, float max) = GenerateHeightMap(seed, size);
-            LogStats("GenerateHeightMap");
+            ProfilerLog.Debug("GenerateHeightMap");
 
 
             float[,,] map3d = To3DMap(map2d, size, min, max);
-            LogStats("To3DMap");
+            ProfilerLog.Debug("To3DMap");
 
             //CarveCaves(map3d, size);
             //LogStats("CarveCaves");
@@ -61,14 +59,14 @@ namespace ProceduralStages
             //var map3d = CarveCaves2(size);
 
             map3d = smoother.SmoothMap(map3d);
-            LogStats("smoother.SmoothMap");
+            ProfilerLog.Debug("smoother.SmoothMap");
 
 
             float[,,] floorDensityMap = ComputeFloorDensityMap(map3d, size);
-            LogStats("floorDensityMap");
+            ProfilerLog.Debug("floorDensityMap");
 
             var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -83,12 +81,6 @@ namespace ProceduralStages
                 densityMap = map3d,
                 maxGroundHeight = float.MaxValue
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
 
         private (Vector2Int seed, Vector3Int size) FindSeed(Vector3Int targetSize)

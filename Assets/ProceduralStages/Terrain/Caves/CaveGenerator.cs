@@ -32,23 +32,21 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             //float[,,] map3d = voronoiWallGenerator.Create(MapGenerator.instance.stageSize);
             //LogStats("voronoiWallGenerator");
 
             Vector3Int stageSize = MapGenerator.instance.stageSize;
             float[,,] floorlessMap = wallGenerator.Create(stageSize);
-            LogStats("wallGenerator");
+            ProfilerLog.Debug("wallGenerator");
             
             carver.CarveWalls(floorlessMap);
-            LogStats("carver");
+            ProfilerLog.Debug("carver");
 
             waller.AddWalls(floorlessMap);
-            LogStats("waller.AddWalls");
+            ProfilerLog.Debug("waller.AddWalls");
 
             stalactitesGenerator.AddStalactites(floorlessMap);
-            LogStats("stalactitesGenerator.AddStalactites");
+            ProfilerLog.Debug("stalactitesGenerator.AddStalactites");
 
             int floorSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int floorSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
@@ -78,13 +76,13 @@ namespace ProceduralStages
                     }
                 }
             });
-            LogStats("waller.AddFloor");
+            ProfilerLog.Debug("waller.AddFloor");
 
             densityMap = map3dNoiser.AddNoise(densityMap);
-            LogStats("map3dNoiser");
+            ProfilerLog.Debug("map3dNoiser");
 
             densityMap = cave3d.SmoothMap(densityMap);
-            LogStats("SmoothMap");
+            ProfilerLog.Debug("SmoothMap");
 
             int stalagmitesSeedX = MapGenerator.rng.RangeInt(0, short.MaxValue);
             int stalagmitesSeedZ = MapGenerator.rng.RangeInt(0, short.MaxValue);
@@ -115,7 +113,7 @@ namespace ProceduralStages
             });
 
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -129,12 +127,6 @@ namespace ProceduralStages
                 densityMap = densityMap,
                 maxGroundHeight = float.MaxValue
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
     }
 }

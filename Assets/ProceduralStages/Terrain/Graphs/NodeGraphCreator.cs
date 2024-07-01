@@ -40,33 +40,28 @@ namespace ProceduralStages
 
         public Graphs CreateGraphs(Terrain terrain)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            //MapDensity mapDensity = densityMap.Create(map);
-            ///LogStats("mapDensity");
-
-            Graphs graphs = CreateGroundNodes2(terrain);
-            LogStats("groundNodes");
-
-            HashSet<int> mainIsland = GetMainIsland(graphs.ground);
-            //HashSet<int> mainIsland = new HashSet<int>();
-            LogStats("mainIsland");
-
-            SetMainIslandFlags(graphs.ground, mainIsland, terrain);
-            LogStats("SetMainIslandFlags");
-
-            graphs.ground.Awake();
-
-            //graphs.air = CreateAirNodes(graphs.ground, mainIsland, map, mapScale);
-            graphs.air = CreateAirGraph(terrain);
-            LogStats("CreateAirNodes");
-
-            return graphs;
-
-            void LogStats(string name)
+            using (ProfilerLog.CreateScope("CreateGraphs"))
             {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
+                //MapDensity mapDensity = densityMap.Create(map);
+                ///LogStats("mapDensity");
+
+                Graphs graphs = CreateGroundNodes2(terrain);
+                ProfilerLog.Debug("groundNodes");
+
+                HashSet<int> mainIsland = GetMainIsland(graphs.ground);
+                //HashSet<int> mainIsland = new HashSet<int>();
+                ProfilerLog.Debug("mainIsland");
+
+                SetMainIslandFlags(graphs.ground, mainIsland, terrain);
+                ProfilerLog.Debug("SetMainIslandFlags");
+
+                graphs.ground.Awake();
+
+                //graphs.air = CreateAirNodes(graphs.ground, mainIsland, map, mapScale);
+                graphs.air = CreateAirGraph(terrain);
+                ProfilerLog.Debug("CreateAirNodes");
+
+                return graphs;
             }
         }
 

@@ -42,35 +42,33 @@ namespace ProceduralStages
             //MoonEscapeSequence.Place(dropship);
             //MapGenerator.instance.StartCoroutine(TransferMithrixArena());
 
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             var stageSize = MapGenerator.instance.stageSize;
             float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
-            LogStats("wallGenerator");
+            ProfilerLog.Debug("wallGenerator");
 
             carver.CarveWalls(wallOnlyMap);
-            LogStats("carver");
+            ProfilerLog.Debug("carver");
 
             //waller.AddCeilling(map3d);
             //LogStats("waller.AddCeilling");
 
             waller.AddWalls(wallOnlyMap);
-            LogStats("waller.AddWalls");
+            ProfilerLog.Debug("waller.AddWalls");
 
             float[,,] floorOnlyMap = new float[stageSize.x, stageSize.y, stageSize.z];
             floorOnlyMap = waller.AddFloor(floorOnlyMap);
-            LogStats("waller.AddFloor");
+            ProfilerLog.Debug("waller.AddFloor");
 
             float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
 
             densityMap = map3dNoiser.AddNoise(densityMap);
-            LogStats("map3dNoiser");
+            ProfilerLog.Debug("map3dNoiser");
 
             float[,,] smoothMap3d = cave3d.SmoothMap(densityMap);
-            LogStats("cave3d");
+            ProfilerLog.Debug("cave3d");
 
             var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -84,12 +82,6 @@ namespace ProceduralStages
                 densityMap = smoothMap3d,
                 maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
 
         private IEnumerator TransferMithrixArena()

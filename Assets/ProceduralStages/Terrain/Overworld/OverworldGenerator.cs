@@ -23,12 +23,10 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             var stageSize = MapGenerator.instance.stageSize;
 
             float[,,] wallOnlyMap = voronoiWallGenerator.Create(stageSize);
-            LogStats("voronoiWallGenerator");
+            ProfilerLog.Debug("voronoiWallGenerator");
 
             //float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
             //LogStats("wallGenerator");
@@ -44,10 +42,10 @@ namespace ProceduralStages
 
             float[,,] floorOnlyMap = new float[stageSize.x, stageSize.y, stageSize.z];
             floorOnlyMap = waller.AddFloor(floorOnlyMap);
-            LogStats("waller.AddFloor");
+            ProfilerLog.Debug("waller.AddFloor");
 
             float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
-            LogStats("floorWallsMixer");
+            ProfilerLog.Debug("floorWallsMixer");
 
             //densityMap = map3dNoiser.AddNoise(densityMap);
             //LogStats("map3dNoiser");
@@ -56,7 +54,7 @@ namespace ProceduralStages
             //LogStats("cave3d");
 
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -70,12 +68,6 @@ namespace ProceduralStages
                 densityMap = densityMap,
                 maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
     }
 }

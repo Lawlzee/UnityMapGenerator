@@ -61,17 +61,15 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             //float[,,] map3d = RandomWalk(MapGenerator.instance.stageSize);
             float[,,] map3d = GenerateVoronoi(MapGenerator.instance.stageSize);
             //float[,,] map3d = AngleRandomWalk(MapGenerator.instance.stageSize);
 
             //map3d = smoother.SmoothMap(map3d);
-            LogStats("smoother.SmoothMap");
+            ProfilerLog.Debug("smoother.SmoothMap");
 
             var meshResult = MarchingCubes.CreateMesh(map3d, MapGenerator.instance.mapScale);
-            LogStats("marchingCubes");
+            ProfilerLog.Debug("marchingCubes");
 
             //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
             //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
@@ -85,12 +83,6 @@ namespace ProceduralStages
                 densityMap = map3d,
                 maxGroundHeight = float.MaxValue
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
         }
 
         private float[,,] RandomWalk(Vector3Int size)

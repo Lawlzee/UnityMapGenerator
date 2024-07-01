@@ -22,20 +22,21 @@ namespace ProceduralStages
 
         public static MeshResult CreateMesh(float[,,] voxels, float scale)
         {
-            return new MarchingCubes().Generate(voxels, scale);
+            using (ProfilerLog.CreateScope("MarchingCubes"))
+            {
+                return new MarchingCubes().Generate(voxels, scale);
+            }
         }
 
         public MeshResult Generate(float[,,] voxels, float scale)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             int width = voxels.GetLength(0);
             int height = voxels.GetLength(1);
             int depth = voxels.GetLength(2);
 
             int[] triangleCounts = new int[width - 1];
             byte[,,] cubeIndices = new byte[width - 1, height - 1, depth - 1];
-            LogStats("Marching cubes");
+            ProfilerLog.Debug("Marching cubes");
 
             Parallel.For(0, width - 1, x =>
             {
@@ -65,13 +66,13 @@ namespace ProceduralStages
                 triangleCounts[x] = triangleCount;
             });
 
-            LogStats("Marching Parallel.For");
+            ProfilerLog.Debug("Marching Parallel.For");
 
             int trianglesCount = triangleCounts.Sum();
             int[] triangles = new int[trianglesCount * 3];
             Vector3[] vertices = new Vector3[trianglesCount * 3];
             Dictionary<Vector3, int> verticesIndexes = new Dictionary<Vector3, int>(trianglesCount * 3);
-            LogStats("Marching allocations");
+            ProfilerLog.Debug("Marching allocations");
 
             Log.Debug(trianglesCount);
 
@@ -136,7 +137,7 @@ namespace ProceduralStages
                 }
             }
             //});
-            LogStats("Marching For");
+            ProfilerLog.Debug("Marching For");
 
             Mesh mesh = new Mesh();
             mesh.indexFormat = IndexFormat.UInt32;
@@ -153,12 +154,6 @@ namespace ProceduralStages
                 vertices = vertices,
                 verticesLength = vectorIndex
             };
-
-            void LogStats(string name)
-            {
-                Log.Debug($"{name}: {stopwatch.Elapsed}");
-                stopwatch.Restart();
-            }
 
             int AddVertex(Vector3 vector)
             {
@@ -779,6 +774,6 @@ namespace ProceduralStages
             1,
             0
         };
-}
+    }
 
 }

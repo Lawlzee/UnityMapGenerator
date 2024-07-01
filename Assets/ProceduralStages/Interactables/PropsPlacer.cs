@@ -28,10 +28,10 @@ namespace ProceduralStages
 
 
         public void PlaceAll(
-            Graphs graphs, 
-            PropsDefinitionCollection propsCollection, 
-            MeshColorer meshColorer, 
-            Texture2D colorGradiant, 
+            Graphs graphs,
+            PropsDefinitionCollection propsCollection,
+            MeshColorer meshColorer,
+            Texture2D colorGradiant,
             Material terrainMaterial,
             float ceillingWeight)
         {
@@ -114,7 +114,7 @@ namespace ProceduralStages
                         attempt++;
                     }
                     while (usedIndexes.Contains(index) && attempt <= 5);
-                    
+
                     if (attempt > 5)
                     {
                         continue;
@@ -133,7 +133,7 @@ namespace ProceduralStages
                     if (prop.changeColor)
                     {
                         var uv = meshColorer.GetUV(propsNode.position, propsNode.normal, colorSeed);
-                        color = colorGradiant.GetPixelBilinear(uv.x ,uv.y);
+                        color = colorGradiant.GetPixelBilinear(uv.x, uv.y);
                     }
 
                     Material material = null;
@@ -145,10 +145,10 @@ namespace ProceduralStages
                     float scale = MapGenerator.rng.RangeFloat(prop.minScale, prop.maxScale);
 
                     GameObject instance = propsNode.Place(
-                        prop.prefab, 
-                        propsObject, 
-                        material, 
-                        color, 
+                        prop.prefab,
+                        propsObject,
+                        material,
+                        color,
                         normal: prop.normal != Vector3.zero
                             ? prop.normal
                             : default(Vector3?),
