@@ -1640,7 +1640,7 @@ MonoBehaviour:
   loadPropsInEditor: 1
   editorSeed: 0
   editorTerrainType: 2
-  editorTheme: 0
+  editorTheme: 6
   editorStageInLoop: 4
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
@@ -1700,8 +1700,8 @@ MonoBehaviour:
   propsPlacer:
     propsCount: 10
     propsObject: {fileID: 1189524057}
-    occlusionCullingObject: {fileID: 739910180}
     instances: []
+  occlusionCulling: {fileID: 739910181}
   postProcessVolume: {fileID: 447697557}
   waterRenderer: {fileID: 120889315}
   waterController: {fileID: 1219868484}

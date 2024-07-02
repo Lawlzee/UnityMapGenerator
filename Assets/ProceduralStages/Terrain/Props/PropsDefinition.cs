@@ -24,6 +24,7 @@ namespace ProceduralStages
         public Vector3 offset;
         public bool isSolid;
         public bool addCollision;
+        public bool isBig;
         public Vector3 initialRotation;
 
         private GameObject _prefab;

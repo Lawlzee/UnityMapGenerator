@@ -21,19 +21,22 @@ namespace ProceduralStages
         public int propsCount = 10;
 
         public GameObject propsObject;
-        public GameObject occlusionCullingObject;
 
         [HideInInspector]
         public List<GameObject> instances = new List<GameObject>();
 
 
         public void PlaceAll(
+            Vector3 offset,
             Graphs graphs,
             PropsDefinitionCollection propsCollection,
             MeshColorer meshColorer,
             Texture2D colorGradiant,
             Material terrainMaterial,
-            float ceillingWeight)
+            float ceillingWeight,
+            float propCountWeight,
+            bool bigObjectOnly,
+            int? maxPropKind = null)
         {
             List<PropsDefinition> props = propsCollection.categories
                 .SelectMany(x => x.props)
@@ -42,6 +45,11 @@ namespace ProceduralStages
             WeightedSelection<PropsDefinition> propsSelection = new WeightedSelection<PropsDefinition>();
             foreach (var prop in props)
             {
+                if (bigObjectOnly && !prop.isBig)
+                {
+                    continue;
+                }
+
                 if (prop.ground)
                 {
                     propsSelection.AddChoice(prop, 1);
@@ -75,7 +83,7 @@ namespace ProceduralStages
             }
 
             int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
-            int stagePropCount = Math.Min(propsSelection.Count, propsCount + stageInLoop);
+            int stagePropCount = Math.Min(maxPropKind ?? int.MaxValue, Math.Min(propsSelection.Count, propsCount + stageInLoop));
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();
             HashSet<int> usedCeillingIndexes = new HashSet<int>();
@@ -99,7 +107,8 @@ namespace ProceduralStages
                     ? usedFloorIndexes
                     : usedCeillingIndexes;
 
-                for (int i = 0; i < prop.count; i++)
+                int scaledPropCount = Mathf.CeilToInt(propCountWeight * prop.count);
+                for (int i = 0; i < scaledPropCount; i++)
                 {
                     if (graph.Length == 0)
                     {
@@ -145,6 +154,7 @@ namespace ProceduralStages
                     float scale = MapGenerator.rng.RangeFloat(prop.minScale, prop.maxScale);
 
                     GameObject instance = propsNode.Place(
+                        offset,
                         prop.prefab,
                         propsObject,
                         material,
@@ -189,8 +199,6 @@ namespace ProceduralStages
                     instances.Add(instance);
                 }
             }
-
-            occlusionCullingObject.GetComponent<OcclusionCulling>().SetTargets(instances, MapGenerator.instance.mapScale * (Vector3)MapGenerator.instance.stageSize);
         }
 
         void SetLayer(GameObject gameObject, int layer)

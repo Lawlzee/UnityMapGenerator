@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1927380c1a546d64d9fe9126577464e3, type: 3}
+  m_Name: IslandBackdropGenerator
+  m_EditorClassIdentifier: 
+  distance:
+    min: -100
+    max: 500
+  minSize: {x: 500, y: 150, z: 500}
+  maxSize: {x: 1200, y: 425, z: 1200}
+  scalePerDistance: 0.018
+  fbm: {fileID: 11400000, guid: aaf93b12cd02a4849b272f347efe5010, type: 2}
+  floorCurve: {fileID: 11400000, guid: f76907d439f9e974b80e11428d1a7a40, type: 2}
+  finalCurve: {fileID: 11400000, guid: e85f247eee4c35d42b7ada12ec5b301b, type: 2}
+  ellipsisDistanceCurve: {fileID: 11400000, guid: 81a63941227e2e04a87510a25c2b7124,
+    type: 2}
+  blendFactor: 0.015
+  propsWeigth: 0.3

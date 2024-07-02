@@ -24,4 +24,5 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 0
+  isBig: 1
   initialRotation: {x: 0, y: 0, z: 0}

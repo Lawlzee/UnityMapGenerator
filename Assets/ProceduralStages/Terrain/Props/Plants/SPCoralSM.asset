@@ -18,10 +18,11 @@ MonoBehaviour:
   ground: 1
   count: 35
   changeColor: 0
-  isRock: 0
+  isRock: 1
   material: 6
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 0
+  isBig: 0
   initialRotation: {x: 0, y: 0, z: 0}

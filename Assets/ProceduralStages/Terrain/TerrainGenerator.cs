@@ -38,6 +38,7 @@ namespace ProceduralStages
         public float waterLevel = 0f;
         public TerrainType terrainType;
         public float ceillingPropsWeight = 1;
+        public BackdropGenerator backdropGenerator;
 
         public abstract Terrain Generate();
     }

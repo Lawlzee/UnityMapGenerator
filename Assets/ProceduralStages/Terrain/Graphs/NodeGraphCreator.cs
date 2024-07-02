@@ -67,6 +67,39 @@ namespace ProceduralStages
 
         }
 
+        public Graphs CreateBackdropGraphs(BackdropTerrain backdropTerrain)
+        {
+            var vertices = backdropTerrain.meshResult.vertices;
+            var normals = backdropTerrain.meshResult.normals;
+            int verticesLength = backdropTerrain.meshResult.verticesLength;
+
+            PropsNode[] floorProps = new PropsNode[verticesLength];
+
+            int index = 0;
+            for (int i = 0; i < verticesLength; i++)
+            {
+                Vector3 normal = normals[i];
+                float angle = Vector3.Dot(Vector3.up, normal);
+                if (angle > minFloorAngle)
+                {
+                    floorProps[index] = new PropsNode
+                    {
+                        normal = normal,
+                        position = vertices[i]
+                    };
+                    index++;
+                }
+            }
+
+            Array.Resize(ref floorProps, index);
+
+            return new Graphs
+            {
+                floorProps = floorProps,
+                groundNodeIndexByPosition = new Dictionary<Vector3, int>()
+            };
+        }
+
         private Graphs CreateGroundNodes2(Terrain terrain)
         {
             using (ProfilerLog.CreateScope("CreateGroundNodes2"))
@@ -85,7 +118,7 @@ namespace ProceduralStages
                 int[] floorNodeCounts = new int[cellSize.x];
                 int[] ceilNodeCounts = new int[cellSize.x];
 
-                Parallel.For(0, cellSize.x, x => 
+                Parallel.For(0, cellSize.x, x =>
                 {
                     int floorNodeCount = 0;
                     int ceilNodeCount = 0;

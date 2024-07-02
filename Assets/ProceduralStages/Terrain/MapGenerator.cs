@@ -46,10 +46,9 @@ namespace ProceduralStages
         public MeshColorer meshColorer = new MeshColorer();
 
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
-
         public DccsPoolGenerator dccsPoolGenerator = new DccsPoolGenerator();
-
         public PropsPlacer propsPlacer = new PropsPlacer();
+        public OcclusionCulling occlusionCulling;
 
         public PostProcessVolume postProcessVolume;
 
@@ -70,7 +69,7 @@ namespace ProceduralStages
         public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
 
-        private GameObject[] terrainCustomObject;
+        private List<GameObject> terrainCustomObject;
         private void Awake()
         {
             instance = this;
@@ -111,7 +110,7 @@ namespace ProceduralStages
                 }
                 propsPlacer.instances.Clear();
 
-                for (int i = 0; i < terrainCustomObject.Length; i++)
+                for (int i = 0; i < terrainCustomObject.Count; i++)
                 {
                     Destroy(terrainCustomObject[i]);
                 }
@@ -203,7 +202,7 @@ namespace ProceduralStages
                 {
                     terrain = terrainGenerator.Generate();
                 }
-                terrainCustomObject = terrain.customObjects;
+                terrainCustomObject = terrain.customObjects.ToList();
 
                 var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
                 oobZone.size = scaledSize;
@@ -330,13 +329,31 @@ namespace ProceduralStages
                 {
                     PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
                     propsPlacer.PlaceAll(
+                        Vector3.zero,
                         graphs,
                         propsCollection,
                         meshColorer,
                         colorGradiant,
                         terrainMaterial,
-                        terrainGenerator.ceillingPropsWeight);
+                        terrainGenerator.ceillingPropsWeight,
+                        propCountWeight: 1,
+                        bigObjectOnly: false);
+
                     ProfilerLog.Debug("propsPlacer");
+
+                    if (terrainGenerator.backdropGenerator != null)
+                    {
+                        using (ProfilerLog.CreateScope("backdropGenerator.Generate"))
+                        {
+                            GameObject[] backdropObjects = terrainGenerator.backdropGenerator.Generate(terrainMaterial, colorGradiant, propsCollection);
+                            terrainCustomObject.AddRange(backdropObjects);
+                        }
+                    }
+
+                    using (ProfilerLog.CreateScope("OcclusionCulling.SetTargets"))
+                    {
+                        occlusionCulling.SetTargets(propsPlacer.instances, mapScale * (Vector3)stageSize);
+                    }
                 }
 
                 if (!Application.isEditor)

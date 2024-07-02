@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: SMRockOblong
   m_EditorClassIdentifier: 
   asset: RoR2/Base/skymeadow/SMRockOblong.fbx
-  scale: 40
   minScale: 25
   maxScale: 45
   ground: 1
   count: 40
   changeColor: 1
   isRock: 0
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 1
+  isBig: 0
+  initialRotation: {x: 0, y: 0, z: 0}

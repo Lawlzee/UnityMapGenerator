@@ -3,6 +3,7 @@
 2. Added theme config
 3. Fixed multiplayer terrain type sync 
 4. Added global stage spawn rate
+5. Added backdrop islands
 
 ## 1.15
 1. **New Terrain Type: Temple:** Introducing a circular ruin as a new terrain type.

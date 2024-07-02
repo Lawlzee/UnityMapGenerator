@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: mdlRock3
   m_EditorClassIdentifier: 
   asset: RoR2/Base/Common/Props/mdlRock3.fbx
-  scale: 1
   minScale: 1
   maxScale: 1.5
   ground: 1
   count: 25
   changeColor: 0
   isRock: 1
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 1
+  isBig: 0
+  initialRotation: {x: 0, y: 0, z: 0}

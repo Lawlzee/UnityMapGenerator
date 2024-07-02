@@ -14,6 +14,7 @@ namespace ProceduralStages
         public Vector3 normal;
 
         public GameObject Place(
+            Vector3 offset,
             GameObject prefab,
             GameObject parent,
             Material material,
@@ -27,7 +28,7 @@ namespace ProceduralStages
                     ? Quaternion.Euler(initialRotation.Value)
                     : prefab.transform.rotation);
 
-            GameObject gameObject = GameObject.Instantiate(prefab, position, rotation, parent.transform);
+            GameObject gameObject = GameObject.Instantiate(prefab, position + offset, rotation, parent.transform);
 
             gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
             gameObject.transform.localScale = new Vector3(scale, scale, scale);

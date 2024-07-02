@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 555b795a30f8f8841b789babe19b22c4, type: 3}
+  m_Name: BackdropGenerator
+  m_EditorClassIdentifier: 
+  generators:
+  - value: {fileID: 11400000, guid: 509d932cc08b33749b498f18e3fb89e7, type: 2}
+    weight: 1
+  count:
+    min: 12
+    max: 22
+  backdropTerrainPrefab: {fileID: 7913724610278518159, guid: 378c6a498578b3f4bb6204aa1a8bd694,
+    type: 3}
+  maxPropKind: 4
