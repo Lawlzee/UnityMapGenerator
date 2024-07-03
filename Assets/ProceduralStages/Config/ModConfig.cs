@@ -107,8 +107,8 @@ namespace ProceduralStages
             {
                 Theme theme = kvp.Key;
 
-                string description = $"Specifies the percentage of maps that will be generated with the \"{theme.GetName()}\" theme.";
-                var themeConfig = config.Bind("Themes", $"{theme.GetName()} map spawn rate", kvp.Value, description);
+                string description = $"Specifies the percentage of stages that will be generated with the \"{theme.GetName()}\" theme.";
+                var themeConfig = config.Bind("Themes", $"{theme.GetName()} spawn rate", kvp.Value, description);
 
                 ModSettingsManager.AddOption(new StepSliderOption(themeConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
 
@@ -139,7 +139,7 @@ namespace ProceduralStages
                 }
             }
 
-            float notSameSpawnRate = -0.01f;
+            float variedSpawnRate = -0.01f;
             bool isTerrainTypeChanging = false;
             bool isGlobalTerrainTypeChanging = false;
             TerrainTypesPercents = new List<TerrainTypePercentConfig>();
@@ -151,14 +151,14 @@ namespace ProceduralStages
                 if (terrainType != TerrainType.Random && terrainType != TerrainType.Moon)
                 {
                     string description = $"Sets the overall percentage of stages that will feature the \"{terrainType.GetName()}\" terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage.";
-                    ConfigEntry<float> terrainConfig = config.Bind($"All Stages", $"{terrainType.GetName()} map spawn rate", notSameSpawnRate, description);
+                    ConfigEntry<float> terrainConfig = config.Bind($"All Stages", $"{terrainType.GetName()} map spawn rate", variedSpawnRate, description);
 
-                    ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = notSameSpawnRate, max = 1, increment = 0.01f, formatString = "{0:0%;'Varied';0%}" }));
+                    ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = variedSpawnRate, max = 1, increment = 0.01f, formatString = "{0:0%;'Varied';0%}" }));
 
                     TerrainType currentTerrainType = terrainType;
                     terrainConfig.SettingChanged += (o, e) =>
                     {
-                        if (isTerrainTypeChanging || terrainConfig.Value == notSameSpawnRate)
+                        if (isTerrainTypeChanging || terrainConfig.Value == variedSpawnRate)
                         {
                             return;
                         }
@@ -232,7 +232,7 @@ namespace ProceduralStages
 
                                     if (terrainPercentConfig.Config.Value != terrainConfig.Value)
                                     {
-                                        stageGlobalConfigByType[currentTerrainType].Value = notSameSpawnRate;
+                                        stageGlobalConfigByType[currentTerrainType].Value = variedSpawnRate;
                                         return;
                                     }
                                 }

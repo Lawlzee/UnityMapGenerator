@@ -1,9 +1,9 @@
 ## 1.16
-1. Rewrote ground graph
-2. Added theme config
-3. Fixed multiplayer terrain type sync 
-4. Added global stage spawn rate
-5. Added backdrop islands
+1. **Enhanced Outer Map Areas:** On Lonely Island, Basalt Isle, and Temple terrain types, islands will now be generated on the map's periphery, making these areas more interesting.
+2. **Theme Spawn Rate Configuration:** Added a configuration option to adjust theme spawn rates.
+3. **Unified Terrain Spawn Rate Configs:** Introduced configurations to adjust terrain spawn rates for all stages simultaneously.
+4. **Improved Ground Graph Generation:** Rewrote the ground graph generation algorithm to enhance ground enemy pathfinding and reduce the likelihood of interactables spawning within decorations like trees.
+5. **Multiplayer Terrain Sync Fix:** Fixed an issue in multiplayer where the host's terrain type configuration was not correctly synced with other players, causing discrepancies in terrain.
 
 ## 1.15
 1. **New Terrain Type: Temple:** Introducing a circular ruin as a new terrain type.
