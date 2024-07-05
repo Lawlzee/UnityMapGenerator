@@ -12,6 +12,7 @@ namespace ProceduralStages
     {
         public Vector3Int size;
         public Vector3Int cellCounts;
+        public float scaleW;
         public Metric metric = Metric.Euclidean;
 
         [SerializeField]
@@ -101,13 +102,13 @@ namespace ProceduralStages
                             scaleReciprocal.y * minDistanceDisplacement2.y,
                             scaleReciprocal.z * minDistanceDisplacement2.z);
 
-                        
+
                         Vector3 pa = -minDistanceDisplacement1;
                         Vector3 ba = minDistanceDisplacement2 - minDistanceDisplacement1;
 
                         //https://www.youtube.com/watch?v=PMltMdi1Wzg
                         float weigth = Mathf.Clamp01(Vector3.Dot(pa, ba) / (Vector3.Dot(ba, ba)));
-                        
+
                         voronoi[x * size.y * size.z + y * size.z + z] = new Voronoi3DResult
                         {
                             displacement1 = displacement1,
@@ -127,6 +128,117 @@ namespace ProceduralStages
             new Vector3(0, 1, 0),
             new Vector3(0, 0, 1),
         };
+
+        [ContextMenu("BakeEuclidean4D")]
+        public void BakeEuclidean4D()
+        {
+            voronoi = new Voronoi3DResult[size.x * size.y * size.z];
+
+            Vector3 scale = new Vector4(
+                cellCounts.x / (float)size.x,
+                cellCounts.y / (float)size.y,
+                cellCounts.z / (float)size.z);
+
+            Vector3 scaleReciprocal = new Vector3(
+                1 / scale.x,
+                1 / scale.y,
+                1 / scale.z);
+
+            Parallel.For(0, size.x, x =>
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    for (int z = 0; z < size.z; z++)
+                    {
+                        Vector4 uvw = new Vector4(
+                            x * scale.x,
+                            y * scale.y,
+                            z * scale.z,
+                            0);
+
+                        Vector4 uvwIntegral = new Vector4(
+                            Mathf.Floor(uvw.x),
+                            Mathf.Floor(uvw.y),
+                            Mathf.Floor(uvw.z),
+                            0);
+
+                        Vector4 uvwFractional = uvw - uvwIntegral;
+
+                        float minDistance1 = float.MaxValue;
+                        Vector4 minDistanceDisplacement1 = default;
+
+                        float minDistance2 = float.MaxValue;
+                        Vector4 minDistanceDisplacement2 = default;
+
+                        for (int i = -1; i <= 1; i++)
+                        {
+                            for (int j = -1; j <= 1; j++)
+                            {
+                                for (int k = -1; k <= 1; k++)
+                                {
+                                    for (int l = -1; l <= 1; l++)
+                                    {
+                                        Vector4 neighbor = new Vector4(i, j, k, l);
+                                        Vector4 pos = uvwIntegral + neighbor;
+                                        Vector4 clampedPos = new Vector4(
+                                            ((pos.x % cellCounts.x) + cellCounts.x) % cellCounts.x,
+                                            ((pos.y % cellCounts.y) + cellCounts.y) % cellCounts.y,
+                                            ((pos.z % cellCounts.z) + cellCounts.z) % cellCounts.z,
+                                            pos.w);
+
+                                        Vector4 displacement = RandomPG.Random4(clampedPos);
+                                        Vector4 diff = neighbor + displacement - uvwFractional;
+                                        diff.w *= scaleW;
+
+                                        float dist = diff.sqrMagnitude;
+                                        if (dist < minDistance1)
+                                        {
+                                            minDistanceDisplacement2 = minDistanceDisplacement1;
+                                            minDistance2 = minDistance1;
+
+                                            minDistanceDisplacement1 = diff;
+                                            minDistance1 = dist;
+                                        }
+                                        else if (dist < minDistance2)
+                                        {
+                                            minDistanceDisplacement2 = diff;
+                                            minDistance2 = dist;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        Vector3 displacement1 = new Vector3(
+                            scaleReciprocal.x * minDistanceDisplacement1.x,
+                            scaleReciprocal.y * minDistanceDisplacement1.y,
+                            scaleReciprocal.z * minDistanceDisplacement1.z);
+
+                        Vector3 displacement2 = new Vector3(
+                            scaleReciprocal.x * minDistanceDisplacement2.x,
+                            scaleReciprocal.y * minDistanceDisplacement2.y,
+                            scaleReciprocal.z * minDistanceDisplacement2.z);
+
+
+                        Vector3 pa = -minDistanceDisplacement1;
+                        Vector3 ba = minDistanceDisplacement2 - minDistanceDisplacement1;
+
+                        //https://www.youtube.com/watch?v=PMltMdi1Wzg
+                        float weigth = Mathf.Clamp01(Vector3.Dot(pa, ba) / (Vector3.Dot(ba, ba)));
+
+                        voronoi[x * size.y * size.z + y * size.z + z] = new Voronoi3DResult
+                        {
+                            displacement1 = displacement1,
+                            displacement2 = displacement2,
+                            weight = weigth
+                        };
+                    }
+                }
+            });
+
+            Log.Debug("Voronoi baked");
+        }
+
 
         [ContextMenu("BakeChebyshev")]
         public void BakeChebyshev()
@@ -229,7 +341,7 @@ namespace ProceduralStages
 
                             //float axisMinValue = Mathf.Min(neighborDisplacement[maxAxisIndex], minNeighborDisplacement[maxAxisIndex]); 
                             //float axisMaxValue = Mathf.Max(neighborDisplacement[maxAxisIndex], minNeighborDisplacement[maxAxisIndex]); 
-                            
+
                             float min = minDisplacement[i] < 0 ? neighborDisplacement[i] : minNeighborDisplacement[i];
                             float max = minDisplacement[i] < 0 ? minNeighborDisplacement[i] : neighborDisplacement[i];
 

@@ -26,5 +26,15 @@ namespace ProceduralStages
                 v.y - (float)Math.Truncate(v.y),
                 v.z - (float)Math.Truncate(v.z));
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector4 Frac(this Vector4 v)
+        {
+            return new Vector4(
+                v.x - (float)Math.Truncate(v.x),
+                v.y - (float)Math.Truncate(v.y),
+                v.z - (float)Math.Truncate(v.z),
+                v.w - (float)Math.Truncate(v.w));
+        }
     }
 }

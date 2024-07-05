@@ -1640,7 +1640,7 @@ MonoBehaviour:
   loadPropsInEditor: 1
   editorSeed: 0
   editorTerrainType: 2
-  editorTheme: 6
+  editorTheme: 0
   editorStageInLoop: 4
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
