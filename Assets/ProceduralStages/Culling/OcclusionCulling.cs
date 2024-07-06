@@ -305,6 +305,7 @@ namespace ProceduralStages
             _meshFilter.mesh = GenerateMesh(boundsByCluster);
 
             _visibleClusters = new uint[clusterCount];
+            _visibleClustersBuffer?.Dispose();
             _visibleClustersBuffer = new ComputeBuffer(clusterCount, 4, ComputeBufferType.Default);
 
             Graphics.ClearRandomWriteTargets();
@@ -368,6 +369,11 @@ namespace ProceduralStages
             }
 
             _visibleClustersBuffer.SetData(_visibleClusters);
+        }
+
+        public void OnDestroy()
+        {
+            _visibleClustersBuffer?.Dispose();
         }
     }
 }

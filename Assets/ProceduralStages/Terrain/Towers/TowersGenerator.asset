@@ -22,6 +22,7 @@ MonoBehaviour:
   waterLevel: 8.5
   terrainType: 6
   ceillingPropsWeight: 0.7
+  backdropGenerator: {fileID: 0}
   voronoiWallGenerator: {fileID: 0}
   outerWallDepth: 12
   towerCellsSize: 30
@@ -39,4 +40,4 @@ MonoBehaviour:
   floorMinHeight: 2.5
   floorMaxHeight: 5.5
   floorBlendFactor: 0.015
-  floorCullingCurve: {fileID: 11400000, guid: 4038dba2d80e0e64a8568d2d9d308330, type: 2}
+  floorCullingCurve: {fileID: 11400000, guid: 8aa68e1c2e9240e4480a4338651f3d7f, type: 2}

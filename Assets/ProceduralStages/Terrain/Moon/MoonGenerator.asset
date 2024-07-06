@@ -12,65 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d97dbc79342e324e857fcc81a3607dc, type: 3}
   m_Name: MoonGenerator
   m_EditorClassIdentifier: 
-  size: {x: 175, y: 80, z: 225}
-  sizeIncreasePerStage: {x: 15, y: 0, z: 25}
-  sizeVariation: {x: 0.1, y: 0.2, z: 0.05}
+  size: {x: 400, y: 150, z: 150}
+  sizeIncreasePerStage: {x: 0, y: 0, z: 0}
+  sizeVariation: {x: 0, y: 0, z: 0}
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
   ambiantLightIntensity: 0.7
   waterLevel: 10
-  terrainType: 5
+  terrainType: 8
   ceillingPropsWeight: 1
-  wallGenerator:
-    frequency: 38
-    wallSurface: 0.45
-    curveFrequency: 0.042
-    curveVerticalScale: 0.8
-    curveMinNoise: 0.6
-  carver:
-    enabled: 1
-    frequency: 0.042
-    verticalScale: 0.3
-    surfaceLevel: 0.6
-  waller:
-    floor:
-      enabled: 1
-      noise: 43.7
-      minThickness: 20
-      maxThickness: 30
-    ceilling:
-      enabled: 1
-      noise: 28
-      minThickness: 1
-      maxThickness: 18
-    walls:
-      enabled: 1
-      noise: 33.7
-      minThickness: 20
-      maxThickness: 35
-    wallRoundingFactor: 8
-    blendFactor: 0.015
-    roundWallsToCeilling: 0
-  floorWallsMixer:
-    wallsBlendFrequency: 0.015
-    wallsBlendVerticalScale: 0.4
-    wallsCarvingRelativeMinDistance: 0.3
-    wallsBlendNoiseBonus: 0.03
-    wallsFrequency: 0.02
-    wallSurface: 1
-    wallsVerticalScale: 0.5
-    roofFrequency: 30.3434
-    roofVerticalScale: 1
-    roofCarvingRelativeMinHeight: 0.8
-    roofCarvingRelativeMaxHeight: 0.95
-    ellipsisDistancePower: 0.5
-  cave3d:
-    enabled: 1
-    smoothingInterations: 2
-    forceWalls: 0
-    forceFloor: 0
-  map3dNoiser:
-    enabled: 1
-    frequency: 0.434
-    amplitude: 0.02
+  backdropGenerator: {fileID: 0}
+  pathway:
+    honeycomb: {fileID: 11400000, guid: 199cc5e3f1e9cca4b86d61edbf334a92, type: 2}
+    bounds:
+      m_Center: {x: 200, y: 75, z: 75}
+      m_Extent: {x: 200, y: 2, z: 15}
+    rings:
+      distance:
+        min: 40
+        max: 50
+      radius:
+        min: 45
+        max: 55
+      thickness:
+        min: 3
+        max: 4
+      honeycomb: {fileID: 11400000, guid: b6c11128c6225584992a215e028321ba, type: 2}
+  spheres:
+    maxAttempt: 10000
+    count:
+      min: 10
+      max: 15
+    radius:
+      min: 35
+      max: 60
+    minDistance: 10
+  voronoi3D: {fileID: 11400000, guid: e9329e544cba9dd458edfabf2991f233, type: 2}
+  voronoiRemapCurve: {fileID: 11400000, guid: 195693a8a8295c1448a71130edaa5464, type: 2}
+  sphereDistanceCurve: {fileID: 11400000, guid: e718272ed466c274ebeae85e7ac3b55d,
+    type: 2}
+  gravitySpherePrefab: {fileID: 5510949426476668870, guid: cc2c2b65d26d15b4ab6d92e03a22ee69,
+    type: 3}
+  antiGravitySpherePrefab: {fileID: 5510949426476668870, guid: 6c69c21c0b6b9ee4d9165d5ff8361dee,
+    type: 3}

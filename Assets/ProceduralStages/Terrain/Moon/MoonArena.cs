@@ -12,7 +12,7 @@ namespace ProceduralStages
 {
     public static class MoonArena
     {
-        public static void AddArena(Vector3 position)
+        public static GameObject AddArena(Vector3 position)
         {
             //var holder = MapGenerator.instance.propsPlacer.propsObject.transform;
             //Vector3 vanillaFinalArenaPosition = new Vector3(-11, 690.96f, -1);
@@ -359,6 +359,8 @@ namespace ProceduralStages
             //}
 
             //MapGenerator.instance.propsPlacer.instances.Add(gameplaySpace);
+
+            return gameplaySpace;
         }
     }
 }

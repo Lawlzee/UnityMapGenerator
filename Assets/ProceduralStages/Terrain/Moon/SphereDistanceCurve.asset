@@ -1,0 +1,162 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2fb2a9a6b211440b615361587bfc75, type: 3}
+  m_Name: SphereDistanceCurve
+  m_EditorClassIdentifier: 
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.75
+      value: 0
+      inSlope: -0
+      outSlope: 1.1175627
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8
+      value: 1
+      inSlope: 4.780451
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.95
+      value: 1
+      inSlope: -0
+      outSlope: -5.096656
+      tangentMode: 5
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.998291
+      value: -0.0019111633
+      inSlope: -20.747356
+      outSlope: -20.747356
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sampleCount: 100
+  _samples:
+  - 0
+  - 0.009253067
+  - 0.030545866
+  - 0.06258728
+  - 0.10408619
+  - 0.15375149
+  - 0.21029346
+  - 0.27241832
+  - 0.33883613
+  - 0.40825593
+  - 0.47938636
+  - 0.5509366
+  - 0.62161523
+  - 0.6901314
+  - 0.7551938
+  - 0.8155115
+  - 0.8697931
+  - 0.91674894
+  - 0.95508516
+  - 0.9835122
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 0.99647915
+  - 0.977749
+  - 0.9516618
+  - 0.9188529
+  - 0.8799564
+  - 0.83560956
+  - 0.7864465
+  - 0.7331027
+  - 0.67621315
+  - 0.61641324
+  - 0.5543381
+  - 0.49062306
+  - 0.4259032
+  - 0.36081386
+  - 0.29599017
+  - 0.23206598
+  - 0.1696794
+  - 0.10946429
+  - 0.052055717
+  - -0.0019111633
+  _min: 0.75
+  _max: 0.998291
+  _inverseRange: 4.027532
+  _step: 0.00250799

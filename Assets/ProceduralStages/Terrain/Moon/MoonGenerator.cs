@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using HG;
+using RoR2;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,140 +16,324 @@ using UnityMeshSimplifier;
 
 namespace ProceduralStages
 {
-    [CreateAssetMenu(fileName = "moonGenerator", menuName = "ProceduralStages/MoonGenerator", order = 2)]
+    [CreateAssetMenu(fileName = "MoonGenerator", menuName = "ProceduralStages/MoonGenerator", order = 2)]
     public class MoonGenerator : TerrainGenerator
     {
-        public Map2dGenerator wallGenerator = new Map2dGenerator();
-        public Carver carver = new Carver();
-        public Waller waller = new Waller();
-        public FloorWallsMixer floorWallsMixer = new FloorWallsMixer();
-        public CellularAutomata3d cave3d = new CellularAutomata3d();
-        public Map3dNoiser map3dNoiser = new Map3dNoiser();
+        public Pathway pathway;
+        public Spheres spheres;
+
+        public Voronoi3D voronoi3D;
+        public ThreadSafeCurve voronoiRemapCurve;
+        public ThreadSafeCurve sphereDistanceCurve;
+
+
+        public GameObject gravitySpherePrefab;
+        public GameObject antiGravitySpherePrefab;
+
+        [Serializable]
+        public struct Spheres
+        {
+            public int maxAttempt;
+            public IntervalInt count;
+            public Interval radius;
+            public float minDistance;
+        }
+
+        [Serializable]
+        public struct Pathway
+        {
+            public SquareHoneycomb honeycomb;
+            public Bounds bounds;
+            public Torus rings;
+        }
+
+        [Serializable]
+        public struct Torus
+        {
+            //public Interval count;
+            public Interval distance;
+            public Interval radius;
+            public Interval thickness;
+            public CubicHoneycomb honeycomb;
+        }
+
+        private struct Ring
+        {
+            public Vector3 position;
+            public float radius;
+            public float thickness;
+        }
+
+        public struct Sphere
+        {
+            public GameObject gravitySphere;
+            public Vector3 position;
+            public float radius;
+        }
 
         public override Terrain Generate()
         {
-            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
-            moonObject.SetActive(true);
-
-            MoonArena.AddArena(new Vector3(-77, -205, -1));
-            
-            if (NetworkServer.active)
-            {
-                var dropship = MoonDropship.Place(new Vector3(100, 0, 0), moonObject);
-
-                moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>().dropshipZone = dropship;
-            }
-            
-            //MoonEscapeSequence.Place(dropship);
-            //MapGenerator.instance.StartCoroutine(TransferMithrixArena());
+            //var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
+            //moonObject.SetActive(true);
+            //
+            //GameObject arena = MoonArena.AddArena(new Vector3(-77, -205, -1));
+            //GameObject dropship = null;
+            //
+            //if (NetworkServer.active)
+            //{
+            //    dropship = MoonDropship.Place(new Vector3(100, 0, 0), moonObject);
+            //
+            //    moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>().dropshipZone = dropship;
+            //}
 
             var stageSize = MapGenerator.instance.stageSize;
-            float[,,] wallOnlyMap = wallGenerator.Create(stageSize);
-            ProfilerLog.Debug("wallGenerator");
 
-            carver.CarveWalls(wallOnlyMap);
-            ProfilerLog.Debug("carver");
+            var rng = MapGenerator.rng;
 
-            //waller.AddCeilling(map3d);
-            //LogStats("waller.AddCeilling");
+            List<Sphere> sphereZones = new List<Sphere>();
 
-            waller.AddWalls(wallOnlyMap);
-            ProfilerLog.Debug("waller.AddWalls");
+            int sphereCount = rng.RangeInt(spheres.count.min, spheres.count.max);
+            
+            for (int i = 0; i < spheres.maxAttempt && sphereZones.Count < sphereCount; i++)
+            {
+                float radius = rng.RangeFloat(spheres.radius.min, spheres.radius.max);
+                Vector3 position = new Vector3(
+                    rng.RangeFloat(radius, stageSize.x - radius),
+                    rng.RangeFloat(radius, stageSize.y - radius),
+                    rng.RangeFloat(radius, stageSize.z - radius));
 
-            float[,,] floorOnlyMap = new float[stageSize.x, stageSize.y, stageSize.z];
-            floorOnlyMap = waller.AddFloor(floorOnlyMap);
-            ProfilerLog.Debug("waller.AddFloor");
 
-            float[,,] densityMap = floorWallsMixer.Mix(floorOnlyMap, wallOnlyMap);
+                bool validPosition = true;
+                for (int j = 0; j < sphereZones.Count; j++)
+                {
+                    float distance = (sphereZones[j].position - position).magnitude - radius;
 
-            densityMap = map3dNoiser.AddNoise(densityMap);
-            ProfilerLog.Debug("map3dNoiser");
+                    if (distance < spheres.minDistance)
+                    {
+                        validPosition = false;
+                        break;
+                    }
+                }
 
-            float[,,] smoothMap3d = cave3d.SmoothMap(densityMap);
-            ProfilerLog.Debug("cave3d");
+                if (!validPosition)
+                {
+                    continue;
+                }
 
-            var meshResult = MarchingCubes.CreateMesh(smoothMap3d, MapGenerator.instance.mapScale);
+                GameObject gravitySphere = Instantiate(gravitySpherePrefab);
+                gravitySphere.transform.position = position * MapGenerator.instance.mapScale;
+                gravitySphere.transform.localScale = new Vector3(radius, radius, radius) * MapGenerator.instance.mapScale;
+
+                sphereZones.Add(new Sphere
+                {
+                    position = position ,
+                    radius = radius,
+                    gravitySphere = gravitySphere
+                });
+            }
+
+            List<Ring> rings = new List<Ring>();
+
+            float ringX = 0;
+
+            while (true)
+            {
+                float distance = rng.RangeFloat(pathway.rings.distance.min, pathway.rings.distance.max);
+                ringX += distance;
+
+                if (ringX > pathway.bounds.max.x)
+                {
+                    break;
+                }
+
+                rings.Add(new Ring
+                {
+                    position = new Vector3(ringX, pathway.bounds.center.y, pathway.bounds.center.z),
+                    radius = rng.RangeFloat(pathway.rings.radius.min, pathway.rings.radius.max),
+                    thickness = rng.RangeFloat(pathway.rings.thickness.min, pathway.rings.thickness.max),
+                });
+            }
+
+            
+            bool[,,] ringsBlockMap = new bool[stageSize.x, stageSize.y, stageSize.z];
+
+
+            Parallel.ForEach(rings, ring =>
+            {
+                int minX = Mathf.Clamp(Mathf.FloorToInt(ring.position.x - ring.thickness), 0, stageSize.x - 1);
+                int maxX = Mathf.Clamp(Mathf.CeilToInt(ring.position.x + ring.thickness), 0, stageSize.x - 1);
+
+                Vector2 center = new Vector2(ring.position.y, ring.position.z);
+
+                int minY = Mathf.Clamp(Mathf.FloorToInt(ring.position.y - ring.radius - ring.thickness), 0, stageSize.y - 1);
+                int maxY = Mathf.Clamp(Mathf.CeilToInt(ring.position.y + ring.radius + ring.thickness), 0, stageSize.y - 1);
+
+                int minZ = Mathf.Clamp(Mathf.FloorToInt(ring.position.z - ring.radius - ring.thickness), 0, stageSize.z - 1);
+                int maxZ = Mathf.Clamp(Mathf.CeilToInt(ring.position.z + ring.radius + ring.thickness), 0, stageSize.z - 1);
+
+                for (int y = minY; y <= maxY; y++)
+                {
+                    for (int z = minZ; z <= maxZ; z++)
+                    {
+                        float distance = (new Vector2(y, z) - center).magnitude;
+                        bool inRing = Mathf.Abs(distance - ring.radius) < ring.thickness;
+
+                        if (!inRing)
+                        {
+                            continue;
+                        }
+
+                        for (int x = minX; x <= maxX; x++)
+                        {
+                            ringsBlockMap[x, y, z] = true;
+                        }
+                    }
+                }
+            });
+
+
+            int floorSeedX = rng.RangeInt(0, short.MaxValue);
+            int floorSeedZ = rng.RangeInt(0, short.MaxValue);
+
+            int ringSeedX = rng.RangeInt(0, short.MaxValue);
+            int ringSeedY = rng.RangeInt(0, short.MaxValue);
+            int ringSeedZ = rng.RangeInt(0, short.MaxValue);
+
+            float[,,] densityMap = new float[stageSize.x, stageSize.y, stageSize.z];
+
+            Parallel.For(0, stageSize.x, x =>
+            {
+                for (int z = 0; z < stageSize.z; z++)
+                {
+                    Vector2 pos2D = new Vector2(x, z);
+
+                    Voronoi2DResult floorHoneycombResult = pathway.honeycomb[x + floorSeedX, z + floorSeedZ];
+
+                    Vector2 floorPos1 = pos2D + floorHoneycombResult.displacement1;
+                    Vector2 floorPos2 = pos2D + floorHoneycombResult.displacement2;
+
+                    bool isFloor1 = pathway.bounds.min.x <= floorPos1.x
+                        && pathway.bounds.min.z <= floorPos1.y
+                        && floorPos1.x < pathway.bounds.max.x
+                        && floorPos1.y < pathway.bounds.max.z;
+
+                    bool isFloor2 = pathway.bounds.min.x <= floorPos2.x
+                        && pathway.bounds.min.z <= floorPos2.y
+                        && floorPos2.x < pathway.bounds.max.x
+                        && floorPos2.y < pathway.bounds.max.z;
+
+                    for (int y = 0; y < stageSize.y; y++)
+                    {
+                        Vector3 pos = new Vector3(x, y, z);
+
+                        var ringHoneyCombResult = pathway.rings.honeycomb[x + ringSeedX, y + ringSeedY, z + ringSeedZ];
+                        bool inRing1 = ringsBlockMap[
+                            Mathf.Clamp(Mathf.RoundToInt(x + ringHoneyCombResult.displacement1.x), 0, stageSize.x - 1),
+                            Mathf.Clamp(Mathf.RoundToInt(y + ringHoneyCombResult.displacement1.y), 0, stageSize.y - 1),
+                            Mathf.Clamp(Mathf.RoundToInt(z + ringHoneyCombResult.displacement1.z), 0, stageSize.z - 1)];
+
+                        bool inRing2 = ringsBlockMap[
+                            Mathf.Clamp(Mathf.RoundToInt(x + ringHoneyCombResult.displacement2.x), 0, stageSize.x - 1),
+                            Mathf.Clamp(Mathf.RoundToInt(y + ringHoneyCombResult.displacement2.y), 0, stageSize.y - 1),
+                            Mathf.Clamp(Mathf.RoundToInt(z + ringHoneyCombResult.displacement2.z), 0, stageSize.z - 1)];
+
+                        bool isFloorHeight = pathway.bounds.min.y <= y
+                            && y <= pathway.bounds.max.y;
+
+                        float density = 0;
+
+                        if (isFloorHeight)
+                        {
+                            if (isFloor1 && isFloor2)
+                            {
+                                density = 1;
+                            }
+                            else if (isFloor1)
+                            {
+                                density = 1 - floorHoneycombResult.weight;
+                            }
+                            else if (isFloor2)
+                            {
+                                density = floorHoneycombResult.weight;
+                            }
+                        }
+
+                        if (ringsBlockMap[x, y, z])
+                        {
+                            density = 1;
+                        }
+
+                        //if (inRing1 || inRing2)
+                        //{
+                        //    density = 1;
+                        //}
+                        //else if (inRing1)
+                        //{
+                        //    density = Mathf.Max(density, 1 - ringHoneyCombResult.weight);
+                        //}
+                        //else if (inRing2)
+                        //{
+                        //    density = Mathf.Max(density, ringHoneyCombResult.weight);
+                        //}
+
+                        densityMap[x, y, z] = density;
+
+                        //Vector3 delta = pos - center;
+                        //float distance = delta.magnitude / radius;
+                        //float distanceNoise = sphereDistanceCurve.Evaluate(distance);
+                        //
+                        //float voronoiNoise = voronoiRemapCurve.Evaluate(voronoi3D[x, y, z].weight);
+                        //
+                        //densityMap[x, y, z] = Mathf.Min(distanceNoise, voronoiNoise);
+                    }
+                }
+            });
+
+            Vector3 stageCenter = (Vector3)stageSize / 2f;
+            //float radius = Mathf.Min(center.x, center.y, center.z);
+            //
+            //Parallel.For(0, stageSize.x, x =>
+            //{
+            //    for (int y = 0; y < stageSize.y; y++)
+            //    {
+            //        for (int z = 0; z < stageSize.z; z++)
+            //        {
+            //            Vector3 pos = new Vector3(x, y, z);
+            //            Vector3 delta = pos - center;
+            //            float distance = delta.magnitude / radius;
+            //            float distanceNoise = sphereDistanceCurve.Evaluate(distance);
+            //
+            //            float voronoiNoise = voronoiRemapCurve.Evaluate(voronoi3D[x, y, z].weight);
+            //
+            //            densityMap[x, y, z] = Mathf.Min(distanceNoise, voronoiNoise);
+            //        }
+            //    }
+            //});
+            //
+            //ProfilerLog.Debug("sphere");
+
+
+            var antiGravitySphere = Instantiate(antiGravitySpherePrefab);
+
+            float antiGravitySphereScale = Mathf.Max(stageSize.x, stageCenter.y, stageCenter.z);
+            antiGravitySphere.transform.localScale = MapGenerator.instance.mapScale * new Vector3(antiGravitySphereScale, antiGravitySphereScale, antiGravitySphereScale);
+            antiGravitySphere.transform.position = stageCenter * MapGenerator.instance.mapScale;
+
+            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             ProfilerLog.Debug("marchingCubes");
 
-            //MeshSimplifier simplifier = new MeshSimplifier(unOptimisedMesh);
-            //simplifier.SimplifyMesh(MapGenerator.instance.meshQuality);
-            //var optimisedMesh = simplifier.ToMesh();
-            //LogStats("MeshSimplifier");
+            List<GameObject> customObjects = new List<GameObject>();
+            customObjects.AddRange(sphereZones.Select(x => x.gravitySphere));
+            customObjects.Add(antiGravitySphere);
 
             return new Terrain
             {
                 meshResult = meshResult,
-                floorlessDensityMap = wallOnlyMap,
-                densityMap = smoothMap3d,
-                maxGroundHeight = waller.floor.maxThickness * MapGenerator.instance.mapScale
+                floorlessDensityMap = new float[stageSize.x, stageSize.y, stageSize.z],
+                densityMap = densityMap,
+                maxGroundHeight = float.MaxValue,
+                customObjects = customObjects.ToArray()
             };
         }
-
-        private IEnumerator TransferMithrixArena()
-        {
-            var proceduralScene = SceneManager.GetActiveScene();
-
-            var scene = Addressables.LoadSceneAsync("RoR2/Base/moon2/moon2.unity", LoadSceneMode.Additive, activateOnLoad: false);
-            yield return scene;
-
-            Scene moon = SceneManager.GetSceneByName("moon2");
-
-            if (false && scene.Status == AsyncOperationStatus.Succeeded)
-            {
-                //AsyncOperation scene = SceneManager.LoadSceneAsync("moon2", LoadSceneMode.Additive);
-                //scene.allowSceneActivation = false;
-
-                //Wait until we are done loading the scene
-                //while (!scene.IsDone)
-                //{
-                //    yield return null;
-                //}
-
-
-                //if (moon.IsValid())
-                {
-                    var rootObjects = moon.GetRootGameObjects();
-
-                    var gameplaySpace = rootObjects.First(x => x.name == "HOLDER: Gameplay Space");
-                    SceneManager.MoveGameObjectToScene(gameplaySpace, proceduralScene);
-
-                    //HOLDER: STATIC MESH
-                    var staticMesh = gameplaySpace.transform.GetChild(0).gameObject;
-                    //Quadrant 5: Blood Arena
-                    Destroy(staticMesh.transform.GetChild(5).gameObject);
-                    //Quadrant 4: Starting Temple
-                    Destroy(staticMesh.transform.GetChild(4).gameObject);
-                    //Quadrant 3: Greenhouse
-                    Destroy(staticMesh.transform.GetChild(3).gameObject);
-                    //Quadrant 2: Workshop
-                    Destroy(staticMesh.transform.GetChild(2).gameObject);
-                    //Quadrant 1: Quarry
-                    Destroy(staticMesh.transform.GetChild(1).gameObject);
-
-                    //HOLDER: OPTIONAL MESH
-                    Destroy(gameplaySpace.transform.GetChild(1).gameObject);
-
-                    //var tower = gameplaySpace.transform.Cast<Transform>()
-                    //    .Where(x => x.name == "HOLDER: STATIC MESH")
-                    //    .SelectMany(x => x.Cast<Transform>())
-                    //    .Where(x => x.name == "Tower")
-                    //    .Select(x => x.gameObject)
-                    //    .First();
-                    //
-                    //var finalArena = gameplaySpace.transform.Cast<Transform>()
-                    //    .Where(x => x.name == "HOLDER: Final Arena")
-                    //    .Select(x => x.gameObject)
-                    //    .First();
-
-
-                    //SceneManager.MoveGameObjectToScene(tower, currentScene);
-                    //SceneManager.MoveGameObjectToScene(finalArena, currentScene);
-                }
-            }
-
-            //SceneManager.UnloadSceneAsync(moon);
-        }
-
-        
     }
 }

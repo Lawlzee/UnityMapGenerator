@@ -112,7 +112,10 @@ namespace ProceduralStages
 
                 for (int i = 0; i < terrainCustomObject.Count; i++)
                 {
-                    Destroy(terrainCustomObject[i]);
+                    if (terrainCustomObject[i] != null)
+                    {
+                        Destroy(terrainCustomObject[i]);
+                    }
                 }
 
                 if (Input.GetKeyDown(KeyCode.F2))
@@ -172,6 +175,7 @@ namespace ProceduralStages
                         ? selection.Evaluate(rng.nextNormalizedFloat)
                         : TerrainType.OpenCaves;
 
+                    terrainType = TerrainType.Moon;
                 }
                 Log.Debug(terrainType);
 
