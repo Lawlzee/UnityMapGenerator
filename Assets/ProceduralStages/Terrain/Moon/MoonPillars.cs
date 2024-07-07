@@ -29,7 +29,11 @@ namespace ProceduralStages
         public SyncListNetworkInstanceId pillarIds;// = new SyncListNetworkInstanceId();
         public SyncListNetworkInstanceId elevatorIds;// = new SyncListNetworkInstanceId();
 
+        public List<Vector3> pillarPositions;
+
         public MoonPillarsMission mission;
+        public ObjectScaleCurve globalSphereScaleCurve;
+        public Xoroshiro128Plus rng;
 
         public void Awake()
         {
@@ -44,21 +48,20 @@ namespace ProceduralStages
             Log.Debug("AA0");
             if (NetworkServer.active)
             {
-                List<GameObject> pillarsPrefabs = new List<GameObject>
-                {
-                    Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatterySoul.prefab").WaitForCompletion(),
-                    Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryMass.prefab").WaitForCompletion(),
-                    Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryDesign.prefab").WaitForCompletion(),
-                    Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryBlood.prefab").WaitForCompletion()
-                };
-                //
-                for (int i = 0; i < 16; i++)
-                {
-                    var pillar = Instantiate(pillarsPrefabs[i / 4], transform);
+                WeightedSelection<GameObject> prefabs = new WeightedSelection<GameObject>();
+                prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatterySoul.prefab").WaitForCompletion(), 1);
+                prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryMass.prefab").WaitForCompletion(), 1);
+                prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryDesign.prefab").WaitForCompletion(), 1);
+                prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryBlood.prefab").WaitForCompletion(), 1);
 
-                    //todo
-                    pillar.transform.position = new Vector3(i * 20, 0, 0);
-                    pillar.SetActive(i % 4 == 0);
+                //
+                for (int i = 0; i < pillarPositions.Count; i++)
+                {
+                    var prefab = prefabs.Evaluate(rng.nextNormalizedFloat);
+
+                    var pillar = Instantiate(prefab, transform);
+
+                    pillar.transform.position = pillarPositions[i];
 
                     NetworkServer.Spawn(pillar);
                     pillarIds.Add(pillar.GetComponent<NetworkIdentity>().netId);

@@ -14,6 +14,7 @@ namespace ProceduralStages
         public float[,,] densityMap;
         public float maxGroundHeight;
         public float minInteractableHeight;
+        public Vector3 oobScale = new Vector3(1, 1.5f, 1);
         public GameObject[] customObjects = new GameObject[0];
     }
 

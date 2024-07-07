@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d97dbc79342e324e857fcc81a3607dc, type: 3}
   m_Name: MoonGenerator
   m_EditorClassIdentifier: 
-  size: {x: 400, y: 150, z: 150}
+  size: {x: 350, y: 125, z: 350}
   sizeIncreasePerStage: {x: 0, y: 0, z: 0}
   sizeVariation: {x: 0, y: 0, z: 0}
   fogPower: 1.75
@@ -30,29 +30,43 @@ MonoBehaviour:
       m_Extent: {x: 200, y: 2, z: 15}
     rings:
       distance:
-        min: 40
-        max: 50
+        min: 5
+        max: 15
       radius:
-        min: 45
-        max: 55
+        min: 8
+        max: 12
       thickness:
         min: 3
         max: 4
       honeycomb: {fileID: 11400000, guid: b6c11128c6225584992a215e028321ba, type: 2}
   spheres:
-    maxAttempt: 10000
+    maxAttempt: 1000
     count:
-      min: 10
+      min: 12
       max: 15
     radius:
-      min: 35
-      max: 60
-    minDistance: 10
+      min: 20
+      max: 40
+    minDistance: 5
+    buffer: 1
+    landScale: 0.499
+    bubbleRenderQueue: 3001
+    bubbleMaterialKey: RoR2/Base/Teleporters/matTeleporterRangeIndicator.mat
+    antigravityColorRemapRamp: {fileID: 2800000, guid: bd79f821e191a6f4cbddd56a085f8757,
+      type: 3}
+    gravityColorRemapRamp: {fileID: 2800000, guid: d34fde0fc64e2c640acd4e259b427fdc,
+      type: 3}
+  arenaZoneScale: {x: 500, y: 70, z: 500}
+  arenaZoneOffset: {x: -10, y: 750, z: 0}
+  arenaDistance: 1
   voronoi3D: {fileID: 11400000, guid: e9329e544cba9dd458edfabf2991f233, type: 2}
   voronoiRemapCurve: {fileID: 11400000, guid: 195693a8a8295c1448a71130edaa5464, type: 2}
   sphereDistanceCurve: {fileID: 11400000, guid: e718272ed466c274ebeae85e7ac3b55d,
     type: 2}
   gravitySpherePrefab: {fileID: 5510949426476668870, guid: cc2c2b65d26d15b4ab6d92e03a22ee69,
     type: 3}
+  gravityCylinderPrefab: {fileID: 5205451501041536733, guid: 83198089ada863f41a9ec4c2a1a6300a,
+    type: 3}
+  antiGravitySphereScale: 1.4
   antiGravitySpherePrefab: {fileID: 5510949426476668870, guid: 6c69c21c0b6b9ee4d9165d5ff8361dee,
     type: 3}

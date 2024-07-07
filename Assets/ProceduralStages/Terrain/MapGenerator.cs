@@ -208,9 +208,9 @@ namespace ProceduralStages
                 }
                 terrainCustomObject = terrain.customObjects.ToList();
 
-                var scaledSize = new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * 1.5f, stageSize.z * mapScale);
+                var scaledSize = new Vector3(stageSize.x * mapScale * terrain.oobScale.x, stageSize.y * mapScale * terrain.oobScale.y, stageSize.z * mapScale * terrain.oobScale.z);
                 oobZone.size = scaledSize;
-                oobZone.center = scaledSize / 2;
+                oobZone.center = 0.5f * new Vector3(stageSize.x * mapScale, stageSize.y * mapScale * terrain.oobScale.y, stageSize.z * mapScale);
 
                 Theme themeType = Theme.LegacyRandom;
                 if (Application.isEditor)

@@ -13,20 +13,47 @@ namespace ProceduralStages
     public class MoonPillarsMission : NetworkBehaviour
     {
         public MoonPillars pillars;
+        private MoonBatteryMissionController controller;
 
         public void Awake()
         {
             Debug.Log("pillarIds.Count = " + pillars.pillarIds.Count);
             Debug.Log("elevatorIds.Count = " + pillars.elevatorIds.Count);
 
-            MoonBatteryMissionController controller = GetComponent<MoonBatteryMissionController>();
+            controller = GetComponent<MoonBatteryMissionController>();
             controller.moonBatteries = pillars.pillarIds
                 .Select(NetworkServer.FindLocalObject)
                 .ToArray();
 
+
             controller.elevators = pillars.elevatorIds
                 .Select(NetworkServer.FindLocalObject)
                 .ToArray();
+        }
+
+        public void Start()
+        {
+            for (int i = 0; i < controller.batteryHoldoutZones.Length; i++)
+            {
+                var pillar = controller.batteryHoldoutZones[i];
+                pillar.onCharged.AddListener(OnBatteryCharged);
+            }
+        }
+
+        public void OnBatteryCharged(HoldoutZoneController holdoutZone)
+        {
+            if (controller.numChargedBatteries < controller.numRequiredBatteries)
+            {
+                return;
+            }
+
+            for (int i = 0; i < controller.batteryHoldoutZones.Length; i++)
+            {
+                var pillar = controller.batteryHoldoutZones[i];
+                pillar.onCharged.RemoveListener(OnBatteryCharged);
+            }
+
+            pillars.globalSphereScaleCurve.enabled = true;
         }
     }
 }
