@@ -21,8 +21,15 @@ namespace ProceduralStages
         public static void Place(
             Graphs graphs,
             int stageInLoop,
-            bool isSimulacrum)
+            bool isSimulacrum,
+            MoonTerrain moonTerrain)
         {
+            if (moonTerrain != null)
+            {
+                //todo
+                return;
+            }
+
             if (!isSimulacrum)
             {
                 InteractablePlacer.Place(

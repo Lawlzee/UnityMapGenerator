@@ -1,5 +1,6 @@
 ﻿using HG;
 using RoR2;
+using RoR2.Navigation;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,9 +20,7 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "MoonGenerator", menuName = "ProceduralStages/MoonGenerator", order = 2)]
     public class MoonGenerator : TerrainGenerator
     {
-        public Pathway pathway;
         public Spheres spheres;
-
 
         public Vector3 arenaZoneScale;
         public Vector3 arenaZoneOffset;
@@ -49,34 +48,9 @@ namespace ProceduralStages
             public float landScale;
 
             public int bubbleRenderQueue;
-            public string bubbleMaterialKey;// = "RoR2/Base/Teleporters/matTeleporterRangeIndicator.mat";
+            public string bubbleMaterialKey;
             public Texture2D antigravityColorRemapRamp;
             public Texture2D gravityColorRemapRamp;
-        }
-
-        [Serializable]
-        public struct Pathway
-        {
-            public SquareHoneycomb honeycomb;
-            public Bounds bounds;
-            public Torus rings;
-        }
-
-        [Serializable]
-        public struct Torus
-        {
-            //public Interval count;
-            public Interval distance;
-            public Interval radius;
-            public Interval thickness;
-            public CubicHoneycomb honeycomb;
-        }
-
-        private struct Ring
-        {
-            public Vector3 position;
-            public float radius;
-            public float thickness;
         }
 
         public struct Sphere
@@ -140,7 +114,6 @@ namespace ProceduralStages
             //arenaZone.transform.localScale = MapGenerator.instance.mapScale * new Vector3(2 * arenaZoneRadius, stageSize.y, 2 * arenaZoneRadius);
             //arenaZone.transform.position = MapGenerator.instance.mapScale * arenaPosition;
 
-
             List<Sphere> sphereZones = new List<Sphere>();
 
             int sphereCount = rng.RangeInt(spheres.count.min, spheres.count.max);
@@ -152,13 +125,6 @@ namespace ProceduralStages
                     rng.RangeFloat(radius + spheres.buffer, stageSize.x - radius - spheres.buffer),
                     rng.RangeFloat(radius + spheres.buffer, stageSize.y - radius - spheres.buffer),
                     rng.RangeFloat(radius + spheres.buffer, stageSize.z - radius - spheres.buffer));
-
-                //float arenaDistance = new Vector3(position.x - arenaPosition.x, position.z - arenaPosition.z).magnitude - arenaZoneRadius - radius;
-                //
-                //if (arenaDistance < spheres.minDistance)
-                //{
-                //    continue;
-                //}
 
                 bool validPosition = true;
                 for (int j = 0; j < sphereZones.Count; j++)
@@ -248,186 +214,6 @@ namespace ProceduralStages
                 }
             });
 
-            //List<Ring> rings = new List<Ring>();
-            //
-            //float ringX = 0;
-            //
-            //while (true)
-            //{
-            //    float distance = rng.RangeFloat(pathway.rings.distance.min, pathway.rings.distance.max);
-            //    ringX += distance;
-            //
-            //    if (ringX > pathway.bounds.max.x)
-            //    {
-            //        break;
-            //    }
-            //
-            //    rings.Add(new Ring
-            //    {
-            //        position = new Vector3(ringX, pathway.bounds.center.y, pathway.bounds.center.z),
-            //        radius = rng.RangeFloat(pathway.rings.radius.min, pathway.rings.radius.max),
-            //        thickness = rng.RangeFloat(pathway.rings.thickness.min, pathway.rings.thickness.max),
-            //    });
-            //}
-            //
-            //
-            //bool[,,] ringsBlockMap = new bool[stageSize.x, stageSize.y, stageSize.z];
-            //
-            //
-            //Parallel.ForEach(rings, ring =>
-            //{
-            //    int minX = Mathf.Clamp(Mathf.FloorToInt(ring.position.x - ring.thickness), 0, stageSize.x - 1);
-            //    int maxX = Mathf.Clamp(Mathf.CeilToInt(ring.position.x + ring.thickness), 0, stageSize.x - 1);
-            //
-            //    Vector2 center = new Vector2(ring.position.y, ring.position.z);
-            //
-            //    int minY = Mathf.Clamp(Mathf.FloorToInt(ring.position.y - ring.radius - ring.thickness), 0, stageSize.y - 1);
-            //    int maxY = Mathf.Clamp(Mathf.CeilToInt(ring.position.y + ring.radius + ring.thickness), 0, stageSize.y - 1);
-            //
-            //    int minZ = Mathf.Clamp(Mathf.FloorToInt(ring.position.z - ring.radius - ring.thickness), 0, stageSize.z - 1);
-            //    int maxZ = Mathf.Clamp(Mathf.CeilToInt(ring.position.z + ring.radius + ring.thickness), 0, stageSize.z - 1);
-            //
-            //    for (int y = minY; y <= maxY; y++)
-            //    {
-            //        for (int z = minZ; z <= maxZ; z++)
-            //        {
-            //            float distance = (new Vector2(y, z) - center).magnitude;
-            //            bool inRing = Mathf.Abs(distance - ring.radius) < ring.thickness;
-            //
-            //            if (!inRing)
-            //            {
-            //                continue;
-            //            }
-            //
-            //            for (int x = minX; x <= maxX; x++)
-            //            {
-            //                ringsBlockMap[x, y, z] = true;
-            //            }
-            //        }
-            //    }
-            //});
-            //
-            //
-            //int floorSeedX = rng.RangeInt(0, short.MaxValue);
-            //int floorSeedZ = rng.RangeInt(0, short.MaxValue);
-            //
-            //int ringSeedX = rng.RangeInt(0, short.MaxValue);
-            //int ringSeedY = rng.RangeInt(0, short.MaxValue);
-            //int ringSeedZ = rng.RangeInt(0, short.MaxValue);
-
-            //float[,,] densityMap = new float[stageSize.x, stageSize.y, stageSize.z];
-            //
-            //Parallel.For(0, stageSize.x, x =>
-            //{
-            //    for (int z = 0; z < stageSize.z; z++)
-            //    {
-            //        Vector2 pos2D = new Vector2(x, z);
-            //
-            //        Voronoi2DResult floorHoneycombResult = pathway.honeycomb[x + floorSeedX, z + floorSeedZ];
-            //
-            //        Vector2 floorPos1 = pos2D + floorHoneycombResult.displacement1;
-            //        Vector2 floorPos2 = pos2D + floorHoneycombResult.displacement2;
-            //
-            //        bool isFloor1 = pathway.bounds.min.x <= floorPos1.x
-            //            && pathway.bounds.min.z <= floorPos1.y
-            //            && floorPos1.x < pathway.bounds.max.x
-            //            && floorPos1.y < pathway.bounds.max.z;
-            //
-            //        bool isFloor2 = pathway.bounds.min.x <= floorPos2.x
-            //            && pathway.bounds.min.z <= floorPos2.y
-            //            && floorPos2.x < pathway.bounds.max.x
-            //            && floorPos2.y < pathway.bounds.max.z;
-            //
-            //        for (int y = 0; y < stageSize.y; y++)
-            //        {
-            //            Vector3 pos = new Vector3(x, y, z);
-            //
-            //            var ringHoneyCombResult = pathway.rings.honeycomb[x + ringSeedX, y + ringSeedY, z + ringSeedZ];
-            //            bool inRing1 = ringsBlockMap[
-            //                Mathf.Clamp(Mathf.RoundToInt(x + ringHoneyCombResult.displacement1.x), 0, stageSize.x - 1),
-            //                Mathf.Clamp(Mathf.RoundToInt(y + ringHoneyCombResult.displacement1.y), 0, stageSize.y - 1),
-            //                Mathf.Clamp(Mathf.RoundToInt(z + ringHoneyCombResult.displacement1.z), 0, stageSize.z - 1)];
-            //
-            //            bool inRing2 = ringsBlockMap[
-            //                Mathf.Clamp(Mathf.RoundToInt(x + ringHoneyCombResult.displacement2.x), 0, stageSize.x - 1),
-            //                Mathf.Clamp(Mathf.RoundToInt(y + ringHoneyCombResult.displacement2.y), 0, stageSize.y - 1),
-            //                Mathf.Clamp(Mathf.RoundToInt(z + ringHoneyCombResult.displacement2.z), 0, stageSize.z - 1)];
-            //
-            //            bool isFloorHeight = pathway.bounds.min.y <= y
-            //                && y <= pathway.bounds.max.y;
-            //
-            //            float density = 0;
-            //
-            //            if (isFloorHeight)
-            //            {
-            //                if (isFloor1 && isFloor2)
-            //                {
-            //                    density = 1;
-            //                }
-            //                else if (isFloor1)
-            //                {
-            //                    density = 1 - floorHoneycombResult.weight;
-            //                }
-            //                else if (isFloor2)
-            //                {
-            //                    density = floorHoneycombResult.weight;
-            //                }
-            //            }
-            //
-            //            if (ringsBlockMap[x, y, z])
-            //            {
-            //                density = 1;
-            //            }
-            //
-            //            //if (inRing1 || inRing2)
-            //            //{
-            //            //    density = 1;
-            //            //}
-            //            //else if (inRing1)
-            //            //{
-            //            //    density = Mathf.Max(density, 1 - ringHoneyCombResult.weight);
-            //            //}
-            //            //else if (inRing2)
-            //            //{
-            //            //    density = Mathf.Max(density, ringHoneyCombResult.weight);
-            //            //}
-            //
-            //            densityMap[x, y, z] = density;
-            //
-            //            //Vector3 delta = pos - center;
-            //            //float distance = delta.magnitude / radius;
-            //            //float distanceNoise = sphereDistanceCurve.Evaluate(distance);
-            //            //
-            //            //float voronoiNoise = voronoiRemapCurve.Evaluate(voronoi3D[x, y, z].weight);
-            //            //
-            //            //densityMap[x, y, z] = Mathf.Min(distanceNoise, voronoiNoise);
-            //        }
-            //    }
-            //});
-
-            //float radius = Mathf.Min(center.x, center.y, center.z);
-            //
-            //Parallel.For(0, stageSize.x, x =>
-            //{
-            //    for (int y = 0; y < stageSize.y; y++)
-            //    {
-            //        for (int z = 0; z < stageSize.z; z++)
-            //        {
-            //            Vector3 pos = new Vector3(x, y, z);
-            //            Vector3 delta = pos - center;
-            //            float distance = delta.magnitude / radius;
-            //            float distanceNoise = sphereDistanceCurve.Evaluate(distance);
-            //
-            //            float voronoiNoise = voronoiRemapCurve.Evaluate(voronoi3D[x, y, z].weight);
-            //
-            //            densityMap[x, y, z] = Mathf.Min(distanceNoise, voronoiNoise);
-            //        }
-            //    }
-            //});
-            //
-            //ProfilerLog.Debug("sphere");
-
-
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             ProfilerLog.Debug("marchingCubes");
 
@@ -441,6 +227,9 @@ namespace ProceduralStages
 
             moonObject.SetActive(true);
 
+            MoonTerrain moonTerrain = new MoonTerrain();
+            SetArenaNodeGraph(moonTerrain, arenaDeltaPos);
+
             return new Terrain
             {
                 meshResult = meshResult,
@@ -448,8 +237,76 @@ namespace ProceduralStages
                 densityMap = densityMap,
                 maxGroundHeight = float.MaxValue,
                 oobScale = new Vector3(4, 6, 4),
-                customObjects = customObjects.ToArray()
+                customObjects = customObjects.ToArray(),
+                moonTerrain = moonTerrain
             };
+        }
+
+        private void SetArenaNodeGraph(MoonTerrain moonTerrain, Vector3 arenaOffset)
+        {
+            moonTerrain.arenaGroundGraph = CreateSubGraph("RoR2/Base/moon2/moon2_GroundNodeGraph.asset", arenaOffset);
+            Log.Debug("moonTerrain.arenaGroundGraph.nodes.Length " + moonTerrain.arenaGroundGraph.nodes.Length);
+            Log.Debug("moonTerrain.arenaGroundGraph.links.Length " + moonTerrain.arenaGroundGraph.links.Length);
+            moonTerrain.arenaAirGraph = CreateSubGraph("RoR2/Base/moon2/moon2_AirNodeGraph.asset", arenaOffset);
+            Log.Debug("moonTerrain.arenaAirGraph.nodes.Length " + moonTerrain.arenaAirGraph.nodes.Length);
+            Log.Debug("moonTerrain.arenaAirGraph.links.Length " + moonTerrain.arenaAirGraph.links.Length);
+        }
+
+        private NodeGraph CreateSubGraph(string graphKey, Vector3 arenaOffset)
+        {
+            NodeGraph nodeGraph = Addressables.LoadAssetAsync<NodeGraph>(graphKey).WaitForCompletion();
+
+            List<NodeGraph.Node> arenaNodes = new List<NodeGraph.Node>(nodeGraph.nodes.Length);
+            int[] nodeReIndex = new int[nodeGraph.nodes.Length];
+
+            int linkCount = 0;
+            int nodeIndex = 0;
+            for (int i = 0; i < nodeGraph.nodes.Length; i++)
+            {
+                NodeGraph.Node node = nodeGraph.nodes[i];
+
+                if (node.position.y < 400)
+                {
+                    nodeReIndex[i] = -1;
+                    continue;
+                }
+
+                node.position += arenaOffset;
+                arenaNodes.Add(node);
+                nodeReIndex[i] = nodeIndex;
+
+                linkCount += (int)node.linkListIndex.size;
+                nodeIndex++;
+            }
+
+            NodeGraph.Link[] nodeLinks = new NodeGraph.Link[linkCount];
+
+            int linkIndex = 0;
+            for (int i = 0; i < arenaNodes.Count; i++)
+            {
+                NodeGraph.Node node = arenaNodes[i];
+                int newLinkIndex = linkIndex;
+
+                for (int j = 0; j < node.linkListIndex.size; j++)
+                {
+                    var link = nodeGraph.links[node.linkListIndex.index + j];
+                    link.nodeIndexA = new NodeGraph.NodeIndex(nodeReIndex[link.nodeIndexA.nodeIndex]);
+                    link.nodeIndexB = new NodeGraph.NodeIndex(nodeReIndex[link.nodeIndexB.nodeIndex]);
+
+                    nodeLinks[linkIndex] = link;
+                    linkIndex++;
+                }
+
+                node.linkListIndex.index = newLinkIndex;
+                arenaNodes[i] = node;
+            }
+
+            NodeGraph resultNodeGraph = CreateInstance<NodeGraph>();
+            resultNodeGraph.nodes = arenaNodes.ToArray();
+            resultNodeGraph.links = nodeLinks;
+            resultNodeGraph.gateNames = nodeGraph.gateNames;
+
+            return resultNodeGraph;
         }
     }
 }

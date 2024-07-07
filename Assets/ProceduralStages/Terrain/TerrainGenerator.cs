@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,20 @@ namespace ProceduralStages
         public float minInteractableHeight;
         public Vector3 oobScale = new Vector3(1, 1.5f, 1);
         public GameObject[] customObjects = new GameObject[0];
+
+        public MoonTerrain moonTerrain;
+    }
+
+    public class MoonTerrain
+    {
+        public NodeGraph arenaGroundGraph;
+        public NodeGraph arenaAirGraph;
+
+        public Vector3 soupsIslandPosition;
+        public float soupsIslandRadius;
+
+        public Vector3 lunarIslandPosition;
+        public float lunarIslandRadius;
     }
 
     public class MeshResult

@@ -35,24 +35,32 @@ namespace ProceduralStages
         {
             using (ProfilerLog.CreateScope("CreateGraphs"))
             {
-                //MapDensity mapDensity = densityMap.Create(map);
-                ///LogStats("mapDensity");
-
                 Graphs graphs = CreateGroundNodes2(terrain);
                 ProfilerLog.Debug("groundNodes");
 
-                HashSet<int> mainIsland = GetMainIsland(graphs.ground);
-                //HashSet<int> mainIsland = new HashSet<int>();
-                ProfilerLog.Debug("mainIsland");
-
-                SetMainIslandFlags(graphs.ground, mainIsland, terrain);
-                ProfilerLog.Debug("SetMainIslandFlags");
-
-                graphs.ground.Awake();
-
-                //graphs.air = CreateAirNodes(graphs.ground, mainIsland, map, mapScale);
                 graphs.air = CreateAirGraph(terrain);
                 ProfilerLog.Debug("CreateAirNodes");
+
+                if (terrain.moonTerrain == null)
+                {
+                    HashSet<int> mainIsland = GetMainIsland(graphs.ground);
+                    //HashSet<int> mainIsland = new HashSet<int>();
+                    ProfilerLog.Debug("mainIsland");
+
+                    SetMainIslandFlags(graphs.ground, mainIsland, terrain);
+                    ProfilerLog.Debug("SetMainIslandFlags");
+                }
+                else
+                {
+                    SetGroundNodeGraphFlags(graphs.ground, terrain);
+                    graphs.ground = MergeGraphs(graphs.ground, terrain.moonTerrain.arenaGroundGraph);
+                    graphs.air = MergeGraphs(graphs.air, terrain.moonTerrain.arenaAirGraph);
+                    //graphs.ground = terrain.moonTerrain.arenaGroundGraph;
+                    //graphs.air = terrain.moonTerrain.arenaAirGraph;
+                }
+
+                graphs.ground.Awake();
+                graphs.air.Awake();
 
                 return graphs;
             }
@@ -729,45 +737,58 @@ namespace ProceduralStages
             foreach (int nodeIndex in mainIsland)
             {
                 ref NodeGraph.Node node = ref groundGraph.nodes[nodeIndex];
+                SetGroundNodeFlags(terrain, ref node);
+            }
+        }
 
-                NodeFlags flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
+        private void SetGroundNodeGraphFlags(NodeGraph groundGraph, Terrain terrain)
+        {
+            for (int i = 0; i < groundGraph.nodes.Length; i++)
+            {
+                ref NodeGraph.Node node = ref groundGraph.nodes[i];
+                SetGroundNodeFlags(terrain, ref node);
+            }
+        }
 
-                float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale);
+        private void SetGroundNodeFlags(Terrain terrain, ref NodeGraph.Node node)
+        {
+            NodeFlags flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
 
-                if (node.position.y <= terrain.maxGroundHeight)
+            float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale);
+
+            if (node.position.y <= terrain.maxGroundHeight)
+            {
+                if (terrain.minInteractableHeight <= node.position.y)
                 {
-                    if (terrain.minInteractableHeight <= node.position.y)
+                    if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
                     {
-                        if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
-                        {
-                            flags |= NodeFlags.TeleporterOK;
-                        }
-
-                        if (density < densityMap.maxChestDensity)
-                        {
-                            flags &= ~NodeFlags.NoChestSpawn;
-                        }
-
-                        if (density < densityMap.maxChestDensity)
-                        {
-                            flags &= ~NodeFlags.NoShrineSpawn;
-                        }
-
-                        if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
-                        {
-                            flags |= NodeFlagsExt.Newt;
-                        }
+                        flags |= NodeFlags.TeleporterOK;
                     }
 
-                    if (density < densityMap.maxSpawnDensity)
+                    if (density < densityMap.maxChestDensity)
                     {
-                        flags &= ~NodeFlags.NoCharacterSpawn;
-                        flags |= NodeFlags.NoCeiling;
+                        flags &= ~NodeFlags.NoChestSpawn;
+                    }
+
+                    if (density < densityMap.maxChestDensity)
+                    {
+                        flags &= ~NodeFlags.NoShrineSpawn;
+                    }
+
+                    if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
+                    {
+                        flags |= NodeFlagsExt.Newt;
                     }
                 }
 
-                node.flags = flags;
+                if (density < densityMap.maxSpawnDensity)
+                {
+                    flags &= ~NodeFlags.NoCharacterSpawn;
+                    flags |= NodeFlags.NoCeiling;
+                }
             }
+
+            node.flags = flags;
         }
 
         private struct AirNode
@@ -984,12 +1005,45 @@ namespace ProceduralStages
             NodeGraph airGraph = ScriptableObject.CreateInstance<NodeGraph>();
             airGraph.nodes = finalNodes;
             airGraph.links = filteredLinks;
-            airGraph.Awake();
 
             Log.Debug($"nodes: {finalNodes.Length}");
             Log.Debug($"links: {filteredLinks.Length}");
 
             return airGraph;
+        }
+
+        private NodeGraph MergeGraphs(NodeGraph graph1, NodeGraph graph2)
+        {
+            NodeGraph.Node[] nodes = new NodeGraph.Node[graph1.nodes.Length + graph2.nodes.Length];
+            NodeGraph.Link[] links = new NodeGraph.Link[graph1.links.Length + graph2.links.Length];
+
+            Array.Copy(graph1.nodes, nodes, graph1.nodes.Length);
+            Array.Copy(graph1.links, links, graph1.links.Length);
+
+            for (int i = 0; i < graph2.nodes.Length; i++)
+            {
+                NodeGraph.Node node = graph2.nodes[i];
+                node.linkListIndex.index += graph1.links.Length;
+
+                nodes[i + graph1.nodes.Length] = node;
+            }
+
+            for (int i = 0; i < graph2.links.Length; i++)
+            {
+                NodeGraph.Link link = graph2.links[i];
+                link.nodeIndexA = new NodeGraph.NodeIndex(link.nodeIndexA.nodeIndex + graph1.nodes.Length);
+                link.nodeIndexB = new NodeGraph.NodeIndex(link.nodeIndexB.nodeIndex + graph1.nodes.Length);
+
+                links[i + graph1.links.Length] = link;
+            }
+
+            NodeGraph resultNodeGraph = ScriptableObject.CreateInstance<NodeGraph>();
+            resultNodeGraph.nodes = nodes;
+            resultNodeGraph.links = links;
+            //todo: merge gate names
+            resultNodeGraph.gateNames = graph2.gateNames;
+
+            return resultNodeGraph;
         }
     }
 }

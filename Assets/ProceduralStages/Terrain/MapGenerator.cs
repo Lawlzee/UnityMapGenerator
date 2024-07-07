@@ -277,7 +277,7 @@ namespace ProceduralStages
 
                 ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
 
-                SetDCCS(stageInfo);
+                SetDCCS(stageInfo, terrainType == TerrainType.Moon);
                 ProfilerLog.Debug("SetDCCS");
 
                 var combatDirectors = directorObject.GetComponents<CombatDirector>();
@@ -296,7 +296,7 @@ namespace ProceduralStages
                     stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
                 }
 
-                if (!IsSimulacrum() || Application.isEditor)
+                if ((!IsSimulacrum() && terrainType != TerrainType.Moon) || Application.isEditor)
                 {
                     stageInfo.sceneDirectorInteractibleCredits = 75 * (stageScaling + 2);
                 }
@@ -310,7 +310,7 @@ namespace ProceduralStages
 
                 if (!Application.isEditor || loadResourcesInEditor)
                 {
-                    if (!IsSimulacrum())
+                    if (terrainType != TerrainType.Moon && !IsSimulacrum())
                     {
                         sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
                     }
@@ -322,7 +322,7 @@ namespace ProceduralStages
                         {
                             SceneDirector.onPostPopulateSceneServer -= placeInteractables;
 
-                            SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum());
+                            SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum(), terrain.moonTerrain);
                         };
 
                         SceneDirector.onPostPopulateSceneServer += placeInteractables;
@@ -443,10 +443,17 @@ namespace ProceduralStages
             return currentSeed;
         }
 
-        private void SetDCCS(ClassicStageInfo stageInfo)
+        private void SetDCCS(ClassicStageInfo stageInfo, bool isMoon)
         {
             if (Application.isEditor && !loadResourcesInEditor)
             {
+                return;
+            }
+
+            if (isMoon)
+            {
+                stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/moon/dpMoonMonsters.asset").WaitForCompletion();
+                stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/moon/dpMoonInteractables.asset").WaitForCompletion();
                 return;
             }
 
