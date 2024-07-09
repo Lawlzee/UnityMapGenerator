@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 203192102}
+  renderer: {fileID: 203192102}
   asset: RoR2/Base/Brother/matBrotherPreBossSphere.mat
 --- !u!1 &207505075
 GameObject:
@@ -2339,7 +2339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 754672678}
+  renderer: {fileID: 0}
   asset: RoR2/Base/Common/matDebugYellow.mat
 --- !u!64 &754672676
 MeshCollider:
@@ -7644,7 +7644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 997151198}
+  renderer: {fileID: 997151198}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
 --- !u!1 &1000705617
 GameObject:
@@ -8393,7 +8393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 1307253616}
+  renderer: {fileID: 1307253616}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
 --- !u!1 &1363230656
 GameObject:
@@ -9935,7 +9935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 2032620367}
+  renderer: {fileID: 2032620367}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
 --- !u!1 &2133128229
 GameObject:
@@ -10013,7 +10013,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807b6cd9ceb4785469a797462696d9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pillarPositions: []
   mission: {fileID: 3223386278384797323}
+  globalSphereScaleCurve: {fileID: 0}
 --- !u!114 &527859971
 MonoBehaviour:
   m_ObjectHideFlags: 0

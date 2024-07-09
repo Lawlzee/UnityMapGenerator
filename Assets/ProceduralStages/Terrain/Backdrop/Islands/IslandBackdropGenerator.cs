@@ -8,7 +8,7 @@ using UnityEngine;
 namespace ProceduralStages
 {
     [CreateAssetMenu(fileName = "IslandBackdropGenerator", menuName = "ProceduralStages/IslandBackdropGenerator", order = 2)]
-    public class IslandBackdropGenerator : BackdropTerrainGenerator
+    public class IslandBackdropGenerator : MeshBackdropTerrainGenerator
     {
         public FBM fbm;
         public ThreadSafeCurve floorCurve;
@@ -17,7 +17,7 @@ namespace ProceduralStages
         public float blendFactor;
         public float propsWeigth;
 
-        public override BackdropTerrain Generate(Vector3 center, ulong seed, ProfilerLog log)
+        protected override MeshBackdropTerrain GenerateTerrain(Vector3 center, ulong seed)
         {
             var rng = new Xoroshiro128Plus(seed);
 
@@ -84,7 +84,7 @@ namespace ProceduralStages
 
             var meshResult = MarchingCubes.CreateMesh(densityMap, scale);
 
-            return new BackdropTerrain
+            return new MeshBackdropTerrain
             {
                 meshResult = meshResult,
                 position = position,

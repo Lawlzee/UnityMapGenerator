@@ -10,10 +10,9 @@ namespace ProceduralStages
     [CreateAssetMenu(fileName = "BackdropGenerator", menuName = "ProceduralStages/BackdropGenerator", order = 2)]
     public class BackdropGenerator : ScriptableObject
     {
+        public RequiredGenerator[] requiredGenerators;
         public Generator[] generators;
         public IntervalInt count;
-        public GameObject backdropTerrainPrefab;
-        public int maxPropKind;
 
         [Serializable]
         public struct Generator
@@ -21,6 +20,13 @@ namespace ProceduralStages
             public BackdropTerrainGenerator value;
 
             public float weight;
+        }
+
+        [Serializable]
+        public struct RequiredGenerator
+        {
+            public BackdropTerrainGenerator value;
+            public int count;
         }
 
         public GameObject[] Generate(
@@ -38,44 +44,52 @@ namespace ProceduralStages
                 terrainSelection.AddChoice(generator.value, generator.weight);
             }
 
-            ulong[] seeds = new ulong[actualCount];
-            BackdropTerrainGenerator[] selectedGenerators = new BackdropTerrainGenerator[actualCount];
-
-            for (int i = 0; i < actualCount; i++)
-            {
-                seeds[i] = rng.nextUlong;
-                selectedGenerators[i] = terrainSelection.Evaluate(rng.nextNormalizedFloat);
-            }
-
             Vector3 mapCenter = 0.5f * MapGenerator.instance.mapScale * (Vector3)MapGenerator.instance.stageSize;
 
             GameObject[] gameObjects = new GameObject[actualCount];
-            for (int i = 0; i < actualCount; i++)
+
+            int propsIndex = 0;
+            for (int i = 0; i < requiredGenerators.Length; i++)
             {
-                var terrain = selectedGenerators[i].Generate(mapCenter, seeds[i], ProfilerLog.Current);
-                //backdropTerrains[i] = terrain;
+                var generator = requiredGenerators[i];
+                for (int j = 0; j < generator.count; j++)
+                {
+                    if (propsIndex >= actualCount)
+                    {
+                        break;
+                    }
 
-                GameObject gameObject = Instantiate(backdropTerrainPrefab);
-                gameObject.transform.position = terrain.position;
+                    ulong seed = rng.nextUlong;
 
-                gameObject.GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
-                gameObject.GetComponent<MeshRenderer>().material = material;
+                    BackdropParams args = new BackdropParams
+                    {
+                        center = mapCenter,
+                        colorGradiant = colorGradiant,
+                        material = material,
+                        propsCollection = propsCollection,
+                        seed = seed
+                    };
 
-                Graphs graphs = MapGenerator.instance.nodeGraphCreator.CreateBackdropGraphs(terrain);
+                    gameObjects[propsIndex] = generator.value.Generate(args);
+                    propsIndex++;
+                }
+            }
 
-                MapGenerator.instance.propsPlacer.PlaceAll(
-                    terrain.position,
-                    graphs,
-                    propsCollection,
-                    MapGenerator.instance.meshColorer,
-                    colorGradiant,
-                    material,
-                    0,
-                    terrain.propsWeigth,
-                    bigObjectOnly: true,
-                    maxPropKind);
+            for (int i = propsIndex; i < actualCount; i++)
+            {
+                ulong seed = rng.nextUlong;
+                BackdropTerrainGenerator generator = terrainSelection.Evaluate(rng.nextNormalizedFloat);
 
-                gameObjects[i] = gameObject;
+                BackdropParams args = new BackdropParams
+                {
+                    center = mapCenter,
+                    colorGradiant = colorGradiant,
+                    material = material,
+                    propsCollection = propsCollection,
+                    seed = seed
+                };
+
+                gameObjects[i] = generator.Generate(args);
             }
 
             return gameObjects;

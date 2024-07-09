@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4be67931a32bdb9439c5ef3fdd6efdd2, type: 3}
+  m_Name: PlanetBackdropGenerator
+  m_EditorClassIdentifier: 
+  planetHolderPrefab: {fileID: 8738069675047476807, guid: ad084c07e2e584c46ab8d97844fda5c0,
+    type: 3}
+  planetHolderRotation:
+    min: 0.5
+    max: 1
+  planetDistance:
+    min: 2300
+    max: 3300
+  planetScale:
+    min: 100
+    max: 400
+  planetRotation:
+    min: 2
+    max: 4
+  planetAngleX:
+    min: -8
+    max: -40
+  ringSpawnRate: 0.5
+  ringScale:
+    min: 1
+    max: 1.5
+  ringAngle: {x: 80, y: 0, z: 0}
+  mdlPlanetPath: RoR2/DLC1/voidraid/mdlVoidRaidPlanet.fbx
+  mdlPlanetVertexShadowPath: RoR2/DLC1/voidraid/mdlVoidRaidPlanetVertexShadow.fbx
+  mdlPlanetRingPath: RoR2/DLC1/voidraid/mdlVoidRaidPlanetRing.fbx
+  opaqueMaterial: RoR2/DLC1/voidraid/matVoidRaidPlanetOpaqueBase.mat
+  edgeLightMaterial: RoR2/DLC1/voidraid/matVoidRaidPlanetSharedShell.mat
+  diffuseMaterial:
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetAcid.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetOceanic.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetBlueMarble.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetEvilCrater.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetGreenMarble.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetMars.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetPinkVomit.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetPurpleCrater.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetPurpleCraterMoon.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetPurpleWave.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetSmallBlue.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetVomitWave.mat
+  ringMaterial:
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetAcidRing.mat
+  - RoR2/DLC1/voidraid/matVoidRaidPlanetMarsRing.mat

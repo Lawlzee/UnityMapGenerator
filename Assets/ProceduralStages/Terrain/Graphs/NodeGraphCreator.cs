@@ -75,7 +75,7 @@ namespace ProceduralStages
 
         }
 
-        public Graphs CreateBackdropGraphs(BackdropTerrain backdropTerrain)
+        public Graphs CreateBackdropGraphs(MeshBackdropTerrain backdropTerrain)
         {
             var vertices = backdropTerrain.meshResult.vertices;
             var normals = backdropTerrain.meshResult.normals;

@@ -22,23 +22,7 @@ MonoBehaviour:
   waterLevel: 10
   terrainType: 8
   ceillingPropsWeight: 1
-  backdropGenerator: {fileID: 0}
-  pathway:
-    honeycomb: {fileID: 11400000, guid: 199cc5e3f1e9cca4b86d61edbf334a92, type: 2}
-    bounds:
-      m_Center: {x: 200, y: 75, z: 75}
-      m_Extent: {x: 200, y: 2, z: 15}
-    rings:
-      distance:
-        min: 5
-        max: 15
-      radius:
-        min: 8
-        max: 12
-      thickness:
-        min: 3
-        max: 4
-      honeycomb: {fileID: 11400000, guid: b6c11128c6225584992a215e028321ba, type: 2}
+  backdropGenerator: {fileID: 11400000, guid: 3f543e2dbc6a6e546a4b0952953e0f54, type: 2}
   spheres:
     maxAttempt: 1000
     count:

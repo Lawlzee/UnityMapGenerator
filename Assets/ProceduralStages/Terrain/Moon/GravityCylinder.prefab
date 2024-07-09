@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 9155621181590008422}
+  renderer: {fileID: 9155621181590008422}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
 --- !u!64 &-8647182795795593878
 MeshCollider:

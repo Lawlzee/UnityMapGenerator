@@ -7,25 +7,17 @@ using UnityEngine;
 
 namespace ProceduralStages
 {
-    public class BackdropTerrain
+    public class BackdropParams
     {
-        public MeshResult meshResult;
-        public Vector3 position;
-        public float propsWeigth;
+        public Vector3 center;
+        public ulong seed;
+        public Material material;
+        public Texture2D colorGradiant;
+        public PropsDefinitionCollection propsCollection;    
     }
 
     public abstract class BackdropTerrainGenerator : ScriptableObject
     {
-        public Interval distance;
-
-        public Vector3 minSize;
-        public Vector3 maxSize;
-
-        public float scalePerDistance;
-
-        public abstract BackdropTerrain Generate(
-            Vector3 center,
-            ulong seed,
-            ProfilerLog log);
+        public abstract GameObject Generate(BackdropParams args);
     }
 }
