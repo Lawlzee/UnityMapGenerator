@@ -1,9 +1,9 @@
 ﻿{
   "name": "ProceduralStages",
-  "version_number": "1.16.0",
+  "version_number": "1.17.0",
   "website_url": "https://github.com/Lawlzee/UnityMapGenerator",
   "displayName": "Procedural Stages",
-  "description": "Adds dynamically generated stages to Risk of Rain 2. Discover procedurally generated stages featuring 7 distinct terrain types alongside 5 captivating themes to explore. Now with 2 new terrain types.",
+  "description": "Adds dynamically generated stages to Risk of Rain 2. Discover procedurally generated stages featuring 8 distinct terrain types alongside 5 captivating themes to explore. Now with a new moon stage!",
   "dependencies": [
     "bbepis-BepInExPack-5.4.2108",
     "RiskofThunder-HookGenPatcher-1.2.3",

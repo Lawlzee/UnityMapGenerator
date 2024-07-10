@@ -34,7 +34,7 @@ namespace ProceduralStages
                 case TerrainType.Mines:
                     return "Twisted Canyon";
                 case TerrainType.Moon:
-                    return "Moon";
+                    return "Lunar Fields";
                 case TerrainType.Basalt:
                     return "Basalt Isle";
                 case TerrainType.Towers:
@@ -59,7 +59,7 @@ namespace ProceduralStages
                 case TerrainType.Mines:
                     return "Spiral Abyss";
                 case TerrainType.Moon:
-                    return "TODO";
+                    return "Celestial Odyssey";
                 case TerrainType.Basalt:
                     return "Volcanic Pillars";
                 case TerrainType.Towers:
@@ -84,7 +84,7 @@ namespace ProceduralStages
                 case TerrainType.Mines:
                     return "You dream of towering canyons veiled in swirling mist.";
                 case TerrainType.Moon:
-                    return "TODO";
+                    return "You dream of exploring moonlit landscapes, where gravity bends and stars seem within reach.";
                 case TerrainType.Basalt:
                     return "You dream of towering basalt columns and the roar of distant volcanoes.";
                 case TerrainType.Towers:

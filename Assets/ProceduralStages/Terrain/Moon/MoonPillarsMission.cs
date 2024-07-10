@@ -38,7 +38,7 @@ namespace ProceduralStages
 
         public void Start()
         {
-            if (controller._numRequiredBatteries >= controller.numRequiredBatteries)
+            if (controller.numChargedBatteries >= controller.numRequiredBatteries)
             {
                 pillars.globalSphereScaleCurve.enabled = true;
                 return;

@@ -58,6 +58,10 @@ namespace ProceduralStages
             public string bubbleMaterialKey;
             public Texture2D antigravityColorRemapRamp;
             public Texture2D gravityColorRemapRamp;
+            public Texture2D shipColorRemapRamp;
+            public Texture2D lootColorRemapRamp;
+            public Texture2D pillarColorRemapRamp;
+            public Texture2D spawnColorRemapRamp;
         }
 
         public struct Sphere
@@ -275,11 +279,23 @@ namespace ProceduralStages
             antiGravitySphereMaterial.renderQueue = spheres.bubbleRenderQueue;
             antiGravitySphereMaterial.SetTexture("_RemapTex", spheres.antigravityColorRemapRamp);
 
+            var antiGravitySphere = Instantiate(antiGravitySpherePrefab);
+            antiGravitySphere.GetComponent<MeshRenderer>().material = antiGravitySphereMaterial;
+
             Material gravitySphereMaterial = new Material(antiGravitySphereMaterial);
             gravitySphereMaterial.SetTexture("_RemapTex", spheres.gravityColorRemapRamp);
 
-            var antiGravitySphere = Instantiate(antiGravitySpherePrefab);
-            antiGravitySphere.GetComponent<MeshRenderer>().material = antiGravitySphereMaterial;
+            Material shipSphereMaterial = new Material(antiGravitySphereMaterial);
+            shipSphereMaterial.SetTexture("_RemapTex", spheres.shipColorRemapRamp);
+
+            Material lootSphereMaterial = new Material(antiGravitySphereMaterial);
+            lootSphereMaterial.SetTexture("_RemapTex", spheres.lootColorRemapRamp);
+
+            Material pillarSphereMaterial = new Material(antiGravitySphereMaterial);
+            pillarSphereMaterial.SetTexture("_RemapTex", spheres.pillarColorRemapRamp);
+
+            Material spawnSphereMaterial = new Material(antiGravitySphereMaterial);
+            spawnSphereMaterial.SetTexture("_RemapTex", spheres.spawnColorRemapRamp);
 
             float antiGravitySphereScale = this.antiGravitySphereScale * Mathf.Max(stageSize.x, stageCenter.y, stageCenter.z);
             antiGravitySphere.transform.localScale = MapGenerator.instance.mapScale * new Vector3(antiGravitySphereScale, antiGravitySphereScale, antiGravitySphereScale);
@@ -297,11 +313,16 @@ namespace ProceduralStages
             moonPillars.globalSphereScaleCurve = antiGravitySphere.GetComponent<ObjectScaleCurve>();
             moonPillars.globalSphereScaleCurve.baseScale = antiGravitySphere.transform.localScale;
 
-            int pillarCount = rng.RangeInt(4, 8);
+            int minPillarsCount = Application.isEditor
+                ? 4
+                : Math.Max(4, ModConfig.MoonRequiredPillarsCount.Value);
+
+            int pillarCount = rng.RangeInt(minPillarsCount, 8);
             for (int i = 1; i <= pillarCount && i < sphereZones.Count; i++)
             {
                 var sphere = sphereZones[i];
                 PropsNode? pillarPosition = graphs.FindNodeApproximate(rng, sphere.position * MapGenerator.instance.mapScale, sphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+                pillarPosition = pillarPosition ?? graphs.FindNodeApproximate(rng, sphere.position * MapGenerator.instance.mapScale, sphere.radius * MapGenerator.instance.mapScale);
 
                 moonPillars.pillarPositions.Add(pillarPosition?.position ?? (sphere.position * MapGenerator.instance.mapScale));
                 if (pillarPosition != null)
@@ -312,6 +333,7 @@ namespace ProceduralStages
 
             var shipSphere = sphereZones[0];
             PropsNode? shipPosition = graphs.FindNodeApproximate(rng, shipSphere.position * MapGenerator.instance.mapScale, shipSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+            shipPosition = shipPosition ?? graphs.FindNodeApproximate(rng, shipSphere.position * MapGenerator.instance.mapScale, shipSphere.radius * MapGenerator.instance.mapScale);
 
             if (NetworkServer.active)
             {
@@ -334,7 +356,8 @@ namespace ProceduralStages
 
                 if (rng.nextNormalizedFloat < lunarSpawnRate)
                 {
-                    PropsNode? podLocation = graphs.FindNodeApproximate(rng, lunarSphere.position * MapGenerator.instance.mapScale, lunarSphere.radius * MapGenerator.instance.mapScale);
+                    PropsNode? podLocation = graphs.FindNodeApproximate(rng, lunarSphere.position * MapGenerator.instance.mapScale, lunarSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+                    podLocation = podLocation ?? graphs.FindNodeApproximate(rng, lunarSphere.position * MapGenerator.instance.mapScale, lunarSphere.radius * MapGenerator.instance.mapScale);
                     if (podLocation == null)
                     {
                         break;
@@ -365,7 +388,8 @@ namespace ProceduralStages
                     ? redCauldronPrefab
                     : greenCauldronPrefab;
 
-                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
+                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+                cauldronLocation = cauldronLocation ?? graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
                 if (cauldronLocation == null)
                 {
                     break;
@@ -388,7 +412,8 @@ namespace ProceduralStages
 
             for (int i = 0; i < whiteCauldronCount; i++)
             {
-                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
+                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+                cauldronLocation = cauldronLocation ?? graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
                 if (cauldronLocation == null)
                 {
                     break;
@@ -412,12 +437,16 @@ namespace ProceduralStages
             Transform centerOfArena = brotherMissionControllerTransform.Find("CenterOfArena");
             childLocator.transformPairs[0].transform = centerOfArena;
 
+            var spawnSphere = sphereZones[sphereZones.Count - 1];
+
             GameObject playerSpawnOrigin = new GameObject("PlayerSpawnOrigin");
-            playerSpawnOrigin.transform.position = sphereZones[sphereZones.Count - 1].position * MapGenerator.instance.mapScale;
+            playerSpawnOrigin.transform.position = spawnSphere.position * MapGenerator.instance.mapScale;
             childLocator.transformPairs[1].transform = playerSpawnOrigin.transform;
             terrain.customObjects.Add(playerSpawnOrigin);
 
-            moonEscapeSequence.frogPosition = playerSpawnOrigin.transform.position;
+            PropsNode? frogPosition = graphs.FindNodeApproximate(rng, spawnSphere.position * MapGenerator.instance.mapScale, spawnSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+            frogPosition = frogPosition ?? graphs.FindNodeApproximate(rng, spawnSphere.position * MapGenerator.instance.mapScale, spawnSphere.radius * MapGenerator.instance.mapScale);
+            moonEscapeSequence.frogPosition = frogPosition?.position ?? playerSpawnOrigin.transform.position;
 
             Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
 
@@ -429,12 +458,21 @@ namespace ProceduralStages
             GameObject arena = MoonArena.AddArena(MapGenerator.instance.mapScale * arenaPosition);
             terrain.customObjects.Add(arena);
 
-            foreach (var sphere in sphereZones)
+            for (int i = 0; i < sphereZones.Count; i++)
             {
+                Sphere sphere = sphereZones[i];
                 GameObject gravitySphere = Instantiate(gravitySpherePrefab);
                 gravitySphere.transform.position = sphere.position * MapGenerator.instance.mapScale;
                 gravitySphere.transform.localScale = 2 * new Vector3(sphere.radius, sphere.radius, sphere.radius) * MapGenerator.instance.mapScale;
-                gravitySphere.GetComponent<MeshRenderer>().material = gravitySphereMaterial;
+                gravitySphere.GetComponent<MeshRenderer>().material = i == 0
+                    ? shipSphereMaterial
+                    : i <= pillarCount
+                        ? pillarSphereMaterial
+                        : i == sphereZones.Count - 1
+                            ? spawnSphereMaterial
+                            : i >= sphereZones.Count - 3
+                                ? lootSphereMaterial
+                                : gravitySphereMaterial;
 
                 terrain.customObjects.Add(gravitySphere);
             }

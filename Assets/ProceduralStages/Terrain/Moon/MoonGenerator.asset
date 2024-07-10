@@ -30,11 +30,11 @@ MonoBehaviour:
       max: 15
     radius:
       min: 20
-      max: 40
+      max: 50
     minDistance: 5
     buffer: 1
     landScale: 0.499
-    maxObjectifDistance: 0.3
+    maxObjectifDistance: 0.5
     floorFBM: {fileID: 11400000, guid: 223110005f462f749ac5a3320d035f82, type: 2}
     floorCurve: {fileID: 11400000, guid: 531b0535fbe369b49ace79bfc7b0fb5d, type: 2}
     distanceFloorMultiplierCurve: {fileID: 11400000, guid: 35a2740b15cb00146af6b73b52c222ab,
@@ -44,6 +44,14 @@ MonoBehaviour:
     antigravityColorRemapRamp: {fileID: 2800000, guid: bd79f821e191a6f4cbddd56a085f8757,
       type: 3}
     gravityColorRemapRamp: {fileID: 2800000, guid: d34fde0fc64e2c640acd4e259b427fdc,
+      type: 3}
+    shipColorRemapRamp: {fileID: 2800000, guid: ab441a177b91c7841a1e9f0b6574c2f5,
+      type: 3}
+    lootColorRemapRamp: {fileID: 2800000, guid: 303c077a53ddd9f4a84c110b1aa9acaa,
+      type: 3}
+    pillarColorRemapRamp: {fileID: 2800000, guid: 61e8131c00dfe0f40b50862c60ae66ae,
+      type: 3}
+    spawnColorRemapRamp: {fileID: 2800000, guid: ea9110d6b16d4354ba9af9e69d5ee60a,
       type: 3}
   arenaZoneScale: {x: 500, y: 70, z: 500}
   arenaZoneOffset: {x: -10, y: 750, z: 0}
