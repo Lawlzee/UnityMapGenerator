@@ -69,6 +69,10 @@ namespace ProceduralStages
         public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
 
+
+        [HideInInspector]
+        public StageType stageType;
+
         private List<GameObject> terrainCustomObject;
         private void Awake()
         {
@@ -78,12 +82,6 @@ namespace ProceduralStages
                 lastSeed = SetSeed();
                 GenerateMap();
             }
-        }
-
-        private void Start()
-        {
-            //UnityEngine.Debug.Log("Start");
-            //GenerateMap();
         }
 
         private void OnDestroy()
@@ -174,10 +172,14 @@ namespace ProceduralStages
                     terrainType = selection.totalWeight > 0
                         ? selection.Evaluate(rng.nextNormalizedFloat)
                         : TerrainType.OpenCaves;
-
-                    terrainType = TerrainType.Moon;
                 }
                 Log.Debug(terrainType);
+
+                stageType = terrainType == TerrainType.Moon
+                    ? StageType.Moon
+                    : !Application.isEditor && Run.instance is InfiniteTowerRun
+                        ? StageType.Simulacrum
+                        : StageType.Regular;
 
                 TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
                 RunConfig.instance.selectedTerrainType = TerrainType.Random;
@@ -277,11 +279,11 @@ namespace ProceduralStages
 
                 ClassicStageInfo stageInfo = sceneInfoObject.GetComponent<ClassicStageInfo>();
 
-                SetDCCS(stageInfo, terrainType == TerrainType.Moon);
+                SetDCCS(stageInfo);
                 ProfilerLog.Debug("SetDCCS");
 
                 var combatDirectors = directorObject.GetComponents<CombatDirector>();
-                if (IsSimulacrum() || Application.isEditor)
+                if (stageType == StageType.Simulacrum || Application.isEditor)
                 {
                     foreach (var combatDirector in combatDirectors)
                     {
@@ -291,12 +293,12 @@ namespace ProceduralStages
                     }
                 }
 
-                if (!IsSimulacrum())
+                if (stageType != StageType.Simulacrum)
                 {
                     stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
                 }
 
-                if ((!IsSimulacrum() && terrainType != TerrainType.Moon) || Application.isEditor)
+                if (stageType == StageType.Regular || Application.isEditor)
                 {
                     stageInfo.sceneDirectorInteractibleCredits = 75 * (stageScaling + 2);
                 }
@@ -310,7 +312,7 @@ namespace ProceduralStages
 
                 if (!Application.isEditor || loadResourcesInEditor)
                 {
-                    if (terrainType != TerrainType.Moon && !IsSimulacrum())
+                    if (stageType == StageType.Regular)
                     {
                         sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
                     }
@@ -322,7 +324,7 @@ namespace ProceduralStages
                         {
                             SceneDirector.onPostPopulateSceneServer -= placeInteractables;
 
-                            SpecialInteractablesPlacer.Place(graphs, stageInLoop, IsSimulacrum(), terrain.moonTerrain);
+                            SpecialInteractablesPlacer.Place(graphs, stageInLoop, terrain.moonTerrain);
                         };
 
                         SceneDirector.onPostPopulateSceneServer += placeInteractables;
@@ -443,17 +445,10 @@ namespace ProceduralStages
             return currentSeed;
         }
 
-        private void SetDCCS(ClassicStageInfo stageInfo, bool isMoon)
+        private void SetDCCS(ClassicStageInfo stageInfo)
         {
             if (Application.isEditor && !loadResourcesInEditor)
             {
-                return;
-            }
-
-            if (isMoon)
-            {
-                stageInfo.monsterDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/moon/dpMoonMonsters.asset").WaitForCompletion();
-                stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>("RoR2/Base/moon/dpMoonInteractables.asset").WaitForCompletion();
                 return;
             }
 
@@ -462,13 +457,11 @@ namespace ProceduralStages
             bool hasDLC1 = expansionDef && Run.instance.IsExpansionEnabled(expansionDef);
 
             var validPools = DccsPoolItem.All
-                .Where(x => IsSimulacrum()
-                    ? x.StageType == StageType.Simulacrum
-                    : x.StageType == StageType.Regular)
+                .Where(x => x.StageType == stageType)
                 .Where(x => hasDLC1 || !x.DLC1)
                 .ToList();
 
-            if (IsSimulacrum())
+            if (stageType != StageType.Regular)
             {
                 var dpMonsters = validPools
                     .Where(x => x.Type == DccsPoolItemType.Monsters)
@@ -495,11 +488,6 @@ namespace ProceduralStages
             Log.Debug(dpInteratable);
 
             stageInfo.interactableDccsPool = Addressables.LoadAssetAsync<DccsPool>(dpInteratable).WaitForCompletion();
-        }
-
-        private bool IsSimulacrum()
-        {
-            return !Application.isEditor && Run.instance is InfiniteTowerRun;
         }
     }
 }

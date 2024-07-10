@@ -26,9 +26,7 @@ namespace ProceduralStages
 
     public class MoonPillars : NetworkBehaviour
     {
-        public SyncListNetworkInstanceId pillarIds;// = new SyncListNetworkInstanceId();
-        public SyncListNetworkInstanceId elevatorIds;// = new SyncListNetworkInstanceId();
-
+        public SyncListNetworkInstanceId pillarIds;
         public List<Vector3> pillarPositions;
 
         public MoonPillarsMission mission;
@@ -54,7 +52,6 @@ namespace ProceduralStages
                 prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryDesign.prefab").WaitForCompletion(), 1);
                 prefabs.AddChoice(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryBlood.prefab").WaitForCompletion(), 1);
 
-                //
                 for (int i = 0; i < pillarPositions.Count; i++)
                 {
                     var prefab = prefabs.Evaluate(rng.nextNormalizedFloat);
@@ -65,36 +62,12 @@ namespace ProceduralStages
 
                     NetworkServer.Spawn(pillar);
                     pillarIds.Add(pillar.GetComponent<NetworkIdentity>().netId);
-
-                    //controller.moonBatteries[i] = pillar;
                 }
 
                 GameObject elevatorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonElevator.prefab").WaitForCompletion();
 
-                for (int i = 0; i < 4; i++)
-                {
-                    var elevator = Instantiate(elevatorPrefab, transform);
-
-                    //todo
-                    elevator.transform.position = new Vector3(i * 20, 0, 50);
-
-                    NetworkServer.Spawn(elevator);
-                    elevatorIds.Add(elevator.GetComponent<NetworkIdentity>().netId);
-
-                    //controller.elevators[i] = elevator;
-                }
-
-                Log.Debug("AA");
                 mission.gameObject.SetActive(true);
-                Log.Debug("AA1");
                 NetworkServer.Spawn(mission.gameObject);
-                Log.Debug("AA2");
-
-                //var controller = missionPrefab.GetComponent<MoonBatteryMissionController>();
-                //GameObject missionPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatteryMissionController.prefab").WaitForCompletion();
-                //GameObject missionObject = Object.Instantiate(missionPrefab, container.transform);
-                //
-                //NetworkServer.Spawn(missionPrefab);
             }
         }
     }

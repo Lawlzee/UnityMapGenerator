@@ -22,7 +22,7 @@ namespace ProceduralStages
         public float timeMax;
         public Transform explicitDestination;
 
-        public void Awake()
+        public void Start()
         {
             string path = "RoR2/Base/moon/MoonExitArenaOrb.prefab";
             GameObject prefab = Addressables.LoadAssetAsync<GameObject>(path).WaitForCompletion();
@@ -46,7 +46,7 @@ namespace ProceduralStages
             orb.transform.localScale = orbLocalScale;
 
             orb.GetComponent<ObjectScaleCurve>().timeMax = timeMax;
-            orb.GetComponent<MapZone>().explicitDestination = explicitDestination.transform;
+            orb.GetComponent<MapZone>().explicitDestination = explicitDestination;
         }
     }
 }

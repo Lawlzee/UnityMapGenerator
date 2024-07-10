@@ -625,6 +625,27 @@ MonoBehaviour:
   explicitDestination: {fileID: 0}
   explicitSpawnEffectPrefab: {fileID: 0}
   destinationIdealRadius: 0
+--- !u!1 &674371781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 903205598, guid: c7ee52cf74d77b94088e3b3c097c9eb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3223386276752008867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &674371782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 674371781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a9881420420ba24290d10176fa1421c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 0}
+  asset: RoR2/Base/Common/VFX/matGlow1.mat
+  shaderValues: []
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1641,7 +1662,7 @@ MonoBehaviour:
   editorSeed: 0
   editorTerrainType: 8
   editorTheme: 0
-  editorStageInLoop: 4
+  editorStageInLoop: 5
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
   editorDetailTexture: {fileID: 0}
@@ -1712,6 +1733,7 @@ MonoBehaviour:
   directorObject: {fileID: 1466132691}
   oobZone: {fileID: 464249046}
   awuEvent: {fileID: 326371546}
+  stageType: 0
 --- !u!23 &1906724323
 MeshRenderer:
   m_ObjectHideFlags: 0

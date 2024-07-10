@@ -433,6 +433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 203192102}
   asset: RoR2/Base/Brother/matBrotherPreBossSphere.mat
+  shaderValues: []
 --- !u!1 &207505075
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,6 +2342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 0}
   asset: RoR2/Base/Common/matDebugYellow.mat
+  shaderValues: []
 --- !u!64 &754672676
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -7646,6 +7648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 997151198}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
+  shaderValues: []
 --- !u!1 &1000705617
 GameObject:
   m_ObjectHideFlags: 0
@@ -8395,6 +8398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 1307253616}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
+  shaderValues: []
 --- !u!1 &1363230656
 GameObject:
   m_ObjectHideFlags: 0
@@ -8508,7 +8512,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 90.00001, y: 0, z: 0}
   orbLocalScale: {x: 1.150437, y: 1.150437, z: 1.150437}
   timeMax: 0.3
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8527,7 +8531,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 2.411744, y: 2.411744, z: 2.411744}
   timeMax: 0.3
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8546,7 +8550,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.24323, y: 1.24323, z: 1.24323}
   timeMax: 0.24
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8565,7 +8569,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
   timeMax: 0.3
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8584,7 +8588,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 0.9871553, y: 0.9871553, z: 0.9871553}
   timeMax: 0.25
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8603,7 +8607,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 2.389379, y: 2.389379, z: 2.389379}
   timeMax: 0.22
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8622,7 +8626,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 2.454931, y: 2.454931, z: 2.454931}
   timeMax: 0.5
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8641,7 +8645,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
   timeMax: 0.3
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8660,7 +8664,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.311065, y: 1.311065, z: 1.311065}
   timeMax: 0.45
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8679,7 +8683,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
   timeMax: 0.1
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8698,7 +8702,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 53.332, y: -69.694, z: -70.173}
   orbLocalScale: {x: 1.21852, y: 1.21852, z: 1.21852}
   timeMax: 0.3
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!114 &1411120061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8717,7 +8721,7 @@ MonoBehaviour:
   orbLocalRotatiton: {x: 90.00001, y: 0, z: 0}
   orbLocalScale: {x: 1.54243, y: 1.54243, z: 1.54243}
   timeMax: 0.25
-  explicitDestination: {fileID: 1411120050}
+  explicitDestination: {fileID: 0}
 --- !u!1 &1430198551
 GameObject:
   m_ObjectHideFlags: 0
@@ -9937,6 +9941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderer: {fileID: 2032620367}
   asset: RoR2/Base/moon/matMoonArenaWall.mat
+  shaderValues: []
 --- !u!1 &2133128229
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ namespace ProceduralStages
     public enum StageType
     {
         Regular,
+        Moon,
         Simulacrum,
         Other
     }
@@ -172,14 +173,14 @@ namespace ProceduralStages
             {
                 Asset = "RoR2/Base/moon/dpMoonInteractables.asset",
                 Type = DccsPoolItemType.Interactables,
-                StageType = StageType.Other,
+                StageType = StageType.Moon,
                 DLC1 = false
             },
             new DccsPoolItem
             {
                 Asset = "RoR2/Base/moon/dpMoonMonsters.asset",
                 Type = DccsPoolItemType.Monsters,
-                StageType = StageType.Other,
+                StageType = StageType.Moon,
                 DLC1 = false
             },
             new DccsPoolItem

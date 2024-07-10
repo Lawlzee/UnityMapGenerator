@@ -21,16 +21,15 @@ namespace ProceduralStages
         public static void Place(
             Graphs graphs,
             int stageInLoop,
-            bool isSimulacrum,
             MoonTerrain moonTerrain)
         {
-            if (moonTerrain != null)
+            if (MapGenerator.instance.stageType == StageType.Moon)
             {
                 //todo
                 return;
             }
 
-            if (!isSimulacrum)
+            if (MapGenerator.instance.stageType == StageType.Regular)
             {
                 InteractablePlacer.Place(
                     graphs,
@@ -59,7 +58,7 @@ namespace ProceduralStages
 
             if (stageInLoop == 4)
             {
-                if (isSimulacrum || MapGenerator.rng.nextNormalizedFloat < (2 / 3f))
+                if (MapGenerator.instance.stageType == StageType.Simulacrum || MapGenerator.rng.nextNormalizedFloat < (2 / 3f))
                 {
                     InteractablePlacer.Place(graphs, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt, skipSpawnWhenSacrificeArtifactEnabled: true);
                 }

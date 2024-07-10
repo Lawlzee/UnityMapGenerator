@@ -88,6 +88,9 @@ namespace ProceduralStages
         public static List<ThemeConfig> ThemeConfigs;
         public static List<TerrainTypePercentConfig> TerrainTypesPercents;
 
+        public static ConfigEntry<float> MoonSpawnRate;
+        public static ConfigEntry<int> MoonRequiredPillarsCount;
+
         public static void Init(ConfigFile config)
         {
             ConfigVersion = config.Bind("Configuration", "Last version played", Main.PluginVersion, "Do not touch");
@@ -271,6 +274,12 @@ namespace ProceduralStages
                     }
                 }
             }
+
+            MoonSpawnRate = config.Bind("Moon", "Spawn rate", 1f, "Specifies the percentage of moon stages that uses the custom terrain type. If the percentage is less than 100%, the normal moon stage will also spawn. If the total percentage is 0%, only the normal moon stage will spawn.");
+            ModSettingsManager.AddOption(new StepSliderOption(MoonSpawnRate, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
+
+            MoonRequiredPillarsCount = config.Bind("Moon", "Required pillars", 4, "Number of pillars necesseray to be able to access the mithrix arena");
+            ModSettingsManager.AddOption(new IntSliderOption(MoonRequiredPillarsCount, new IntSliderConfig() { min = 0, max = 7 }));
 
             StageSeed = config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
             ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));

@@ -18,21 +18,32 @@ namespace ProceduralStages
         public void Awake()
         {
             Debug.Log("pillarIds.Count = " + pillars.pillarIds.Count);
-            Debug.Log("elevatorIds.Count = " + pillars.elevatorIds.Count);
 
             controller = GetComponent<MoonBatteryMissionController>();
             controller.moonBatteries = pillars.pillarIds
                 .Select(NetworkServer.FindLocalObject)
                 .ToArray();
 
+            controller.elevators = new GameObject[0];
 
-            controller.elevators = pillars.elevatorIds
-                .Select(NetworkServer.FindLocalObject)
-                .ToArray();
+            if (NetworkServer.active)
+            {
+                if (ModConfig.MoonRequiredPillarsCount.Value == 0)
+                {
+                    controller._numChargedBatteries = int.MaxValue;
+                }
+                controller._numRequiredBatteries = ModConfig.MoonRequiredPillarsCount.Value;
+            }
         }
 
         public void Start()
         {
+            if (controller._numRequiredBatteries >= controller.numRequiredBatteries)
+            {
+                pillars.globalSphereScaleCurve.enabled = true;
+                return;
+            }
+
             for (int i = 0; i < controller.batteryHoldoutZones.Length; i++)
             {
                 var pillar = controller.batteryHoldoutZones[i];

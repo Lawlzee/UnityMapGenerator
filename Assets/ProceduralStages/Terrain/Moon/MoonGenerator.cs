@@ -113,7 +113,7 @@ namespace ProceduralStages
             //GameObject arenaZone = Instantiate(gravityCylinderPrefab);
             //arenaZone.transform.localScale = MapGenerator.instance.mapScale * new Vector3(2 * arenaZoneRadius, stageSize.y, 2 * arenaZoneRadius);
             //arenaZone.transform.position = MapGenerator.instance.mapScale * arenaPosition;
-
+            
             List<Sphere> sphereZones = new List<Sphere>();
 
             int sphereCount = rng.RangeInt(spheres.count.min, spheres.count.max);
@@ -214,15 +214,43 @@ namespace ProceduralStages
                 }
             });
 
-            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            ProfilerLog.Debug("marchingCubes");
-
             List<GameObject> customObjects = new List<GameObject>();
             customObjects.AddRange(sphereZones.Select(x => x.gravitySphere));
             customObjects.Add(antiGravitySphere);
             customObjects.Add(dropship);
             customObjects.Add(arena);
             customObjects.Add(arenaGravityZone);
+
+            MoonExitOrbSpawner[] exitOrbs = moonObject.GetComponentsInChildren<MoonExitOrbSpawner>(includeInactive: true);
+            exitOrbs[0].transform.parent.position += arenaDeltaPos;
+
+            for (int i = 0; i < exitOrbs.Length; i++)
+            {
+                Vector3Int destination;
+                while (true)
+                {
+                    destination = new Vector3Int(
+                        rng.RangeInt(0, stageSize.x),
+                        rng.RangeInt(0, stageSize.y),
+                        rng.RangeInt(0, stageSize.z));
+
+                    if (densityMap[destination.x, destination.y, destination.z] < 0.5f)
+                    {
+                        break;
+                    }
+                }
+
+                GameObject orbDestination = new GameObject("OrbDestination");
+                orbDestination.transform.position = (Vector3)destination * MapGenerator.instance.mapScale;
+
+                exitOrbs[i].explicitDestination = orbDestination.transform;
+                customObjects.Add(orbDestination);
+            }
+
+            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
+            ProfilerLog.Debug("marchingCubes");
+
+
             //customObjects.Add(arenaZone);
 
             moonObject.SetActive(true);

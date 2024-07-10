@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Rendering;
@@ -128,39 +129,44 @@ namespace ProceduralStages
 
         private static void SceneExitController_SetState(On.RoR2.SceneExitController.orig_SetState orig, SceneExitController self, SceneExitController.ExitState newState)
         {
-            if (!NetworkServer.active
-                || !Run.instance.name.Contains(Main.Judgement)
-                || newState != SceneExitController.ExitState.Finished
-                || SceneCatalog.currentSceneDef.cachedName != "bazaar"
-                || Run.instance.stageClearCount >= 11)
+            if (NetworkServer.active && newState == SceneExitController.ExitState.Finished)
             {
-                orig(self, newState);
-                return;
-            }
-
-            int stageIndex = (Run.instance.stageClearCount / 2) % Run.stagesPerLoop;
-
-            var typesWeights = RunConfig.instance.terrainTypesPercents
-                .Where(x => x.StageIndex == stageIndex)
-                .ToList();
-
-            float totalPercent = typesWeights
-                .Select(x => x.Percent)
-                .Sum();
-
-            if (Run.instance.stageRngGenerator.nextNormalizedFloat <= totalPercent)
-            {
-                Run.instance.nextStageScene = ContentProvider.ItSceneDef;
-
-                WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
-
-                for (int i = 0; i < typesWeights.Count; i++)
+                if (Run.instance.name.Contains(Main.Judgement)
+                    && SceneCatalog.currentSceneDef.cachedName == "bazaar"
+                    && Run.instance.stageClearCount < 11)
                 {
-                    var config = typesWeights[i];
-                    selection.AddChoice(config.TerrainType, config.Percent);
-                }
+                    int stageIndex = (Run.instance.stageClearCount / 2) % Run.stagesPerLoop;
 
-                RunConfig.instance.selectedTerrainType = selection.Evaluate(RunConfig.instance.stageRng.nextNormalizedFloat);
+                    var typesWeights = RunConfig.instance.terrainTypesPercents
+                        .Where(x => x.StageIndex == stageIndex)
+                        .ToList();
+
+                    float totalPercent = typesWeights
+                        .Select(x => x.Percent)
+                        .Sum();
+
+                    if (Run.instance.stageRngGenerator.nextNormalizedFloat <= totalPercent)
+                    {
+                        Run.instance.nextStageScene = ContentProvider.ItSceneDef;
+
+                        WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                        for (int i = 0; i < typesWeights.Count; i++)
+                        {
+                            var config = typesWeights[i];
+                            selection.AddChoice(config.TerrainType, config.Percent);
+                        }
+
+                        RunConfig.instance.selectedTerrainType = selection.Evaluate(RunConfig.instance.stageRng.nextNormalizedFloat);
+                    }
+                }
+                else if (self.gameObject.name == "LunarTeleporter Variant(Clone)" 
+                    && !self.useRunNextStageScene
+                    && RunConfig.instance.stageRng.nextNormalizedFloat <= ModConfig.MoonSpawnRate.Value)
+                {
+                    RunConfig.instance.selectedTerrainType = TerrainType.Moon;
+                    self.destinationScene = ContentProvider.LoopSceneDefs[0];
+                }
             }
 
             orig(self, newState);
