@@ -50,6 +50,10 @@ namespace ProceduralStages
             [Range(0f, 1f)]
             public float maxObjectifDistance;
 
+            public FBM floorFBM;
+            public ThreadSafeCurve floorCurve;
+            public ThreadSafeCurve distanceFloorMultiplierCurve;
+
             public int bubbleRenderQueue;
             public string bubbleMaterialKey;
             public Texture2D antigravityColorRemapRamp;
@@ -60,6 +64,9 @@ namespace ProceduralStages
         {
             public Vector3 position;
             public float radius;
+
+            public int seedX;
+            public int seedZ;
         }
 
         public override Terrain Generate()
@@ -75,10 +82,6 @@ namespace ProceduralStages
                 arenaDistance * Mathf.Sin(arenaAngle) * stageSize.z + stageSize.z / 2f);
 
             Vector3 stageCenter = (Vector3)stageSize / 2f;
-
-            //GameObject arenaZone = Instantiate(gravityCylinderPrefab);
-            //arenaZone.transform.localScale = MapGenerator.instance.mapScale * new Vector3(2 * arenaZoneRadius, stageSize.y, 2 * arenaZoneRadius);
-            //arenaZone.transform.position = MapGenerator.instance.mapScale * arenaPosition;
 
             sphereZones = new List<Sphere>();
 
@@ -114,7 +117,9 @@ namespace ProceduralStages
                 sphereZones.Add(new Sphere
                 {
                     position = position,
-                    radius = radius
+                    radius = radius,
+                    seedX = MapGenerator.rng.RangeInt(0, short.MaxValue),
+                    seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue)
                 });
             }
 
@@ -137,22 +142,24 @@ namespace ProceduralStages
                 for (int y = minY; y <= maxY; y++)
                 {
                     bool isBottomHalf = y < sphereZone.position.y;
-                    float verticalDistance = Mathf.Clamp01(0.5f + (sphereZone.position.y - y) / sphereZone.radius);
+                    float verticalDistance = 0.5f + (sphereZone.position.y - y) / sphereZone.radius;
 
                     for (int x = minX; x <= maxX; x++)
                     {
                         for (int z = minZ; z <= maxZ; z++)
                         {
                             Vector3 position = new Vector3(x, y, z);
+                            float distance = (position - sphereZone.position).magnitude / sphereZone.radius;
 
+                            float floorNoise = spheres.floorCurve.Evaluate(0.5f * (spheres.floorFBM.Evaluate(x + sphereZone.seedX, z + sphereZone.seedZ) + 1));
+                            float scaledFloorNoise = spheres.distanceFloorMultiplierCurve.Evaluate(distance) * floorNoise;
+                            float verticalNoise = verticalDistance + scaledFloorNoise;
 
-                            float distance = (position - sphereZone.position).magnitude;
-
-                            float density = verticalDistance;
+                            float density = verticalNoise;
 
                             if (isBottomHalf)
                             {
-                                density = Mathf.Min(density, Mathf.Clamp01(1 - spheres.landScale * distance / sphereZone.radius));
+                                density = Mathf.Min(density, Mathf.Clamp01(1 - spheres.landScale * distance));
                             }
 
                             densityMap[x, y, z] = density;

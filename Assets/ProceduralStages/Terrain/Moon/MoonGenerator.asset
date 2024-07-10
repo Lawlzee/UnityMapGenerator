@@ -35,6 +35,10 @@ MonoBehaviour:
     buffer: 1
     landScale: 0.499
     maxObjectifDistance: 0.3
+    floorFBM: {fileID: 11400000, guid: 223110005f462f749ac5a3320d035f82, type: 2}
+    floorCurve: {fileID: 11400000, guid: 531b0535fbe369b49ace79bfc7b0fb5d, type: 2}
+    distanceFloorMultiplierCurve: {fileID: 11400000, guid: 35a2740b15cb00146af6b73b52c222ab,
+      type: 2}
     bubbleRenderQueue: 3001
     bubbleMaterialKey: RoR2/Base/Teleporters/matTeleporterRangeIndicator.mat
     antigravityColorRemapRamp: {fileID: 2800000, guid: bd79f821e191a6f4cbddd56a085f8757,

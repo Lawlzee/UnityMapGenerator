@@ -62,8 +62,6 @@ namespace ProceduralStages
                 validPositions.Add(node);
             }
 
-            Log.Debug("validPositions.Length: " + validPositions.Count);
-
             if (validPositions.Count == 0)
             {
                 return null;
