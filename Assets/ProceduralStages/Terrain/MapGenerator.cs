@@ -208,7 +208,6 @@ namespace ProceduralStages
                 {
                     terrain = terrainGenerator.Generate();
                 }
-                terrainCustomObject = terrain.customObjects.ToList();
 
                 var scaledSize = new Vector3(stageSize.x * mapScale * terrain.oobScale.x, stageSize.y * mapScale * terrain.oobScale.y, stageSize.z * mapScale * terrain.oobScale.z);
                 oobZone.size = scaledSize;
@@ -346,6 +345,10 @@ namespace ProceduralStages
                         bigObjectOnly: false);
 
                     ProfilerLog.Debug("propsPlacer");
+
+                    terrainGenerator.AddProps(terrain, graphs);
+                    terrainCustomObject = terrain.customObjects;
+                    ProfilerLog.Debug("terrainGenerator.AddProps");
 
                     if (terrainGenerator.backdropGenerator != null)
                     {

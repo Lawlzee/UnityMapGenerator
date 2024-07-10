@@ -11,9 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.Networking;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
-using UnityMeshSimplifier;
 
 namespace ProceduralStages
 {
@@ -27,15 +25,18 @@ namespace ProceduralStages
 
         public float arenaDistance;
 
-        public Voronoi3D voronoi3D;
-        public ThreadSafeCurve voronoiRemapCurve;
-        public ThreadSafeCurve sphereDistanceCurve;
-
-
         public GameObject gravitySpherePrefab;
         public GameObject gravityCylinderPrefab;
         public float antiGravitySphereScale;
         public GameObject antiGravitySpherePrefab;
+
+        public string redCauldronKey;
+        public string greenCauldronKey;
+        public string whiteCauldronKey;
+        public string lunarPodKey;
+
+        private Vector3 arenaPosition;
+        private List<Sphere> sphereZones;
 
         [Serializable]
         public struct Spheres
@@ -46,6 +47,8 @@ namespace ProceduralStages
             public float minDistance;
             public float buffer;
             public float landScale;
+            [Range(0f, 1f)]
+            public float maxObjectifDistance;
 
             public int bubbleRenderQueue;
             public string bubbleMaterialKey;
@@ -55,7 +58,6 @@ namespace ProceduralStages
 
         public struct Sphere
         {
-            public GameObject gravitySphere;
             public Vector3 position;
             public float radius;
         }
@@ -67,54 +69,18 @@ namespace ProceduralStages
 
             float arenaAngle = rng.nextNormalizedFloat * 2 * Mathf.PI;
 
-            Vector3 arenaPosition = new Vector3(
+            arenaPosition = new Vector3(
                 arenaDistance * Mathf.Cos(arenaAngle) * stageSize.x + stageSize.x / 2f,
                 0,
                 arenaDistance * Mathf.Sin(arenaAngle) * stageSize.z + stageSize.z / 2f);
 
-            GameObject arenaGravityZone = Instantiate(gravityCylinderPrefab);
-            arenaGravityZone.transform.position = MapGenerator.instance.mapScale * arenaPosition + arenaZoneOffset;
-            arenaGravityZone.transform.localScale = arenaZoneScale;
-
-            Material antiGravitySphereMaterial = new Material(Addressables.LoadAssetAsync<Material>(spheres.bubbleMaterialKey).WaitForCompletion());
-            antiGravitySphereMaterial.renderQueue = spheres.bubbleRenderQueue;
-            antiGravitySphereMaterial.SetTexture("_RemapTex", spheres.antigravityColorRemapRamp);
-
-            Material gravitySphereMaterial = new Material(antiGravitySphereMaterial);
-            gravitySphereMaterial.SetTexture("_RemapTex", spheres.gravityColorRemapRamp);
-
             Vector3 stageCenter = (Vector3)stageSize / 2f;
 
-            var antiGravitySphere = Instantiate(antiGravitySpherePrefab);
-            antiGravitySphere.GetComponent<MeshRenderer>().material = antiGravitySphereMaterial;
-
-            float antiGravitySphereScale = this.antiGravitySphereScale * Mathf.Max(stageSize.x, stageCenter.y, stageCenter.z);
-            antiGravitySphere.transform.localScale = MapGenerator.instance.mapScale * new Vector3(antiGravitySphereScale, antiGravitySphereScale, antiGravitySphereScale);
-            antiGravitySphere.transform.position = new Vector3(stageCenter.x, 0, stageCenter.z) * MapGenerator.instance.mapScale;
-
-
-            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
-
-            MoonPillars moonPillars = moonObject.GetComponentInChildren<MoonPillars>();
-            moonPillars.pillarPositions = new List<Vector3>();
-            moonPillars.rng = new Xoroshiro128Plus(rng.nextUlong);
-            moonPillars.globalSphereScaleCurve = antiGravitySphere.GetComponent<ObjectScaleCurve>();
-            moonPillars.globalSphereScaleCurve.baseScale = antiGravitySphere.transform.localScale;
-
-            Transform brotherMissionControllerTransform = moonObject.transform.Find("BrotherMissionController");
-            Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
-
-            Vector3 arenaDeltaPos = MapGenerator.instance.mapScale * arenaPosition - gameplaySpaceTransform.position;
-            brotherMissionControllerTransform.position += arenaDeltaPos;
-
-            gameplaySpaceTransform.position = MapGenerator.instance.mapScale * arenaPosition;
-
-            GameObject arena = MoonArena.AddArena(MapGenerator.instance.mapScale * arenaPosition);
             //GameObject arenaZone = Instantiate(gravityCylinderPrefab);
             //arenaZone.transform.localScale = MapGenerator.instance.mapScale * new Vector3(2 * arenaZoneRadius, stageSize.y, 2 * arenaZoneRadius);
             //arenaZone.transform.position = MapGenerator.instance.mapScale * arenaPosition;
-            
-            List<Sphere> sphereZones = new List<Sphere>();
+
+            sphereZones = new List<Sphere>();
 
             int sphereCount = rng.RangeInt(spheres.count.min, spheres.count.max);
 
@@ -145,33 +111,14 @@ namespace ProceduralStages
                     continue;
                 }
 
-                GameObject gravitySphere = Instantiate(gravitySpherePrefab);
-                gravitySphere.transform.position = position * MapGenerator.instance.mapScale;
-                gravitySphere.transform.localScale = 2 * new Vector3(radius, radius, radius) * MapGenerator.instance.mapScale;
-                gravitySphere.GetComponent<MeshRenderer>().material = gravitySphereMaterial;
-
                 sphereZones.Add(new Sphere
                 {
                     position = position,
-                    radius = radius,
-                    gravitySphere = gravitySphere
+                    radius = radius
                 });
             }
 
-            int pillarCount = rng.RangeInt(4, 8);
-            for (int i = 1; i <= pillarCount && i < sphereZones.Count; i++)
-            {
-                moonPillars.pillarPositions.Add(sphereZones[i].position * MapGenerator.instance.mapScale);
-            }
-
-            GameObject dropship = null;
-
-            if (NetworkServer.active)
-            {
-                dropship = MoonDropship.Place(sphereZones[0].position * MapGenerator.instance.mapScale, moonObject);
-
-                moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>().dropshipZone = dropship;
-            }
+            sphereZones.Sort((a, b) => a.radius > b.radius ? -1 : 1);
 
             float[,,] densityMap = new float[stageSize.x, stageSize.y, stageSize.z];
 
@@ -214,48 +161,16 @@ namespace ProceduralStages
                 }
             });
 
-            List<GameObject> customObjects = new List<GameObject>();
-            customObjects.AddRange(sphereZones.Select(x => x.gravitySphere));
-            customObjects.Add(antiGravitySphere);
-            customObjects.Add(dropship);
-            customObjects.Add(arena);
-            customObjects.Add(arenaGravityZone);
-
-            MoonExitOrbSpawner[] exitOrbs = moonObject.GetComponentsInChildren<MoonExitOrbSpawner>(includeInactive: true);
-            exitOrbs[0].transform.parent.position += arenaDeltaPos;
-
-            for (int i = 0; i < exitOrbs.Length; i++)
-            {
-                Vector3Int destination;
-                while (true)
-                {
-                    destination = new Vector3Int(
-                        rng.RangeInt(0, stageSize.x),
-                        rng.RangeInt(0, stageSize.y),
-                        rng.RangeInt(0, stageSize.z));
-
-                    if (densityMap[destination.x, destination.y, destination.z] < 0.5f)
-                    {
-                        break;
-                    }
-                }
-
-                GameObject orbDestination = new GameObject("OrbDestination");
-                orbDestination.transform.position = (Vector3)destination * MapGenerator.instance.mapScale;
-
-                exitOrbs[i].explicitDestination = orbDestination.transform;
-                customObjects.Add(orbDestination);
-            }
-
             var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
             ProfilerLog.Debug("marchingCubes");
 
-
-            //customObjects.Add(arenaZone);
-
-            moonObject.SetActive(true);
-
             MoonTerrain moonTerrain = new MoonTerrain();
+
+
+            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
+            Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
+
+            Vector3 arenaDeltaPos = MapGenerator.instance.mapScale * arenaPosition - gameplaySpaceTransform.position;
             SetArenaNodeGraph(moonTerrain, arenaDeltaPos);
 
             return new Terrain
@@ -265,7 +180,7 @@ namespace ProceduralStages
                 densityMap = densityMap,
                 maxGroundHeight = float.MaxValue,
                 oobScale = new Vector3(4, 6, 4),
-                customObjects = customObjects.ToArray(),
+                customObjects = new List<GameObject>(),
                 moonTerrain = moonTerrain
             };
         }
@@ -335,6 +250,215 @@ namespace ProceduralStages
             resultNodeGraph.gateNames = nodeGraph.gateNames;
 
             return resultNodeGraph;
+        }
+
+        public override void AddProps(Terrain terrain, Graphs graphs)
+        {
+            var rng = MapGenerator.rng;
+
+            var stageSize = MapGenerator.instance.stageSize;
+            Vector3 stageCenter = (Vector3)stageSize / 2f;
+
+            GameObject arenaGravityZone = Instantiate(gravityCylinderPrefab);
+            arenaGravityZone.transform.position = MapGenerator.instance.mapScale * arenaPosition + arenaZoneOffset;
+            arenaGravityZone.transform.localScale = arenaZoneScale;
+            terrain.customObjects.Add(arenaGravityZone);
+
+            Material antiGravitySphereMaterial = new Material(Addressables.LoadAssetAsync<Material>(spheres.bubbleMaterialKey).WaitForCompletion());
+            antiGravitySphereMaterial.renderQueue = spheres.bubbleRenderQueue;
+            antiGravitySphereMaterial.SetTexture("_RemapTex", spheres.antigravityColorRemapRamp);
+
+            Material gravitySphereMaterial = new Material(antiGravitySphereMaterial);
+            gravitySphereMaterial.SetTexture("_RemapTex", spheres.gravityColorRemapRamp);
+
+            var antiGravitySphere = Instantiate(antiGravitySpherePrefab);
+            antiGravitySphere.GetComponent<MeshRenderer>().material = antiGravitySphereMaterial;
+
+            float antiGravitySphereScale = this.antiGravitySphereScale * Mathf.Max(stageSize.x, stageCenter.y, stageCenter.z);
+            antiGravitySphere.transform.localScale = MapGenerator.instance.mapScale * new Vector3(antiGravitySphereScale, antiGravitySphereScale, antiGravitySphereScale);
+            antiGravitySphere.transform.position = new Vector3(stageCenter.x, 0, stageCenter.z) * MapGenerator.instance.mapScale;
+
+            terrain.customObjects.Add(antiGravitySphere);
+
+            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
+
+            MoonEscapeSequence moonEscapeSequence = moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>();
+
+            MoonPillars moonPillars = moonObject.GetComponentInChildren<MoonPillars>();
+            moonPillars.pillarPositions = new List<Vector3>();
+            moonPillars.rng = new Xoroshiro128Plus(rng.nextUlong);
+            moonPillars.globalSphereScaleCurve = antiGravitySphere.GetComponent<ObjectScaleCurve>();
+            moonPillars.globalSphereScaleCurve.baseScale = antiGravitySphere.transform.localScale;
+
+            int pillarCount = rng.RangeInt(4, 8);
+            for (int i = 1; i <= pillarCount && i < sphereZones.Count; i++)
+            {
+                var sphere = sphereZones[i];
+                PropsNode? pillarPosition = graphs.FindNodeApproximate(rng, sphere.position * MapGenerator.instance.mapScale, sphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+
+                moonPillars.pillarPositions.Add(pillarPosition?.position ?? (sphere.position * MapGenerator.instance.mapScale));
+                if (pillarPosition != null)
+                {
+                    graphs.OccupySpace(pillarPosition.Value.position, solid: true);
+                }
+            }
+
+            var shipSphere = sphereZones[0];
+            PropsNode? shipPosition = graphs.FindNodeApproximate(rng, shipSphere.position * MapGenerator.instance.mapScale, shipSphere.radius * MapGenerator.instance.mapScale * spheres.maxObjectifDistance);
+
+            if (NetworkServer.active)
+            {
+                GameObject dropship = MoonDropship.Place(shipPosition?.position ?? (shipSphere.position * MapGenerator.instance.mapScale), moonObject);
+                moonEscapeSequence.dropshipZone = dropship;
+                terrain.customObjects.Add(dropship);
+            }
+
+            if (shipPosition != null)
+            {
+                graphs.OccupySpace(shipPosition.Value.position, solid: true);
+            }
+
+            var lunarSphere = sphereZones[sphereZones.Count - 3];
+            GameObject lunarPodPrefab = Addressables.LoadAssetAsync<GameObject>(lunarPodKey).WaitForCompletion();
+
+            for (int i = 0; i < 7; i++)
+            {
+                float lunarSpawnRate = 17f / 49f;
+
+                if (rng.nextNormalizedFloat < lunarSpawnRate)
+                {
+                    PropsNode? podLocation = graphs.FindNodeApproximate(rng, lunarSphere.position * MapGenerator.instance.mapScale, lunarSphere.radius * MapGenerator.instance.mapScale);
+                    if (podLocation == null)
+                    {
+                        break;
+                    }
+
+                    graphs.OccupySpace(podLocation.Value.position, solid: false);
+
+                    if (NetworkServer.active)
+                    {
+                        GameObject lunarPod = Instantiate(lunarPodPrefab);
+                        lunarPod.transform.position = podLocation.Value.position;
+
+                        NetworkServer.Spawn(lunarPod);
+                        terrain.customObjects.Add(lunarPod);
+                    }
+                }
+            }
+
+            var cauldronSphere = sphereZones[sphereZones.Count - 2];
+            float redCauldronRate = 10f / 22f;
+
+            GameObject redCauldronPrefab = Addressables.LoadAssetAsync<GameObject>(redCauldronKey).WaitForCompletion();
+            GameObject greenCauldronPrefab = Addressables.LoadAssetAsync<GameObject>(greenCauldronKey).WaitForCompletion();
+
+            for (int i = 0; i < 5; i++)
+            {
+                GameObject cauldronPrefab = rng.nextNormalizedFloat < redCauldronRate
+                    ? redCauldronPrefab
+                    : greenCauldronPrefab;
+
+                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
+                if (cauldronLocation == null)
+                {
+                    break;
+                }
+
+                graphs.OccupySpace(cauldronLocation.Value.position, solid: true);
+
+                if (NetworkServer.active)
+                {
+                    GameObject cauldron = Instantiate(cauldronPrefab);
+                    cauldron.transform.position = cauldronLocation.Value.position;
+
+                    NetworkServer.Spawn(cauldron);
+                    terrain.customObjects.Add(cauldron);
+                }
+            }
+
+            GameObject whiteCauldronPrefab = Addressables.LoadAssetAsync<GameObject>(whiteCauldronKey).WaitForCompletion();
+            int whiteCauldronCount = MapGenerator.rng.RangeInt(0, 3);
+
+            for (int i = 0; i < whiteCauldronCount; i++)
+            {
+                PropsNode? cauldronLocation = graphs.FindNodeApproximate(rng, cauldronSphere.position * MapGenerator.instance.mapScale, cauldronSphere.radius * MapGenerator.instance.mapScale);
+                if (cauldronLocation == null)
+                {
+                    break;
+                }
+
+                graphs.OccupySpace(cauldronLocation.Value.position, solid: true);
+
+                if (NetworkServer.active)
+                {
+                    GameObject cauldron = Instantiate(whiteCauldronPrefab);
+                    cauldron.transform.position = cauldronLocation.Value.position;
+
+                    NetworkServer.Spawn(cauldron);
+                    terrain.customObjects.Add(cauldron);
+                }
+            }
+
+            Transform brotherMissionControllerTransform = moonObject.transform.Find("BrotherMissionController");
+
+            ChildLocator childLocator = MapGenerator.instance.sceneInfoObject.GetComponent<ChildLocator>();
+            Transform centerOfArena = brotherMissionControllerTransform.Find("CenterOfArena");
+            childLocator.transformPairs[0].transform = centerOfArena;
+
+            GameObject playerSpawnOrigin = new GameObject("PlayerSpawnOrigin");
+            playerSpawnOrigin.transform.position = sphereZones[sphereZones.Count - 1].position * MapGenerator.instance.mapScale;
+            childLocator.transformPairs[1].transform = playerSpawnOrigin.transform;
+            terrain.customObjects.Add(playerSpawnOrigin);
+
+            moonEscapeSequence.frogPosition = playerSpawnOrigin.transform.position;
+
+            Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
+
+            Vector3 arenaDeltaPos = MapGenerator.instance.mapScale * arenaPosition - gameplaySpaceTransform.position;
+            brotherMissionControllerTransform.position += arenaDeltaPos;
+
+            gameplaySpaceTransform.position = MapGenerator.instance.mapScale * arenaPosition;
+
+            GameObject arena = MoonArena.AddArena(MapGenerator.instance.mapScale * arenaPosition);
+            terrain.customObjects.Add(arena);
+
+            foreach (var sphere in sphereZones)
+            {
+                GameObject gravitySphere = Instantiate(gravitySpherePrefab);
+                gravitySphere.transform.position = sphere.position * MapGenerator.instance.mapScale;
+                gravitySphere.transform.localScale = 2 * new Vector3(sphere.radius, sphere.radius, sphere.radius) * MapGenerator.instance.mapScale;
+                gravitySphere.GetComponent<MeshRenderer>().material = gravitySphereMaterial;
+
+                terrain.customObjects.Add(gravitySphere);
+            }
+
+            MoonExitOrbSpawner[] exitOrbs = moonObject.GetComponentsInChildren<MoonExitOrbSpawner>(includeInactive: true);
+            exitOrbs[0].transform.parent.position += arenaDeltaPos;
+
+            for (int i = 0; i < exitOrbs.Length; i++)
+            {
+                Vector3Int destination;
+                while (true)
+                {
+                    destination = new Vector3Int(
+                        rng.RangeInt(0, stageSize.x),
+                        rng.RangeInt(0, stageSize.y),
+                        rng.RangeInt(0, stageSize.z));
+
+                    if (terrain.densityMap[destination.x, destination.y, destination.z] < 0.5f)
+                    {
+                        break;
+                    }
+                }
+
+                GameObject orbDestination = new GameObject("OrbDestination");
+                orbDestination.transform.position = (Vector3)destination * MapGenerator.instance.mapScale;
+
+                exitOrbs[i].explicitDestination = orbDestination.transform;
+                terrain.customObjects.Add(orbDestination);
+            }
+
+            moonObject.SetActive(true);
         }
     }
 }

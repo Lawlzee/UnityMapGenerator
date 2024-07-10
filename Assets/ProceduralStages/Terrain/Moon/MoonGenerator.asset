@@ -34,6 +34,7 @@ MonoBehaviour:
     minDistance: 5
     buffer: 1
     landScale: 0.499
+    maxObjectifDistance: 0.3
     bubbleRenderQueue: 3001
     bubbleMaterialKey: RoR2/Base/Teleporters/matTeleporterRangeIndicator.mat
     antigravityColorRemapRamp: {fileID: 2800000, guid: bd79f821e191a6f4cbddd56a085f8757,
@@ -43,10 +44,6 @@ MonoBehaviour:
   arenaZoneScale: {x: 500, y: 70, z: 500}
   arenaZoneOffset: {x: -10, y: 750, z: 0}
   arenaDistance: 1
-  voronoi3D: {fileID: 11400000, guid: e9329e544cba9dd458edfabf2991f233, type: 2}
-  voronoiRemapCurve: {fileID: 11400000, guid: 195693a8a8295c1448a71130edaa5464, type: 2}
-  sphereDistanceCurve: {fileID: 11400000, guid: e718272ed466c274ebeae85e7ac3b55d,
-    type: 2}
   gravitySpherePrefab: {fileID: 5510949426476668870, guid: cc2c2b65d26d15b4ab6d92e03a22ee69,
     type: 3}
   gravityCylinderPrefab: {fileID: 5205451501041536733, guid: 83198089ada863f41a9ec4c2a1a6300a,
@@ -54,3 +51,7 @@ MonoBehaviour:
   antiGravitySphereScale: 1.4
   antiGravitySpherePrefab: {fileID: 5510949426476668870, guid: 6c69c21c0b6b9ee4d9165d5ff8361dee,
     type: 3}
+  redCauldronKey: RoR2/Base/LunarCauldrons/LunarCauldron, GreenToRed Variant.prefab
+  greenCauldronKey: RoR2/Base/LunarCauldrons/LunarCauldron, WhiteToGreen.prefab
+  whiteCauldronKey: RoR2/Base/LunarCauldrons/LunarCauldron, RedToWhite Variant.prefab
+  lunarPodKey: RoR2/Base/LunarChest/LunarChest.prefab

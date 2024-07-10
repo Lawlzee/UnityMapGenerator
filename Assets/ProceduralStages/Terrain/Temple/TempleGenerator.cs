@@ -398,7 +398,7 @@ namespace ProceduralStages
                 floorlessDensityMap = floorlessMap,
                 densityMap = densityMap,
                 maxGroundHeight = float.MaxValue,
-                customObjects = new GameObject[]
+                customObjects = new List<GameObject>()
                 {
                     crystalParticleSystem
                 }

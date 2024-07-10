@@ -80,7 +80,7 @@ namespace ProceduralStages
                 densityMap = map3d,
                 maxGroundHeight = float.MaxValue,
                 minInteractableHeight = waterLevel,
-                customObjects = new GameObject[]
+                customObjects = new List<GameObject>()
                 {
                     volcanoParticleSystem
                 }

@@ -16,7 +16,7 @@ namespace ProceduralStages
         public float maxGroundHeight;
         public float minInteractableHeight;
         public Vector3 oobScale = new Vector3(1, 1.5f, 1);
-        public GameObject[] customObjects = new GameObject[0];
+        public List<GameObject> customObjects = new List<GameObject>();
 
         public MoonTerrain moonTerrain;
     }
@@ -25,12 +25,6 @@ namespace ProceduralStages
     {
         public NodeGraph arenaGroundGraph;
         public NodeGraph arenaAirGraph;
-
-        public Vector3 soupsIslandPosition;
-        public float soupsIslandRadius;
-
-        public Vector3 lunarIslandPosition;
-        public float lunarIslandRadius;
     }
 
     public class MeshResult
@@ -57,5 +51,10 @@ namespace ProceduralStages
         public BackdropGenerator backdropGenerator;
 
         public abstract Terrain Generate();
+
+        public virtual void AddProps(Terrain terrain, Graphs graphs)
+        {
+
+        }
     }
 }

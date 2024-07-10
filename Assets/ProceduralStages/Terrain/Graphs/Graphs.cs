@@ -34,5 +34,42 @@ namespace ProceduralStages
                 }
             }
         }
+
+        public PropsNode? FindNodeApproximate(Xoroshiro128Plus rng, Vector3 position, float maxDistance)
+        {
+            List<PropsNode> validPositions = new List<PropsNode>();
+
+            for (int i = 0; i < floorProps.Length; i++)
+            {
+                PropsNode node = floorProps[i];
+                
+                if ((node.position - position).sqrMagnitude > maxDistance * maxDistance)
+                {
+                    continue;
+                }
+
+                if (!groundNodeIndexByPosition.TryGetValue(node.position, out int index))
+                {
+                    continue;
+                }
+
+                var graphNode = ground.nodes[index];
+                if (graphNode.forbiddenHulls == (HullMask.Human | HullMask.Golem | HullMask.BeetleQueen))
+                {
+                    continue;
+                }
+
+                validPositions.Add(node);
+            }
+
+            Log.Debug("validPositions.Length: " + validPositions.Count);
+
+            if (validPositions.Count == 0)
+            {
+                return null;
+            }
+
+            return rng.NextElementUniform(validPositions);
+        }
     }
 }

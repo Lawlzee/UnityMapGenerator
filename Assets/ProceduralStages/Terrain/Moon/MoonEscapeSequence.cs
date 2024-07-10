@@ -17,6 +17,7 @@ namespace ProceduralStages
     public class MoonEscapeSequence : NetworkBehaviour
     {
         public GameObject dropshipZone;
+        public Vector3 frogPosition;
 
         public void Start()
         {
@@ -43,7 +44,7 @@ namespace ProceduralStages
 
                 GameObject frogSpawner = new GameObject("FrogSpawner");
                 frogSpawner.transform.parent = escapeSequenceObjects.transform;
-                frogSpawner.transform.localPosition = new Vector3(1105.95f, -283.0119f, 1182.11f);
+                frogSpawner.transform.position = frogPosition;
                 GenericSceneSpawnPoint frogSpawnPoint = frogSpawner.AddComponent<GenericSceneSpawnPoint>();
                 frogSpawnPoint.networkedObjectPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/FrogInteractable.prefab").WaitForCompletion();
 

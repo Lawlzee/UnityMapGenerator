@@ -64,7 +64,7 @@ namespace ProceduralStages
 
         private static void SceneDirector_PlacePlayerSpawnsViaNodegraph(On.RoR2.SceneDirector.orig_PlacePlayerSpawnsViaNodegraph orig, SceneDirector self)
         {
-            if (Run.instance.spawnWithPod && SceneCatalog.currentSceneDef.cachedName == Main.SceneName)
+            if (Run.instance.spawnWithPod && SceneCatalog.currentSceneDef.cachedName == Main.SceneName && MapGenerator.instance.stageType != StageType.Moon)
             {
                 bool oldValue = Stage.instance.usePod;
                 try

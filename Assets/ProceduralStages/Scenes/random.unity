@@ -1535,6 +1535,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1708339108}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1735791201 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3223386276809580240, guid: c7ee52cf74d77b94088e3b3c097c9eb8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3223386276752008867}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1735791202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1735791201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1604495451, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1798483139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,6 +1564,7 @@ GameObject:
   - component: {fileID: 1798483140}
   - component: {fileID: 1798483141}
   - component: {fileID: 1798483142}
+  - component: {fileID: 1798483143}
   m_Layer: 0
   m_Name: Scene Info
   m_TagString: Untagged
@@ -1607,6 +1626,23 @@ MonoBehaviour:
   interactableCategories: {fileID: 0}
   monsterCategories: {fileID: 0}
   possibleMonsterFamilies: []
+--- !u!114 &1798483143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798483139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -226763392, guid: 951ce57ad999ac1f040a4dceb5f8b763, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transformPairs:
+  - name: CenterOfArena
+    transform: {fileID: 0}
+  - name: PlayerSpawnOrigin
+    transform: {fileID: 0}
 --- !u!1 &1906724320
 GameObject:
   m_ObjectHideFlags: 0
