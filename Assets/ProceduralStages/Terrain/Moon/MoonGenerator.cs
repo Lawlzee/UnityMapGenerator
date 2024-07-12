@@ -184,6 +184,7 @@ namespace ProceduralStages
 
             return new Terrain
             {
+                generator = this,
                 meshResult = meshResult,
                 floorlessDensityMap = new float[stageSize.x, stageSize.y, stageSize.z],
                 densityMap = densityMap,

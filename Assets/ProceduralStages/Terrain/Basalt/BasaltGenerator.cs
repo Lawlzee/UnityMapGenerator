@@ -75,6 +75,7 @@ namespace ProceduralStages
 
             return new Terrain
             {
+                generator = this,
                 meshResult = meshResult,
                 floorlessDensityMap = floorlessMap,
                 densityMap = map3d,

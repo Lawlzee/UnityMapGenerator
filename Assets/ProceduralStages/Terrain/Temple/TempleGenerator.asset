@@ -23,6 +23,7 @@ MonoBehaviour:
   terrainType: 7
   ceillingPropsWeight: 1
   backdropGenerator: {fileID: 11400000, guid: 64d7d59a9b3c82244b13eb40aba11c32, type: 2}
+  airNodesScale: 2
   towerWidth:
     min: 4
     max: 10

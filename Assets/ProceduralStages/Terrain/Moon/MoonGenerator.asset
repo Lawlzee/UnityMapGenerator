@@ -23,6 +23,7 @@ MonoBehaviour:
   terrainType: 8
   ceillingPropsWeight: 1
   backdropGenerator: {fileID: 11400000, guid: 3f543e2dbc6a6e546a4b0952953e0f54, type: 2}
+  airNodesScale: 3
   spheres:
     maxAttempt: 1000
     count:

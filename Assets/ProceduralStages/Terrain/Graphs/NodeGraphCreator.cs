@@ -465,221 +465,6 @@ namespace ProceduralStages
 
         }
 
-        private Graphs CreateGroundNodes(Terrain terrain)
-        {
-            var groundNodes = ScriptableObject.CreateInstance<NodeGraph>();
-
-            var triangles = terrain.meshResult.triangles;
-            var vertices = terrain.meshResult.vertices;
-            var normals = terrain.meshResult.normals;
-
-            Dictionary<Vector3, PropsNode> nodeInfoByPosition = new Dictionary<Vector3, PropsNode>();
-            List<PropsNode> floorProps = new List<PropsNode>();
-            List<PropsNode> ceilingProps = new List<PropsNode>();
-
-            var nodes = new NodeGraph.Node[terrain.meshResult.verticesLength];
-
-            int index = 0;
-            for (int i = 0; i < terrain.meshResult.verticesLength; i++)
-            {
-                var vertex = vertices[i];
-                var normal = normals[i];
-
-                float angle = Vector3.Dot(Vector3.up, normal);
-
-                float density = densityMap.GetDensity(terrain.floorlessDensityMap, vertex / MapGenerator.instance.mapScale);
-
-                bool isFloor = angle > minFloorAngle
-                    && density < densityMap.ground.maxHumanDensity;
-                bool isCeiling = angle < -minFloorAngle;
-
-                var node = new NodeGraph.Node
-                {
-                    position = vertex,
-                    linkListIndex = new NodeGraph.LinkListIndex()
-                    {
-                        index = isFloor ? index : -1,
-                        size = 0
-                    },
-                    forbiddenHulls = HullMask.None,
-                    flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn
-                };
-
-                var propsNode = new PropsNode
-                {
-                    normal = normal,
-                    position = vertex
-                };
-
-                nodeInfoByPosition[vertex] = propsNode;
-
-                if (isFloor)
-                {
-                    floorProps.Add(propsNode);
-
-                    index++;
-
-                    HullMask forbiddenHulls = HullMask.None;
-
-                    if (density > densityMap.ground.maxGolemDensity)
-                    {
-                        forbiddenHulls |= HullMask.Golem;
-                    }
-
-                    if (density > densityMap.ground.maxBeetleQueenDensity)
-                    {
-                        forbiddenHulls |= HullMask.BeetleQueen;
-                    }
-
-                    node.forbiddenHulls = forbiddenHulls;
-                }
-
-                if (isCeiling)
-                {
-                    ceilingProps.Add(propsNode);
-                }
-
-                nodes[i] = node;
-            }
-
-            List<NodeGraph.Link>[] links = new List<NodeGraph.Link>[index];
-
-            for (int i = 0; i < index; i++)
-            {
-                links[i] = new List<NodeGraph.Link>();
-            }
-
-            for (int i = 0; i < triangles.Length; i += 3)
-            {
-                ref var node1 = ref nodes[triangles[i]];
-                ref var node2 = ref nodes[triangles[i + 1]];
-                ref var node3 = ref nodes[triangles[i + 2]];
-
-                if (node1.linkListIndex.index != -1)
-                {
-                    if (node2.linkListIndex.index != -1)
-                    {
-                        float distance = (node1.position - node2.position).magnitude;
-
-                        links[node1.linkListIndex.index].Add(new NodeGraph.Link
-                        {
-                            nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                            distanceScore = distance,
-                            minJumpHeight = 0,
-                            hullMask = 0xFFFFFFF,
-                            jumpHullMask = 0xFFFFFFF,
-                            gateIndex = 0
-                        });
-
-                        links[node2.linkListIndex.index].Add(new NodeGraph.Link
-                        {
-                            nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                            nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            distanceScore = distance,
-                            minJumpHeight = 0,
-                            hullMask = 0xFFFFFFF,
-                            jumpHullMask = 0xFFFFFFF,
-                            gateIndex = 0
-                        });
-                    }
-
-                    if (node3.linkListIndex.index != -1)
-                    {
-                        float distance = (node2.position - node3.position).magnitude;
-
-                        links[node1.linkListIndex.index].Add(new NodeGraph.Link
-                        {
-                            nodeIndexA = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                            distanceScore = distance,
-                            minJumpHeight = 0,
-                            hullMask = 0xFFFFFFF,
-                            jumpHullMask = 0xFFFFFFF,
-                            gateIndex = 0
-                        });
-
-                        links[node3.linkListIndex.index].Add(new NodeGraph.Link
-                        {
-                            nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                            nodeIndexB = new NodeGraph.NodeIndex(node1.linkListIndex.index),
-                            distanceScore = distance,
-                            minJumpHeight = 0,
-                            hullMask = 0xFFFFFFF,
-                            jumpHullMask = 0xFFFFFFF,
-                            gateIndex = 0
-                        });
-                    }
-                }
-
-                if (node2.linkListIndex.index != -1 && node3.linkListIndex.index != -1)
-                {
-                    float distance = (node2.position - node3.position).magnitude;
-
-                    links[node2.linkListIndex.index].Add(new NodeGraph.Link
-                    {
-                        nodeIndexA = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                        nodeIndexB = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                        distanceScore = distance,
-                        minJumpHeight = 0,
-                        hullMask = 0xFFFFFFF,
-                        jumpHullMask = 0xFFFFFFF,
-                        gateIndex = 0
-                    });
-
-                    links[node3.linkListIndex.index].Add(new NodeGraph.Link
-                    {
-                        nodeIndexA = new NodeGraph.NodeIndex(node3.linkListIndex.index),
-                        nodeIndexB = new NodeGraph.NodeIndex(node2.linkListIndex.index),
-                        distanceScore = distance,
-                        minJumpHeight = 0,
-                        hullMask = 0xFFFFFFF,
-                        jumpHullMask = 0xFFFFFFF,
-                        gateIndex = 0
-                    });
-                }
-            };
-
-            NodeGraph.Node[] allNodes = nodes
-                .Where(x => x.linkListIndex.index != -1)
-                .ToArray();
-
-            var nodeByPosition = allNodes
-                .GroupBy(x => x.position)
-                .ToDictionary(
-                    x => x.Key,
-                    x => x.First().linkListIndex.index);
-
-            List<NodeGraph.Link> linkList = new List<NodeGraph.Link>();
-
-            for (int i = 0; i < allNodes.Length; i++)
-            {
-                var currentLinks = links[i];
-                int position = linkList.Count;
-
-                for (int j = 0; j < currentLinks.Count; j++)
-                {
-                    linkList.Add(currentLinks[j]);
-                }
-
-                ref NodeGraph.Node node = ref allNodes[i];
-                node.linkListIndex.index = position;
-                node.linkListIndex.size = (uint)currentLinks.Count;
-            }
-
-            groundNodes.nodes = allNodes;
-            groundNodes.links = linkList.ToArray();
-
-            return new Graphs
-            {
-                ground = groundNodes,
-                //floorProps = floorProps,
-                //ceilingProps = ceilingProps,
-                groundNodeIndexByPosition = nodeByPosition,
-                nodeInfoByPosition = nodeInfoByPosition
-            };
-        }
-
         private HashSet<int> GetMainIsland(NodeGraph groundGraph)
         {
             var islands = GetNodeIslands(groundGraph.nodes, groundGraph.links)
@@ -801,13 +586,14 @@ namespace ProceduralStages
 
         private NodeGraph CreateAirGraph(Terrain terrain)
         {
+            float airScale = terrain.generator.airNodesScale * airNodeCellSize;
             float mapScale = MapGenerator.instance.mapScale;
 
             Vector3Int size = new Vector3Int(terrain.densityMap.GetLength(0), terrain.densityMap.GetLength(1), terrain.densityMap.GetLength(2));
             Vector3Int cellSize = new Vector3Int(
-                Mathf.FloorToInt(mapScale * size.x / airNodeCellSize),
-                Mathf.FloorToInt(mapScale * size.y / airNodeCellSize),
-                Mathf.FloorToInt(mapScale * size.z / airNodeCellSize));
+                Mathf.FloorToInt(mapScale * size.x / airScale),
+                Mathf.FloorToInt(mapScale * size.y / airScale),
+                Mathf.FloorToInt(mapScale * size.z / airScale));
 
             AirNode?[,,] nodes = new AirNode?[cellSize.x, cellSize.y, cellSize.z];
 
@@ -817,13 +603,13 @@ namespace ProceduralStages
             {
                 int nodeCount = 0;
 
-                float posX = x * airNodeCellSize;
+                float posX = x * airScale;
                 for (int y = 0; y < cellSize.y; y++)
                 {
-                    float posY = y * airNodeCellSize;
+                    float posY = y * airScale;
                     for (int z = 0; z < cellSize.z; z++)
                     {
-                        float posZ = z * airNodeCellSize;
+                        float posZ = z * airScale;
 
                         Vector3 pointIntegral = new Vector3Int(
                             Mathf.FloorToInt(posX),
@@ -831,7 +617,7 @@ namespace ProceduralStages
                             Mathf.FloorToInt(posZ));
                         //Vector3 pointFractional = new Vector3(posX, posY, posZ) - pointIntegral;
 
-                        Vector3 displacement = RandomPG.Random3(pointIntegral) * airNodeCellSize;
+                        Vector3 displacement = RandomPG.Random3(pointIntegral) * airScale;
 
                         Vector3 nodePos = pointIntegral + displacement;
 
@@ -953,7 +739,7 @@ namespace ProceduralStages
                                 }
 
                                 float distance = (airNode.node.position - neighbord.Value.node.position).magnitude;
-                                if (airNodeMinDistance <= distance && distance < airNodeMaxDistance)
+                                if (airNodeMinDistance * terrain.generator.airNodesScale <= distance && distance < airNodeMaxDistance * terrain.generator.airNodesScale)
                                 {
                                     links[nodeIndex * 26 + linkCount] = new NodeGraph.Link
                                     {

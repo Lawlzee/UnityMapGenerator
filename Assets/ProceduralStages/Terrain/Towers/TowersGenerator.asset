@@ -23,6 +23,7 @@ MonoBehaviour:
   terrainType: 6
   ceillingPropsWeight: 0.7
   backdropGenerator: {fileID: 0}
+  airNodesScale: 2
   voronoiWallGenerator: {fileID: 0}
   outerWallDepth: 12
   towerCellsSize: 30

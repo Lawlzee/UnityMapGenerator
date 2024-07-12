@@ -1,3 +1,6 @@
+## 1.17.2
+1. Fixed lag spikes during the Mithrix fight by simplifying the air node graph. This should also improve the performance of pathfinding for flying enemies.
+
 ## 1.17.1
 1. Fixed "Lunar Fields" not loading
 

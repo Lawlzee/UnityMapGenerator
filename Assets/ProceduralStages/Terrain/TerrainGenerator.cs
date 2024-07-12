@@ -10,6 +10,7 @@ namespace ProceduralStages
 {
     public class Terrain
     {
+        public TerrainGenerator generator;
         public MeshResult meshResult;
         public float[,,] floorlessDensityMap;
         public float[,,] densityMap;
@@ -49,6 +50,7 @@ namespace ProceduralStages
         public TerrainType terrainType;
         public float ceillingPropsWeight = 1;
         public BackdropGenerator backdropGenerator;
+        public float airNodesScale = 1;
 
         public abstract Terrain Generate();
 
