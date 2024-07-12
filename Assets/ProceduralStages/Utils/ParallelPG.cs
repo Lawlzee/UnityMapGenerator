@@ -15,7 +15,7 @@ namespace ProceduralStages
 
             Parallel.For(0, bandsCount, bandIndex =>
             {
-                int min = bandIndex * bandSize - fromInclusive;
+                int min = bandIndex * bandSize + fromInclusive;
                 int max = Math.Min(toExlusive, min + bandSize);
 
                 body(bandIndex, min, max);

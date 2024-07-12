@@ -6,7 +6,7 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 ## Features
 
-- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle tunnel caves, temple and block maze, each dynamically generated for a fresh adventure.
+- **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle, tunnel caves, lunar fields, temple and block maze, each dynamically generated for a fresh adventure.
 - **Dynamic Map Themes**: Experience different visual themes with every stage, including Plains, Desert, Snow, Void, Mushroom, and the old "random" theme.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
 - **Multiplayer Support:** Enjoy the procedural adventure with friends.
@@ -24,8 +24,8 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 Each stage is randomly generated, featuring unique terrain types and themes:
 
-- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle, tunnel caves, temple and block maze.
-- **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the classic "Random" theme.
+- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle, tunnel caves, lunar fields, temple and block maze.
+- **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the legacy "Random" theme.
 
 ### Screenshots
 
@@ -39,17 +39,14 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image2.png)
 *Open cave map with the void theme*
 
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.17/Image9.png)
+*Lunar Fields map with the plains theme*
+
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image8.png)
 *Basalt isle map with the snow theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image26.png)
 *Block maze map with the mushroom theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image16.png)
-*Twisted canyons map with the snow theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image11.png)
-*Tunnel cave map with the mushroom theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image21.png)
 *Temple map with the snow theme*
@@ -65,6 +62,9 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image23.png)
 *Tunnel cave map with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.17/Image3.png)
+*Lunar Fields map with the mushroom theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
 *Tunnel cave map with the snow theme*
@@ -99,6 +99,8 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 | Themes        | `<Theme>` spawn rate | See table below  | Specifies the percentage of stages that will be generated with the `<theme>` theme. |
 | All Stages    | `<Terrain type>` map spawn rate | Varied | Sets the overall percentage of stages that will feature the `<Terrain type>` terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage. |
 | Stage `[1,5]` | `<Terrain type>` map spawn rate | See table below | Specifies the percentage of maps that will be generated with the `<Terrain type>` for stage 1. If the total percentage for stage `X` is less than 15% , normal stages may also spawn. If the total percentage for stage `X` is 0%, only normal stages will spawn.|
+| Moon          | Lunar Fields map spawn rate | 100%      | Indicates the percentage of final stages featuring the custom \"Lunar Fields\" terrain type instead of the vanilla moon stage. If this percentage is less than 100%, the normal moon stage will also appear. If the total percentage is 0%, only the normal moon stage will be generated. |
+| Moon          | Required pillars     | 4                | Number of pillars necessary to access the Mithrix arena |
 | Debug         | Stage seed           |                  | Specifies the stage seed. If left blank, a random seed will be used.                                                      |
 
 

@@ -39,17 +39,14 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image2.png)
 *Open cave map with the void theme*
 
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.17/Image9.png)
+*Lunar Fields map with the plains theme*
+
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.13/Image8.png)
 *Basalt isle map with the snow theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image26.png)
 *Block maze map with the mushroom theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image16.png)
-*Twisted canyons map with the snow theme*
-
-![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image11.png)
-*Tunnel cave map with the mushroom theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image21.png)
 *Temple map with the snow theme*
@@ -65,6 +62,9 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image23.png)
 *Tunnel cave map with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.17/Image3.png)
+*Lunar Fields map with the mushroom theme*
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.12/Image7.png)
 *Tunnel cave map with the snow theme*

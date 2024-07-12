@@ -1,5 +1,8 @@
+## 1.17.1
+1. Fixed "Lunar Fields" not loading
+
 ## 1.17
-1. **Introducing Lunar Fields Terrain:** This new terrain type, "Lunar Fields," replaces the previous moon terrain. In this stage, players traverse antigravity force fields between gravity spheres to charge the pillars. The number of pillars and the spawn rate of the stage are configurable.
+1. **Introducing Lunar Fields Terrain:** This new terrain type, "Lunar Fields" replaces the previous moon terrain. In this stage, players traverse antigravity force fields between gravity spheres to charge the pillars. The number of pillars and the spawn rate of the stage are configurable.
 2. **Varied Island Rocks:** Enhanced the appearance of rocks on island stages to reduce uniformity.
 
 ## 1.16

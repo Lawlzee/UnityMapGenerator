@@ -172,17 +172,15 @@ namespace ProceduralStages
                 }
             });
 
-            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
-            ProfilerLog.Debug("marchingCubes");
-
-            MoonTerrain moonTerrain = new MoonTerrain();
-
-
             var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
             Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
 
+            MoonTerrain moonTerrain = new MoonTerrain();
             Vector3 arenaDeltaPos = MapGenerator.instance.mapScale * arenaPosition - gameplaySpaceTransform.position;
             SetArenaNodeGraph(moonTerrain, arenaDeltaPos);
+
+            var meshResult = MarchingCubes.CreateMesh(densityMap, MapGenerator.instance.mapScale);
+            ProfilerLog.Debug("marchingCubes");
 
             return new Terrain
             {
