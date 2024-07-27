@@ -176,7 +176,7 @@ namespace ProceduralStages
                         ? selection.Evaluate(rng.nextNormalizedFloat)
                         : TerrainType.OpenCaves;
                 }
-                terrainType = TerrainType.Moon;
+                //terrainType = TerrainType.Moon;
                 Log.Debug(terrainType);
 
                 stageType = terrainType == TerrainType.Moon

@@ -174,6 +174,7 @@ namespace ProceduralStages
 
             var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon").gameObject;
             Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
+            gameplaySpaceTransform.Find("HOLDER: Final Arena").Find("ArenaTrigger").GetComponent<AllPlayersTrigger>().enabled = true;
 
             MoonTerrain moonTerrain = new MoonTerrain();
             Vector3 arenaDeltaPos = MapGenerator.instance.mapScale * arenaPosition - gameplaySpaceTransform.position;
@@ -301,12 +302,11 @@ namespace ProceduralStages
             antiGravitySphere.transform.position = new Vector3(stageCenter.x, 0, stageCenter.z) * MapGenerator.instance.mapScale;
 
             terrain.customObjects.Add(antiGravitySphere);
-
-            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon").gameObject;
+            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
 
             MoonEscapeSequence moonEscapeSequence = moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>();
 
-            MoonPillars moonPillars = moonObject.GetComponentInChildren<MoonPillars>();
+            MoonPillars moonPillars = moonObject.transform.Find("MoonBatteryMissionController").GetComponent<MoonPillars>();
             moonPillars.pillarPositions = new List<Vector3>();
             moonPillars.rng = new Xoroshiro128Plus(rng.nextUlong);
             moonPillars.globalSphereScaleCurve = antiGravitySphere.GetComponent<ObjectScaleCurve>();
@@ -336,7 +336,7 @@ namespace ProceduralStages
 
             if (NetworkServer.active)
             {
-                GameObject dropship = MoonDropship.Place(shipPosition?.position ?? (shipSphere.position * MapGenerator.instance.mapScale), moonObject);
+                GameObject dropship = MoonDropship.Place(shipPosition?.position ?? (shipSphere.position * MapGenerator.instance.mapScale));
                 moonEscapeSequence.dropshipZone = dropship;
                 terrain.customObjects.Add(dropship);
             }
@@ -436,6 +436,8 @@ namespace ProceduralStages
             Transform centerOfArena = brotherMissionControllerTransform.Find("CenterOfArena");
             childLocator.transformPairs[0].transform = centerOfArena;
 
+            centerOfArena.Find("CenterOrbEffect").gameObject.SetActive(true);
+
             var spawnSphere = sphereZones[sphereZones.Count - 1];
 
             GameObject playerSpawnOrigin = new GameObject("PlayerSpawnOrigin");
@@ -502,7 +504,9 @@ namespace ProceduralStages
                 terrain.customObjects.Add(orbDestination);
             }
 
-            moonObject.SetActive(true);
+            moonObject.GetComponent<MoonMissionController>().enabled = true;
+
+            //moonObject.SetActive(true);
             if (NetworkServer.active)
             {
                 //NetworkServer.Spawn(moonObject);

@@ -23,7 +23,7 @@ namespace ProceduralStages
         {
             var escapeSequenceObjects = transform.Find("EscapeSequenceObjects").gameObject;
 
-            if (NetworkServer.active)
+            if (NetworkServer.active && MapGenerator.instance.stageType == StageType.Moon)
             {
                 var globalEventMethodLibrary = Addressables.LoadAssetAsync<GlobalEventMethodLibrary>("RoR2/Base/Core/GlobalEventMethodLibrary.asset").WaitForCompletion();
                 var mainEnding = Addressables.LoadAssetAsync<GameEndingDef>("RoR2/Base/ClassicRun/MainEnding.asset").WaitForCompletion();

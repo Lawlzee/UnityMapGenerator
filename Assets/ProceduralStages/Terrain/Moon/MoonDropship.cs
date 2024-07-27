@@ -12,7 +12,7 @@ namespace ProceduralStages
 {
     public static class MoonDropship
     {
-        public static GameObject Place(Vector3 position, GameObject moonObject)
+        public static GameObject Place(Vector3 position)
         {
             if (!NetworkServer.active)
             {
@@ -21,13 +21,11 @@ namespace ProceduralStages
 
             GameObject prefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/Moon2DropshipZone.prefab").WaitForCompletion();
             
-            GameObject dropship = Object.Instantiate(prefab, moonObject.transform);
+            GameObject dropship = Object.Instantiate(prefab);
             dropship.transform.position = position;
 
             NetworkServer.Spawn(dropship);
-
             return dropship;
-
         }
     }
 }

@@ -3,6 +3,7 @@
 2. Fixed props desync
 3. Fixed moon desync
 4. Use moon music on moon
+5. Fixed moon to work in multiplayer
 
 ## 1.17.2
 1. Fixed lag spikes during the Mithrix fight by simplifying the air node graph. This should also improve the performance of pathfinding for flying enemies.

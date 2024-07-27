@@ -38,6 +38,9 @@ namespace ProceduralStages
         public bool infiniteMapScaling;
 
         [SyncVar]
+        public int moonRequiredPillarsCount;
+
+        [SyncVar]
         private int _selectedTerrainType;
 
         public TerrainType selectedTerrainType
@@ -128,6 +131,7 @@ namespace ProceduralStages
             {
                 ModConfig.StageSeed.SettingChanged -= StageSeed_SettingChanged;
                 ModConfig.InfiniteMapScaling.SettingChanged -= InfiniteMapScaling_SettingChanged;
+                ModConfig.MoonRequiredPillarsCount.SettingChanged -= MoonRequiredPillarsCount_SettingChanged;
 
                 for (int i = 0; i < ModConfig.TerrainTypesPercents.Count; i++)
                 {
@@ -153,6 +157,9 @@ namespace ProceduralStages
 
             infiniteMapScaling = ModConfig.InfiniteMapScaling.Value;
             ModConfig.InfiniteMapScaling.SettingChanged += InfiniteMapScaling_SettingChanged;
+
+            moonRequiredPillarsCount = ModConfig.MoonRequiredPillarsCount.Value;
+            ModConfig.MoonRequiredPillarsCount.SettingChanged += MoonRequiredPillarsCount_SettingChanged; ;
 
             _terrainTypesPercentsSettingChanged = new EventHandler[ModConfig.TerrainTypesPercents.Count];
 
@@ -199,6 +206,11 @@ namespace ProceduralStages
         private void InfiniteMapScaling_SettingChanged(object sender, EventArgs e)
         {
             infiniteMapScaling = ModConfig.InfiniteMapScaling.Value;
+        }
+
+        private void MoonRequiredPillarsCount_SettingChanged(object sender, EventArgs e)
+        {
+            moonRequiredPillarsCount = ModConfig.MoonRequiredPillarsCount.Value;
         }
     }
 }
