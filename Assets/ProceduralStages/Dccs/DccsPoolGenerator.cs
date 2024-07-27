@@ -30,8 +30,10 @@ namespace ProceduralStages
 
         public DccsPool GenerateMonstersDccs(bool hasDLC1)
         {
-            int stageCleared = Run.instance?.stageClearCount ?? 0;
-            int currentStageInLoop = (stageCleared % Run.stagesPerLoop) + 1;
+            int stageCleared = RunConfig.instance.nextStageClearCount;
+            int currentStageInLoop = Application.isEditor
+                ? MapGenerator.instance.editorStageInLoop
+                : (stageCleared % Run.stagesPerLoop) + 1;
 
             var validPools = DccsPoolItem.All
                 .Where(x => x.StageType == StageType.Regular)

@@ -82,7 +82,9 @@ namespace ProceduralStages
                 Log.Debug(sb.ToString());
             }
 
-            int stageInLoop = ((Run.instance?.stageClearCount ?? 0) % Run.stagesPerLoop) + 1;
+            int stageInLoop = Application.isEditor
+                ? MapGenerator.instance.editorStageInLoop
+                : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
             int stagePropCount = Math.Min(maxPropKind ?? int.MaxValue, Math.Min(propsSelection.Count, propsCount + stageInLoop));
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();

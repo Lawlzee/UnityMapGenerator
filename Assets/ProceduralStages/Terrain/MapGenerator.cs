@@ -68,6 +68,7 @@ namespace ProceduralStages
         private ulong lastSeed;
         public static MapGenerator instance;
         public static Xoroshiro128Plus rng;
+        public static Xoroshiro128Plus serverRng;
 
 
         [HideInInspector]
@@ -88,6 +89,7 @@ namespace ProceduralStages
         {
             instance = null;
             rng = null;
+            serverRng = null;
         }
 
         private bool generateNextFrame;
@@ -123,6 +125,7 @@ namespace ProceduralStages
                 else
                 {
                     rng = new Xoroshiro128Plus(lastSeed);
+                    serverRng = new Xoroshiro128Plus(lastSeed + 1);
                 }
 
                 generateNextFrame = true;
@@ -173,6 +176,7 @@ namespace ProceduralStages
                         ? selection.Evaluate(rng.nextNormalizedFloat)
                         : TerrainType.OpenCaves;
                 }
+                terrainType = TerrainType.Moon;
                 Log.Debug(terrainType);
 
                 stageType = terrainType == TerrainType.Moon
@@ -309,7 +313,7 @@ namespace ProceduralStages
                     ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                     : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
-                if (!Application.isEditor || loadResourcesInEditor)
+                if (!Application.isEditor)
                 {
                     if (stageType == StageType.Regular)
                     {
@@ -371,21 +375,33 @@ namespace ProceduralStages
                         .Where(x => x.cachedName != Main.SceneName)
                         .ToList();
 
-                    var mainTracks = stages
-                        .Select(x => x.mainTrack)
-                        .Where(x => x)
-                        .Distinct()
-                        .ToList();
+                    MusicTrackDef mainTrack;
+                    MusicTrackDef bossTrack;
 
-                    var bossTracks = stages
-                        .Select(x => x.bossTrack)
-                        .Distinct()
-                        .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
-                        .ToList();
+                    if (stageType == StageType.Moon)
+                    {
+                        var moonStage = stages.First(x => x.cachedName == "moon2");
+                        mainTrack = moonStage.mainTrack;
+                        bossTrack = moonStage.bossTrack;
+                    }
+                    else
+                    {
+                        var mainTracks = stages
+                            .Select(x => x.mainTrack)
+                            .Where(x => x)
+                            .Distinct()
+                            .ToList();
 
-                    var mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
-                    var bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
+                        var bossTracks = stages
+                            .Select(x => x.bossTrack)
+                            .Distinct()
+                            .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
+                            .ToList();
 
+                        mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
+                        bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
+                    }
+                    
                     Action<SceneDef> onSceneChanged = null;
                     onSceneChanged = scene =>
                     {
@@ -445,6 +461,7 @@ namespace ProceduralStages
             Log.Debug("Stage Seed: " + currentSeed);
 
             rng = new Xoroshiro128Plus(currentSeed);
+            serverRng = new Xoroshiro128Plus(currentSeed + 1);
             return currentSeed;
         }
 

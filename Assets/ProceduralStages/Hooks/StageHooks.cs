@@ -157,12 +157,12 @@ namespace ProceduralStages
                             selection.AddChoice(config.TerrainType, config.Percent);
                         }
 
-                        RunConfig.instance.selectedTerrainType = selection.Evaluate(RunConfig.instance.stageRng.nextNormalizedFloat);
+                        RunConfig.instance.selectedTerrainType = selection.Evaluate(Run.instance.nextStageRng.nextNormalizedFloat);
                     }
                 }
                 else if (self.gameObject.name == "LunarTeleporter Variant(Clone)" 
                     && !self.useRunNextStageScene
-                    && RunConfig.instance.stageRng.nextNormalizedFloat <= ModConfig.MoonSpawnRate.Value)
+                    && Run.instance.nextStageRng.nextNormalizedFloat <= ModConfig.MoonSpawnRate.Value)
                 {
                     RunConfig.instance.selectedTerrainType = TerrainType.Moon;
                     self.destinationScene = ContentProvider.LoopSceneDefs[0];

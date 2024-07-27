@@ -122,8 +122,8 @@ namespace ProceduralStages
                 {
                     position = position,
                     radius = radius,
-                    seedX = MapGenerator.rng.RangeInt(0, short.MaxValue),
-                    seedZ = MapGenerator.rng.RangeInt(0, short.MaxValue)
+                    seedX = rng.RangeInt(0, short.MaxValue),
+                    seedZ = rng.RangeInt(0, short.MaxValue)
                 });
             }
 
@@ -172,7 +172,7 @@ namespace ProceduralStages
                 }
             });
 
-            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
+            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon").gameObject;
             Transform gameplaySpaceTransform = moonObject.transform.Find("HOLDER: Gameplay Space");
 
             MoonTerrain moonTerrain = new MoonTerrain();
@@ -302,7 +302,7 @@ namespace ProceduralStages
 
             terrain.customObjects.Add(antiGravitySphere);
 
-            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon");
+            var moonObject = SceneManager.GetActiveScene().GetRootGameObjects().Single(x => x.name == "Moon").gameObject;
 
             MoonEscapeSequence moonEscapeSequence = moonObject.transform.Find("MoonEscapeSequence").GetComponent<MoonEscapeSequence>();
 
@@ -503,6 +503,10 @@ namespace ProceduralStages
             }
 
             moonObject.SetActive(true);
+            if (NetworkServer.active)
+            {
+                //NetworkServer.Spawn(moonObject);
+            }
         }
     }
 }

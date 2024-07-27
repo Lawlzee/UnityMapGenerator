@@ -19,7 +19,7 @@ namespace ProceduralStages
         {
             if (NetworkServer.active)
             {
-                NetworkServer.Spawn(gameObject);
+                //NetworkServer.Spawn(gameObject);
             }
 
             //var centerOrbSound = Addressables.LoadAssetAsync<GameObject>("Wwise/E02BAD62-435B-4950-9187-0A0C9822A4C9.asset").WaitForCompletion();

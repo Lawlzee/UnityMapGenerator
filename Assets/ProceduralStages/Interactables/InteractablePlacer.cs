@@ -28,7 +28,7 @@ namespace ProceduralStages
                 return null;
             }
 
-            rng = rng ?? MapGenerator.rng;
+            rng = rng ?? MapGenerator.serverRng;
 
             var card = ScriptableObject.CreateInstance<SpawnCard>();
             card.prefab = Addressables.LoadAssetAsync<GameObject>(prefab).WaitForCompletion();

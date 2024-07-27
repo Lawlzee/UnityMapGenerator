@@ -23,11 +23,11 @@ namespace ProceduralStages
             counter.onTrigger = new UnityEvent();
 
             //same amount of pots than goolake
-            int potCount = MapGenerator.rng.RangeInt(8, 31);
+            int potCount = MapGenerator.serverRng.RangeInt(8, 31);
 
             for (int i = 0; i < potCount; i++)
             {
-                GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab", NodeFlagsExt.Newt, offset: Vector3.up);
+                GameObject plateObject = InteractablePlacer.Place(graphs, "RoR2/Base/ExplosivePotDestructible/ExplosivePotDestructibleBody.prefab", NodeFlagsExt.Newt, offset: Vector3.up, rng: MapGenerator.serverRng);
                 if (plateObject)
                 {
                     plateObject.GetComponentInChildren<MeshRenderer>().enabled = true;
@@ -54,7 +54,7 @@ namespace ProceduralStages
                 }
             }
 
-            Xoroshiro128Plus lemurianRng = new Xoroshiro128Plus(MapGenerator.rng.nextUlong);
+            Xoroshiro128Plus lemurianRng = new Xoroshiro128Plus(MapGenerator.serverRng.nextUlong);
 
             counter.onTrigger.AddListener(() =>
             {

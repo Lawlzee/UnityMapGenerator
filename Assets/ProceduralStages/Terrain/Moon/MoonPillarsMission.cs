@@ -26,19 +26,20 @@ namespace ProceduralStages
 
             controller.elevators = new GameObject[0];
 
+            if (ModConfig.MoonRequiredPillarsCount.Value == 0)
+            {
+                controller._numChargedBatteries = int.MaxValue;
+            }
+
             if (NetworkServer.active)
             {
-                if (ModConfig.MoonRequiredPillarsCount.Value == 0)
-                {
-                    controller._numChargedBatteries = int.MaxValue;
-                }
                 controller._numRequiredBatteries = ModConfig.MoonRequiredPillarsCount.Value;
             }
         }
 
         public void Start()
         {
-            if (controller.numChargedBatteries >= controller.numRequiredBatteries)
+            if (controller.numChargedBatteries >= ModConfig.MoonRequiredPillarsCount.Value)
             {
                 pillars.globalSphereScaleCurve.enabled = true;
                 return;
@@ -53,7 +54,7 @@ namespace ProceduralStages
 
         public void OnBatteryCharged(HoldoutZoneController holdoutZone)
         {
-            if (controller.numChargedBatteries < controller.numRequiredBatteries)
+            if (controller.numChargedBatteries < ModConfig.MoonRequiredPillarsCount.Value)
             {
                 return;
             }

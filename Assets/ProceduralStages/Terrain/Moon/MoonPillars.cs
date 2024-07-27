@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.AddressableAssets;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using RoR2;
 using UnityEngine.Networking;
 
@@ -37,7 +36,7 @@ namespace ProceduralStages
         {
             if (NetworkServer.active)
             {
-                NetworkServer.Spawn(gameObject);
+                //NetworkServer.Spawn(gameObject);
             }
         }
 
@@ -63,11 +62,13 @@ namespace ProceduralStages
                     NetworkServer.Spawn(pillar);
                     pillarIds.Add(pillar.GetComponent<NetworkIdentity>().netId);
                 }
-
-                GameObject elevatorPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonElevator.prefab").WaitForCompletion();
-
                 mission.gameObject.SetActive(true);
-                NetworkServer.Spawn(mission.gameObject);
+                //NetworkServer.Spawn(mission.gameObject);
+
+            }
+            else
+            {
+                mission.gameObject.SetActive(true);
             }
         }
     }

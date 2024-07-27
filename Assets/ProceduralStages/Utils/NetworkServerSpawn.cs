@@ -17,7 +17,7 @@ namespace ProceduralStages
         {
             if (NetworkServer.active)
             {
-                NetworkServer.Spawn(gameObject);
+                //NetworkServer.Spawn(gameObject);
             }
         }
     }

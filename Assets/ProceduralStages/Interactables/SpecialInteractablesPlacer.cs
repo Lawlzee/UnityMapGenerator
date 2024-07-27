@@ -25,7 +25,6 @@ namespace ProceduralStages
         {
             if (MapGenerator.instance.stageType == StageType.Moon)
             {
-                //todo
                 return;
             }
 
@@ -39,7 +38,7 @@ namespace ProceduralStages
                     offset: Vector3.up,
                     lookAwayFromWall: true);
 
-                if (stageInLoop == 3 && MapGenerator.rng.nextNormalizedFloat < (1 / 3f))
+                if (stageInLoop == 3 && MapGenerator.serverRng.nextNormalizedFloat < (1 / 3f))
                 {
                     InteractablePlacer.Place(
                         graphs,
@@ -50,7 +49,7 @@ namespace ProceduralStages
                         lookAwayFromWall: true);
                 }
 
-                if (stageInLoop == 2 && MapGenerator.rng.nextNormalizedFloat < (1 / 3f))
+                if (stageInLoop == 2 && MapGenerator.serverRng.nextNormalizedFloat < (1 / 3f))
                 {
                     RingEvent.Add(graphs);
                 }
@@ -58,13 +57,13 @@ namespace ProceduralStages
 
             if (stageInLoop == 4)
             {
-                if (MapGenerator.instance.stageType == StageType.Simulacrum || MapGenerator.rng.nextNormalizedFloat < (2 / 3f))
+                if (MapGenerator.instance.stageType == StageType.Simulacrum || MapGenerator.serverRng.nextNormalizedFloat < (2 / 3f))
                 {
                     InteractablePlacer.Place(graphs, "RoR2/Base/GoldChest/GoldChest.prefab", NodeFlagsExt.Newt, skipSpawnWhenSacrificeArtifactEnabled: true);
                 }
                 else
                 {
-                    MapGenerator.instance.awuEvent.seed = MapGenerator.rng.nextUlong;
+                    MapGenerator.instance.awuEvent.seed = MapGenerator.serverRng.nextUlong;
                     MapGenerator.instance.awuEvent.enabled = true;
                 }
             }

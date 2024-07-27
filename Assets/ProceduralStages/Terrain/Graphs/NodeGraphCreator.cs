@@ -35,7 +35,7 @@ namespace ProceduralStages
         {
             using (ProfilerLog.CreateScope("CreateGraphs"))
             {
-                Graphs graphs = CreateGroundNodes2(terrain);
+                Graphs graphs = CreateGroundNodes(terrain);
                 ProfilerLog.Debug("groundNodes");
 
                 graphs.air = CreateAirGraph(terrain);
@@ -108,9 +108,9 @@ namespace ProceduralStages
             };
         }
 
-        private Graphs CreateGroundNodes2(Terrain terrain)
+        private Graphs CreateGroundNodes(Terrain terrain)
         {
-            using (ProfilerLog.CreateScope("CreateGroundNodes2"))
+            using (ProfilerLog.CreateScope("CreateGroundNodes"))
             {
                 float mapScale = MapGenerator.instance.mapScale;
 
@@ -163,6 +163,13 @@ namespace ProceduralStages
                                 NodeGraph.Node node = new NodeGraph.Node();
                                 node.position = nodePos;
                                 node.flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
+
+
+                                //Add NoCeiling to half of the nodes, so that lunar golems can spawn
+                                if ((x + y + z) % 2 == 0)
+                                {
+                                    node.flags |= NodeFlags.NoCeiling;
+                                }
 
                                 floorNodes[x, y, z] = new FloorNode
                                 {
@@ -537,8 +544,6 @@ namespace ProceduralStages
 
         private void SetGroundNodeFlags(Terrain terrain, ref NodeGraph.Node node)
         {
-            NodeFlags flags = NodeFlags.NoCharacterSpawn | NodeFlags.NoChestSpawn | NodeFlags.NoShrineSpawn;
-
             float density = densityMap.GetDensity(terrain.floorlessDensityMap, node.position / MapGenerator.instance.mapScale);
 
             if (node.position.y <= terrain.maxGroundHeight)
@@ -547,33 +552,30 @@ namespace ProceduralStages
                 {
                     if (densityMap.minTeleporterDensity <= density && density <= densityMap.maxTeleporterDensity)
                     {
-                        flags |= NodeFlags.TeleporterOK;
+                        node.flags |= NodeFlags.TeleporterOK;
                     }
 
                     if (density < densityMap.maxChestDensity)
                     {
-                        flags &= ~NodeFlags.NoChestSpawn;
+                        node.flags &= ~NodeFlags.NoChestSpawn;
                     }
 
                     if (density < densityMap.maxChestDensity)
                     {
-                        flags &= ~NodeFlags.NoShrineSpawn;
+                        node.flags &= ~NodeFlags.NoShrineSpawn;
                     }
 
                     if (densityMap.minNewtDensity <= density && density <= densityMap.maxNewtDensity)
                     {
-                        flags |= NodeFlagsExt.Newt;
+                        node.flags |= NodeFlagsExt.Newt;
                     }
                 }
 
                 if (density < densityMap.maxSpawnDensity)
                 {
-                    flags &= ~NodeFlags.NoCharacterSpawn;
-                    flags |= NodeFlags.NoCeiling;
+                    node.flags &= ~NodeFlags.NoCharacterSpawn;                       
                 }
             }
-
-            node.flags = flags;
         }
 
         private struct AirNode
