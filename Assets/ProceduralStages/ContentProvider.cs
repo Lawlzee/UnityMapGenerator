@@ -32,6 +32,7 @@ namespace ProceduralStages
         public static Texture texBlockMazePreview;
         public static Texture texTemplePreview;
         public static GameObject runConfigPrefab;
+        public static GameObject rampPrefab;
 
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
         public static SceneDef ItSceneDef;
@@ -73,6 +74,7 @@ namespace ProceduralStages
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
             {
                 runConfigPrefab = assets.First(a => a.name == "Run Config");
+                rampPrefab = assets.First(a => a.name == "Ramp");
 
                 foreach (var asset in assets)
                 {

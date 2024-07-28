@@ -27,6 +27,7 @@ namespace ProceduralStages
 
 
         public void PlaceAll(
+            Xoroshiro128Plus rng,
             Vector3 offset,
             Graphs graphs,
             PropsDefinitionCollection propsCollection,
@@ -82,24 +83,32 @@ namespace ProceduralStages
                 Log.Debug(sb.ToString());
             }
 
-            int stageInLoop = Application.isEditor
-                ? MapGenerator.instance.editorStageInLoop
-                : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
-            int stagePropCount = Math.Min(maxPropKind ?? int.MaxValue, Math.Min(propsSelection.Count, propsCount + stageInLoop));
+            int stagePropCount;
+            if (maxPropKind != null)
+            {
+                stagePropCount = maxPropKind.Value;
+            }
+            else
+            {
+                int stageInLoop = Application.isEditor
+                    ? MapGenerator.instance.editorStageInLoop
+                    : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
+                stagePropCount = Math.Min(propsSelection.Count, propsCount + stageInLoop);
+            }
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();
             HashSet<int> usedCeillingIndexes = new HashSet<int>();
 
             for (int j = 0; j < stagePropCount; j++)
             {
-                int propIndex = propsSelection.EvaluateToChoiceIndex(MapGenerator.rng.nextNormalizedFloat);
+                int propIndex = propsSelection.EvaluateToChoiceIndex(rng.nextNormalizedFloat);
                 var prop = propsSelection.choices[propIndex].value;
                 propsSelection.RemoveChoice(propIndex);
 
                 Vector3Int colorSeed = new Vector3Int(
-                    MapGenerator.rng.RangeInt(0, short.MaxValue),
-                    MapGenerator.rng.RangeInt(0, short.MaxValue),
-                    MapGenerator.rng.RangeInt(0, short.MaxValue));
+                    rng.RangeInt(0, short.MaxValue),
+                    rng.RangeInt(0, short.MaxValue),
+                    rng.RangeInt(0, short.MaxValue));
 
                 PropsNode[] graph = prop.ground
                     ? graphs.floorProps
@@ -121,7 +130,7 @@ namespace ProceduralStages
                     int index;
                     do
                     {
-                        index = MapGenerator.rng.RangeInt(0, graph.Length);
+                        index = rng.RangeInt(0, graph.Length);
                         attempt++;
                     }
                     while (usedIndexes.Contains(index) && attempt <= 5);
@@ -153,9 +162,10 @@ namespace ProceduralStages
                         material = terrainMaterial;
                     }
 
-                    float scale = MapGenerator.rng.RangeFloat(prop.minScale, prop.maxScale);
+                    float scale = rng.RangeFloat(prop.minScale, prop.maxScale);
 
                     GameObject instance = propsNode.Place(
+                        rng,
                         offset,
                         prop.prefab,
                         propsObject,

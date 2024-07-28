@@ -23,12 +23,12 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float amplitude;
 
-        public void ColorMesh(MeshResult meshResult)
+        public void ColorMesh(MeshResult meshResult, Xoroshiro128Plus rng)
         {
             Vector3Int seed = new Vector3Int(
-                MapGenerator.rng.RangeInt(0, short.MaxValue), 
-                MapGenerator.rng.RangeInt(0, short.MaxValue), 
-                MapGenerator.rng.RangeInt(0, short.MaxValue));
+                rng.RangeInt(0, short.MaxValue), 
+                rng.RangeInt(0, short.MaxValue), 
+                rng.RangeInt(0, short.MaxValue));
 
             var uvs = new Vector2[meshResult.verticesLength];
             ParallelPG.For(0, meshResult.verticesLength, 8, (band, min, max) =>

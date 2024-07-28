@@ -41,6 +41,7 @@ namespace ProceduralStages
             Graphs graphs = MapGenerator.instance.nodeGraphCreator.CreateBackdropGraphs(terrain);
 
             MapGenerator.instance.propsPlacer.PlaceAll(
+                MapGenerator.rng,
                 terrain.position,
                 graphs,
                 args.propsCollection,

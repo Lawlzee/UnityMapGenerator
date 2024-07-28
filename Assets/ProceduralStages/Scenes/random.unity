@@ -560,6 +560,7 @@ Transform:
   - {fileID: 377542557}
   - {fileID: 1318512244}
   - {fileID: 963849589}
+  - {fileID: 900740247}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -906,6 +907,56 @@ MonoBehaviour:
   lookSensitivity: 2
   dampingCoefficient: 5
   focusOnEnable: 1
+--- !u!1 &900740246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 900740247}
+  - component: {fileID: 900740248}
+  m_Layer: 0
+  m_Name: RampSpawner
+  m_TagString: EditorOnly
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &900740247
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900740246}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 454570142}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &900740248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900740246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e6a5aba6a9ddad448f94f2dfc1536e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rampPrefab: {fileID: 1361591622951456057, guid: f5efa00ff458ec54e921ca059203c92c,
+    type: 3}
+  size: {x: 50, y: 40, z: 100}
+  distance: 0
+  yOffset: -10
+  noiseLevel: 1
+  propsWeight: 0.1
 --- !u!1 &934897083
 GameObject:
   m_ObjectHideFlags: 0
@@ -1657,9 +1708,9 @@ MonoBehaviour:
   loadResourcesInEditor: 1
   loadPropsInEditor: 1
   editorSeed: 0
-  editorTerrainType: 8
+  editorTerrainType: 2
   editorTheme: 0
-  editorStageInLoop: 5
+  editorStageInLoop: 1
   editorFloorTexture: {fileID: 0}
   editorWallTexture: {fileID: 0}
   editorDetailTexture: {fileID: 0}

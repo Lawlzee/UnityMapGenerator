@@ -24,17 +24,17 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float maxNoise = 0.25f;
 
-        public Texture2D CreateGrassTexture()
+        public Texture2D CreateGrassTexture(Xoroshiro128Plus rng)
         {
-            return CreateTexture(grass);
+            return CreateTexture(grass, rng);
         }
 
-        public Texture2D CreateTerrainTexture()
+        public Texture2D CreateTerrainTexture(Xoroshiro128Plus rng)
         {
-            return CreateTexture(floor);
+            return CreateTexture(floor, rng);
         }
 
-        private Texture2D CreateTexture(SurfaceColor floor)
+        private Texture2D CreateTexture(SurfaceColor floor, Xoroshiro128Plus rng)
         {
             Color[] colors = new Color[6];
 
@@ -54,14 +54,14 @@ namespace ProceduralStages
             ColorHSV minCeilColor = floor.minColor.ToHSV();
             ColorHSV maxCeilColor = floor.maxColor.ToHSV();
 
-            ColorHSV floorColor = ColorHSV.GetRandom(floor.minColor.ToHSV(), floor.maxColor.ToHSV(), MapGenerator.rng);
-            ColorHSV wallColor = ColorHSV.GetRandom(walls.minColor.ToHSV(), walls.maxColor.ToHSV(), MapGenerator.rng);
-            ColorHSV ceilColor = ColorHSV.GetRandom(ceilling.minColor.ToHSV(), ceilling.maxColor.ToHSV(), MapGenerator.rng);
+            ColorHSV floorColor = ColorHSV.GetRandom(floor.minColor.ToHSV(), floor.maxColor.ToHSV(), rng);
+            ColorHSV wallColor = ColorHSV.GetRandom(walls.minColor.ToHSV(), walls.maxColor.ToHSV(), rng);
+            ColorHSV ceilColor = ColorHSV.GetRandom(ceilling.minColor.ToHSV(), ceilling.maxColor.ToHSV(), rng);
 
-            float floorNoise = MapGenerator.rng.RangeFloat(minNoise, maxNoise);
+            float floorNoise = rng.RangeFloat(minNoise, maxNoise);
             float floorHueVariation = ColorHSV.ClampHue((floorColor.hue + floorNoise + 1) % 1, minFloorColor.hue, maxFloorColor.hue);
 
-            float wallNoise = MapGenerator.rng.RangeFloat(minNoise, maxNoise);
+            float wallNoise = rng.RangeFloat(minNoise, maxNoise);
             float wallHueVariation = ColorHSV.ClampHue((wallColor.hue + wallNoise + 1) % 1, minWallColor.hue, maxWallColor.hue);
 
             colors[0] = floorColor.ToRGB();

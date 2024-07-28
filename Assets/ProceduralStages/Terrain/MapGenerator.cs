@@ -247,7 +247,7 @@ namespace ProceduralStages
                 Log.Debug(themeType);
                 MapTheme theme = themes.First(x => x.Theme == themeType);
 
-                meshColorer.ColorMesh(terrain.meshResult);
+                meshColorer.ColorMesh(terrain.meshResult, rng);
                 ProfilerLog.Debug("meshColorer");
 
                 GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
@@ -338,6 +338,7 @@ namespace ProceduralStages
                 {
                     PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
                     propsPlacer.PlaceAll(
+                        MapGenerator.rng,
                         Vector3.zero,
                         graphs,
                         propsCollection,

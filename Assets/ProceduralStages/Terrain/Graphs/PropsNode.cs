@@ -14,6 +14,7 @@ namespace ProceduralStages
         public Vector3 normal;
 
         public GameObject Place(
+            Xoroshiro128Plus rng,
             Vector3 offset,
             GameObject prefab,
             GameObject parent,
@@ -28,9 +29,11 @@ namespace ProceduralStages
                     ? Quaternion.Euler(initialRotation.Value)
                     : prefab.transform.rotation);
 
-            GameObject gameObject = GameObject.Instantiate(prefab, position + offset, rotation, parent.transform);
+            GameObject gameObject = GameObject.Instantiate(prefab, parent.transform);
 
-            gameObject.transform.Rotate(normal ?? this.normal, MapGenerator.rng.nextNormalizedFloat * 360f, Space.World);
+            gameObject.transform.rotation = rotation;
+            gameObject.transform.localPosition = position + offset;
+            gameObject.transform.Rotate(normal ?? this.normal, rng.nextNormalizedFloat * 360f, Space.World);
             gameObject.transform.localScale = new Vector3(scale, scale, scale);
 
             if (material != null)

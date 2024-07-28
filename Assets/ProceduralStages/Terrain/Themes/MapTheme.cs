@@ -23,9 +23,9 @@ namespace ProceduralStages
         public PropsDefinitionCollection[] propCollections = new PropsDefinitionCollection[0];
 
         public Texture2D ApplyTheme(
-            TerrainGenerator terrainGenerator, 
-            Material material, 
-            RampFog fog, 
+            TerrainGenerator terrainGenerator,
+            Material material,
+            RampFog fog,
             Vignette vignette,
             MeshRenderer waterMeshRenderer,
             ColorGrading waterColorGrading,
@@ -33,8 +33,8 @@ namespace ProceduralStages
             SurfaceDefProvider terrainSurfaceDefProvider)
         {
             ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
-            Texture2D colorGradiant = SetTexture(material, colorPalette, terrainSurfaceDefProvider);
-            
+            Texture2D colorGradiant = SetTexture(material, colorPalette, terrainSurfaceDefProvider, MapGenerator.rng);
+
             var skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
             if (Application.isEditor)
             {
@@ -48,7 +48,7 @@ namespace ProceduralStages
             waterMeshRenderer.material.SetTexture("_Cube", skybox.GetTexture("_Tex"));
 
             var skyColor = (skybox.GetColor("_Tint") * skybox.GetFloat("_Exposure")).ToHSV();
-            
+
             if (skyColor.hue == 0 && skyColor.saturation == 0)
             {
                 skyColor.hue = 0.5f;
@@ -103,15 +103,23 @@ namespace ProceduralStages
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
 
             return colorPalette.grass != null
-                ? colorPalette.CreateGrassTexture()
+                ? colorPalette.CreateGrassTexture(MapGenerator.rng)
                 : colorGradiant;
         }
 
-        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette, SurfaceDefProvider terrainSurfaceDefProvider)
+        public Texture2D ApplyTextures(Material material, SurfaceDefProvider surfaceDefProvider, Xoroshiro128Plus rng)
         {
-            var rng = MapGenerator.rng;
+            ThemeColorPalettes colorPalette = colorPalettes[rng.RangeInt(0, colorPalettes.Length)];
+            Texture2D colorGradiant = SetTexture(material, colorPalette, surfaceDefProvider, rng);
 
-            Texture2D colorGradiant = colorPalette.CreateTerrainTexture();
+            return colorPalette.grass != null
+                ? colorPalette.CreateGrassTexture(rng)
+                : colorGradiant;
+        }
+
+        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette, SurfaceDefProvider terrainSurfaceDefProvider, Xoroshiro128Plus rng)
+        {
+            Texture2D colorGradiant = colorPalette.CreateTerrainTexture(rng);
             material.SetTexture("_ColorTex", colorGradiant);
 
             int floorIndex = rng.RangeInt(0, floor.Length);
@@ -124,11 +132,10 @@ namespace ProceduralStages
 
             if (Application.isEditor)
             {
-                floorTexture = MapGenerator.instance.editorFloorTexture ?? floorTexture;
-                wallTexture = MapGenerator.instance.editorWallTexture ?? wallTexture;
-                detailTexture = MapGenerator.instance.editorDetailTexture ?? detailTexture;
+                floorTexture = MapGenerator.instance?.editorFloorTexture ?? floorTexture;
+                wallTexture = MapGenerator.instance?.editorWallTexture ?? wallTexture;
+                detailTexture = MapGenerator.instance?.editorDetailTexture ?? detailTexture;
             }
-
 
             terrainSurfaceDefProvider.surfaceDef = floorTexture.surfaceDef;
 
@@ -162,7 +169,7 @@ namespace ProceduralStages
 
             ColorHSV fogColorHSV = ColorHSV.GetRandom(minColor, maxColor, MapGenerator.rng);
             float fogHue = ColorHSV.ClampHue(sunHue, minColor.hue, maxColor.hue);
-            
+
             var fogColor = Color.HSVToRGB(fogHue, fogColorHSV.saturation, fogColorHSV.value);
 
             fog.fogColorStart.value = fogColor;
