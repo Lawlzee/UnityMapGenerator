@@ -1,9 +1,12 @@
 ## 1.17.3
-1. Fixed lunar golems not spawning
-2. Fixed props desync
-3. Fixed moon desync
-4. Use moon music on moon
-5. Fixed moon to work in multiplayer
+1. **Lunar Fields Multiplayer Fixes:**
+    1. Resolved terrain desync issues between players.
+    2. Fixed the Mithrix fight issues.
+    3. Antigravity bubbles now extend for all players when pillars are charged.
+    4. Fixed the issue of lunar golems not spawning.
+2. **Prop Synchronization:** Props are no longer desynced between players in multiplayer.
+3. **Lunar Fields Music Update:** Lunar Fields now uses the same music as the vanilla moon stage.
+
 
 ## 1.17.2
 1. Fixed lag spikes during the Mithrix fight by simplifying the air node graph. This should also improve the performance of pathfinding for flying enemies.
