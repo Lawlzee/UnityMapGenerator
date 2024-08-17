@@ -31,7 +31,12 @@ namespace ProceduralStages
             if (NetworkServer.active)
             {
                 var runConfig = UnityEngine.Object.Instantiate(ContentProvider.runConfigPrefab);
-                runConfig.GetComponent<RunConfig>().InitHostConfig(self.runSeed);
+
+                ulong seed = PublicGauntletCompatibility.enabled
+                    ? PublicGauntletCompatibility.GetSeed()
+                    : self.runSeed;
+
+                runConfig.GetComponent<RunConfig>().InitHostConfig(seed);
                 NetworkServer.Spawn(runConfig);
             }
         }

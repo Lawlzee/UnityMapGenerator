@@ -100,6 +100,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "riskofresources-public_gauntlet": {
+      "version": "file:Public_Gauntlet",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "riskofthunder-bepinex_gui": {
       "version": "file:BepInEx_GUI",
       "depth": 0,

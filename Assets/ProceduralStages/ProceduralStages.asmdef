@@ -27,7 +27,8 @@
         "RiskOfOptions.dll",
         "R2API.Language.dll",
         "Wwise.dll",
-        "Rewired_Core.dll"
+        "Rewired_Core.dll",
+        "RoRGauntlet.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

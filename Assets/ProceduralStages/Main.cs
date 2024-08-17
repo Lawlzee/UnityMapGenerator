@@ -1,9 +1,5 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using RiskOfOptions;
-using RiskOfOptions.OptionConfigs;
-using RiskOfOptions.Options;
-using RoR2;
 using RoR2.ContentManagement;
 using System;
 using System.Collections;
@@ -11,14 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
-using UnityEngine.SceneManagement;
 
 [assembly: HG.Reflection.SearchableAttribute.OptIn]
 
 namespace ProceduralStages
 {
+    [BepInDependency("RiskOfResources.PublicRoRGauntlet", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.rune580.riskofoptions")]
     [BepInPlugin(PluginGUID, PluginName, PluginVersion)]
     public class Main : BaseUnityPlugin
