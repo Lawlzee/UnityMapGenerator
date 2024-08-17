@@ -24,6 +24,12 @@ namespace ProceduralStages
         public ConfigEntry<float> Config;
     }
 
+    public enum TerrainRepetition
+    {
+        Yes,
+        NonePerLoop
+    }
+
     public static class ModConfig
     {
         private static Dictionary<(TerrainType, int), float> _defaultTerrainTypesPercents = new Dictionary<(TerrainType, int), float>
@@ -86,6 +92,8 @@ namespace ProceduralStages
         public static ConfigEntry<int> OcclusionCullingDelay;
 
         public static List<ThemeConfig> ThemeConfigs;
+        public static ConfigEntry<int> MinStageCount;
+        public static ConfigEntry<TerrainRepetition> TerrainTypeRepetition;
         public static List<TerrainTypePercentConfig> TerrainTypesPercents;
 
         public static ConfigEntry<float> MoonSpawnRate;
@@ -110,7 +118,7 @@ namespace ProceduralStages
             {
                 Theme theme = kvp.Key;
 
-                string description = $"Specifies the percentage of stages that will be generated with the \"{theme.GetName()}\" theme.";
+                string description = $"Specifies the percentage of stages that will be generated with the <style=cIsHealing>{theme.GetName()}</style> theme.";
                 var themeConfig = config.Bind("Themes", $"{theme.GetName()} spawn rate", kvp.Value, description);
 
                 ModSettingsManager.AddOption(new StepSliderOption(themeConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
@@ -142,6 +150,12 @@ namespace ProceduralStages
                 }
             }
 
+            MinStageCount = config.Bind("All Stages", "Min stage count", 1, "Defines the minimum number of stages required to enable the spawning of procedural stages.");
+            ModSettingsManager.AddOption(new IntSliderOption(MinStageCount, new IntSliderConfig { min = 1, max = 15 }));
+
+            TerrainTypeRepetition = config.Bind("All Stages", "Stage repetition", TerrainRepetition.NonePerLoop, "Specifies whether a stage can be repeated.\r\n\r\n<style=cIsHealing>Yes</style>: The stage can be repeated multiple times.\r\n<style=cIsHealing>NonePerLoop</style>: The stage cannot be repeated within the same loop.");
+            ModSettingsManager.AddOption(new ChoiceOption(TerrainTypeRepetition));
+
             float variedSpawnRate = -0.01f;
             bool isTerrainTypeChanging = false;
             bool isGlobalTerrainTypeChanging = false;
@@ -153,7 +167,7 @@ namespace ProceduralStages
             {
                 if (terrainType != TerrainType.Random && terrainType != TerrainType.Moon)
                 {
-                    string description = $"Sets the overall percentage of stages that will feature the \"{terrainType.GetName()}\" terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage.";
+                    string description = $"Sets the overall percentage of stages that will feature the <style=cIsHealing>{terrainType.GetName()}</style> terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage.";
                     ConfigEntry<float> terrainConfig = config.Bind($"All Stages", $"{terrainType.GetName()} map spawn rate", variedSpawnRate, description);
 
                     ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = variedSpawnRate, max = 1, increment = 0.01f, formatString = "{0:0%;'Varied';0%}" }));
@@ -207,7 +221,7 @@ namespace ProceduralStages
                     {
                         float defaultPercent = _defaultTerrainTypesPercents[(terrainType, stageIndex)];
 
-                        string description = $"Specifies the percentage of maps that will be generated with the \"{terrainType.GetName()}\" terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
+                        string description = $"Specifies the percentage of maps that will be generated with the <style=cIsHealing>{terrainType.GetName()}</style> terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
                         var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, description);
                         if (lastVersion < SemanticVersion.Parse("1.15.0"))
                         {
@@ -275,7 +289,7 @@ namespace ProceduralStages
                 }
             }
 
-            MoonSpawnRate = config.Bind("Moon", "Lunar Fields map spawn rate", 1f, "Indicates the percentage of final stages featuring the custom \"Lunar Fields\" terrain type instead of the vanilla moon stage. If this percentage is less than 100%, the normal moon stage will also appear. If the total percentage is 0%, only the normal moon stage will be generated.");
+            MoonSpawnRate = config.Bind("Moon", "Lunar Fields map spawn rate", 1f, "Indicates the percentage of final stages featuring the custom <style=cIsHealing>Lunar Fields</style> terrain type instead of the vanilla moon stage. If this percentage is less than 100%, the normal moon stage will also appear. If the total percentage is 0%, only the normal moon stage will be generated.");
             ModSettingsManager.AddOption(new StepSliderOption(MoonSpawnRate, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
 
             MoonRequiredPillarsCount = config.Bind("Moon", "Required pillars", 4, "Number of pillars necessary to access the Mithrix arena");

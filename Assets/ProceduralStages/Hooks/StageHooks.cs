@@ -98,22 +98,25 @@ namespace ProceduralStages
 
         private static void Run_PickNextStageScene(On.RoR2.Run.orig_PickNextStageScene orig, Run self, WeightedSelection<SceneDef> choices)
         {
-            if (Run.instance.stageClearCount == 0 && self.name.Contains(Main.Judgement))
+            int nextStageIndex = RunConfig.instance.nextStageClearCount + 1;
+
+            if ((Run.instance.stageClearCount == 0 && self.name.Contains(Main.Judgement))
+                || nextStageIndex < RunConfig.instance.minStageCount)
             {
                 orig(self, choices);
                 return;
             }
 
-            int stageIndex = (Math.Max(0, Run.instance.stageClearCount) + 1) % Run.stagesPerLoop;
+            int stageIndexInLoop = nextStageIndex % Run.stagesPerLoop;
 
             float totalPercent = RunConfig.instance.terrainTypesPercents
-                .Where(x => x.StageIndex == stageIndex)
+                .Where(x => x.StageIndex == stageIndexInLoop)
                 .Select(x => x.Percent)
                 .Sum();
 
             SceneDef sceneDef = self is InfiniteTowerRun
                 ? ContentProvider.ItSceneDef
-                : ContentProvider.LoopSceneDefs[stageIndex];
+                : ContentProvider.LoopSceneDefs[stageIndexInLoop];
 
             if (totalPercent >= 1)
             {
@@ -137,6 +140,12 @@ namespace ProceduralStages
                 {
                     int stageIndex = (Run.instance.stageClearCount / 2) % Run.stagesPerLoop;
 
+                    if (stageIndex < RunConfig.instance.minStageCount)
+                    {
+                        orig(self, newState);
+                        return;
+                    }
+
                     var typesWeights = RunConfig.instance.terrainTypesPercents
                         .Where(x => x.StageIndex == stageIndex)
                         .ToList();
@@ -149,15 +158,30 @@ namespace ProceduralStages
                     {
                         Run.instance.nextStageScene = ContentProvider.ItSceneDef;
 
-                        WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                        int loopIndex = (stageIndex - 1) / Run.stagesPerLoop;
+                        TerrainType[] terrainTypesVisitedInLoop = RunConfig.instance.terrainTypeVisits
+                            .Where(x => (x.stageCount - 1) / Run.stagesPerLoop == loopIndex)
+                            .Select(x => x.terrainType)
+                            .ToArray();
+
+                        WeightedSelection<TerrainType> filteredSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                        WeightedSelection<TerrainType> allSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
 
                         for (int i = 0; i < typesWeights.Count; i++)
                         {
                             var config = typesWeights[i];
-                            selection.AddChoice(config.TerrainType, config.Percent);
+                            if (RunConfig.instance.terrainRepetition == TerrainRepetition.NonePerLoop && !terrainTypesVisitedInLoop.Contains(config.TerrainType))
+                            {
+                                filteredSelection.AddChoice(config.TerrainType, config.Percent);
+                            }
+                            allSelection.AddChoice(config.TerrainType, config.Percent);
                         }
 
-                        RunConfig.instance.selectedTerrainType = selection.Evaluate(Run.instance.nextStageRng.nextNormalizedFloat);
+                        RunConfig.instance.selectedTerrainType = filteredSelection.totalWeight > 0
+                            ? filteredSelection.Evaluate(Run.instance.nextStageRng.nextNormalizedFloat)
+                            : allSelection.totalWeight > 0
+                                ? allSelection.Evaluate(Run.instance.nextStageRng.nextNormalizedFloat)
+                                : TerrainType.Random;
                     }
                 }
                 else if (self.gameObject.name == "LunarTeleporter Variant(Clone)" 

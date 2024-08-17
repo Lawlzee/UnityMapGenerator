@@ -164,17 +164,39 @@ namespace ProceduralStages
                         .Where(x => x.StageIndex + 1 == stageInLoop)
                         .ToList();
 
-                    WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                    WeightedSelection<TerrainType> filteredSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                    WeightedSelection<TerrainType> allSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                    int loopIndex = stageClearCount / Run.stagesPerLoop;
+                    TerrainType[] terrainTypesVisitedInLoop = RunConfig.instance.terrainTypeVisits
+                        .Where(x => (x.stageCount - 1) / Run.stagesPerLoop == loopIndex)
+                        .Select(x => x.terrainType)
+                        .ToArray();
 
                     for (int i = 0; i < typesWeights.Count; i++)
                     {
                         var config = typesWeights[i];
-                        selection.AddChoice(config.TerrainType, config.Percent);
+                        if (RunConfig.instance.terrainRepetition == TerrainRepetition.NonePerLoop && !terrainTypesVisitedInLoop.Contains(config.TerrainType))
+                        {
+                            filteredSelection.AddChoice(config.TerrainType, config.Percent);
+                        }
+                        allSelection.AddChoice(config.TerrainType, config.Percent);
                     }
 
-                    terrainType = selection.totalWeight > 0
-                        ? selection.Evaluate(rng.nextNormalizedFloat)
-                        : TerrainType.OpenCaves;
+                    terrainType = filteredSelection.totalWeight > 0
+                        ? filteredSelection.Evaluate(rng.nextNormalizedFloat)
+                        : allSelection.totalWeight > 0
+                            ? allSelection.Evaluate(rng.nextNormalizedFloat)
+                            : TerrainType.OpenCaves;
+
+                    if (NetworkServer.active)
+                    {
+                        RunConfig.instance.terrainTypeVisits.Add(new TerrainTypeVisit
+                        {
+                            stageCount = stageClearCount + 1,
+                            terrainType = terrainType
+                        });
+                    }
                 }
                 //terrainType = TerrainType.Moon;
                 Log.Debug(terrainType);
@@ -200,7 +222,7 @@ namespace ProceduralStages
                 waterControllerBoxController.center = waterPPCollider.center;
                 waterControllerBoxController.size = waterPPCollider.size;
 
-                waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAsset<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
+                waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
 
                 stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
                 stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);

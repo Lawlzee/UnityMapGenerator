@@ -21,6 +21,21 @@ namespace ProceduralStages
         public float Percent;
     }
 
+    [Serializable]
+    public struct TerrainTypeVisit : IEquatable<TerrainTypeVisit>
+    {
+        public int stageCount;
+        public TerrainType terrainType;
+
+        public bool Equals(TerrainTypeVisit other)
+        {
+            return stageCount == other.stageCount 
+                && terrainType == other.terrainType;
+        }
+    }
+
+    public class SyncListTerrainTypeVisit : SyncListStruct<TerrainTypeVisit> { }
+
     [DefaultExecutionOrder(-100)]
     public class RunConfig : NetworkBehaviour
     {
@@ -53,6 +68,20 @@ namespace ProceduralStages
         //is not synced yet to the client before generating the next stage
         [SyncVar]
         public int nextStageClearCount;
+
+        [SyncVar]
+        public int minStageCount;
+        
+        [SyncVar]
+        private int _terrainRepetition;
+
+        public TerrainRepetition terrainRepetition
+        {
+            get => (TerrainRepetition)_terrainRepetition;
+            set => _terrainRepetition = (int)value;
+        }
+
+        public SyncListTerrainTypeVisit terrainTypeVisits;
 
         private SyncListFloat _terrainTypesPercents;
 
@@ -132,6 +161,8 @@ namespace ProceduralStages
                 ModConfig.StageSeed.SettingChanged -= StageSeed_SettingChanged;
                 ModConfig.InfiniteMapScaling.SettingChanged -= InfiniteMapScaling_SettingChanged;
                 ModConfig.MoonRequiredPillarsCount.SettingChanged -= MoonRequiredPillarsCount_SettingChanged;
+                ModConfig.MinStageCount.SettingChanged -= MinStageCount_SettingChanged;
+                ModConfig.TerrainTypeRepetition.SettingChanged -= TerrainTypeRepetition_SettingChanged;
 
                 for (int i = 0; i < ModConfig.TerrainTypesPercents.Count; i++)
                 {
@@ -159,7 +190,13 @@ namespace ProceduralStages
             ModConfig.InfiniteMapScaling.SettingChanged += InfiniteMapScaling_SettingChanged;
 
             moonRequiredPillarsCount = ModConfig.MoonRequiredPillarsCount.Value;
-            ModConfig.MoonRequiredPillarsCount.SettingChanged += MoonRequiredPillarsCount_SettingChanged; ;
+            ModConfig.MoonRequiredPillarsCount.SettingChanged += MoonRequiredPillarsCount_SettingChanged;
+
+            minStageCount = ModConfig.MinStageCount.Value;
+            ModConfig.MinStageCount.SettingChanged += MinStageCount_SettingChanged;
+
+            terrainRepetition = ModConfig.TerrainTypeRepetition.Value;
+            ModConfig.TerrainTypeRepetition.SettingChanged += TerrainTypeRepetition_SettingChanged;
 
             _terrainTypesPercentsSettingChanged = new EventHandler[ModConfig.TerrainTypesPercents.Count];
 
@@ -211,6 +248,16 @@ namespace ProceduralStages
         private void MoonRequiredPillarsCount_SettingChanged(object sender, EventArgs e)
         {
             moonRequiredPillarsCount = ModConfig.MoonRequiredPillarsCount.Value;
+        }
+
+        private void MinStageCount_SettingChanged(object sender, EventArgs e)
+        {
+            minStageCount = ModConfig.MinStageCount.Value;
+        }
+
+        private void TerrainTypeRepetition_SettingChanged(object sender, EventArgs e)
+        {
+            terrainRepetition = ModConfig.TerrainTypeRepetition.Value;
         }
     }
 }

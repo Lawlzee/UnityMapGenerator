@@ -42,7 +42,7 @@ namespace ProceduralStages
                     }
                 }
 
-                if (randomStage != null)
+                if (randomStage != null && RunConfig.instance.minStageCount <= Run.instance.stageClearCount + 1)
                 {
                     var totalPercent = RunConfig.instance.terrainTypesPercents
                         .Where(x => x.StageIndex + 1 == stageOrder)
@@ -118,17 +118,30 @@ namespace ProceduralStages
                         .Where(x => x.StageIndex == stageIndex)
                         .ToList();
 
-                    WeightedSelection<TerrainType> selection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                    WeightedSelection<TerrainType> filteredSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
+                    WeightedSelection<TerrainType> allSelection = new WeightedSelection<TerrainType>(typesWeights.Count);
+
+                    int loopIndex = (stageIndex - 1) / Run.stagesPerLoop;
+                    TerrainType[] terrainTypesVisitedInLoop = RunConfig.instance.terrainTypeVisits
+                        .Where(x => (x.stageCount - 1) / Run.stagesPerLoop == loopIndex)
+                        .Select(x => x.terrainType)
+                        .ToArray();
 
                     for (int i = 0; i < typesWeights.Count; i++)
                     {
                         var config = typesWeights[i];
-                        selection.AddChoice(config.TerrainType, config.Percent);
+                        if (RunConfig.instance.terrainRepetition == TerrainRepetition.NonePerLoop && !terrainTypesVisitedInLoop.Contains(config.TerrainType))
+                        {
+                            filteredSelection.AddChoice(config.TerrainType, config.Percent);
+                        }
+                        allSelection.AddChoice(config.TerrainType, config.Percent);
                     }
 
-                    TerrainType terrainType = selection.totalWeight > 0
-                        ? selection.Evaluate(RunConfig.instance.seerRng.nextNormalizedFloat)
-                        : TerrainType.OpenCaves;
+                    TerrainType terrainType = filteredSelection.totalWeight > 0
+                        ? filteredSelection.Evaluate(RunConfig.instance.seerRng.nextNormalizedFloat)
+                        : allSelection.totalWeight > 0
+                            ? allSelection.Evaluate(RunConfig.instance.seerRng.nextNormalizedFloat)
+                            : TerrainType.OpenCaves;
 
                     portalMaterial = ContentProvider.SeerMaterialByTerrainType[terrainType];
                 }

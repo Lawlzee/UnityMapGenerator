@@ -1,3 +1,7 @@
+## 1.18
+1. Added "Min stage count" config
+2. Added "Stage repetition" config
+
 ## 1.17.3
 1. **Lunar Fields Multiplayer Fixes:**
     1. Resolved terrain desync issues between players.

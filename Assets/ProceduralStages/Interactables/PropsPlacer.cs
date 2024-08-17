@@ -99,7 +99,7 @@ namespace ProceduralStages
             HashSet<int> usedFloorIndexes = new HashSet<int>();
             HashSet<int> usedCeillingIndexes = new HashSet<int>();
 
-            for (int j = 0; j < stagePropCount; j++)
+            for (int j = 0; j < stagePropCount && propsSelection.Count > 0; j++)
             {
                 int propIndex = propsSelection.EvaluateToChoiceIndex(rng.nextNormalizedFloat);
                 var prop = propsSelection.choices[propIndex].value;
