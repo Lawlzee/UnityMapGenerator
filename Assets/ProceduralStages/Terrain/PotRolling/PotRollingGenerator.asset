@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e215e513b8fcaf94e9dfc81f87aad841, type: 3}
+  m_Name: PotRollingGenerator
+  m_EditorClassIdentifier: 
+  size: {x: 80, y: 12, z: 350}
+  sizeIncreasePerStage: {x: 0, y: 0, z: 0}
+  sizeVariation: {x: 0, y: 0, z: 0}
+  fogPower: 1.75
+  fogIntensityCoefficient: 1
+  vignetteInsentity: 0.12
+  ambiantLightIntensity: 0.7
+  waterLevel: 8.5
+  terrainType: 9
+  propCountWeight: 0.6
+  ceillingPropsWeight: 0
+  backdropGenerator: {fileID: 11400000, guid: 64d7d59a9b3c82244b13eb40aba11c32, type: 2}
+  airNodesScale: 2.5
+  minHeightCurve: {fileID: 11400000, guid: 16e5261e18280e148bfc1c0f0f43d795, type: 2}
+  maxHeightCurve: {fileID: 11400000, guid: 28f56c8dd8f74fc49b72d936e3ffeece, type: 2}
+  floorFBM: {fileID: 11400000, guid: d6063a0bc568a2443b0b0ed631dc69a9, type: 2}
+  floorNoiseRemap: {fileID: 11400000, guid: 61ab809653c3de840a453e9d89b3dabe, type: 2}
+  pathCurveFBM: {fileID: 11400000, guid: fb8abc1291b9fda4b9edc3eab504c6ef, type: 2}
+  pathCurveRemap: {fileID: 11400000, guid: ea33613ce06f6ac4080ad0dd54c9022d, type: 2}
+  blendFactor: 0.015
+  plateDistanceFromEdge: 40
+  platePositionMaxOffset: {x: 20, y: 0, z: 30}
+  platePositionYOffset: -0.12

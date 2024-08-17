@@ -158,6 +158,10 @@ namespace ProceduralStages
                         terrainType = editorTerrainType;
                     }
                 }
+                else if (ModConfig.PotRollingModeEnabled.Value)
+                {
+                    terrainType = TerrainType.PotRolling;
+                }
                 else if (terrainType == TerrainType.Random)
                 {
                     var typesWeights = RunConfig.instance.terrainTypesPercents
@@ -201,11 +205,13 @@ namespace ProceduralStages
                 //terrainType = TerrainType.Moon;
                 Log.Debug(terrainType);
 
-                stageType = terrainType == TerrainType.Moon
-                    ? StageType.Moon
-                    : !Application.isEditor && Run.instance is InfiniteTowerRun
-                        ? StageType.Simulacrum
-                        : StageType.Regular;
+                stageType = terrainType == TerrainType.PotRolling
+                    ? StageType.PotRolling
+                        : terrainType == TerrainType.Moon
+                        ? StageType.Moon
+                        : !Application.isEditor && Run.instance is InfiniteTowerRun
+                            ? StageType.Simulacrum
+                            : StageType.Regular;
 
                 TerrainGenerator terrainGenerator = terrainGenerators.First(x => x.terrainType == terrainType);
                 RunConfig.instance.selectedTerrainType = TerrainType.Random;
@@ -224,11 +230,21 @@ namespace ProceduralStages
 
                 waterControllerBoxController.GetComponent<SurfaceDefProvider>().surfaceDef = Addressables.LoadAssetAsync<SurfaceDef>("RoR2/Base/Common/sdWater.asset").WaitForCompletion();
 
-                stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
-                stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
-                stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
-                stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
-
+                if (!Application.isEditor && stageType == StageType.PotRolling)
+                {
+                    stageSize = new Vector3Int(
+                        Mathf.CeilToInt(ModConfig.PotRollingStageWidth.Value / mapScale),
+                        Mathf.CeilToInt(ModConfig.PotRollingStageHeight.Value / mapScale),
+                        Mathf.CeilToInt(ModConfig.PotRollingStageDepth.Value / mapScale));
+                }
+                else
+                {
+                    stageSize = terrainGenerator.size + stageScaling * terrainGenerator.sizeIncreasePerStage;
+                    stageSize.x -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.x * terrainGenerator.sizeVariation.x);
+                    stageSize.y -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.y * terrainGenerator.sizeVariation.y);
+                    stageSize.z -= Mathf.CeilToInt(rng.nextNormalizedFloat * stageSize.z * terrainGenerator.sizeVariation.z);
+                }
+                
                 Terrain terrain;
                 using (ProfilerLog.CreateScope("terrainGenerator.Generate"))
                 {
@@ -307,8 +323,13 @@ namespace ProceduralStages
                 SetDCCS(stageInfo);
                 ProfilerLog.Debug("SetDCCS");
 
+                if (Application.isEditor)
+                {
+                    directorObject.SetActive(false);
+                }
+
                 var combatDirectors = directorObject.GetComponents<CombatDirector>();
-                if (stageType == StageType.Simulacrum || Application.isEditor)
+                if (stageType == StageType.Simulacrum || stageType == StageType.PotRolling)
                 {
                     foreach (var combatDirector in combatDirectors)
                     {
@@ -318,7 +339,7 @@ namespace ProceduralStages
                     }
                 }
 
-                if (stageType != StageType.Simulacrum)
+                if (stageType != StageType.Simulacrum && stageType != StageType.PotRolling)
                 {
                     stageInfo.sceneDirectorMonsterCredits = 30 * (stageScaling + 4);
                 }
@@ -335,13 +356,14 @@ namespace ProceduralStages
                     ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                     : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
+
+                if (stageType == StageType.Regular)
+                {
+                    sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
+                }
+
                 if (!Application.isEditor)
                 {
-                    if (stageType == StageType.Regular)
-                    {
-                        sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
-                    }
-
                     if (NetworkServer.active)
                     {
                         Action<SceneDirector> placeInteractables = null;
@@ -368,7 +390,7 @@ namespace ProceduralStages
                         colorGradiant,
                         terrainMaterial,
                         terrainGenerator.ceillingPropsWeight,
-                        propCountWeight: 1,
+                        terrainGenerator.propCountWeight,
                         bigObjectOnly: false);
 
                     ProfilerLog.Debug("propsPlacer");
@@ -424,7 +446,7 @@ namespace ProceduralStages
                         mainTrack = mainTracks[rng.RangeInt(0, mainTracks.Count)];
                         bossTrack = bossTracks[rng.RangeInt(0, bossTracks.Count)];
                     }
-                    
+
                     Action<SceneDef> onSceneChanged = null;
                     onSceneChanged = scene =>
                     {
@@ -500,7 +522,7 @@ namespace ProceduralStages
             bool hasDLC1 = expansionDef && Run.instance.IsExpansionEnabled(expansionDef);
 
             var validPools = DccsPoolItem.All
-                .Where(x => x.StageType == stageType)
+                .Where(x => stageType == StageType.PotRolling || x.StageType == stageType)
                 .Where(x => hasDLC1 || !x.DLC1)
                 .ToList();
 

@@ -99,6 +99,11 @@ namespace ProceduralStages
         public static ConfigEntry<float> MoonSpawnRate;
         public static ConfigEntry<int> MoonRequiredPillarsCount;
 
+        public static ConfigEntry<bool> PotRollingModeEnabled;
+        public static ConfigEntry<int> PotRollingStageWidth;
+        public static ConfigEntry<int> PotRollingStageHeight;
+        public static ConfigEntry<int> PotRollingStageDepth;
+
         public static void Init(ConfigFile config)
         {
             ConfigVersion = config.Bind("Configuration", "Last version played", Main.PluginVersion, "Do not touch");
@@ -165,7 +170,7 @@ namespace ProceduralStages
             float totalGlobalTerrain = 0;
             foreach (TerrainType terrainType in Enum.GetValues(typeof(TerrainType)))
             {
-                if (terrainType != TerrainType.Random && terrainType != TerrainType.Moon)
+                if (terrainType.IsNormalStage())
                 {
                     string description = $"Sets the overall percentage of stages that will feature the <style=cIsHealing>{terrainType.GetName()}</style> terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage.";
                     ConfigEntry<float> terrainConfig = config.Bind($"All Stages", $"{terrainType.GetName()} map spawn rate", variedSpawnRate, description);
@@ -217,7 +222,7 @@ namespace ProceduralStages
 
                 foreach (TerrainType terrainType in Enum.GetValues(typeof(TerrainType)))
                 {
-                    if (terrainType != TerrainType.Random && terrainType != TerrainType.Moon)
+                    if (terrainType.IsNormalStage())
                     {
                         float defaultPercent = _defaultTerrainTypesPercents[(terrainType, stageIndex)];
 
@@ -297,6 +302,18 @@ namespace ProceduralStages
 
             StageSeed = config.Bind("Debug", "Stage seed", "", "Specifies the stage seed. If left blank, a random seed will be used.");
             ModSettingsManager.AddOption(new StringInputFieldOption(StageSeed));
+
+            PotRollingModeEnabled = config.Bind("Pot rolling", "Enabled", false, "This feature is not production ready. Do not touch");
+            ModSettingsManager.AddOption(new CheckBoxOption(PotRollingModeEnabled));
+
+            PotRollingStageWidth = config.Bind("Pot rolling", "Stage width", 200, "This feature is not production ready. Do not touch");
+            ModSettingsManager.AddOption(new IntSliderOption(PotRollingStageWidth, new IntSliderConfig { min = 20, max = 500 }));
+
+            PotRollingStageHeight = config.Bind("Pot rolling", "Stage height", 30, "This feature is not production ready. Do not touch");
+            ModSettingsManager.AddOption(new IntSliderOption(PotRollingStageHeight, new IntSliderConfig { min = 10, max = 100 }));
+
+            PotRollingStageDepth = config.Bind("Pot rolling", "Stage depth", 900, "This feature is not production ready. Do not touch");
+            ModSettingsManager.AddOption(new IntSliderOption(PotRollingStageDepth, new IntSliderConfig { min = 50, max = 2000 }));
         }
     }
 }

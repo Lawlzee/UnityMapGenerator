@@ -23,7 +23,7 @@ namespace ProceduralStages
             int stageInLoop,
             MoonTerrain moonTerrain)
         {
-            if (MapGenerator.instance.stageType == StageType.Moon)
+            if (MapGenerator.instance.stageType == StageType.Moon || MapGenerator.instance.stageType == StageType.PotRolling)
             {
                 return;
             }

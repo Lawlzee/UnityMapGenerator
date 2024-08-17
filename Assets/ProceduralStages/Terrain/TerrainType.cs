@@ -16,11 +16,29 @@ namespace ProceduralStages
         Basalt,
         Towers,
         Temple,
-        Moon
+        Moon,
+        PotRolling
     }
 
     public static class TerrainTypeExtensions
     {
+        public static bool IsNormalStage(this TerrainType terrainType)
+        {
+            switch (terrainType)
+            {
+                case TerrainType.OpenCaves:
+                case TerrainType.TunnelCaves:
+                case TerrainType.Islands:
+                case TerrainType.Mines:
+                case TerrainType.Basalt:
+                case TerrainType.Towers:
+                case TerrainType.Temple:
+                    return true;
+            }
+
+            return false;
+        }
+
         public static string GetName(this TerrainType terrainType)
         {
             switch (terrainType)
@@ -41,6 +59,8 @@ namespace ProceduralStages
                     return "Block maze";
                 case TerrainType.Temple:
                     return "Temple";
+                case TerrainType.PotRolling:
+                    return "The line";
                 default:
                     return "?";
             }
@@ -66,6 +86,8 @@ namespace ProceduralStages
                     return "Enigmatic Towers";
                 case TerrainType.Temple:
                     return "Ancient Sanctuary";
+                case TerrainType.PotRolling:
+                    return "Sisyphus' Trial";
                 default:
                     return "?";
             }
@@ -91,6 +113,8 @@ namespace ProceduralStages
                     return "You dream of diamonds.";
                 case TerrainType.Temple:
                     return "You dream of mystical energies flowing through ancient ruins.";
+                case TerrainType.PotRolling:
+                    return "You dream of an upside down world.";
                 default:
                     return "?";
             }

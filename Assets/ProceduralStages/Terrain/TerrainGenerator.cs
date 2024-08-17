@@ -48,6 +48,7 @@ namespace ProceduralStages
         public float ambiantLightIntensity;
         public float waterLevel = 0f;
         public TerrainType terrainType;
+        public float propCountWeight = 1;
         public float ceillingPropsWeight = 1;
         public BackdropGenerator backdropGenerator;
         public float airNodesScale = 1;

@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c2fb2a9a6b211440b615361587bfc75, type: 3}
+  m_Name: FloorNoiseRemap
+  m_EditorClassIdentifier: 
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -1
+      value: 0
+      inSlope: 0.99275947
+      outSlope: 0.99275947
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: -0.49613845
+      value: 0.5002133
+      inSlope: 0.25811684
+      outSlope: 0.25811684
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: -0.27628213
+      value: 0.39544612
+      inSlope: 0.16667265
+      outSlope: 0.16667265
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.09822908
+      value: 0.6987519
+      inSlope: 0.22483924
+      outSlope: 0.22483924
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.44915277
+      value: 0.5723518
+      inSlope: 0.20807683
+      outSlope: 0.20807683
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.77634627
+      outSlope: 0.77634627
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  sampleCount: 100
+  _samples:
+  - 0
+  - 0.02062696
+  - 0.042300813
+  - 0.06487853
+  - 0.08821691
+  - 0.11217272
+  - 0.13660295
+  - 0.16136439
+  - 0.18631382
+  - 0.21130824
+  - 0.2362044
+  - 0.2608591
+  - 0.28512934
+  - 0.3088719
+  - 0.33194354
+  - 0.35420126
+  - 0.37550178
+  - 0.39570203
+  - 0.4146589
+  - 0.43222913
+  - 0.44826964
+  - 0.46263728
+  - 0.47518885
+  - 0.4857813
+  - 0.49427137
+  - 0.5005067
+  - 0.50161713
+  - 0.49637783
+  - 0.4861989
+  - 0.4724905
+  - 0.4566627
+  - 0.44012564
+  - 0.4242895
+  - 0.41056433
+  - 0.4003603
+  - 0.3950875
+  - 0.3961014
+  - 0.40210858
+  - 0.4116851
+  - 0.4243978
+  - 0.4398134
+  - 0.45749876
+  - 0.47702065
+  - 0.4979459
+  - 0.5198413
+  - 0.54227364
+  - 0.5648098
+  - 0.58701646
+  - 0.6084604
+  - 0.6287086
+  - 0.6473278
+  - 0.6638847
+  - 0.6779462
+  - 0.68907905
+  - 0.69685006
+  - 0.7008463
+  - 0.7011077
+  - 0.6980844
+  - 0.6922398
+  - 0.6840372
+  - 0.6739398
+  - 0.662411
+  - 0.64991397
+  - 0.63691205
+  - 0.6238686
+  - 0.61124676
+  - 0.59950995
+  - 0.5891214
+  - 0.5805445
+  - 0.57424235
+  - 0.57067835
+  - 0.57031584
+  - 0.5735336
+  - 0.5789977
+  - 0.5860285
+  - 0.59453344
+  - 0.6044198
+  - 0.615595
+  - 0.6279663
+  - 0.6414411
+  - 0.6559268
+  - 0.67133075
+  - 0.68756026
+  - 0.70452267
+  - 0.72212535
+  - 0.74027574
+  - 0.758881
+  - 0.77784866
+  - 0.79708606
+  - 0.8165004
+  - 0.83599925
+  - 0.85548985
+  - 0.8748795
+  - 0.89407563
+  - 0.91298556
+  - 0.93151665
+  - 0.9495763
+  - 0.9670719
+  - 0.9839107
+  - 1
+  _min: -1
+  _max: 1
+  _inverseRange: 0.5
+  _step: 0.02020202

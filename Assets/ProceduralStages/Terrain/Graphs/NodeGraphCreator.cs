@@ -478,6 +478,11 @@ namespace ProceduralStages
                 .OrderByDescending(x => x.Count)
                 .ToList();
 
+            if (islands.Count == 0)
+            {
+                return new HashSet<int>();
+            }
+
             Log.Debug("islands.Count: " + islands.Count);
             Log.Debug("islands[0].Count: " + islands[0].Count);
 

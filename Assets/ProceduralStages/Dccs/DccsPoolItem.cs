@@ -17,6 +17,7 @@ namespace ProceduralStages
         Regular,
         Moon,
         Simulacrum,
+        PotRolling,
         Other
     }
 
