@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: TLGrassSparse
   m_EditorClassIdentifier: 
-  asset: RoR2/CU8/lakes/TLGrassSparse.spm
+  asset: RoR2/DLC2/lakes/Assets/TLGrassSparse.spm
   minScale: 2
   maxScale: 3
   ground: 1
   count: 200
   changeColor: 0
   isRock: 0
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 0
   addCollision: 0
+  isBig: 0
   initialRotation: {x: 0, y: 0, z: 0}

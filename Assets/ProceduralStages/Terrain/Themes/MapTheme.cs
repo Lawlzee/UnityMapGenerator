@@ -184,5 +184,50 @@ namespace ProceduralStages
             fog.fogIntensity.value = colorPalette.fog.intensity * intensityCoefficient;
             fog.fogPower.value = power;
         }
+
+        public void CheckAssets()
+        {
+            var invalidTextures = walls.Concat(floor).Concat(detail)
+                .Where(x => x.texture == null)
+                .Select(x => x.textureAsset)
+                .ToList();
+
+            if (invalidTextures.Count > 0)
+            {
+                Log.Debug("Invalid textures: " + string.Join("\r\n", invalidTextures));
+            }
+
+            var invalidMaterials = skyboxes
+                .Where(x => x.material == null)
+                .Select(x => x.asset)
+                .ToList();
+
+            if (invalidTextures.Count > 0)
+            {
+                Log.Debug("Invalid materials: " + string.Join("\r\n", invalidMaterials));
+            }
+
+            var invalidWaters = waters
+                .Where(x => x.material == null)
+                .Select(x => x.asset)
+                .ToList();
+
+            if (invalidWaters.Count > 0)
+            {
+                Log.Debug("Invalid waters: " + string.Join("\r\n", invalidMaterials));
+            }
+
+            var invalidProps = propCollections
+                .SelectMany(x => x.categories)
+                .SelectMany(x => x.props)
+                .Where(x => Addressables.LoadAssetAsync<GameObject>(x.asset).WaitForCompletion() == null)
+                .Select(x => x.asset)
+                .ToList();
+
+            if (invalidProps.Count > 0)
+            {
+                Log.Debug("Invalid props: " + string.Join("\r\n", invalidMaterials));
+            }
+        }
     }
 }

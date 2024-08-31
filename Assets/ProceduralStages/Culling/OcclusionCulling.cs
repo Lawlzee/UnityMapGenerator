@@ -318,7 +318,7 @@ namespace ProceduralStages
             ProfilerLog.Debug("Index4 2");
         }
 
-        public void Update()
+        public void FixedUpdate()
         {
             if (Time.frameCount % updateFrameDelay != 0)
             {

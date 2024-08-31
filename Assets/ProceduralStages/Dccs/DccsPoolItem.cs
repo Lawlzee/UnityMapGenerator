@@ -28,6 +28,7 @@ namespace ProceduralStages
         public DccsPoolItemType Type;
         public StageType StageType;
         public bool DLC1;
+        public bool DLC2;
 
         //todo: put in scene
         public static readonly List<DccsPoolItem> All = new List<DccsPoolItem>()
@@ -365,6 +366,213 @@ namespace ProceduralStages
                 Type = DccsPoolItemType.Monsters,
                 StageType = StageType.Other,
                 DLC1 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/artifactworld01/dpArtifactWorld01Interactables.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/artifactworld01/dpArtifactWorld01Monsters.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/artifactworld02/dpArtifactWorld02Monsters.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/artifactworld03/dpArtifactWorld03Interactables.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/artifactworld03/dpArtifactWorld03Monsters.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/habitat/dpHabitatInteractables.asset",
+                StageIndex = 3,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/habitat/dpHabitatMonsters.asset",
+                StageIndex = 3,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/habitatfall/dpHabitatfallInteractables.asset",
+                StageIndex = 3,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/habitatfall/dpHabitatfallMonsters.asset",
+                StageIndex = 3,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/helminthroost/dpHelminthRoostInteractables.asset",
+                StageIndex = 5,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/helminthroost/dpHelminthRoostMonsters.asset",
+                StageIndex = 5,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lakes/dpLakesInteractables.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lakes/dpLakesMonsters.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lakesnight/dpLakesnightInteractables.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lakesnight/dpLakesnightMonsters.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lemuriantemple/dpLemurianTempleInteractables.asset",
+                StageIndex = 2,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/lemuriantemple/dpLemurianTempleMonsters.asset",
+                StageIndex = 2,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/meridian/dpMeridianInteractables.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/meridian/dpMeridianMonsters.asset",
+                StageIndex = 0,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Other,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/dpSulfurPoolsMonstersDLC2.asset",
+                StageIndex = 3,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = true,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/village/dpVillageInteractables.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Interactables,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/village/dpVillageMonsters.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
+            },
+            new DccsPoolItem
+            {
+                Asset = "RoR2/DLC2/villagenight/dpVillageNightMonsters.asset",
+                StageIndex = 1,
+                Type = DccsPoolItemType.Monsters,
+                StageType = StageType.Regular,
+                DLC1 = false,
+                DLC2 = true
             }
         };
     }

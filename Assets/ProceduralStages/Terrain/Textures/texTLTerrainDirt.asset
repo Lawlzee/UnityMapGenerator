@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bae08a0b55152d428631c5b95418987, type: 3}
   m_Name: texTLTerrainDirt
   m_EditorClassIdentifier: 
-  textureAsset: RoR2/CU8/lakes/texTLTerrainDirt.tga
+  textureAsset: RoR2/DLC2/lakes/Assets/texTLTerrainDirt.tga
   normalAsset: 
   bias: 0
   averageColor: {r: 0.6, g: 0.5294118, b: 0.47058827, a: 0}

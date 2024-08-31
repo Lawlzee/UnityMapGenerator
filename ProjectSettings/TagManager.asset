@@ -9,7 +9,12 @@ TagManager:
   - InitialBurst
   - Chest
   - CamAttachPoint
+  - VoiceChatCard
+  - NexAssetsRankingParamText
+  - NexAssetsRankingHeaderText
   - CreditsGroup
+  - NexAssetsRanking2HeaderText
+  - NexAssetsRanking2ParamText
   layers:
   - Default
   - TransparentFX

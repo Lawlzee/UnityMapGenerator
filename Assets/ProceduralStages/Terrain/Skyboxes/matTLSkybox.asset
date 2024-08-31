@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 079f28b6ceeafd64d83674f940fdc90a, type: 3}
   m_Name: matTLSkybox
   m_EditorClassIdentifier: 
-  asset: RoR2/CU8/lakes/matTLSkybox.mat
+  asset: RoR2/DLC2/lakes/Assets/matTLSkybox.mat

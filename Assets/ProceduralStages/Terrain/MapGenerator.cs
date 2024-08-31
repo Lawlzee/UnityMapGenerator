@@ -285,6 +285,14 @@ namespace ProceduralStages
                 Log.Debug(themeType);
                 MapTheme theme = themes.First(x => x.Theme == themeType);
 
+                if (Application.isEditor)
+                {
+                    foreach (var t in themes)
+                    {
+                        t.CheckAssets();
+                    }
+                }
+
                 meshColorer.ColorMesh(terrain.meshResult, rng);
                 ProfilerLog.Debug("meshColorer");
 
@@ -517,13 +525,16 @@ namespace ProceduralStages
                 return;
             }
 
-            ExpansionDef expansionDef = ExpansionCatalog.expansionDefs.FirstOrDefault(x => x.name == "DLC1");
+            ExpansionDef dlc1Def = ExpansionCatalog.expansionDefs.FirstOrDefault(x => x.name == "DLC1");
+            ExpansionDef dlc2Def = ExpansionCatalog.expansionDefs.FirstOrDefault(x => x.name == "DLC2");
 
-            bool hasDLC1 = expansionDef && Run.instance.IsExpansionEnabled(expansionDef);
+            bool hasDLC1 = Application.isEditor || (dlc1Def && Run.instance.IsExpansionEnabled(dlc1Def));
+            bool hasDLC2 = Application.isEditor || (dlc2Def && Run.instance.IsExpansionEnabled(dlc2Def));
 
             var validPools = DccsPoolItem.All
                 .Where(x => stageType == StageType.PotRolling || x.StageType == stageType)
                 .Where(x => hasDLC1 || !x.DLC1)
+                .Where(x => hasDLC2 || !x.DLC2)
                 .ToList();
 
             if (stageType != StageType.Regular)
@@ -541,7 +552,7 @@ namespace ProceduralStages
             else
             {
                 Log.Debug("dpCustomProceduralStages");
-                stageInfo.monsterDccsPool = dccsPoolGenerator.GenerateMonstersDccs(hasDLC1);
+                stageInfo.monsterDccsPool = dccsPoolGenerator.GenerateMonstersDccs(hasDLC1, hasDLC2);
             }
 
             var dpInteratables = validPools

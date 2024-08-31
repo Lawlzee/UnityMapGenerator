@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: RJShroomBig
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/rootjungle/RJShroomBig.prefab
+  asset: RoR2/Base/rootjungle/RJ_ShroomBig.prefab
   minScale: 0.2
   maxScale: 0.35
   ground: 1

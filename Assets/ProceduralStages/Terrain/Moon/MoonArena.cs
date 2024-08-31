@@ -27,12 +27,12 @@ namespace ProceduralStages
             GameObject arenaRoundPrefab = arenaPrefab.transform.GetChild(4).gameObject;
             GameObject moonArenaColumnPrefab = arenaPrefab.transform.GetChild(6).gameObject;
 
-            GameObject mdlPlatform_Column_LowPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/mdlPlatform_Column_Low.prefab").WaitForCompletion();
-            GameObject mdlPlatform_Column_Low_StraightPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/mdlPlatform_Column_Low_Straight Variant.prefab").WaitForCompletion();
+            GameObject mdlPlatform_Column_LowPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/Platform_Column.prefab").WaitForCompletion();
+            GameObject mdlPlatform_Column_Low_StraightPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/Platform_Column_Straight.prefab").WaitForCompletion();
             GameObject HG_Tower_terrainPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/HG_Tower_terrain.fbx").WaitForCompletion();
-            GameObject mdlroot_structurePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/mdlroot_structure.prefab").WaitForCompletion();
-            GameObject mdl_disc_platformPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/mdl_disc_platform.prefab").WaitForCompletion();
-            GameObject moonArenaColumnSmallPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/MoonArenaColumn, Small.prefab").WaitForCompletion();
+            GameObject mdlroot_structurePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/Root_Structure.prefab").WaitForCompletion();
+            GameObject mdl_disc_platformPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/Disk_Platform.prefab").WaitForCompletion();
+            GameObject moonArenaColumnSmallPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/MoonArenaColumn_Small.prefab").WaitForCompletion();
             GameObject moonArenaColumnHugePrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/MoonArenaColumn, Huge.prefab").WaitForCompletion();
             GameObject moonArenaColumnHugeAltPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon/MoonArenaColumn, Huge Alt.prefab").WaitForCompletion();
 

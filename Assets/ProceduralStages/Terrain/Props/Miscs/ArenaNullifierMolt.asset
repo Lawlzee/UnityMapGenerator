@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: ArenaNullifierMolt
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/arena/ArenaNullifierMolt.prefab
+  asset: RoR2/Base/arena/Arena_NullifierMolt.prefab
   minScale: 1
   maxScale: 1
   ground: 1
   count: 5
   changeColor: 0
   isRock: 0
+  material: 5
   normal: {x: 0, y: 0, z: 0}
   offset: {x: 0, y: 0, z: 0}
   isSolid: 0
   addCollision: 0
+  isBig: 0
+  initialRotation: {x: 0, y: 0, z: 0}

@@ -1,7 +1,10 @@
+## 1.19
+1. Added compatibility to Seekers of the Storm
+
 ## 1.18
-1. Added "Min stage count" config
-2. Added "Stage repetition" config
-3. Added PublicRoRGauntlet compatibility 
+1. **Minimum Stage Completion Configuration:** Added an option to set a minimum number of completed stages before procedural stages can spawn.
+2. **Terrain Repetition Control:** Introduced a configuration option to prevent the repetition of terrain types in each loop.
+3. **Public Gauntlet Mod Compatibility:** Added support for the [Public Gauntlet](https://thunderstore.io/package/riskofresources/Public_Gauntlet/) mod.
 
 ## 1.17.3
 1. **Lunar Fields Multiplayer Fixes:**

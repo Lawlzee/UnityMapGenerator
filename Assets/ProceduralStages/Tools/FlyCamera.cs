@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using RoR2;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace ProceduralStages
@@ -30,7 +31,12 @@ namespace ProceduralStages
             if (Application.isPlaying)
             {
                 var cameraPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/Main Camera.prefab").WaitForCompletion();
-                cameraObject = Instantiate(cameraPrefab, transform).transform.GetChild(0).gameObject;
+
+                var mainCamera = Instantiate(cameraPrefab, transform);
+                //Fix fov override
+                mainCamera.GetComponent<CameraRigController>().isCutscene = true;
+
+                cameraObject = mainCamera.transform.GetChild(0).gameObject;
             }
         }
 

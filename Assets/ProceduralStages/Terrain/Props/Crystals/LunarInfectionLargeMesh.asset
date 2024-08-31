@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: LunarInfectionLargeMesh
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/bazaar/LunarInfectionLargeMesh.prefab
+  asset: RoR2/Base/bazaar/Bazaar_LunarInfectionLarge.prefab
   minScale: 1
   maxScale: 1
   ground: 1
@@ -24,4 +24,5 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: 0}
   isSolid: 1
   addCollision: 0
+  isBig: 0
   initialRotation: {x: 0, y: 0, z: 0}

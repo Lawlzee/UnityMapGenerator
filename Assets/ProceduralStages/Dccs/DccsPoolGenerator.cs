@@ -28,7 +28,7 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float blendFactor = 0.5f;
 
-        public DccsPool GenerateMonstersDccs(bool hasDLC1)
+        public DccsPool GenerateMonstersDccs(bool hasDLC1, bool hasDLC2)
         {
             int stageCleared = RunConfig.instance.nextStageClearCount;
             int currentStageInLoop = Application.isEditor
@@ -39,6 +39,7 @@ namespace ProceduralStages
                 .Where(x => x.StageType == StageType.Regular)
                 .Where(x => x.Type == DccsPoolItemType.Monsters)
                 .Where(x => hasDLC1 || !x.DLC1)
+                .Where(x => hasDLC2 || !x.DLC2)
                 .Select(x =>
                 {
                     DccsPool pool = Addressables.LoadAssetAsync<DccsPool>(x.Asset).WaitForCompletion();
@@ -100,7 +101,7 @@ namespace ProceduralStages
                     .Where(x => x.name == "Family")
                     .First(),
                 templateStage.Pool.poolCategories
-                    .Where(x => x.name == "VoidInvasion")
+                    .Where(x => x.name == "VoidInvasion" || x.name == "VoildInvasion")
                     .First()
             };
 
@@ -115,7 +116,7 @@ namespace ProceduralStages
                             .Where(x => x.name == template.name)
                             .FirstOrDefault();
 
-                        return dccsCategory.cards
+                        return (dccsCategory.cards ?? Array.Empty<DirectorCard>())
                             .Where(x => x?.spawnCard?.name != null)
                             .Where(x => x.minimumStageCompletions <= stageCleared)
                             .Select(card => new

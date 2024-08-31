@@ -1,5 +1,6 @@
 {
     "name": "ProceduralStages",
+    "rootNamespace": "",
     "references": [
         "com.unity.multiplayer-hlapi.Runtime",
         "Unity.Postprocessing.Runtime"
@@ -28,7 +29,9 @@
         "R2API.Language.dll",
         "Wwise.dll",
         "Rewired_Core.dll",
-        "RoRGauntlet.dll"
+        "RoRGauntlet.dll",
+        "AK.Wwise.Unity.MonoBehaviour.dll",
+        "AK.Wwise.Unity.API.WwiseTypes.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

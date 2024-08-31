@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 339ce12dc98e72d4ba9f07526347eb42, type: 3}
   m_Name: MSCrystalLarge
   m_EditorClassIdentifier: 
-  asset: RoR2/Base/mysteryspace/MSCrystalLarge.prefab
+  asset: RoR2/Base/mysteryspace/MS_Crystal.prefab
   minScale: 2
   maxScale: 4
   ground: 1

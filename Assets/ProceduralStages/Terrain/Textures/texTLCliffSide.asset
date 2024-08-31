@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bae08a0b55152d428631c5b95418987, type: 3}
   m_Name: texTLCliffSide
   m_EditorClassIdentifier: 
-  textureAsset: RoR2/CU8/lakes/texTLCliffSide.png
+  textureAsset: RoR2/DLC2/lakes/Assets/texTLCliffSide.png
   normalAsset: 
   bias: 0
   averageColor: {r: 0.46274513, g: 0.42352945, b: 0.38823533, a: 0}
@@ -21,3 +21,4 @@ MonoBehaviour:
   constrast: 1
   glossiness: 0.2
   metallic: 0
+  material: 5
