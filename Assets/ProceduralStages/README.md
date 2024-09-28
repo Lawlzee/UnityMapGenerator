@@ -129,6 +129,11 @@ Here are the default spawn rates for all terrain types:
 | Stage 4 | 15%        | 5%           | 20%           | 10%             | 10%         | 20%    | 20%        |
 | Stage 5 | 15%        | 25%          | 5%            | 20%             | 25%         | 5%     | 5%         |
 
+## Commands
+- `ps_set_stage <terrain_type> <theme> <stage_count>`
+    - Available terrain types: `Random`, `OpenCaves`, `Islands`, `TunnelCaves`, `Mines`, `Basalt`, `Towers`, `Temple`, `Moon`, and `PotRolling`.
+    - Available themes: `Random`, `LegacyRandom`, `Desert`, `Snow`, `Void`, `Plains`, and `Mushroom`.
+
 ## Troubleshooting
 
 If you encounter any issues with the stage not loading or not loading properly, try creating a new, fresh profile with the same mods. This solution has resolved the issue for multiple users.

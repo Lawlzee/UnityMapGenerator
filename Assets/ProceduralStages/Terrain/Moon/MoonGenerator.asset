@@ -18,9 +18,10 @@ MonoBehaviour:
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
-  ambiantLightIntensity: 0.7
+  ambiantLightIntensity: 0.8
   waterLevel: 10
   terrainType: 8
+  propCountWeight: 1
   ceillingPropsWeight: 1
   backdropGenerator: {fileID: 11400000, guid: 3f543e2dbc6a6e546a4b0952953e0f54, type: 2}
   airNodesScale: 3

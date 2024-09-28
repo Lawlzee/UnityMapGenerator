@@ -18,7 +18,7 @@ MonoBehaviour:
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
-  ambiantLightIntensity: 0.7
+  ambiantLightIntensity: 0.8
   waterLevel: 8.5
   terrainType: 9
   propCountWeight: 0.6

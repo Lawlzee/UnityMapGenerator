@@ -11,6 +11,8 @@ namespace ProceduralStages
         public float lookSensitivity = 2; // mouse look sensitivity
         public float dampingCoefficient = 5; // how quickly you break to a halt after you stop your input
         public bool focusOnEnable = true; // whether or not to focus and lock cursor immediately on enable
+        [Range(0, 180)]
+        public float fov = 90;
 
         Vector3 velocity; // current velocity
 
@@ -33,8 +35,11 @@ namespace ProceduralStages
                 var cameraPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Core/Main Camera.prefab").WaitForCompletion();
 
                 var mainCamera = Instantiate(cameraPrefab, transform);
+
+                var cameraRigController = mainCamera.GetComponent<CameraRigController>();
                 //Fix fov override
                 mainCamera.GetComponent<CameraRigController>().isCutscene = true;
+                cameraRigController.sceneCam.fieldOfView = fov;
 
                 cameraObject = mainCamera.transform.GetChild(0).gameObject;
             }

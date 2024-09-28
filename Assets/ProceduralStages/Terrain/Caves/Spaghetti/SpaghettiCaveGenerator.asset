@@ -18,10 +18,13 @@ MonoBehaviour:
   fogPower: 1
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.2
-  ambiantLightIntensity: 0.6
+  ambiantLightIntensity: 0.7
   waterLevel: 30
   terrainType: 3
+  propCountWeight: 1
   ceillingPropsWeight: 1
+  backdropGenerator: {fileID: 0}
+  airNodesScale: 1
   wallGenerator:
     frequency: 0
     wallSurface: 0.5
@@ -59,11 +62,6 @@ MonoBehaviour:
     surfaceLevel: 0.5
   waller:
     floor:
-      enabled: 1
-      noise: 0
-      minThickness: 1
-      maxThickness: 0
-    ceilling:
       enabled: 1
       noise: 0
       minThickness: 1

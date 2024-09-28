@@ -98,7 +98,7 @@ namespace ProceduralStages
             RenderSettings.sun.color = lightHsv.ToRGB();
             RenderSettings.ambientLight = new Color(terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity);
 
-            SetFog(fog, lightHsv.hue, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
+            SetFog(fog, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
 
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
 
@@ -162,27 +162,28 @@ namespace ProceduralStages
             return colorGradiant;
         }
 
-        private void SetFog(RampFog fog, float sunHue, float power, float intensityCoefficient, ThemeColorPalettes colorPalette)
+        private void SetFog(RampFog fog, float power, float intensityCoefficient, ThemeColorPalettes colorPalette)
         {
             ColorHSV minColor = colorPalette.fog.minColor.ToHSV();
             ColorHSV maxColor = colorPalette.fog.maxColor.ToHSV();
 
-            ColorHSV fogColorHSV = ColorHSV.GetRandom(minColor, maxColor, MapGenerator.rng);
-            float fogHue = ColorHSV.ClampHue(sunHue, minColor.hue, maxColor.hue);
-
-            var fogColor = Color.HSVToRGB(fogHue, fogColorHSV.saturation, fogColorHSV.value);
-
-            fog.fogColorStart.value = fogColor;
+            fog.fogColorStart.value = GetRandomFogColor();
             fog.fogColorStart.value.a = colorPalette.fog.colorStartAlpha;
-            fog.fogColorMid.value = fogColor;
+            fog.fogColorMid.value = GetRandomFogColor();
             fog.fogColorMid.value.a = colorPalette.fog.colorMidAlpha;
-            fog.fogColorEnd.value = fogColor;
+            fog.fogColorEnd.value = GetRandomFogColor();
             fog.fogColorEnd.value.a = colorPalette.fog.colorEndAlpha;
             fog.fogZero.value = colorPalette.fog.zero;
             fog.fogOne.value = colorPalette.fog.one;
 
             fog.fogIntensity.value = colorPalette.fog.intensity * intensityCoefficient;
             fog.fogPower.value = power;
+
+            Color GetRandomFogColor()
+            {
+                ColorHSV fogColorHSV = ColorHSV.GetRandom(minColor, maxColor, MapGenerator.rng);
+                return fogColorHSV.ToRGB();
+            }
         }
 
         public void CheckAssets()

@@ -64,6 +64,15 @@ namespace ProceduralStages
             set => _selectedTerrainType = (int)value;
         }
 
+        [SyncVar]
+        private int _selectedTheme;
+
+        public Theme selectedTheme
+        {
+            get => (Theme)_selectedTheme;
+            set => _selectedTheme = (int)value;
+        }
+
         //Keep track of stageClearCount here, because Run.stageClearCount
         //is not synced yet to the client before generating the next stage
         [SyncVar]

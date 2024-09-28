@@ -18,9 +18,10 @@ MonoBehaviour:
   fogPower: 1.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.12
-  ambiantLightIntensity: 0.7
+  ambiantLightIntensity: 0.8
   waterLevel: 8.5
   terrainType: 7
+  propCountWeight: 1
   ceillingPropsWeight: 1
   backdropGenerator: {fileID: 11400000, guid: 64d7d59a9b3c82244b13eb40aba11c32, type: 2}
   airNodesScale: 2
@@ -67,12 +68,12 @@ MonoBehaviour:
         min: 0
         max: 10
       addPath: 0
-      seedZ: 24397
+      seedZ: 25780
     - heigth:
         min: 25
         max: 29
       addPath: 0
-      seedZ: 30217
+      seedZ: 17840
     ringPathWidth: 0
   - distance:
       min: 0.65
@@ -86,12 +87,12 @@ MonoBehaviour:
         min: 0
         max: 15
       addPath: 1
-      seedZ: 14602
+      seedZ: 31726
     - heigth:
         min: 35
         max: 39
       addPath: 0
-      seedZ: 32445
+      seedZ: 16857
     ringPathWidth: 0.1
   - distance:
       min: 0.35
@@ -105,12 +106,12 @@ MonoBehaviour:
         min: 0
         max: 20
       addPath: 1
-      seedZ: 4295
+      seedZ: 22088
     - heigth:
         min: 45
         max: 49
       addPath: 0
-      seedZ: 6429
+      seedZ: 30566
     ringPathWidth: 0.12
   - distance:
       min: 0.1
@@ -124,5 +125,5 @@ MonoBehaviour:
         min: 0
         max: 22
       addPath: 0
-      seedZ: 14926
+      seedZ: 15376
     ringPathWidth: 0

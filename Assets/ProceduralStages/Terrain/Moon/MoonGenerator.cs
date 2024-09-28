@@ -75,6 +75,8 @@ namespace ProceduralStages
 
         public override Terrain Generate()
         {
+            Physics.gravity = new Vector3(0.0f, -20, 0.0f);
+
             var stageSize = MapGenerator.instance.stageSize;
             var rng = MapGenerator.rng;
 

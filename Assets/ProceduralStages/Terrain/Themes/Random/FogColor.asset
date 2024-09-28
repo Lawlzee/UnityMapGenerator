@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28729d9208446d04b84c2c200b7d2b23, type: 3}
   m_Name: FogColor
   m_EditorClassIdentifier: 
-  saturation: 0.7
-  value: 0.7
   minColor: {r: 0.69803923, g: 0.20941179, b: 0.20941179, a: 0}
   maxColor: {r: 0.7, g: 0.21000001, b: 0.21816655, a: 0}
   colorStartAlpha: 0
-  colorMidAlpha: 0.175
-  colorEndAlpha: 0.35
+  colorMidAlpha: 0.1
+  colorEndAlpha: 0.7
   zero: 0
   one: 0.1
   intensity: 0.4

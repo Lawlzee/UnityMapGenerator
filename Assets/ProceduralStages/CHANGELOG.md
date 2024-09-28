@@ -1,3 +1,12 @@
+## 1.20
+1. **Prop Rendering Fix:** Resolved an issue where props would occasionally fail to render.
+2. **Lunar Fields Gravity Adjustment:** Updated the gravity in Lunar Fields to match the vanilla moon's gravity.
+3. **Procedural Stage Command:** Introduced the `ps_set_stage` command to allow switching between procedural stages.
+    - Syntax: `ps_set_stage <terrain_type> <theme> <stage_count>`.
+    - Available terrain types: `Random`, `OpenCaves`, `Islands`, `TunnelCaves`, `Mines`, `Basalt`, `Towers`, `Temple`, `Moon`, and `PotRolling`.
+    - Available themes: `Random`, `LegacyRandom`, `Desert`, `Snow`, `Void`, `Plains`, and `Mushroom`.
+4. **Lighting and Fog Adjustment:** Improved lighting and fog settings to brighten the stage.
+
 ## 1.19
 1. Added compatibility to Seekers of the Storm
 

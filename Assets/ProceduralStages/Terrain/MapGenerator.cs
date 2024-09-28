@@ -267,6 +267,11 @@ namespace ProceduralStages
                         themeType = editorTheme;
                     }
                 }
+                else if (RunConfig.instance.selectedTheme != Theme.Random)
+                {
+                    themeType = RunConfig.instance.selectedTheme;
+                    RunConfig.instance.selectedTheme = Theme.Random;
+                }
                 else
                 {
                     WeightedSelection<Theme> selection = new WeightedSelection<Theme>(RunConfig.instance.themePercents.Length);

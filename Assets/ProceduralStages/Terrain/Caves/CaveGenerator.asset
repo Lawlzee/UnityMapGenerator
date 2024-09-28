@@ -18,10 +18,13 @@ MonoBehaviour:
   fogPower: 0.75
   fogIntensityCoefficient: 1
   vignetteInsentity: 0.25
-  ambiantLightIntensity: 0.6
+  ambiantLightIntensity: 0.7
   waterLevel: 10
   terrainType: 1
+  propCountWeight: 1
   ceillingPropsWeight: 1
+  backdropGenerator: {fileID: 0}
+  airNodesScale: 1
   voronoiWallGenerator: {fileID: 0}
   wallGenerator:
     frequency: 28

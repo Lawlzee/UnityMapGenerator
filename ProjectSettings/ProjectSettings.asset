@@ -138,7 +138,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.3.1
+  bundleVersion: 1.3.4
   preloadedAssets: []
   metroInputSource: 1
   wsaTransparentSwapchain: 0
@@ -256,7 +256,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: {inproject}: {inproject}: {inproject}: '
+  AndroidKeystoreName: '{inproject}: {inproject}: {inproject}: {inproject}: {inproject}:
+    {inproject}: '
   AndroidKeyaliasName: 
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
@@ -319,9 +320,9 @@ PlayerSettings:
     m_GraphicsJobs: 1
   m_BuildTargetGraphicsJobMode:
   - m_BuildTarget: PS4Player
-    m_GraphicsJobMode: 1879181344
+    m_GraphicsJobMode: 133152
   - m_BuildTarget: XboxOnePlayer
-    m_GraphicsJobMode: 1879181344
+    m_GraphicsJobMode: 133152
   m_BuildTargetGraphicsAPIs:
   - m_BuildTarget: iOSSupport
     m_APIs: 10000000

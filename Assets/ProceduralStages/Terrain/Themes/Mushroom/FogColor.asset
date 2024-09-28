@@ -15,8 +15,8 @@ MonoBehaviour:
   minColor: {r: 0.20784314, g: 0.69803923, b: 0.56644493, a: 0}
   maxColor: {r: 0.21176471, g: 0.5893905, b: 0.69803923, a: 0}
   colorStartAlpha: 0
-  colorMidAlpha: 0.2
-  colorEndAlpha: 0.4
+  colorMidAlpha: 0.1
+  colorEndAlpha: 0.9
   zero: 0
   one: 0.1
   intensity: 0.45
