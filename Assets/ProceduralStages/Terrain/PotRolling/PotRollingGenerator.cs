@@ -1,4 +1,5 @@
-﻿using RiskOfOptions.Resources;
+﻿using RoR2.UI;
+using RiskOfOptions.Resources;
 using RoR2;
 using RoR2.Navigation;
 using System;
@@ -27,6 +28,8 @@ namespace ProceduralStages
         public float plateDistanceFromEdge;
         public Vector3 platePositionMaxOffset;
         public float platePositionYOffset;
+
+        public GameObject plateIndicatorPrefab;
 
         public override Terrain Generate()
         {
@@ -143,6 +146,29 @@ namespace ProceduralStages
 
             var platetPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/goolake/GLPressurePlate.prefab").WaitForCompletion();
             var plate = Instantiate(platetPrefab, bestNodeInfo.position + new Vector3(0, platePositionYOffset, 0), Quaternion.FromToRotation(Vector3.up, bestNodeInfo.normal));
+
+            PressurePlateController pressurePlateController = plate.GetComponent<PressurePlateController>();
+            PlateStageChanger plateStageChanger = plate.AddComponent<PlateStageChanger>();
+            plateStageChanger.onDelayFinished = () =>
+            {
+                RoR2.Console.instance.SubmitCmd(null, "next_stage");
+            };
+
+            pressurePlateController.OnSwitchDown.AddListener(() =>
+            {
+                plateStageChanger.enabled = true;
+            });
+
+            pressurePlateController.OnSwitchUp.AddListener(() =>
+            {
+                plateStageChanger.enabled = false;
+            });
+
+            GameObject plateIndicator = Instantiate(plateIndicatorPrefab);
+            terrain.customObjects.Add(plateIndicator);
+
+            plateIndicator.GetComponentInChildren<SpriteRenderer>(includeInactive: true).sprite = Addressables.LoadAssetAsync<Sprite>("RoR2/Base/Common/MiscIcons/texLootIconOutlined.png").WaitForCompletion();
+            plateIndicator.GetComponent<PositionIndicator>().targetTransform = plate.transform;
 
             GameObject batteryPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/moon2/MoonBatterySoul.prefab").WaitForCompletion();
 

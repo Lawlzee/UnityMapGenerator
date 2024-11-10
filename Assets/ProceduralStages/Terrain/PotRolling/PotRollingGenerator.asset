@@ -35,3 +35,5 @@ MonoBehaviour:
   plateDistanceFromEdge: 40
   platePositionMaxOffset: {x: 20, y: 0, z: 30}
   platePositionYOffset: -0.12
+  plateIndicatorPrefab: {fileID: 2448516637189780368, guid: 7058b6b4d6deffc40b01dadebb3e2388,
+    type: 3}
