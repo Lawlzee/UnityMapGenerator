@@ -4,6 +4,7 @@
     Properties
     {
         _MainTex("Wall Texture", 2D) = "white" {}
+
         //_WallNormalTex("Wall Normal Texture", 2D) = "bump" {}
         _WallBias("Wall Bias",  Range(0, 1)) = 1
         _WallColor ("Wall Average Color", Color) = (1,1,1,1)
@@ -40,7 +41,7 @@
         _Intensity("Intensity", Float) = 1
         _HeightblendFactor("Height Blend Factor", Float) = 1
 
-
+        _UseUV("Use UV", int) = 1
 
         //_BumpScale("Bump Scale", Float) = 1
         //_BumpMap("Bump Map", 2D) = "bump" {}
@@ -102,20 +103,24 @@
         half _Intensity;
         half _HeightblendFactor;
 
+        bool _UseUV;
+
         sampler2D _ColorTex;
 
         struct Input
         {
             float2 uv_MainTex;
             float3 localCoord;
-            float3 localNormal;
+            float3 worldNormal;
+            float3 worldUp;
         };
 
         void vert(inout appdata_full v, out Input data)
         {
             UNITY_INITIALIZE_OUTPUT(Input, data);
-            data.localCoord = v.vertex.xyz;
-            data.localNormal = v.normal.xyz;
+            float4 worldPos = mul(unity_ObjectToWorld, v.vertex);
+            data.localCoord = worldPos.xyz;
+            data.worldNormal = UnityObjectToWorldNormal(v.normal);
         }
 
         float3 RGBToHSV(float3 c)
@@ -174,29 +179,44 @@
         void surf(Input IN, inout SurfaceOutputStandard o)
         {
             // Blending factor of triplanar mapping
-            float3 blendingFactor = normalize(abs(IN.localNormal));
+            float3 blendingFactor = normalize(abs(IN.worldNormal));
             float dotL = dot(blendingFactor, (float3)1);
             blendingFactor /= dotL;
 
-            // Color
-            half4 color = tex2D(_ColorTex, IN.uv_MainTex);
+            half4 color;
+            if (_UseUV)
+            {
+                color =  tex2D(_ColorTex, IN.uv_MainTex);
+            }
+            else
+            {
+                float2 uv;
+                uv.x = 0.5f;
+                uv.y = 0.5f;
+
+                color = tex2D(_ColorTex, uv);
+            }
+            
             float3 hsv = RGBToHSV(color);
             
             float2 tx = IN.localCoord.zy;
             float2 ty = IN.localCoord.zx;
             float2 tz = IN.localCoord.xy;
             
-            
             float4 wallColor = getColor(tx, ty, tz, _WallColor, blendingFactor, hsv, _MainTex, _WallScale, _WallContrast, _WallBias); 
             float4 detailColor = getColor(tx, ty, tz, _DetailColor, blendingFactor, hsv, _DetailTex, _DetailScaleCoefficient * _DetailScale, _DetailContrast, _DetailBias); 
             float4 floorColor = getColor(tx, ty, tz, _FloorColor, blendingFactor, hsv, _FloorTex, _FloorScale, _FloorContrast, _FloorBias);
             
-            float floorIntensity = saturate(dot(normalize(IN.localNormal), float3(0, 1, 0)));
+            float floorIntensity = saturate(dot(normalize(IN.worldNormal), float3(0, 1, 0)));
             float4 surfaceColor = heightlerp(wallColor, floorColor, floorIntensity) * _Intensity;
             
             float4 finalColor = saturate(heightlerp(surfaceColor, detailColor, _DetailIntensity));
+            finalColor.r = floorIntensity;
+            //finalColor.g = 0;
+            //finalColor.b = 0;
 
-            o.Albedo = finalColor.rgb;//(surfaceColor + detailColor.xyz * _DetailIntensity) / (1 + _DetailIntensity);
+
+            o.Albedo = surfaceColor.rgb;//(surfaceColor + detailColor.xyz * _DetailIntensity) / (1 + _DetailIntensity);
             o.Alpha = 1;
             o.Metallic = _WallMetallic;
             o.Smoothness = _WallGlossiness;

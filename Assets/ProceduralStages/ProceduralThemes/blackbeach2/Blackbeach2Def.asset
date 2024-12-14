@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: Blackbeach2Def
+  m_EditorClassIdentifier: 
+  sceneName: blackbeach2
+  gameObjectsToDisable:
+  - 'HOLDER: Trees'
+  - 'HOLDER: Rocks'
+  - 'HOLDER: Foliage'
+  - 'HOLDER: Ruins/GROUP: Pillars'
+  - 'HOLDER: Ruins/GROUP: Tiles'
+  - 'HOLDER: Ruins/GROUP: Steps'
+  - 'HOLDER: Ruins/GROUP: Markers'
+  - 'HOLDER: Terrain/blackbeach2_terrain/Shelf/Foliage'
+  - 'HOLDER: Terrain/blackbeach2_terrain/Shelf/Rocks'
+  - 'HOLDER: Terrain/blackbeach2_terrain/Pillar/BbRuinPillar1_LOD0 (5)'
+  - 'HOLDER: Ruins/GROUP: Gates/BbRuinArch_LOD0'
+  - 'HOLDER: Ruins/GROUP: Gates/BbRuinArch_LOD0 (2)'
+  - 'HOLDER: Randomization'
+  - 'HOLDER: Terrain/blackbeach2_terrain/Shelf/mdlBBBoulderMediumFlat1'
+  terrainRenderers:
+  - path: 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
+    useUV: 1
+  - path: 'HOLDER: Terrain/blackbeach2_terrain/Shelf'
+    useUV: 1
+  - path: 'HOLDER: Distant Terrain/bbDistantPillar'
+    useUV: 0

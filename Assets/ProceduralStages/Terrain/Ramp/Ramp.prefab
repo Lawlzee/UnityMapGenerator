@@ -31,6 +31,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,13 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f6d305f661c09044a86443946000e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  themes:
-  - {fileID: 11400000, guid: 126163679e654ea4f9ab2559c9296d94, type: 2}
-  - {fileID: 11400000, guid: 805d6808ab298af40a3f93a22b173232, type: 2}
-  - {fileID: 11400000, guid: 3d804dcb07f96ef4e9628c3a5f55b464, type: 2}
-  - {fileID: 11400000, guid: e202df0b8d98d3142a45fa47e538948d, type: 2}
-  - {fileID: 11400000, guid: 67a0a61bcf19e8e468053bc5e088fd92, type: 2}
-  - {fileID: 11400000, guid: 99cff528d0c667e42bc23a8b25b18196, type: 2}
+  themes: {fileID: 11400000, guid: df2385cd832379b49a30bfa1d057d8b5, type: 2}
   meshColorer:
     grassAngle: -0.15
     detailSize: 100
@@ -133,10 +128,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -161,6 +158,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &4057810588333810107
 MonoBehaviour:
   m_ObjectHideFlags: 0

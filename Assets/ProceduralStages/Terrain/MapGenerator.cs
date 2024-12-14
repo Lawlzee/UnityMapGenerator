@@ -41,7 +41,7 @@ namespace ProceduralStages
         public SkyboxDef editorSkybox;
 
         public TerrainGenerator[] terrainGenerators;
-        public MapTheme[] themes;
+        public MapThemeCollection themes;
 
         public MeshColorer meshColorer = new MeshColorer();
 
@@ -260,7 +260,7 @@ namespace ProceduralStages
                 {
                     if (editorTheme == Theme.Random)
                     {
-                        themeType = themes[rng.RangeInt(1, themes.Length)].Theme;
+                        themeType = themes.themes[rng.RangeInt(1, themes.themes.Length)].Theme;
                     }
                     else
                     {
@@ -288,11 +288,11 @@ namespace ProceduralStages
                 }
 
                 Log.Debug(themeType);
-                MapTheme theme = themes.First(x => x.Theme == themeType);
+                MapTheme theme = themes.themes.First(x => x.Theme == themeType);
 
                 if (Application.isEditor)
                 {
-                    foreach (var t in themes)
+                    foreach (var t in themes.themes)
                     {
                         t.CheckAssets();
                     }

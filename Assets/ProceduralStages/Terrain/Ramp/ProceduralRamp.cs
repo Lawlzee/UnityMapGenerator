@@ -10,7 +10,7 @@ namespace ProceduralStages
 {
     public class ProceduralRamp : MonoBehaviour
     {
-        public MapTheme[] themes;
+        public MapThemeCollection themes;
         public MeshColorer meshColorer = new MeshColorer();
         public PropsPlacer propsPlacer = new PropsPlacer();
         public NodeGraphCreator nodeGraphCreator = new NodeGraphCreator();
@@ -74,8 +74,8 @@ namespace ProceduralStages
                 propsWeigth = propsWeight
             });
 
-            var theme = rng.NextElementUniform(themes);
-            var colorGradiant = theme.ApplyTextures(meshRenderer.material, surfaceDefProvider, rng);
+            var theme = rng.NextElementUniform(themes.themes);
+            var colorGradiant = theme.SetTexture(meshRenderer.material, surfaceDefProvider, rng).grassColorGradiant;
 
             meshColorer.ColorMesh(meshResult, rng);
             meshFilter.mesh = meshResult.mesh;

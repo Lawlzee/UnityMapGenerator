@@ -32,8 +32,7 @@ namespace ProceduralStages
             MeshRenderer seaFloorMeshRenderer,
             SurfaceDefProvider terrainSurfaceDefProvider)
         {
-            ThemeColorPalettes colorPalette = colorPalettes[MapGenerator.rng.RangeInt(0, colorPalettes.Length)];
-            Texture2D colorGradiant = SetTexture(material, colorPalette, terrainSurfaceDefProvider, MapGenerator.rng);
+            MaterialInfo materialInfo = SetTexture(material, terrainSurfaceDefProvider, MapGenerator.rng);
 
             var skybox = skyboxes[MapGenerator.rng.RangeInt(0, skyboxes.Length)].material;
             if (Application.isEditor)
@@ -55,8 +54,8 @@ namespace ProceduralStages
                 skyColor.saturation = 0.2f;
             }
 
-            ColorHSV minLightHsv = colorPalette.light.minColor.ToHSV();
-            ColorHSV maxLightHsv = colorPalette.light.maxColor.ToHSV();
+            ColorHSV minLightHsv = materialInfo.colorPalette.light.minColor.ToHSV();
+            ColorHSV maxLightHsv = materialInfo.colorPalette.light.maxColor.ToHSV();
 
             skyColor.hue = ColorHSV.ClampHue(skyColor.hue, minLightHsv.hue, maxLightHsv.hue);
 
@@ -98,29 +97,26 @@ namespace ProceduralStages
             RenderSettings.sun.color = lightHsv.ToRGB();
             RenderSettings.ambientLight = new Color(terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity, terrainGenerator.ambiantLightIntensity);
 
-            SetFog(fog, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, colorPalette);
+            SetFog(fog, terrainGenerator.fogPower, terrainGenerator.fogIntensityCoefficient, materialInfo.colorPalette);
 
             vignette.intensity.value = terrainGenerator.vignetteInsentity;
 
-            return colorPalette.grass != null
-                ? colorPalette.CreateGrassTexture(MapGenerator.rng)
-                : colorGradiant;
+            return materialInfo.grassColorGradiant;
         }
 
-        public Texture2D ApplyTextures(Material material, SurfaceDefProvider surfaceDefProvider, Xoroshiro128Plus rng)
+        public MaterialInfo SetTexture(Material material, SurfaceDefProvider terrainSurfaceDefProvider, Xoroshiro128Plus rng)
+        {
+            MaterialInfo materialInfo = GenerateMaterialInfo(rng);
+            terrainSurfaceDefProvider.surfaceDef = materialInfo.floorTexture.surfaceDef;
+
+            materialInfo.ApplyTo(material);
+            return materialInfo;
+        }
+
+        public MaterialInfo GenerateMaterialInfo(Xoroshiro128Plus rng)
         {
             ThemeColorPalettes colorPalette = colorPalettes[rng.RangeInt(0, colorPalettes.Length)];
-            Texture2D colorGradiant = SetTexture(material, colorPalette, surfaceDefProvider, rng);
-
-            return colorPalette.grass != null
-                ? colorPalette.CreateGrassTexture(rng)
-                : colorGradiant;
-        }
-
-        private Texture2D SetTexture(Material material, ThemeColorPalettes colorPalette, SurfaceDefProvider terrainSurfaceDefProvider, Xoroshiro128Plus rng)
-        {
             Texture2D colorGradiant = colorPalette.CreateTerrainTexture(rng);
-            material.SetTexture("_ColorTex", colorGradiant);
 
             int floorIndex = rng.RangeInt(0, floor.Length);
             int wallIndex = rng.RangeInt(0, walls.Length);
@@ -137,29 +133,17 @@ namespace ProceduralStages
                 detailTexture = MapGenerator.instance?.editorDetailTexture ?? detailTexture;
             }
 
-            terrainSurfaceDefProvider.surfaceDef = floorTexture.surfaceDef;
-
-            material.mainTexture = wallTexture.texture;
-            material.SetFloat("_WallBias", wallTexture.bias);
-            material.SetColor("_WallColor", wallTexture.averageColor);
-            material.SetFloat("_WallScale", wallTexture.scale);
-            material.SetFloat("_WallContrast", wallTexture.constrast);
-            material.SetFloat("_WallGlossiness", wallTexture.glossiness);
-            material.SetFloat("_WallMetallic", wallTexture.metallic);
-
-            material.SetTexture("_FloorTex", floorTexture.texture);
-            material.SetFloat("_FloorBias", floorTexture.bias);
-            material.SetColor("_FloorColor", floorTexture.averageColor);
-            material.SetFloat("_FloorScale", floorTexture.scale);
-            material.SetFloat("_FloorContrast", floorTexture.constrast);
-
-            material.SetTexture("_DetailTex", detailTexture.texture);
-            material.SetFloat("_DetailBias", detailTexture.bias);
-            material.SetColor("_DetailColor", detailTexture.averageColor);
-            material.SetFloat("_DetailScale", detailTexture.scale);
-            material.SetFloat("_DetailContrast", detailTexture.constrast);
-
-            return colorGradiant;
+            return new MaterialInfo
+            {
+                colorPalette = colorPalette,
+                colorGradiant = colorGradiant,
+                grassColorGradiant = colorPalette.grass != null
+                    ? colorPalette.CreateGrassTexture(rng)
+                    : colorGradiant,
+                floorTexture = floorTexture,
+                wallTexture = wallTexture,
+                detailTexture = detailTexture
+            };
         }
 
         private void SetFog(RampFog fog, float power, float intensityCoefficient, ThemeColorPalettes colorPalette)
