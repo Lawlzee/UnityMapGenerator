@@ -153,7 +153,15 @@ namespace ProceduralStages
                     if (prop.changeColor)
                     {
                         var uv = meshColorer.GetUV(propsNode.position, propsNode.normal, colorSeed);
-                        color = colorGradiant.GetPixelBilinear(uv.x, uv.y);
+                        try
+                        {
+                            color = colorGradiant.GetPixelBilinear(uv.x, uv.y);
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Error($"Failed to GetPixelBilinear for {propsNode.position} {propsNode.normal} {uv} {colorSeed}");
+                            Log.Error(ex.ToString());
+                        }
                     }
 
                     Material material = null;

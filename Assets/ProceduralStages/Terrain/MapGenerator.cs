@@ -304,22 +304,6 @@ namespace ProceduralStages
                 GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;
                 ProfilerLog.Debug("MeshFilter");
 
-                Material terrainMaterial = GetComponent<MeshRenderer>().material;
-                var profile = postProcessVolume.profile;
-                RampFog fog = profile.GetSetting<RampFog>();
-                Vignette vignette = profile.GetSetting<Vignette>();
-
-                Texture2D colorGradiant = theme.ApplyTheme(
-                    terrainGenerator,
-                    terrainMaterial,
-                    fog,
-                    vignette,
-                    waterRenderer,
-                    waterColorGrading,
-                    seaFloorRenderer,
-                    GetComponent<SurfaceDefProvider>());
-
-                ProfilerLog.Debug("surfaceDef");
 
                 GetComponent<MeshCollider>().sharedMesh = terrain.meshResult.mesh;
                 ProfilerLog.Debug("MeshCollider");
@@ -369,7 +353,6 @@ namespace ProceduralStages
                     ? "RoR2/Base/Teleporters/iscLunarTeleporter.asset"
                     : "RoR2/Base/Teleporters/iscTeleporter.asset";
 
-
                 if (stageType == StageType.Regular)
                 {
                     sceneDirector.teleporterSpawnCard = Addressables.LoadAssetAsync<InteractableSpawnCard>(portalPath).WaitForCompletion();
@@ -390,6 +373,22 @@ namespace ProceduralStages
                         SceneDirector.onPostPopulateSceneServer += placeInteractables;
                     }
                 }
+
+                Material terrainMaterial = GetComponent<MeshRenderer>().material;
+                var profile = postProcessVolume.profile;
+                RampFog fog = profile.GetSetting<RampFog>();
+                Vignette vignette = profile.GetSetting<Vignette>();
+
+                Texture2D colorGradiant = theme.ApplyTheme(
+                    terrainGenerator,
+                    terrainMaterial,
+                    fog,
+                    vignette,
+                    waterRenderer,
+                    waterColorGrading,
+                    seaFloorRenderer,
+                    GetComponent<SurfaceDefProvider>());
+                ProfilerLog.Debug("surfaceDef");
 
                 if (!Application.isEditor || loadPropsInEditor)
                 {

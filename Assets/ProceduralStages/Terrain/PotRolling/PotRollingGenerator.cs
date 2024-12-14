@@ -103,7 +103,8 @@ namespace ProceduralStages
                 customObjects = new List<GameObject>()
                 {
                     playerSpawnOrigin
-                }
+                },
+                oobScale = new Vector3(1, 8, 1)
             };
         }
 
