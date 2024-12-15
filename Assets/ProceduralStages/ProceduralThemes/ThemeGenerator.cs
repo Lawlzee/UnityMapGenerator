@@ -20,6 +20,11 @@ namespace ProceduralStages
         public Material terrainMaterial;
         public SurfaceDefProvider surfaceDefProvider;
 
+        public bool showDebugMeshes;
+
+        public MeshFilter debugFloorMeshFilter;
+        public MeshFilter debugCeilMeshFilter;
+
         private ulong lastSeed;
         public static ThemeGenerator instance;
         public static Xoroshiro128Plus rng;
@@ -81,6 +86,12 @@ namespace ProceduralStages
             }
         }
 
+        private void OnValidate()
+        {
+            debugFloorMeshFilter.gameObject.SetActive(Application.isEditor && showDebugMeshes);
+            debugCeilMeshFilter.gameObject.SetActive(Application.isEditor && showDebugMeshes);
+        }
+
         private void ApplyTheme()
         {
             ProfilerLog.Reset();
@@ -97,6 +108,9 @@ namespace ProceduralStages
 
                 stageDef.DisableProps();
                 ProfilerLog.Debug("Built in props disabled");
+
+                debugFloorMeshFilter.sharedMesh = stageDef.floorMesh;
+                debugCeilMeshFilter.sharedMesh = stageDef.ceilMesh;
 
                 MapTheme theme = GetTheme();
                 MaterialInfo materialInfo = theme.GenerateMaterialInfo(rng);
