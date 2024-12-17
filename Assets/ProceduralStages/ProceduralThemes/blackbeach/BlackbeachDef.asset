@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: BlackbeachDef
+  m_EditorClassIdentifier: 
+  sceneName: blackbeach
+  nameToken: MAP_BLACKBEACH_TITLE
+  gameObjectsToDisable:
+  - 'HOLDER: Grass'
+  - FOLIAGE
+  - GAMEPLAY SPACE/Boulders/Pebbles
+  - GAMEPLAY SPACE/Ruins/*
+  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0 (1)
+  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Open/BbRuinMarker_LOD0 (12)
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Open/BbRuinMarker_LOD0 (13)
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Closed/BbRuinMarker_LOD0 (12)
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Closed/BbRuinMarker_LOD0 (13)
+  - GAMEPLAY SPACE/Grass
+  - GAMEPLAY SPACE/Terrain/blackbeachIslandBridge/*
+  - SKYBOX/bbDistantPillar/*
+  - SKYBOX/bbDistantPillar (1)/*
+  - SKYBOX/bbDistantPillar (2)/*
+  - SKYBOX/bbDistantPillar (3)/*
+  - SKYBOX/bbDistantPillar (4)/*
+  - SKYBOX/bbDistantPillar (5)/*
+  - SKYBOX/bbDistantPillar (6)/*
+  - SKYBOX/bbDistantPillar (7)/*
+  - SKYBOX/bbDistantPillar (8)/*
+  - SKYBOX/bbDistantPillar (9)/*
+  - SKYBOX/bbDistantPillar (10)/*
+  - SKYBOX/bbDistantPillar (11)/*
+  - SKYBOX/bbDistantPillar (12)/*
+  gameObjectsToEnable:
+  - GAMEPLAY SPACE/Ruins/BbRuinGateOpen
+  - SKYBOX/bbDistantPillar/Foam
+  - SKYBOX/bbDistantPillar (1)/Foam
+  - SKYBOX/bbDistantPillar (2)/Foam
+  - SKYBOX/bbDistantPillar (3)/Foam
+  - SKYBOX/bbDistantPillar (5)/Foam (1)
+  - SKYBOX/bbDistantPillar (6)/Foam
+  - SKYBOX/bbDistantPillar (7)/Foam
+  - SKYBOX/bbDistantPillar (8)/Foam
+  - SKYBOX/bbDistantPillar (9)/Foam
+  - SKYBOX/bbDistantPillar (10)/Foam
+  - SKYBOX/bbDistantPillar (11)/Foam
+  - SKYBOX/bbDistantPillar (12)/Foam
+  - SKYBOX/bbDistantPillar/Foam (1)
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - GAMEPLAY SPACE/Terrain/blackbeachTerrainFull
+    - SKYBOX/bbDistantPillar
+    - SKYBOX/bbDistantPillar (1)
+    - SKYBOX/bbDistantPillar (2)
+    - SKYBOX/bbDistantPillar (3)
+    - SKYBOX/bbDistantPillar (4)
+    - SKYBOX/bbDistantPillar (5)
+    - SKYBOX/bbDistantPillar (6)
+    - SKYBOX/bbDistantPillar (7)
+    - SKYBOX/bbDistantPillar (8)
+    - SKYBOX/bbDistantPillar (9)
+    - SKYBOX/bbDistantPillar (10)
+    - SKYBOX/bbDistantPillar (11)
+    - SKYBOX/bbDistantPillar (12)
+    floorMesh: {fileID: 4300000, guid: ab2b90932ca940e408a0358564f58445, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 40802cd1ba51a314d98e45ef107d66b9, type: 2}
+  - gateName: BigBridge
+    paths:
+    - GAMEPLAY SPACE/Terrain/blackbeachIslandBridge
+    floorMesh: {fileID: 4300000, guid: 442a405cea0e655469c07181d29c9f91, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 5f492cf4a66dcaf4da262ee8a713ba67, type: 2}
+  - gateName: Lookout
+    paths: []
+    floorMesh: {fileID: 4300000, guid: e919d9eb6c1bb4f47ae17b3b0ecf4662, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 078b5fbd3adc7a94f88e84a80e5702b2, type: 2}
+  - gateName: OverlookPillar2
+    paths: []
+    floorMesh: {fileID: 4300000, guid: 76a8f3ef26f42ed468df5de73c888b50, type: 2}
+    ceilMesh: {fileID: 4300000, guid: ac89c58932af5f24c9795f5ed0861e44, type: 2}
+  - gateName: OverlookPillar1
+    paths: []
+    floorMesh: {fileID: 4300000, guid: 3f9cd25fd020d27409a82eb0466a0a28, type: 2}
+    ceilMesh: {fileID: 4300000, guid: fd39d1e0672e7b541a2a3204bf873f3d, type: 2}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: -44.023285, y: -168.01088, z: -160.65698}
+    m_Extent: {x: 283.92886, y: 88.110886, z: 230.857}

@@ -355,6 +355,7 @@ MonoBehaviour:
   stages:
   - {fileID: 11400000, guid: b44b306b17abccb429c231495190304a, type: 2}
   - {fileID: 11400000, guid: 97124c3c61b977845a9699ae9bd9742e, type: 2}
+  - {fileID: 11400000, guid: 8737d44f094887a40828ed1b231acb46, type: 2}
   propsPlacer:
     propsCount: 10
     propsObject: {fileID: 1462936002}
