@@ -38,6 +38,10 @@ MonoBehaviour:
   terrainMeshColliders:
   - 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
   - 'HOLDER: Distant Terrain/bbDistantPillar'
+  sceneInfo: SceneInfo
   minFloorAngle: 0.35
   floorMesh: {fileID: 4300000, guid: d2825ee2f6405c548b15924c8ce49a34, type: 2}
   ceilMesh: {fileID: 4300000, guid: ca686715f3c08b7458303120fe9b9e49, type: 2}
+  mapBounds:
+    m_Center: {x: -105.34941, y: 52.72746, z: 7.1233597}
+    m_Extent: {x: 271.5006, y: 70.21942, z: 178.7367}

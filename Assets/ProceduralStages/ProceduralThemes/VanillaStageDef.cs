@@ -19,10 +19,12 @@ namespace ProceduralStages
         public string[] gameObjectsToDisable;
         public TerrainRendererDef[] terrainRenderers;
         public string[] terrainMeshColliders;
+        public string sceneInfo;
         public float minFloorAngle = 0.35f;
 
         public Mesh floorMesh;
         public Mesh ceilMesh;
+        public Bounds mapBounds;
 
         public void DisableProps()
         {
@@ -98,6 +100,50 @@ namespace ProceduralStages
         }
 
 #if UNITY_EDITOR
+
+        [ContextMenu("Bake map size")]
+        public void BakeMapSize()
+        {
+            var info = GameObject.Find(sceneInfo).GetComponent<SceneInfo>();
+            var groundNodes = info.groundNodesAsset.nodes;
+            var airNodes = info.airNodesAsset.nodes;
+
+            Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            for (int i = 0; i < groundNodes.Length; i++)
+            {
+                var pos = groundNodes[i].position;
+
+                min.x = Mathf.Min(min.x, pos.x);
+                min.y = Mathf.Min(min.y, pos.y);
+                min.z = Mathf.Min(min.z, pos.z);
+
+                max.x = Mathf.Max(max.x, pos.x);
+                max.y = Mathf.Max(max.y, pos.y);
+                max.z = Mathf.Max(max.z, pos.z);
+            }
+
+            for (int i = 0; i < airNodes.Length; i++)
+            {
+                var pos = airNodes[i].position;
+
+                min.x = Mathf.Min(min.x, pos.x);
+                min.y = Mathf.Min(min.y, pos.y);
+                min.z = Mathf.Min(min.z, pos.z);
+
+                max.x = Mathf.Max(max.x, pos.x);
+                max.y = Mathf.Max(max.y, pos.y);
+                max.z = Mathf.Max(max.z, pos.z);
+            }
+
+            mapBounds = new Bounds((min + max) / 2, max - min);
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         private struct MeshInfo
         {
             public Matrix4x4 localToWorldMatrix;

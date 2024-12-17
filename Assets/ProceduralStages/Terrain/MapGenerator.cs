@@ -422,7 +422,8 @@ namespace ProceduralStages
 
                     using (ProfilerLog.CreateScope("OcclusionCulling.SetTargets"))
                     {
-                        occlusionCulling.SetTargets(propsPlacer.instances, mapScale * (Vector3)stageSize);
+                        Vector3 mapSize = mapScale * (Vector3)stageSize;
+                        occlusionCulling.SetTargets(propsPlacer.instances, new Bounds(mapSize / 2f, mapSize));
                     }
                 }
 

@@ -90,7 +90,7 @@ namespace ProceduralStages
             }
             else
             {
-                int stageInLoop = Application.isEditor
+                int stageInLoop = MapGenerator.instance != null && Application.isEditor
                     ? MapGenerator.instance.editorStageInLoop
                     : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
                 stagePropCount = Math.Min(propsSelection.Count, propsCount + stageInLoop);

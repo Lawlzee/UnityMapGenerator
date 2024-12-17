@@ -1,6 +1,7 @@
 
 using RoR2;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,11 +20,13 @@ namespace ProceduralStages
 
         public Material terrainMaterial;
         public SurfaceDefProvider surfaceDefProvider;
+        public OcclusionCulling occlusionCulling;
 
         public bool showDebugMeshes;
 
         public MeshFilter debugFloorMeshFilter;
         public MeshFilter debugCeilMeshFilter;
+        public GameObject debugMapBounds;
 
         private ulong lastSeed;
         public static ThemeGenerator instance;
@@ -90,6 +93,7 @@ namespace ProceduralStages
         {
             debugFloorMeshFilter.gameObject.SetActive(Application.isEditor && showDebugMeshes);
             debugCeilMeshFilter.gameObject.SetActive(Application.isEditor && showDebugMeshes);
+            debugMapBounds.SetActive(Application.isEditor && showDebugMeshes);
         }
 
         private void ApplyTheme()
@@ -111,12 +115,59 @@ namespace ProceduralStages
 
                 debugFloorMeshFilter.sharedMesh = stageDef.floorMesh;
                 debugCeilMeshFilter.sharedMesh = stageDef.ceilMesh;
+                debugMapBounds.transform.localPosition = stageDef.mapBounds.center;
+                debugMapBounds.transform.localScale = stageDef.mapBounds.size;
 
                 MapTheme theme = GetTheme();
                 MaterialInfo materialInfo = theme.GenerateMaterialInfo(rng);
 
                 stageDef.ApplyTerrainMaterial(terrainMaterial, materialInfo);
                 ProfilerLog.Debug("Terrain material applied");
+
+                Graphs graphs = new Graphs
+                {
+                    floorProps = MeshToPropsNode(stageDef.floorMesh),
+                    ceilingProps = MeshToPropsNode(stageDef.ceilMesh),
+                    groundNodeIndexByPosition = new Dictionary<Vector3, int>()
+                };
+                ProfilerLog.Debug("Mesh to graph");
+
+                PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
+
+                propsPlacer.PlaceAll(
+                    rng,
+                    Vector3.zero,
+                    graphs,
+                    propsCollection,
+                    meshColorer,
+                    materialInfo.grassColorGradiant,
+                    materialInfo.ApplyTo(new Material(terrainMaterial)),
+                    ceillingWeight: 1,
+                    propCountWeight: 1,
+                    bigObjectOnly: false);
+
+                ProfilerLog.Debug("propsPlacer");
+
+                using (ProfilerLog.CreateScope("OcclusionCulling.SetTargets"))
+                {
+                    occlusionCulling.SetTargets(propsPlacer.instances, stageDef.mapBounds);
+                }
+            }
+
+            PropsNode[] MeshToPropsNode(Mesh mesh)
+            {
+                var vertices = mesh.vertices;
+                var normals = mesh.normals;
+
+                PropsNode[] propsNodes = new PropsNode[vertices.Length];
+
+                for (int i = 0; i < vertices.Length; i++)
+                {
+                    propsNodes[i].position =vertices[i];
+                    propsNodes[i].normal = normals[i];
+                }
+
+                return propsNodes;
             }
         }
 

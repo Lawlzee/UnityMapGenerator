@@ -105,6 +105,7 @@ namespace ProceduralStages
 
         public float cellSize = 1;
         private float cellSizeReciprocal;
+        private Bounds mapBounds;
 
         public void Awake()
         {
@@ -163,8 +164,11 @@ namespace ProceduralStages
             return mesh;
         }
 
-        public void SetTargets(List<GameObject> gameObjects, Vector3 mapSize)
+        public void SetTargets(List<GameObject> gameObjects, Bounds mapBounds)
         {
+            _meshFilter = _meshFilter ?? GetComponent<MeshFilter>();
+            _meshRenderer = _meshRenderer ?? GetComponent<MeshRenderer>();
+
             cellSizeReciprocal = 1 / cellSize;
 
             MeshRenderer[][] meshRenderers = new MeshRenderer[gameObjects.Count][];
@@ -239,9 +243,11 @@ namespace ProceduralStages
 
             ProfilerLog.Debug("Encapsulate");
 
-            int sizeX = Mathf.CeilToInt(mapSize.x * cellSizeReciprocal);
-            int sizeY = Mathf.CeilToInt(mapSize.y * cellSizeReciprocal);
-            int sizeZ = Mathf.CeilToInt(mapSize.z * cellSizeReciprocal);
+            int sizeX = Mathf.CeilToInt(mapBounds.size.x * cellSizeReciprocal);
+            int sizeY = Mathf.CeilToInt(mapBounds.size.y * cellSizeReciprocal);
+            int sizeZ = Mathf.CeilToInt(mapBounds.size.z * cellSizeReciprocal);
+
+            ProfilerLog.Debug($"size: {sizeX} {sizeY} {sizeZ}");
 
             _clustersLength = new Vector3Int(sizeX, sizeY, sizeZ);
             _clusterIndexByPos = new Index4[sizeX, sizeY, sizeZ];
@@ -271,13 +277,16 @@ namespace ProceduralStages
             {
                 Bounds bound = boundsByCluster[i];
 
-                int startX = Math.Max(0, Mathf.FloorToInt(bound.min.x * cellSizeReciprocal));
-                int startY = Math.Max(0, Mathf.FloorToInt(bound.min.y * cellSizeReciprocal));
-                int startZ = Math.Max(0, Mathf.FloorToInt(bound.min.z * cellSizeReciprocal));
+                Vector3 min = bound.min - mapBounds.min;
+                Vector3 max = bound.max - mapBounds.max;
 
-                int endX = Math.Min(sizeX - 1, Mathf.CeilToInt(bound.max.x * cellSizeReciprocal));
-                int endY = Math.Min(sizeY - 1, Mathf.CeilToInt(bound.max.y * cellSizeReciprocal));
-                int endZ = Math.Min(sizeZ - 1, Mathf.CeilToInt(bound.max.z * cellSizeReciprocal));
+                int startX = Math.Max(0, Mathf.FloorToInt(min.x * cellSizeReciprocal));
+                int startY = Math.Max(0, Mathf.FloorToInt(min.y * cellSizeReciprocal));
+                int startZ = Math.Max(0, Mathf.FloorToInt(min.z * cellSizeReciprocal));
+
+                int endX = Math.Min(sizeX - 1, Mathf.CeilToInt(max.x * cellSizeReciprocal));
+                int endY = Math.Min(sizeY - 1, Mathf.CeilToInt(max.y * cellSizeReciprocal));
+                int endZ = Math.Min(sizeZ - 1, Mathf.CeilToInt(max.z * cellSizeReciprocal));
 
                 for (int x = startX; x <= endX; x++)
                 {
@@ -327,12 +336,11 @@ namespace ProceduralStages
 
             _visibleClustersBuffer.GetData(_visibleClusters);
 
+            Vector3 cellCameraPostion = Camera.main.transform.position - mapBounds.min;
 
-            Vector3 cameraPostion = Camera.main.transform.position;
-
-            int cellX = Mathf.FloorToInt(cameraPostion.x * cellSizeReciprocal);
-            int cellY = Mathf.FloorToInt(cameraPostion.y * cellSizeReciprocal);
-            int cellZ = Mathf.FloorToInt(cameraPostion.z * cellSizeReciprocal);
+            int cellX = Mathf.FloorToInt(cellCameraPostion.x * cellSizeReciprocal);
+            int cellY = Mathf.FloorToInt(cellCameraPostion.y * cellSizeReciprocal);
+            int cellZ = Mathf.FloorToInt(cellCameraPostion.z * cellSizeReciprocal);
 
             Index4 currentClusterIndex = new Index4
             {
