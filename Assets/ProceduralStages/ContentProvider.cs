@@ -34,6 +34,9 @@ namespace ProceduralStages
         public static GameObject runConfigPrefab;
         public static GameObject rampPrefab;
 
+        public static GameObject themeGeneratorPrefab;
+        public static MapThemeCollection mapThemeCollection;
+
         public static SceneDef[] LoopSceneDefs = new SceneDef[5];
         public static SceneDef ItSceneDef;
 
@@ -71,10 +74,16 @@ namespace ProceduralStages
                 texTemplePreview = assets.First(a => a.name == "texTemplePreview");
             }));
 
+            yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<MapThemeCollection[]>)((assets) =>
+            {
+                mapThemeCollection = assets.Single();
+            }));
+
             yield return LoadAllAssetsAsync(assetsBundle, args.progressReceiver, (Action<GameObject[]>)((assets) =>
             {
                 runConfigPrefab = assets.First(a => a.name == "Run Config");
                 rampPrefab = assets.First(a => a.name == "Ramp");
+                themeGeneratorPrefab = assets.First(a => a.name == "ThemeGenerator");
 
                 foreach (var asset in assets)
                 {

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace ProceduralStages
 {
@@ -13,16 +14,19 @@ namespace ProceduralStages
 
         void Start()
         {
-            AsyncOperationHandle<SceneInstance> handler = Addressables.LoadSceneAsync(sceneName);
-            handler.Completed += OnSceneLoaded;
+            Init(prefabs);
+            Addressables.LoadSceneAsync(sceneName);
         }
 
-        private void OnSceneLoaded(AsyncOperationHandle<SceneInstance> obj)
+        public static void Init(GameObject[] prefabs)
         {
-            GameObject gameObject = new GameObject("DelayedInstantier");
-            DelayedInstantier delayedInstantier = gameObject.AddComponent<DelayedInstantier>();
+            SceneManager.sceneLoaded += (Scene scene, LoadSceneMode mode) =>
+            {
+                GameObject gameObject = new GameObject("DelayedInstantier");
+                DelayedInstantier delayedInstantier = gameObject.AddComponent<DelayedInstantier>();
 
-            delayedInstantier.prefabs = prefabs;
+                delayedInstantier.prefabs = prefabs;
+            };
         }
     }
 }

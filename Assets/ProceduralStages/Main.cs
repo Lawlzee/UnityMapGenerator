@@ -1,5 +1,6 @@
 ﻿using BepInEx;
 using RiskOfOptions;
+using RoR2;
 using RoR2.ContentManagement;
 using System;
 using System.Collections;
@@ -20,7 +21,7 @@ namespace ProceduralStages
         public const string PluginGUID = "Lawlzee.ProceduralStages";
         public const string PluginAuthor = "Lawlzee";
         public const string PluginName = "ProceduralStages";
-        public const string PluginVersion = "1.20.2";
+        public const string PluginVersion = "2.0.0";
 
         public static string SceneName = "random";
         public static string Judgement = "Judgement";
@@ -43,6 +44,11 @@ namespace ProceduralStages
             StageHooks.Init();
 
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
+            RoR2Application.onLoadFinished += () =>
+            {
+                ContentProvider.mapThemeCollection.WarmUp();
+                SceneLoader.Init(new GameObject[] { ContentProvider.themeGeneratorPrefab });
+            };
         }
 
         public void Start()

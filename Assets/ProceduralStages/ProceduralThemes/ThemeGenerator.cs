@@ -35,8 +35,14 @@ namespace ProceduralStages
         private void Awake()
         {
             instance = this;
-            if (Application.IsPlaying(this))
+
+            if (Application.IsPlaying(this) && RunConfig.instance != null)
             {
+                if (Application.isEditor)
+                {
+                    themes.WarmUp();
+                }
+
                 lastSeed = SetSeed();
                 ApplyTheme();
             }
@@ -119,10 +125,6 @@ namespace ProceduralStages
                 debugMapBounds.transform.localScale = stageDef.mapBounds.size;
 
                 MapTheme theme = GetTheme();
-                MaterialInfo materialInfo = theme.GenerateMaterialInfo(rng);
-
-                stageDef.ApplyTerrainMaterial(terrainMaterial, materialInfo);
-                ProfilerLog.Debug("Terrain material applied");
 
                 Graphs graphs = new Graphs
                 {
@@ -133,6 +135,10 @@ namespace ProceduralStages
                 ProfilerLog.Debug("Mesh to graph");
 
                 PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
+                MaterialInfo materialInfo = theme.GenerateMaterialInfo(rng);
+
+                stageDef.ApplyTerrainMaterial(terrainMaterial, materialInfo);
+                ProfilerLog.Debug("Terrain material applied");
 
                 propsPlacer.PlaceAll(
                     rng,
@@ -163,7 +169,7 @@ namespace ProceduralStages
 
                 for (int i = 0; i < vertices.Length; i++)
                 {
-                    propsNodes[i].position =vertices[i];
+                    propsNodes[i].position = vertices[i];
                     propsNodes[i].normal = normals[i];
                 }
 
