@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: TitleDef
   m_EditorClassIdentifier: 
   sceneName: title
+  assetKey: RoR2/Base/title/title.unity
   nameToken: Main menu
+  propKindCount: 15
+  propCeillingWeight: 0
+  propCountWeight: 0.7
   gameObjectsToDisable:
   - 'HOLDER: Title Background/Trees'
   - 'HOLDER: Title Background/Rocks'
@@ -31,3 +35,4 @@ MonoBehaviour:
   mapBounds:
     m_Center: {x: 50, y: 0, z: 200}
     m_Extent: {x: 200, y: 50, z: 275}
+  propsDensity: 10000

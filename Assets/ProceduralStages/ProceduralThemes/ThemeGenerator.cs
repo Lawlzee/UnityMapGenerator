@@ -161,9 +161,10 @@ namespace ProceduralStages
                     meshColorer,
                     materialInfo.grassColorGradiant,
                     materialInfo.ApplyTo(new Material(terrainMaterial)),
-                    ceillingWeight: 1,
-                    propCountWeight: 1,
-                    stageDef.mapBounds);
+                    ceillingWeight: stageDef.propCeillingWeight,
+                    propCountWeight: stageDef.propCountWeight,
+                    stageDef.mapBounds,
+                    stageDef.propKindCount);
 
                 ProfilerLog.Debug("propsPlacer");
 

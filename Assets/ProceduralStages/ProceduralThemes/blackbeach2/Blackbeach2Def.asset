@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: Blackbeach2Def
   m_EditorClassIdentifier: 
   sceneName: blackbeach2
+  assetKey: RoR2/Base/blackbeach2/blackbeach2.unity
   nameToken: MAP_BLACKBEACH_TITLE
+  propKindCount: 12
+  propCeillingWeight: 0.5799966
+  propCountWeight: Infinity
   gameObjectsToDisable:
   - 'HOLDER: Trees'
   - 'HOLDER: Rocks/GROUP: Boulders/*'
@@ -61,3 +65,4 @@ MonoBehaviour:
   mapBounds:
     m_Center: {x: -105.34941, y: 52.72746, z: 7.1233597}
     m_Extent: {x: 271.5006, y: 70.21942, z: 178.7367}
+  propsDensity: 0

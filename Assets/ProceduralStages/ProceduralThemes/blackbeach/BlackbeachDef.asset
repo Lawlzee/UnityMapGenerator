@@ -13,7 +13,11 @@ MonoBehaviour:
   m_Name: BlackbeachDef
   m_EditorClassIdentifier: 
   sceneName: blackbeach
+  assetKey: RoR2/Base/blackbeach/blackbeach.unity
   nameToken: MAP_BLACKBEACH_TITLE
+  propKindCount: 12
+  propCeillingWeight: 0.5
+  propCountWeight: 0.6
   gameObjectsToDisable:
   - 'HOLDER: Grass'
   - FOLIAGE
@@ -40,6 +44,7 @@ MonoBehaviour:
   - SKYBOX/bbDistantPillar (10)/*
   - SKYBOX/bbDistantPillar (11)/*
   - SKYBOX/bbDistantPillar (12)/*
+  - GAMEPLAY SPACE/Boulders/Pebbles
   gameObjectsToEnable:
   - GAMEPLAY SPACE/Ruins/BbRuinGateOpen
   - SKYBOX/bbDistantPillar/Foam
@@ -96,3 +101,4 @@ MonoBehaviour:
   mapBounds:
     m_Center: {x: -44.023285, y: -168.01088, z: -160.65698}
     m_Extent: {x: 283.92886, y: 88.110886, z: 230.857}
+  propsDensity: 0

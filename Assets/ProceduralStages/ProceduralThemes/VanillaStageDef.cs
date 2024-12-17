@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 
 namespace ProceduralStages
@@ -17,7 +18,11 @@ namespace ProceduralStages
     public class VanillaStageDef : ScriptableObject
     {
         public string sceneName;
+        public string assetKey;
         public string nameToken;
+        public int propKindCount = 12;
+        public float propCeillingWeight = 0.5f;
+        public float propCountWeight = 1f;
         public string[] gameObjectsToDisable;
         public string[] gameObjectsToEnable;
         public TerrainMeshGateDef[] terrainMeshes;
@@ -71,7 +76,10 @@ namespace ProceduralStages
                         }
 
                         MeshFilter meshFilter = tranform.GetComponent<MeshFilter>();
-                        Mesh mesh = Instantiate(meshFilter.sharedMesh);
+                        MeshCollider meshCollider = tranform.GetComponent<MeshCollider>();
+                        Mesh mesh = Instantiate(meshFilter.sharedMesh.isReadable
+                            ? meshFilter.sharedMesh
+                            : meshCollider.sharedMesh);
 
                         meshColorer.ColorMesh(
                             new MeshResult
@@ -192,6 +200,12 @@ namespace ProceduralStages
 
 #if UNITY_EDITOR
 
+        [ContextMenu("Load Scene")]
+        public void LoadScene()
+        {
+            Addressables.LoadSceneAsync(assetKey).WaitForCompletion();
+        }
+
         [ContextMenu("Bake map size")]
         public void BakeMapSize()
         {
@@ -286,6 +300,24 @@ namespace ProceduralStages
             }
 
             terrainMeshes = newDefs.ToArray();
+
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        [ContextMenu("Bake Props Ceil Weights")]
+        public void BakePropWeights()
+        {
+            int ceilVertexCount = terrainMeshes
+                .Select(x => x.ceilMesh.vertexCount)
+                .Sum();
+
+            int floorVertexCount = terrainMeshes
+                .Select(x => x.floorMesh.vertexCount)
+                .Sum();
+
+            propCeillingWeight = ceilVertexCount / (float)floorVertexCount;
 
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
