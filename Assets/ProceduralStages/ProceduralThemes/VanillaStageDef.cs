@@ -17,6 +17,7 @@ namespace ProceduralStages
     public class VanillaStageDef : ScriptableObject
     {
         public string sceneName;
+        public string nameToken;
         public string[] gameObjectsToDisable;
         public string[] gameObjectsToEnable;
         public TerrainMeshGateDef[] terrainMeshes;
@@ -91,14 +92,18 @@ namespace ProceduralStages
 
         public (Mesh floorMesh, Mesh ceilMesh) CreateMeshes()
         {
-            NodeGraph nodeGraph = GameObject.Find(sceneInfo).GetComponent<SceneInfo>().groundNodes;
+            NodeGraph nodeGraph = sceneInfo == ""
+                ? null
+                : GameObject.Find(sceneInfo).GetComponent<SceneInfo>().groundNodes;
 
             List<Mesh> floorMeshes = new List<Mesh>();
             List<Mesh> ceilMeshes = new List<Mesh>();
 
             foreach (var terrainMesh in terrainMeshes)
             {
-                if (terrainMesh.gateName == "" || nodeGraph.IsGateOpen(terrainMesh.gateName))
+                if (terrainMesh.gateName == "" 
+                    || nodeGraph == null
+                    || nodeGraph.IsGateOpen(terrainMesh.gateName))
                 {
                     floorMeshes.Add(terrainMesh.floorMesh);
                     ceilMeshes.Add(terrainMesh.ceilMesh);

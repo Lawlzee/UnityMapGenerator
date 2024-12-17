@@ -91,7 +91,7 @@ namespace ProceduralStages
                 meshRenderer.material,
                 0,
                 propsWeight,
-                bigObjectOnly: false,
+                new Bounds(Vector3.zero, new Vector3(1000000, 100000, 10000)),
                 maxPropKind);
         }
 

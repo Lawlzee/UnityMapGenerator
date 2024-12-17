@@ -36,7 +36,7 @@ namespace ProceduralStages
         {
             instance = this;
 
-            if (Application.IsPlaying(this) && RunConfig.instance != null)
+            if (Application.IsPlaying(this))
             {
                 if (Application.isEditor)
                 {
@@ -110,7 +110,7 @@ namespace ProceduralStages
                 string currentSceneName = SceneManager.GetActiveScene().name;
                 var stageDef = stages.FirstOrDefault(x => x.sceneName == currentSceneName);
 
-                if (stageDef == null)
+                if (!stageDef)
                 {
                     ProfilerLog.Debug($"No stageDef found for '{currentSceneName}'");
                     return;
@@ -163,7 +163,7 @@ namespace ProceduralStages
                     materialInfo.ApplyTo(new Material(terrainMaterial)),
                     ceillingWeight: 1,
                     propCountWeight: 1,
-                    bigObjectOnly: false);
+                    stageDef.mapBounds);
 
                 ProfilerLog.Debug("propsPlacer");
 
@@ -203,6 +203,10 @@ namespace ProceduralStages
                 {
                     themeType = editorTheme;
                 }
+            }
+            else if  (RunConfig.instance == null)
+            {
+                themeType = themes.themes[rng.RangeInt(1, themes.themes.Length)].Theme;
             }
             else if (RunConfig.instance.selectedTheme != Theme.Random)
             {
@@ -258,7 +262,12 @@ namespace ProceduralStages
             }
             else
             {
-                if (RunConfig.instance.stageSeed != "")
+                if (RunConfig.instance == null)
+                {
+                    //For the main menu scene
+                    currentSeed = (ulong)DateTime.Now.Ticks;
+                }
+                else if (RunConfig.instance.stageSeed != "")
                 {
                     if (ulong.TryParse(RunConfig.instance.stageSeed, out ulong seed))
                     {

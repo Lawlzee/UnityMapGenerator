@@ -354,6 +354,7 @@ MonoBehaviour:
   themes: {fileID: 11400000, guid: df2385cd832379b49a30bfa1d057d8b5, type: 2}
   stages:
   - {fileID: 11400000, guid: b44b306b17abccb429c231495190304a, type: 2}
+  - {fileID: 11400000, guid: 97124c3c61b977845a9699ae9bd9742e, type: 2}
   propsPlacer:
     propsCount: 10
     propsObject: {fileID: 1462936002}

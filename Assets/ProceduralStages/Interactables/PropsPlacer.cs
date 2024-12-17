@@ -36,7 +36,7 @@ namespace ProceduralStages
             Material terrainMaterial,
             float ceillingWeight,
             float propCountWeight,
-            bool bigObjectOnly,
+            Bounds smallObjectBounds,
             int? maxPropKind = null)
         {
             List<PropsDefinition> props = propsCollection.categories
@@ -46,11 +46,6 @@ namespace ProceduralStages
             WeightedSelection<PropsDefinition> propsSelection = new WeightedSelection<PropsDefinition>();
             foreach (var prop in props)
             {
-                if (bigObjectOnly && !prop.isBig)
-                {
-                    continue;
-                }
-
                 if (prop.ground)
                 {
                     propsSelection.AddChoice(prop, 1);
@@ -92,12 +87,33 @@ namespace ProceduralStages
             {
                 int stageInLoop = MapGenerator.instance != null && Application.isEditor
                     ? MapGenerator.instance.editorStageInLoop
-                    : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
+                    : RunConfig.instance == null
+                        ? 1
+                        : (RunConfig.instance.nextStageClearCount % Run.stagesPerLoop) + 1;
                 stagePropCount = Math.Min(propsSelection.Count, propsCount + stageInLoop);
             }
 
             HashSet<int> usedFloorIndexes = new HashSet<int>();
             HashSet<int> usedCeillingIndexes = new HashSet<int>();
+
+            List<int> inBoundsFloorIndexes = new List<int>(graphs.floorProps.Length);
+            List<int> inBoundsCeilIndexes = new List<int>(graphs.ceilingProps.Length);
+
+            for (int i = 0; i < graphs.floorProps.Length; i++)
+            {
+                if (smallObjectBounds.Contains(graphs.floorProps[i].position))
+                {
+                    inBoundsFloorIndexes.Add(i);
+                }
+            }
+
+            for (int i = 0; i < graphs.ceilingProps.Length; i++)
+            {
+                if (smallObjectBounds.Contains(graphs.ceilingProps[i].position))
+                {
+                    inBoundsCeilIndexes.Add(i);
+                }
+            }
 
             for (int j = 0; j < stagePropCount && propsSelection.Count > 0; j++)
             {
@@ -118,6 +134,15 @@ namespace ProceduralStages
                     ? usedFloorIndexes
                     : usedCeillingIndexes;
 
+                List<int> inBoundsIndexes = prop.ground
+                    ? inBoundsFloorIndexes
+                    : inBoundsCeilIndexes;
+
+                if (!prop.isBig && inBoundsIndexes.Count == 0)
+                {
+                    continue;
+                }
+
                 int scaledPropCount = Mathf.CeilToInt(propCountWeight * prop.count);
                 for (int i = 0; i < scaledPropCount; i++)
                 {
@@ -126,11 +151,14 @@ namespace ProceduralStages
                         continue;
                     }
 
-                    int attempt = 0;
                     int index;
+                    int attempt = 0;
                     do
                     {
-                        index = rng.RangeInt(0, graph.Length);
+                        index = prop.isBig 
+                            ? rng.RangeInt(0, graph.Length) 
+                            : rng.NextElementUniform(inBoundsIndexes);
+
                         attempt++;
                     }
                     while (usedIndexes.Contains(index) && attempt <= 5);
@@ -140,85 +168,85 @@ namespace ProceduralStages
                         continue;
                     }
 
-                    usedIndexes.Add(index);
+                usedIndexes.Add(index);
 
-                    var propsNode = graph[index];
+                var propsNode = graph[index];
 
-                    if (prop.ground)
-                    {
-                        graphs.OccupySpace(propsNode.position, prop.isSolid);
-                    }
-
-                    Color? color = null;
-                    if (prop.changeColor)
-                    {
-                        var uv = meshColorer.GetUV(propsNode.position, propsNode.normal, colorSeed);
-                        try
-                        {
-                            color = colorGradiant.GetPixelBilinear(uv.x, uv.y);
-                        }
-                        catch (Exception ex)
-                        {
-                            Log.Error($"Failed to GetPixelBilinear for {propsNode.position} {propsNode.normal} {uv} {colorSeed}");
-                            Log.Error(ex.ToString());
-                        }
-                    }
-
-                    Material material = null;
-                    if (prop.isRock)
-                    {
-                        material = terrainMaterial;
-                    }
-
-                    float scale = rng.RangeFloat(prop.minScale, prop.maxScale);
-
-                    GameObject instance = propsNode.Place(
-                        rng,
-                        offset,
-                        prop.prefab,
-                        propsObject,
-                        material,
-                        color,
-                        normal: prop.normal != Vector3.zero
-                            ? prop.normal
-                            : default(Vector3?),
-                        scale,
-                        initialRotation: prop.initialRotation != Vector3.zero
-                            ? prop.initialRotation
-                            : default(Vector3?));
-
-                    instance.transform.position += prop.offset;
-
-                    if (prop.addCollision)
-                    {
-                        foreach (var meshRenderer in instance.GetComponentsInChildren<MeshRenderer>(includeInactive: true))
-                        {
-                            meshRenderer.gameObject.AddComponent<MeshCollider>();
-                        }
-                    }
-
-                    foreach (var renderer in instance.GetComponentsInChildren<Renderer>(includeInactive: true))
-                    {
-                        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                    }
-
-                    foreach (var collider in instance.GetComponentsInChildren<Collider>(includeInactive: true))
-                    {
-                        if (collider.gameObject.GetComponent<SurfaceDefProvider>() == null)
-                        {
-                            SurfaceDefProvider surfaceDefProvider = collider.gameObject.AddComponent<SurfaceDefProvider>();
-                            surfaceDefProvider.surfaceDef = prop.surfaceDef;
-                        }
-                    }
-
-                    if (prop.isSolid)
-                    {
-                        SetLayer(instance, LayerIndex.world.intVal);
-                    }
-
-                    instances.Add(instance);
+                if (prop.ground)
+                {
+                    graphs.OccupySpace(propsNode.position, prop.isSolid);
                 }
+
+                Color? color = null;
+                if (prop.changeColor)
+                {
+                    var uv = meshColorer.GetUV(propsNode.position, propsNode.normal, colorSeed);
+                    try
+                    {
+                        color = colorGradiant.GetPixelBilinear(uv.x, uv.y);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error($"Failed to GetPixelBilinear for {propsNode.position} {propsNode.normal} {uv} {colorSeed}");
+                        Log.Error(ex.ToString());
+                    }
+                }
+
+                Material material = null;
+                if (prop.isRock)
+                {
+                    material = terrainMaterial;
+                }
+
+                float scale = rng.RangeFloat(prop.minScale, prop.maxScale);
+
+                GameObject instance = propsNode.Place(
+                    rng,
+                    offset,
+                    prop.prefab,
+                    propsObject,
+                    material,
+                    color,
+                    normal: prop.normal != Vector3.zero
+                        ? prop.normal
+                        : default(Vector3?),
+                    scale,
+                    initialRotation: prop.initialRotation != Vector3.zero
+                        ? prop.initialRotation
+                        : default(Vector3?));
+
+                instance.transform.position += prop.offset;
+
+                if (prop.addCollision)
+                {
+                    foreach (var meshRenderer in instance.GetComponentsInChildren<MeshRenderer>(includeInactive: true))
+                    {
+                        meshRenderer.gameObject.AddComponent<MeshCollider>();
+                    }
+                }
+
+                foreach (var renderer in instance.GetComponentsInChildren<Renderer>(includeInactive: true))
+                {
+                    renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
+
+                foreach (var collider in instance.GetComponentsInChildren<Collider>(includeInactive: true))
+                {
+                    if (collider.gameObject.GetComponent<SurfaceDefProvider>() == null)
+                    {
+                        SurfaceDefProvider surfaceDefProvider = collider.gameObject.AddComponent<SurfaceDefProvider>();
+                        surfaceDefProvider.surfaceDef = prop.surfaceDef;
+                    }
+                }
+
+                if (prop.isSolid)
+                {
+                    SetLayer(instance, LayerIndex.world.intVal);
+                }
+
+                instances.Add(instance);
             }
+        }
         }
 
         void SetLayer(GameObject gameObject, int layer)

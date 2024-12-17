@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: TitleDef
+  m_EditorClassIdentifier: 
+  sceneName: title
+  nameToken: Main menu
+  gameObjectsToDisable:
+  - 'HOLDER: Title Background/Trees'
+  - 'HOLDER: Title Background/Rocks'
+  - 'HOLDER: Title Background/Terrain/Pebbles'
+  - 'HOLDER: Title Background/Terrain/Foliage'
+  gameObjectsToEnable: []
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Title Background/Terrain/title terrain'
+    floorMesh: {fileID: 4300000, guid: 7244b98db38cb5543ac951e9735cb766, type: 2}
+    ceilMesh: {fileID: 4300000, guid: f112867b22e891a4c890c5ebb605f606, type: 2}
+  sceneInfo: 
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 50, y: 0, z: 200}
+    m_Extent: {x: 200, y: 50, z: 275}

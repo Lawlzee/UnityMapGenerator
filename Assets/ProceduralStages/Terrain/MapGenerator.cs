@@ -403,7 +403,7 @@ namespace ProceduralStages
                         terrainMaterial,
                         terrainGenerator.ceillingPropsWeight,
                         terrainGenerator.propCountWeight,
-                        bigObjectOnly: false);
+                        new Bounds(Vector3.zero, new Vector3(1000000, 100000, 10000)));
 
                     ProfilerLog.Debug("propsPlacer");
 

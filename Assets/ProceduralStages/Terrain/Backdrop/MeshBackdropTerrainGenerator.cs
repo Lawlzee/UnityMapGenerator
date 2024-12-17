@@ -50,7 +50,7 @@ namespace ProceduralStages
                 args.material,
                 0,
                 terrain.propsWeigth,
-                bigObjectOnly: true,
+                new Bounds(),
                 maxPropKind);
 
             return gameObject;
