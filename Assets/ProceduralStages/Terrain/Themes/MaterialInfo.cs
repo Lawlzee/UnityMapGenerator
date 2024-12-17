@@ -11,9 +11,7 @@ namespace ProceduralStages
         public SurfaceTexture wallTexture;
         public SurfaceTexture detailTexture;
 
-        public Material ApplyTo(
-            Material material,
-            bool useUV = true)
+        public Material ApplyTo(Material material)
         {
             material.SetTexture("_ColorTex", colorGradiant);
 
@@ -36,8 +34,6 @@ namespace ProceduralStages
             material.SetColor("_DetailColor", detailTexture.averageColor);
             material.SetFloat("_DetailScale", detailTexture.scale);
             material.SetFloat("_DetailContrast", detailTexture.constrast);
-
-            material.SetInt("_UseUV", useUV ? 1 : 0);
 
             return material;
         }

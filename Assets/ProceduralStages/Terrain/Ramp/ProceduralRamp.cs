@@ -77,7 +77,7 @@ namespace ProceduralStages
             var theme = rng.NextElementUniform(themes.themes);
             var colorGradiant = theme.SetTexture(meshRenderer.material, surfaceDefProvider, rng).grassColorGradiant;
 
-            meshColorer.ColorMesh(meshResult, rng);
+            meshColorer.ColorMesh(meshResult, Matrix4x4.identity, rng);
             meshFilter.mesh = meshResult.mesh;
             meshCollider.sharedMesh = meshResult.mesh;
 

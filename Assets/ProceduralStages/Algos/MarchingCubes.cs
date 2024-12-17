@@ -145,6 +145,7 @@ namespace ProceduralStages
             mesh.SetTriangles(triangles, 0);
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
+            mesh.RecalculateTangents();
 
             return new MeshResult
             {

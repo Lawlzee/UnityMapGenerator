@@ -23,8 +23,10 @@ namespace ProceduralStages
         [Range(0, 1)]
         public float amplitude;
 
-        public void ColorMesh(MeshResult meshResult, Xoroshiro128Plus rng)
+        public void ColorMesh(MeshResult meshResult, Matrix4x4 localToWorldMatrix, Xoroshiro128Plus rng)
         {
+            Matrix4x4 normalMatrix = localToWorldMatrix.inverse.transpose;
+
             Vector3Int seed = new Vector3Int(
                 rng.RangeInt(0, short.MaxValue), 
                 rng.RangeInt(0, short.MaxValue), 
@@ -35,15 +37,14 @@ namespace ProceduralStages
             {
                 for (int i = min; i < max; i++)
                 {
-                    var vertex = meshResult.vertices[i];
-                    var normal = meshResult.normals[i];
+                    var vertex = localToWorldMatrix.MultiplyPoint3x4(meshResult.vertices[i]);
+                    var normal = normalMatrix.MultiplyVector(meshResult.normals[i]).normalized;
 
                     uvs[i] = GetUV(vertex, normal, seed);
                 }
             });
 
             meshResult.mesh.uv = uvs;
-            meshResult.mesh.RecalculateTangents();
         }
 
         public Vector2 GetUV(Vector3 vertex, Vector3 normal, Vector3Int seed)

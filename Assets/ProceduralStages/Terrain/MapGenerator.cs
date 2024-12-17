@@ -298,7 +298,7 @@ namespace ProceduralStages
                     }
                 }
 
-                meshColorer.ColorMesh(terrain.meshResult, rng);
+                meshColorer.ColorMesh(terrain.meshResult, Matrix4x4.identity, rng);
                 ProfilerLog.Debug("meshColorer");
 
                 GetComponent<MeshFilter>().mesh = terrain.meshResult.mesh;

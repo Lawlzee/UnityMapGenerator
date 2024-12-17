@@ -15,7 +15,7 @@ MonoBehaviour:
   sceneName: blackbeach2
   gameObjectsToDisable:
   - 'HOLDER: Trees'
-  - 'HOLDER: Rocks'
+  - 'HOLDER: Rocks/GROUP: Boulders/*'
   - 'HOLDER: Foliage'
   - 'HOLDER: Ruins/GROUP: Pillars'
   - 'HOLDER: Ruins/GROUP: Tiles'
@@ -28,20 +28,34 @@ MonoBehaviour:
   - 'HOLDER: Ruins/GROUP: Gates/BbRuinArch_LOD0 (2)'
   - 'HOLDER: Randomization'
   - 'HOLDER: Terrain/blackbeach2_terrain/Shelf/mdlBBBoulderMediumFlat1'
-  terrainRenderers:
-  - path: 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
-    useUV: 1
-  - path: 'HOLDER: Terrain/blackbeach2_terrain/Shelf'
-    useUV: 1
-  - path: 'HOLDER: Distant Terrain/bbDistantPillar'
-    useUV: 0
-  terrainMeshColliders:
-  - 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
-  - 'HOLDER: Distant Terrain/bbDistantPillar'
+  - 'HOLDER: Rocks/GROUP: Pebbles'
+  - 'HOLDER: Rocks/GROUP: Detail'
+  gameObjectsToEnable:
+  - 'HOLDER: Rocks/GROUP: Boulders/mdlBBBoulderMediumFlat1 (4)'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
+    - 'HOLDER: Distant Terrain/bbDistantPillar'
+    - 'HOLDER: Rocks/GROUP: Boulders/mdlBBBoulderMediumFlat1 (4)'
+    floorMesh: {fileID: 4300000, guid: d2825ee2f6405c548b15924c8ce49a34, type: 2}
+    ceilMesh: {fileID: 4300000, guid: ca686715f3c08b7458303120fe9b9e49, type: 2}
+  - gateName: Pillar
+    paths:
+    - 'HOLDER: Terrain/blackbeach2_terrain/Pillar'
+    floorMesh: {fileID: 4300000, guid: 116d9f91dd7ae5a4e91cac5261eb3c3a, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 98d003e78afad204b95643ebad47cb4e, type: 2}
+  - gateName: Gate
+    paths: []
+    floorMesh: {fileID: 4300000, guid: ee149c51a6fdd5741a797261a0265ffb, type: 2}
+    ceilMesh: {fileID: 4300000, guid: ccad1d95a58c1414fbed2af646624665, type: 2}
+  - gateName: Shelf
+    paths:
+    - 'HOLDER: Terrain/blackbeach2_terrain/Shelf'
+    floorMesh: {fileID: 4300000, guid: 6f033ebe09a01bf48beb0dc2860d756d, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 7248b3d34e6a23649a197bf6cd84da29, type: 2}
   sceneInfo: SceneInfo
   minFloorAngle: 0.35
-  floorMesh: {fileID: 4300000, guid: d2825ee2f6405c548b15924c8ce49a34, type: 2}
-  ceilMesh: {fileID: 4300000, guid: ca686715f3c08b7458303120fe9b9e49, type: 2}
   mapBounds:
     m_Center: {x: -105.34941, y: 52.72746, z: 7.1233597}
     m_Extent: {x: 271.5006, y: 70.21942, z: 178.7367}

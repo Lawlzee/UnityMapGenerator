@@ -119,25 +119,38 @@ namespace ProceduralStages
                 stageDef.DisableProps();
                 ProfilerLog.Debug("Built in props disabled");
 
-                debugFloorMeshFilter.sharedMesh = stageDef.floorMesh;
-                debugCeilMeshFilter.sharedMesh = stageDef.ceilMesh;
+                (Mesh floorMesh, Mesh ceilMesh) = stageDef.CreateMeshes();
+                ProfilerLog.Debug("CreateMeshes");
+
+                if (floorMesh == null)
+                {
+                    ProfilerLog.Error("floorMesh is null");
+                    return;
+                }
+
+                debugFloorMeshFilter.sharedMesh = floorMesh;
+                debugCeilMeshFilter.sharedMesh = ceilMesh;
                 debugMapBounds.transform.localPosition = stageDef.mapBounds.center;
                 debugMapBounds.transform.localScale = stageDef.mapBounds.size;
 
-                MapTheme theme = GetTheme();
-
                 Graphs graphs = new Graphs
                 {
-                    floorProps = MeshToPropsNode(stageDef.floorMesh),
-                    ceilingProps = MeshToPropsNode(stageDef.ceilMesh),
+                    floorProps = MeshToPropsNode(floorMesh),
+                    ceilingProps = MeshToPropsNode(ceilMesh),
                     groundNodeIndexByPosition = new Dictionary<Vector3, int>()
                 };
                 ProfilerLog.Debug("Mesh to graph");
 
+                MapTheme theme = GetTheme();
+
                 PropsDefinitionCollection propsCollection = theme.propCollections[rng.RangeInt(0, theme.propCollections.Length)];
                 MaterialInfo materialInfo = theme.GenerateMaterialInfo(rng);
 
-                stageDef.ApplyTerrainMaterial(terrainMaterial, materialInfo);
+                stageDef.ApplyTerrainMaterial(
+                    terrainMaterial, 
+                    materialInfo,
+                    meshColorer, 
+                    rng);
                 ProfilerLog.Debug("Terrain material applied");
 
                 propsPlacer.PlaceAll(

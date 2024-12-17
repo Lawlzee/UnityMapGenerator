@@ -41,8 +41,6 @@
         _Intensity("Intensity", Float) = 1
         _HeightblendFactor("Height Blend Factor", Float) = 1
 
-        _UseUV("Use UV", int) = 1
-
         //_BumpScale("Bump Scale", Float) = 1
         //_BumpMap("Bump Map", 2D) = "bump" {}
         //
@@ -102,8 +100,6 @@
 
         half _Intensity;
         half _HeightblendFactor;
-
-        bool _UseUV;
 
         sampler2D _ColorTex;
 
@@ -183,20 +179,8 @@
             float dotL = dot(blendingFactor, (float3)1);
             blendingFactor /= dotL;
 
-            half4 color;
-            if (_UseUV)
-            {
-                color =  tex2D(_ColorTex, IN.uv_MainTex);
-            }
-            else
-            {
-                float2 uv;
-                uv.x = 0.5f;
-                uv.y = 0.5f;
+            half4 color = tex2D(_ColorTex, IN.uv_MainTex);
 
-                color = tex2D(_ColorTex, uv);
-            }
-            
             float3 hsv = RGBToHSV(color);
             
             float2 tx = IN.localCoord.zy;
