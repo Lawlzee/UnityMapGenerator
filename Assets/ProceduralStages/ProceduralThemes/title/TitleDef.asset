@@ -24,6 +24,7 @@ MonoBehaviour:
   - 'HOLDER: Title Background/Terrain/Pebbles'
   - 'HOLDER: Title Background/Terrain/Foliage'
   gameObjectsToEnable: []
+  meshesToColor: []
   terrainMeshes:
   - gateName: 
     paths:
@@ -35,4 +36,3 @@ MonoBehaviour:
   mapBounds:
     m_Center: {x: 50, y: 0, z: 200}
     m_Extent: {x: 200, y: 50, z: 275}
-  propsDensity: 10000

@@ -22,11 +22,10 @@ MonoBehaviour:
   - 'HOLDER: Starting Cave/Pebbles'
   - 'HOLDER: Starting Cave/Foliage'
   - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Rocks'
-  gameObjectsToEnable:
-  - 'HOLDER: Store/HOLDER: Lights/Base Light'
+  gameObjectsToEnable: []
   meshesToColor:
-  - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterBig'
-  - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge'
+  - 'HOLDER: Starting Cave/Static/*Bazaar_StalagmiteClusterBig'
+  - 'HOLDER: Starting Cave/Static/*Bazaar_StalagmiteClusterHuge'
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (1)'
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (2)'
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (3)'
@@ -34,24 +33,31 @@ MonoBehaviour:
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (5)'
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (9)'
   - 'HOLDER: Starting Cave/Static/Bazaar_StalagmiteClusterHuge (10)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterBig'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (1)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (2)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (3)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (4)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (5)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (6)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge (7)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent'
-  - 'HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent (1)'
-  - 'HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent (2)'
-  - 'HOLDER: Store/HOLDER: Confining Walls/Bazaar_CaveWallCorner'
-  - 'HOLDER: Store/HOLDER: Confining Walls/Bazaar_CaveWall'
-  - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterHuge'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterBig'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/*Gameplay Space/Bazaar_StalagmiteClusterHuge'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (1)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (2)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (3)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (4)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (5)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (6)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/Bazaar_StalagmiteClusterHuge
+    (7)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent (1)'
+  - 'HOLDER: Starting Cave/HOLDER: Arena Entrance/Gameplay Space/ArenaHeatvent (2)'
+  - 'HOLDER: Store/HOLDER: Confining Walls/*Bazaar_CaveWallCorner'
+  - 'HOLDER: Store/HOLDER: Confining Walls/*Bazaar_CaveWall'
+  - 'HOLDER: Store/HOLDER: Ceiling Meshes/*Bazaar_StalagmiteClusterHuge'
   - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterBig'
   - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterBig (1)'
-  - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterHuge'
+  - 'HOLDER: Store/HOLDER: Ceiling Meshes/*Bazaar_StalagmiteClusterHuge'
   - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterHuge (1)'
   - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterHuge (2)'
   - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_StalagmiteClusterHuge (3)'
@@ -63,8 +69,8 @@ MonoBehaviour:
     paths:
     - 'HOLDER: Starting Cave/Static/Bazaar_CaveMain'
     - 'HOLDER: Starting Cave/Static/Bazaar_CaveInitialPath'
-    - 'HOLDER: Starting Cave/Static/Bazaar_CaveWall'
-    - 'HOLDER: Store/HOLDER: Ceiling Meshes/Bazaar_CaveCeilingLarge'
+    - 'HOLDER: Starting Cave/Static/*Bazaar_CaveWall'
+    - 'HOLDER: Store/HOLDER: Ceiling Meshes/*Bazaar_CaveCeilingLarge'
     - 'HOLDER: Store/HOLDER: Store Platforms/Bazaar_Platform'
     - 'HOLDER: Store/HOLDER: Store Platforms/Bazaar_Platform (1)'
     - 'HOLDER: Store/HOLDER: Store Platforms/Bazaar_Platform (2)'

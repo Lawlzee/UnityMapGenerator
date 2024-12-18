@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: GolemplainsDef
+  m_EditorClassIdentifier: 
+  sceneName: golemplains
+  assetKey: RoR2/Base/golemplains/golemplains.unity
+  nameToken: 
+  propKindCount: 10
+  propCeillingWeight: 0.15770087
+  propCountWeight: 1
+  gameObjectsToDisable:
+  - 'FOLIAGE: Grass'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - '"HOLDER: Boulders/Rocks"/GiantRocks/*GPGiantRockSlab'
+  - '"HOLDER: Boulders/Rocks"/Boulders_HeavyMoss/*GP_BBBoulder'
+  - '"HOLDER: Boulders/Rocks"/Boulders_ProjectedMoss/*GP_BBBoulder'
+  - 'HOLDER: Ruined Pieces/*'
+  - 'HOLDER: Ruined Pieces/*/*'
+  - 'HOLDER: Ribcage/*'
+  - 'HOLDER: Skybox Props/Rings/*'
+  - 'HOLDER: Skybox Props/"Boulders/Rocks"/*'
+  - 'HOLDER: Terrain Blender/*GPTerrainBlender'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Terrain/GPTerrainMesh'
+    - 'HOLDER: Terrain/GPTerrainMeshDistant'
+    - 'HOLDER: Terrain/GPTerrainBackwall'
+    - 'HOLDER: Terrain/GPTerrainBackwall (1)'
+    - 'HOLDER: Terrain/GPTerrainColumn'
+    - 'HOLDER: Terrain/GPTerrainColumn (1)'
+    - 'HOLDER: Terrain/GPTerrainColumn (3)'
+    floorMesh: {fileID: 4300000, guid: 015525e6646fce04e859f2e78443422b, type: 2}
+    ceilMesh: {fileID: 4300000, guid: ca1a4e2fbfa0a7e4c9aa2470da5ec9b4, type: 2}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 56.20845, y: -123.74124, z: -137.66655}
+    m_Extent: {x: 241.60912, y: 40.85439, z: 268.84705}

@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: FoggyswampDef
+  m_EditorClassIdentifier: 
+  sceneName: foggyswamp
+  assetKey: RoR2/Base/foggyswamp/foggyswamp.unity
+  nameToken: 
+  propKindCount: 12
+  propCeillingWeight: 0.2
+  propCountWeight: 1
+  gameObjectsToDisable:
+  - 'HOLDER: Boulders'
+  - 'HOLDER: Foliage'
+  - '*RoachPlaceholder(Clone)'
+  - 'HOLDER: Hidden Altar Stuff/Foliage'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (1)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (2)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (3)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (4)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (5)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (6)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (7)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (8)'
+  - 'HOLDER: Hidden Altar Stuff/FSBoulderMedium (9)'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSTreeTrunkEnormousNoCollisionSkybox/Mesh'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSTreeTrunkEnormousCollision/Mesh'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSRootBundleLargeCollision
+    (1)/RootBundleLarge_LOD0'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSRootBundleLargeCollision
+    (1)/RootBundleLarge_LOD1'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSRootBundleLargeCollision
+    (1)/RootBundleLarge_LOD2'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSRootBundleSmallNoCollision/*'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSRootBundleSmallNoCollision
+    (1)/*'
+  - 'HOLDER: Tree Trunks w Collision/CompositeTreeTrunk/FSTreeTrunkEnormousCollision
+    (2)/Mesh'
+  - 'HOLDER: Tree Trunks w Collision/*/Mesh'
+  - 'HOLDER: Skybox/SkyboxTrees/*/Mesh'
+  - 'HOLDER: Ruin Pieces/*'
+  - 'HOLDER: Ruin Pieces/*/Mesh'
+  - 'HOLDER: Giant Gates/*FSGiantRuinFrameDoorCollision/*'
+  - 'HOLDER: Blenders/*'
+  - 'HOLDER: Ruin Pieces/FSGiantRuinFrameCollision/FrameMesh'
+  - 'HOLDER: Ruin Pieces/*/FSRuinRingCollision'
+  - 'HOLDER: Tree Trunks w Collision/*/FSRuinRingCollision'
+  - 'HOLDER: OOB TREE/*FSTreeTrunkLongCollision/Mesh'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Hero Assets/Terrain/FSWallMeshHero/Mesh'
+    - 'HOLDER: Hero Assets/Terrain/FCTerrainCluster1'
+    - 'HOLDER: Hero Assets/Terrain/FCTerrainCluster2'
+    - 'HOLDER: Hero Assets/Terrain/FCTerrainCluster3'
+    - 'HOLDER: Hero Assets/Terrain/FSFloor'
+    floorMesh: {fileID: 4300000, guid: 8bce0b0236bf6bc42a414ad75dbb33ee, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 46215d52ee9d9674ca96be02f8891dc6, type: 2}
+  - gateName: Gate3
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Gate1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Gate2
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 77.11422, y: -114.182526, z: -133.5448}
+    m_Extent: {x: 238.9596, y: 51.435696, z: 259.9548}

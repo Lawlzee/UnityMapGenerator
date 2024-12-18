@@ -276,12 +276,12 @@ namespace ProceduralStages
                     : null
             });
 
-            string debugPath = string.Join(
-                ", ",
-                parts
-                    .Select(x => $"{(x.quoted ? "[quoted] " : "")}{(x.many ? "[*] " : "")}{x.subPath ?? "<null>"}"));
-
-            Log.Debug($"{path}= {debugPath}");
+            //string debugPath = string.Join(
+            //    ", ",
+            //    parts
+            //        .Select(x => $"{(x.quoted ? "[quoted] " : "")}{(x.many ? "[*] " : "")}{x.subPath ?? "<null>"}"));
+            //
+            //Log.Debug($"{path}= {debugPath}");
 
             return parts;
         }

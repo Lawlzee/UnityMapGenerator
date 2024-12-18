@@ -1,21 +1,19 @@
-using ProceduralStages;
+using RoR2;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
-using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
 
 namespace ProceduralStages
 {
     public class SceneLoader : MonoBehaviour
     {
-        public string sceneName;
+        public VanillaStageDef scene;
         public GameObject[] prefabs;
 
         void Start()
         {
             Init(prefabs);
-            Addressables.LoadSceneAsync(sceneName);
+            Addressables.LoadSceneAsync(scene.assetKey);
         }
 
         public static void Init(GameObject[] prefabs)

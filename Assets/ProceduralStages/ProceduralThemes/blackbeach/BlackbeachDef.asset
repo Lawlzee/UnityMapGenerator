@@ -21,13 +21,6 @@ MonoBehaviour:
   gameObjectsToDisable:
   - 'HOLDER: Grass'
   - FOLIAGE
-  - GAMEPLAY SPACE/Ruins/*
-  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0 (1)
-  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0
-  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Open/BbRuinMarker_LOD0 (12)
-  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Open/BbRuinMarker_LOD0 (13)
-  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Closed/BbRuinMarker_LOD0 (12)
-  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Closed/BbRuinMarker_LOD0 (13)
   - GAMEPLAY SPACE/Grass
   - GAMEPLAY SPACE/Terrain/blackbeachIslandBridge/*
   - SKYBOX/bbDistantPillar/*
@@ -43,24 +36,8 @@ MonoBehaviour:
   - SKYBOX/bbDistantPillar (10)/*
   - SKYBOX/bbDistantPillar (11)/*
   - SKYBOX/bbDistantPillar (12)/*
-  - mdlBBBoulderMediumFlat1
-  - mdlBBBoulderMediumFlat1 (1)
-  - mdlBBBoulderMediumFlat1 (2)
-  - mdlBBBoulderMediumFlat1 (3)
-  - mdlBBBoulderMediumFlat1 (4)
-  - mdlBBBoulderMediumFlat1 (5)
-  - mdlBBBoulderMediumFlat1 (7)
-  - PebbleBlackbeach
-  - BBRockyTerrainBlender1 (5)
-  - BBRockyTerrainBlender1 (4)
-  - BBRockyTerrainBlender1 (3)
-  - BBRockyTerrainBlender1 (2)
-  - BBRockyTerrainBlender1 (1)
-  - BBRockyTerrainBlender1
-  - mdlBBBoulderMediumRound1
-  - mdlBBBoulderMediumRound1 (26)
-  - PebbleBlackbeach
-  - mdlBBBoulderMediumRound1
+  - GAMEPLAY SPACE/"Boulders/Pebbles"
+  - 'HOLDER: Artifact Formula/*mdlBBBoulderMediumRound1'
   gameObjectsToEnable:
   - GAMEPLAY SPACE/Ruins/BbRuinGateOpen
   - SKYBOX/bbDistantPillar/Foam
@@ -76,7 +53,13 @@ MonoBehaviour:
   - SKYBOX/bbDistantPillar (11)/Foam
   - SKYBOX/bbDistantPillar (12)/Foam
   - SKYBOX/bbDistantPillar/Foam (1)
-  meshesToColor: []
+  meshesToColor:
+  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0 (1)
+  - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0
+  - GAMEPLAY SPACE/Ruins/*
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Open/*
+  - GAMEPLAY SPACE/GATED STUFF/DownstairsGate, Closed/*
+  - GAMEPLAY SPACE/Ruins/BbRuinGateOpen/BbRuinGate_LOD0
   terrainMeshes:
   - gateName: 
     paths:

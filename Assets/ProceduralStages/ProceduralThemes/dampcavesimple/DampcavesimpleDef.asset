@@ -107,6 +107,12 @@ MonoBehaviour:
   - 'HOLDER: Gameplay Space/DCGiantRockSlab (4)'
   - 'HOLDER: Gameplay Space/Giant Chains/*'
   - 'HOLDER: Gameplay Space/Giant Chains/Gated Chains/*'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision (2)/Mesh'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision (1)/Mesh'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision/Mesh'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision (4)/Mesh'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision (5)/Mesh'
+  - 'HOLDER: Gameplay Space/Ruins/DCRuinPillarCollision (6)/Mesh'
   terrainMeshes:
   - gateName: 
     paths:

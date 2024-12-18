@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: GoolakeDef
+  m_EditorClassIdentifier: 
+  sceneName: goolake
+  assetKey: RoR2/Base/goolake/goolake.unity
+  nameToken: 
+  propKindCount: 12
+  propCeillingWeight: 0.18616182
+  propCountWeight: 1
+  gameObjectsToDisable:
+  - 'HOLDER: GameplaySpace/SandstonePillars'
+  - 'HOLDER: GameplaySpace/Gates/ScatteredPillars'
+  - 'HOLDER: Misc Props/Foliage'
+  - 'HOLDER: Misc Props/Pebbles'
+  - 'HOLDER: Misc Props/SimpleGrass'
+  - 'HOLDER: Secret Ring Area Content/ApproxCenter/Foliage'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - 'HOLDER: GameplaySpace/SandDunes/*GL_SandDune'
+  - 'HOLDER: GameplaySpace/mdlGooLake'
+  - 'HOLDER: GameplaySpace/*mdlGlDam'
+  - 'HOLDER: GameplaySpace/*mdlGlDam/GL_AqueductPartial'
+  - 'HOLDER: Misc Props/Props/*GL_EelSkeleton/EelSkeletonSkull'
+  - 'HOLDER: Misc Props/Props/*GL_EelSkeleton/EelSkeletonSpine'
+  - 'HOLDER: GameplaySpace/Gates/BridgeOverGooOn/*'
+  - 'HOLDER: GameplaySpace/Gates/BridgeOverGooOff/*'
+  - 'HOLDER: GameplaySpace/Gates/BlockPath1/*'
+  - 'HOLDER: GameplaySpace/Rocks/*GL_BBBoulder'
+  - 'HOLDER: GameplaySpace/Gates/SmallBridge/*'
+  - 'HOLDER: Secret Ring Area Content/Entrance/GLRuinGate/BbRuinGate_LOD0'
+  - 'HOLDER: Secret Ring Area Content/Entrance/GLRuinGate/DoorSliderRight/PressureDoorRight'
+  - 'HOLDER: Secret Ring Area Content/Entrance/GLRuinGate/DoorSliderLeft/PressureDoorLeft'
+  - 'HOLDER: Secret Ring Area Content/ApproxCenter/Floor/*'
+  - 'HOLDER: Secret Ring Area Content/ApproxCenter/CaveSpines/*'
+  - 'HOLDER: Secret Ring Area Content/ApproxCenter/TunnelRings/*'
+  - 'HOLDER: Secret Ring Area Content/ApproxCenter/*GL_SandstonePillars'
+  - '"HOLDER: Skybox/OOB"/*GL_AqueductFullLong'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: GameplaySpace/GL_Terrain'
+    floorMesh: {fileID: 4300000, guid: 1150ae3a9bd0fc3458a0707e82213f2b, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 6e4765acd80ca1745b9425fe4e8550b9, type: 2}
+  - gateName: Path1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: BridgeOverGoo
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: SmallBridge1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: SmallBridge3
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: RingEvent
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: SmallBridge2
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: SmallBridge4
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: SmallBridge5
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 121.74524, y: -113.60924, z: -55.359528}
+    m_Extent: {x: 216.90097, y: 64.02284, z: 353.63535}

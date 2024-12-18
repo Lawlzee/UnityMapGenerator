@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: FrozenwallDef
+  m_EditorClassIdentifier: 
+  sceneName: frozenwall
+  assetKey: RoR2/Base/frozenwall/frozenwall.unity
+  nameToken: 
+  propKindCount: 12
+  propCeillingWeight: 0.27692673
+  propCountWeight: 1.25
+  gameObjectsToDisable:
+  - 'HOLDER: Foliage'
+  - 'HOLDER: Artifact Formula Area/*spmFWPine1'
+  - 'HOLDER: Skybox/FW_GlacierChunk2'
+  - 'HOLDER: Skybox/FW_GlacierChunk2 (1)'
+  - 'HOLDER: Skybox/FW_GlacierChunk2 (2)'
+  - 'HOLDER: Skybox/FW_GlacierChunk3'
+  - 'HOLDER: Skybox/FW_GlacierChunk3 (1)'
+  - 'HOLDER: ShippingCenter/HOLDER: Cloth'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - 'HOLDER: GAMEPLAY SPACE/HOLDER:GlacierChunks/*'
+  - 'HOLDER: GAMEPLAY SPACE/HOLDER:GlacierChunks/*/*'
+  - 'HOLDER: GAMEPLAY SPACE/*FW_PillarSkinnyShort'
+  - 'HOLDER: GAMEPLAY SPACE/*FW_PillarSkinnyTall'
+  - 'HOLDER: Dunes and Snow Piles/*'
+  - 'HOLDER: Stalagmites/*'
+  - 'HOLDER: Stalactite/*'
+  - 'HOLDER: Stalactite/Arch/*'
+  - 'HOLDER: Artifact Formula Area/FW_GlacierChunk2'
+  - 'HOLDER: Artifact Formula Area/*FW_GlacierChunk2'
+  - 'HOLDER: Artifact Formula Area/*FW_GlacierChunk3'
+  - 'HOLDER: Artifact Formula Area/FW_SnowPile'
+  - 'HOLDER: Skybox/FW_DistantGlacier1'
+  - 'HOLDER: Skybox/FW_DistantGlacier1 (1)'
+  - 'HOLDER: Skybox/FW_DistantGlacier2'
+  - 'HOLDER: Skybox/FW_DistantGlacier2 (1)'
+  - 'HOLDER: Skybox/FW_DistantGlacier2 (2)'
+  - 'HOLDER: Skybox/FW_DistantGlacier2 (3)'
+  - 'HOLDER: Skybox/FW_DistantGlacier2 (4)'
+  - 'HOLDER: Skybox/FW_DistantGlacier2 (5)'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: GAMEPLAY SPACE/FW_TerrainGameplaySpace'
+    - 'HOLDER: Artifact Formula Area/FW_FloatingIsland1'
+    floorMesh: {fileID: 4300000, guid: 9721508d6d3eac5459773f9af6a15b58, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 86bbef01e6d5a904593ed6a7e7e0ff78, type: 2}
+  - gateName: HopOverWall
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: UpperHiddenPath
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: GroundToSmallPath
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: LShapeScaffolding
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: HighScaffolding
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: GroundToCrate
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: StaircaseScaffolding
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 5.93692, y: 63.667084, z: -4.962387}
+    m_Extent: {x: 286.2963, y: 74.599, z: 263.13727}
