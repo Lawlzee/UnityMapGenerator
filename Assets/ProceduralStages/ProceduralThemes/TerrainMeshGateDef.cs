@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AI;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -48,12 +50,22 @@ namespace ProceduralStages
 
                 foreach (string path in paths)
                 {
-                    foreach (Transform tranform in vanillaStageDef.FindMany(path))
+                    foreach (GameObject gameObject in GameObjectUtils.FindMany(path))
                     {
-                        Mesh mesh = tranform.GetComponent<MeshFilter>().sharedMesh;
+                        Mesh mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
+                        if (!mesh.isReadable)
+                        {
+                            if (!gameObject.TryGetComponent(out MeshCollider meshCollider))
+                            {
+                                continue;
+                            }
+
+                            mesh = meshCollider.sharedMesh;
+                        }
+
                         meshes.Add(new MeshInfo
                         {
-                            localToWorldMatrix = tranform.localToWorldMatrix,
+                            localToWorldMatrix = gameObject.transform.localToWorldMatrix,
                             vertices = mesh.vertices,
                             triangles = mesh.triangles,
                             normals = mesh.normals
@@ -62,6 +74,13 @@ namespace ProceduralStages
                 }
 
                 ProfilerLog.Info($"{meshes.Count} meshes found");
+
+                if (meshes.Count == 0)
+                {
+                    this.floorMesh = null;
+                    this.ceilMesh = null;
+                    return;
+                }
 
                 MeshState[] floorStates = new MeshState[meshes.Count];
                 MeshState[] ceilStates = new MeshState[meshes.Count];

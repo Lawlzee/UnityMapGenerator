@@ -21,7 +21,6 @@ MonoBehaviour:
   gameObjectsToDisable:
   - 'HOLDER: Grass'
   - FOLIAGE
-  - GAMEPLAY SPACE/Boulders/Pebbles
   - GAMEPLAY SPACE/Ruins/*
   - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0 (1)
   - GAMEPLAY SPACE/GATED STUFF/BbRuinPillar1_LOD0
@@ -44,7 +43,24 @@ MonoBehaviour:
   - SKYBOX/bbDistantPillar (10)/*
   - SKYBOX/bbDistantPillar (11)/*
   - SKYBOX/bbDistantPillar (12)/*
-  - GAMEPLAY SPACE/Boulders/Pebbles
+  - mdlBBBoulderMediumFlat1
+  - mdlBBBoulderMediumFlat1 (1)
+  - mdlBBBoulderMediumFlat1 (2)
+  - mdlBBBoulderMediumFlat1 (3)
+  - mdlBBBoulderMediumFlat1 (4)
+  - mdlBBBoulderMediumFlat1 (5)
+  - mdlBBBoulderMediumFlat1 (7)
+  - PebbleBlackbeach
+  - BBRockyTerrainBlender1 (5)
+  - BBRockyTerrainBlender1 (4)
+  - BBRockyTerrainBlender1 (3)
+  - BBRockyTerrainBlender1 (2)
+  - BBRockyTerrainBlender1 (1)
+  - BBRockyTerrainBlender1
+  - mdlBBBoulderMediumRound1
+  - mdlBBBoulderMediumRound1 (26)
+  - PebbleBlackbeach
+  - mdlBBBoulderMediumRound1
   gameObjectsToEnable:
   - GAMEPLAY SPACE/Ruins/BbRuinGateOpen
   - SKYBOX/bbDistantPillar/Foam
@@ -60,6 +76,7 @@ MonoBehaviour:
   - SKYBOX/bbDistantPillar (11)/Foam
   - SKYBOX/bbDistantPillar (12)/Foam
   - SKYBOX/bbDistantPillar/Foam (1)
+  meshesToColor: []
   terrainMeshes:
   - gateName: 
     paths:
@@ -86,19 +103,18 @@ MonoBehaviour:
     ceilMesh: {fileID: 4300000, guid: 5f492cf4a66dcaf4da262ee8a713ba67, type: 2}
   - gateName: Lookout
     paths: []
-    floorMesh: {fileID: 4300000, guid: e919d9eb6c1bb4f47ae17b3b0ecf4662, type: 2}
-    ceilMesh: {fileID: 4300000, guid: 078b5fbd3adc7a94f88e84a80e5702b2, type: 2}
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
   - gateName: OverlookPillar2
     paths: []
-    floorMesh: {fileID: 4300000, guid: 76a8f3ef26f42ed468df5de73c888b50, type: 2}
-    ceilMesh: {fileID: 4300000, guid: ac89c58932af5f24c9795f5ed0861e44, type: 2}
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
   - gateName: OverlookPillar1
     paths: []
-    floorMesh: {fileID: 4300000, guid: 3f9cd25fd020d27409a82eb0466a0a28, type: 2}
-    ceilMesh: {fileID: 4300000, guid: fd39d1e0672e7b541a2a3204bf873f3d, type: 2}
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
   minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: -44.023285, y: -168.01088, z: -160.65698}
     m_Extent: {x: 283.92886, y: 88.110886, z: 230.857}
-  propsDensity: 0

@@ -16,8 +16,8 @@ MonoBehaviour:
   assetKey: RoR2/Base/blackbeach2/blackbeach2.unity
   nameToken: MAP_BLACKBEACH_TITLE
   propKindCount: 12
-  propCeillingWeight: 0.5799966
-  propCountWeight: Infinity
+  propCeillingWeight: 0.5
+  propCountWeight: 0.6
   gameObjectsToDisable:
   - 'HOLDER: Trees'
   - 'HOLDER: Rocks/GROUP: Boulders/*'
@@ -37,13 +37,16 @@ MonoBehaviour:
   - 'HOLDER: Rocks/GROUP: Detail'
   - 'HOLDER: Terrain/blackbeach2_terrain/Pillar/Foliage'
   - 'HOLDER: Terrain/blackbeach2_terrain/Pillar/Rocks'
+  - 'HOLDER: Distant Terrain/bbDistantPillar/*'
   gameObjectsToEnable:
   - 'HOLDER: Rocks/GROUP: Boulders/mdlBBBoulderMediumFlat1 (4)'
+  meshesToColor: []
   terrainMeshes:
   - gateName: 
     paths:
     - 'HOLDER: Terrain/blackbeach2_terrain/Terrain'
     - 'HOLDER: Distant Terrain/bbDistantPillar'
+    - 'HOLDER: Rocks/GROUP: Boulders/mdlBBBoulderMediumFlat1 (4)'
     floorMesh: {fileID: 4300000, guid: d2825ee2f6405c548b15924c8ce49a34, type: 2}
     ceilMesh: {fileID: 4300000, guid: ca686715f3c08b7458303120fe9b9e49, type: 2}
   - gateName: Pillar
@@ -53,8 +56,8 @@ MonoBehaviour:
     ceilMesh: {fileID: 4300000, guid: 98d003e78afad204b95643ebad47cb4e, type: 2}
   - gateName: Gate
     paths: []
-    floorMesh: {fileID: 4300000, guid: ee149c51a6fdd5741a797261a0265ffb, type: 2}
-    ceilMesh: {fileID: 4300000, guid: ccad1d95a58c1414fbed2af646624665, type: 2}
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
   - gateName: Shelf
     paths:
     - 'HOLDER: Terrain/blackbeach2_terrain/Shelf'
@@ -65,4 +68,3 @@ MonoBehaviour:
   mapBounds:
     m_Center: {x: -105.34941, y: 52.72746, z: 7.1233597}
     m_Extent: {x: 271.5006, y: 70.21942, z: 178.7367}
-  propsDensity: 0

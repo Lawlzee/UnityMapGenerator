@@ -10,6 +10,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace ProceduralStages
@@ -25,6 +26,7 @@ namespace ProceduralStages
         public float propCountWeight = 1f;
         public string[] gameObjectsToDisable;
         public string[] gameObjectsToEnable;
+        public string[] meshesToColor;
         public TerrainMeshGateDef[] terrainMeshes;
         public string sceneInfo = "SceneInfo";
         public float minFloorAngle = 0.35f;
@@ -35,17 +37,17 @@ namespace ProceduralStages
         {
             foreach (string path in gameObjectsToDisable)
             {
-                foreach (Transform tranform in FindMany(path))
+                foreach (GameObject gameObject in GameObjectUtils.FindMany(path))
                 {
-                    tranform.gameObject.SetActive(false);
+                    gameObject.SetActive(false);
                 }
             }
 
             foreach (string path in gameObjectsToEnable)
             {
-                foreach (Transform tranform in FindMany(path))
+                foreach (GameObject gameObject in GameObjectUtils.FindMany(path))
                 {
-                    tranform.gameObject.SetActive(true);
+                    gameObject.SetActive(true);
                 }
             }
         }
@@ -58,42 +60,55 @@ namespace ProceduralStages
         {
             SurfaceDef surfaceDef = materialInfo.floorTexture.surfaceDef;
 
-            foreach (TerrainMeshGateDef terrainMeshDef in terrainMeshes)
+            List<string> paths = meshesToColor
+                .Concat(terrainMeshes
+                    .SelectMany(x => x.paths))
+                .ToList();
+
+            foreach (var path in paths)
             {
-                foreach (var path in terrainMeshDef.paths)
+                foreach (GameObject gameObject in GameObjectUtils.FindMany(path))
                 {
-                    foreach (Transform tranform in FindMany(path))
+                    if (!gameObject.TryGetComponent(out Renderer renderer))
                     {
-                        Renderer renderer = tranform.GetComponent<Renderer>();
-                        renderer.material = new Material(terrainMaterial);
-
-                        materialInfo.ApplyTo(renderer.material);
-
-                        SurfaceDefProvider surfaceDefProvider = tranform.GetComponent<SurfaceDefProvider>();
-                        if (surfaceDef != null && surfaceDefProvider != null)
-                        {
-                            surfaceDefProvider.surfaceDef = surfaceDef;
-                        }
-
-                        MeshFilter meshFilter = tranform.GetComponent<MeshFilter>();
-                        MeshCollider meshCollider = tranform.GetComponent<MeshCollider>();
-                        Mesh mesh = Instantiate(meshFilter.sharedMesh.isReadable
-                            ? meshFilter.sharedMesh
-                            : meshCollider.sharedMesh);
-
-                        meshColorer.ColorMesh(
-                            new MeshResult
-                            {
-                                mesh = mesh,
-                                vertices = mesh.vertices,
-                                normals = mesh.normals,
-                                verticesLength = mesh.vertexCount
-                            },
-                            tranform.localToWorldMatrix,
-                            rng);
-
-                        meshFilter.sharedMesh = mesh;
+                        continue;
                     }
+                    renderer.material = new Material(terrainMaterial);
+
+                    materialInfo.ApplyTo(renderer.material);
+
+                    SurfaceDefProvider surfaceDefProvider = gameObject.GetComponent<SurfaceDefProvider>();
+                    if (surfaceDef != null && surfaceDefProvider != null)
+                    {
+                        surfaceDefProvider.surfaceDef = surfaceDef;
+                    }
+
+                    MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
+                    Mesh baseMesh = meshFilter.mesh.isReadable
+                        ? meshFilter.mesh
+                        : gameObject.TryGetComponent(out MeshCollider meshCollider)
+                            ? meshCollider.sharedMesh
+                            : null;
+
+                    if (baseMesh == null)
+                    {
+                        continue;
+                    }
+
+                    Mesh mesh = Instantiate(baseMesh);
+
+                    meshColorer.ColorMesh(
+                        new MeshResult
+                        {
+                            mesh = mesh,
+                            vertices = mesh.vertices,
+                            normals = mesh.normals,
+                            verticesLength = mesh.vertexCount
+                        },
+                        gameObject.transform.localToWorldMatrix,
+                        rng);
+
+                    meshFilter.sharedMesh = mesh;
                 }
             }
         }
@@ -109,7 +124,12 @@ namespace ProceduralStages
 
             foreach (var terrainMesh in terrainMeshes)
             {
-                if (terrainMesh.gateName == "" 
+                if (!terrainMesh.floorMesh)
+                {
+                    continue;
+                }
+
+                if (terrainMesh.gateName == ""
                     || nodeGraph == null
                     || nodeGraph.IsGateOpen(terrainMesh.gateName))
                 {
@@ -127,75 +147,36 @@ namespace ProceduralStages
                 return (floorMeshes[0], ceilMeshes[0]);
             }
 
+            int floorVertexCount = 0;
             CombineInstance[] combine = new CombineInstance[floorMeshes.Count];
             for (int i = 0; i < floorMeshes.Count; i++)
             {
                 combine[i].mesh = floorMeshes[i];
                 combine[i].transform = Matrix4x4.identity;
+
+                floorVertexCount += floorMeshes[i].vertexCount;
             }
 
             Mesh floorMesh = new Mesh();
+            floorMesh.indexFormat = floorVertexCount <= ushort.MaxValue
+                ? IndexFormat.UInt16
+                : IndexFormat.UInt32;
             floorMesh.CombineMeshes(combine);
 
+            int ceilVertexCount = 0;
             for (int i = 0; i < ceilMeshes.Count; i++)
             {
                 combine[i].mesh = ceilMeshes[i];
+                ceilVertexCount += ceilMeshes[i].vertexCount;
             }
 
             Mesh ceilMesh = new Mesh();
+            ceilMesh.indexFormat = ceilVertexCount <= ushort.MaxValue
+                ? IndexFormat.UInt16
+                : IndexFormat.UInt32;
             ceilMesh.CombineMeshes(combine);
 
             return (floorMesh, ceilMesh);
-        }
-
-        public IEnumerable<Transform> FindMany(string path)
-        {
-            bool allChild = path.EndsWith("/*");
-            if (allChild)
-            {
-                path = path.Substring(0, path.Length - 2);
-                Debug.Log(path);
-            }
-
-            GameObject gameObject = GameObject.Find(path);
-            if (gameObject != null)
-            {
-                var parent = allChild
-                    ? gameObject.transform
-                    : gameObject.transform.parent;
-
-                if (parent == null)
-                {
-                    GameObject[] rootObjects = SceneManager.GetActiveScene().GetRootGameObjects();
-
-                    for (int i = 0; i < rootObjects.Length; i++)
-                    {
-                        GameObject child = rootObjects[i];
-                        if (allChild || child.name == gameObject.name)
-                        {
-                            yield return child.transform;
-                        }
-                    }
-                }
-                else
-                {
-                    int siblingCount = parent.childCount;
-
-                    for (int i = 0; i < siblingCount; i++)
-                    {
-                        Transform child = parent.GetChild(i);
-                        if (allChild || child.name == gameObject.name)
-                        {
-                            yield return child;
-                        }
-                    }
-                }
-
-            }
-            else
-            {
-                Log.Warning($"GameObject {path} not found");
-            }
         }
 
 #if UNITY_EDITOR
@@ -310,10 +291,12 @@ namespace ProceduralStages
         public void BakePropWeights()
         {
             int ceilVertexCount = terrainMeshes
+                .Where(x => x.ceilMesh)
                 .Select(x => x.ceilMesh.vertexCount)
                 .Sum();
 
             int floorVertexCount = terrainMeshes
+                .Where(x => x.floorMesh)
                 .Select(x => x.floorMesh.vertexCount)
                 .Sum();
 

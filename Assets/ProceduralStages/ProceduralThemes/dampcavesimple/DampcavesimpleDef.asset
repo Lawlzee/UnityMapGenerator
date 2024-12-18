@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: DampcavesimpleDef
+  m_EditorClassIdentifier: 
+  sceneName: dampcavesimple
+  assetKey: RoR2/Base/dampcavesimple/dampcavesimple.unity
+  nameToken: MAP_DAMPCAVE_TITLE
+  propKindCount: 12
+  propCeillingWeight: 0.5591541
+  propCountWeight: 2
+  gameObjectsToDisable:
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroSwitchback/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroSwitchback/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroSmallWall/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveWalls/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveWalls/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroFloor/*'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroBackWall/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroBackWall/*DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroBackWall/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/*DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (1)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (2)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (3)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (4)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (5)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (6)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (7)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCBoulderMedium (8)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossSpread'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossCluster'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossSpread (1)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossSpread (2)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossCluster (1)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossSpread (3)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossSpread (4)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossCluster (2)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/spmDanglingMossCluster (3)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1/*DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (1)/DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (1)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (1)/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (2)/DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (2)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (1)/*DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (1)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (3)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (3)/DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (2)/*DCBoulderMedium'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (2)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (2)/*spmDCFern1'
+  - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (3)/*spmDCGrass'
+  - 'HOLDER: Gameplay Space/Heroes/DCTerrainBackwall/*'
+  - 'HOLDER: Coral and Vents'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/*spmDCGrass'
+  - 'HOLDER: Foliage/*'
+  gameObjectsToEnable:
+  - 'HOLDER: Foliage/FSRootBundleLargeNoCollision (1)'
+  - 'HOLDER: Foliage/*FSRootBundleLargeNoCollision'
+  meshesToColor:
+  - 'HOLDER: Skybox/OOB/WALLS/InnerLayer/*'
+  - 'HOLDER: Skybox/OOB/WALLS/MiddleLayer/*'
+  - 'HOLDER: Skybox/OOB/WALLS/OuterLayer/*'
+  - 'HOLDER: Skybox/OOB/CEILING/LowerLayer/*'
+  - 'HOLDER: Skybox/OOB/CEILING/MiddleLayer/*'
+  - 'HOLDER: Skybox/OOB/CEILING/TopLayer/*'
+  - 'HOLDER: Gameplay Space/Terrain Columns/*'
+  - 'HOLDER: Gameplay Space/Boulders/*'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveCeiling/*DCStalagmiteSingle'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveWalls/*DCStalagmiteSingle'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillar/*DCStalagmiteSingle'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillar/*DCStalagmiteClusterBig'
+  - 'HOLDER: Gameplay Space/Heroes/DCHeroBackWall/*DCStalagmiteSingle'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (1)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (2)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (3)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (4)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (5)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (6)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (7)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (8)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (9)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (10)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (11)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (12)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (13)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (14)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (15)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/DCStalagmiteCluster (16)'
+  - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster/*DCStalagmiteSingle'
+  - 'HOLDER: Gameplay Space/DCGiantRockSlab'
+  - 'HOLDER: Gameplay Space/DCGiantRockSlab (1)'
+  - 'HOLDER: Gameplay Space/DCGiantRockSlab (3)'
+  - 'HOLDER: Gameplay Space/DCGiantRockSlab (4)'
+  - 'HOLDER: Gameplay Space/Giant Chains/*'
+  - 'HOLDER: Gameplay Space/Giant Chains/Gated Chains/*'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroSwitchback'
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroSmallWall'
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveCeiling'
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroCaveWalls'
+    - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillar'
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroFloor'
+    - 'HOLDER: Gameplay Space/Heroes/DCHeroBackWall'
+    - 'HOLDER: Gameplay Space/Heroes/*DCHeroPillarCluster'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (1)'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (2)'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (1)'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab2 (3)'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (2)'
+    - 'HOLDER: Gameplay Space/Heroes/DCGiantStoneSlab1 (3)'
+    - 'HOLDER: Gameplay Space/Heroes/DCTerrainBackwall'
+    floorMesh: {fileID: 4300000, guid: d92314c198b946f4d8a9cf057f84f7f6, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 075a9477c50067641935300d9d37f055, type: 2}
+  - gateName: Chain7
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain4
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain5
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain2
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain3
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Cave
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Chain6
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  sceneInfo: SceneInfo
+  minFloorAngle: 0.35
+  mapBounds:
+    m_Center: {x: 20.1419, y: -125.90427, z: -274.0376}
+    m_Extent: {x: 224.67572, y: 60.20271, z: 350.0959}
