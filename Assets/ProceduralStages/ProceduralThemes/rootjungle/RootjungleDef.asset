@@ -14,16 +14,108 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: rootjungle
   assetKey: RoR2/Base/rootjungle/rootjungle.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
   propKindCount: 12
-  propCeillingWeight: 0.5
+  propCeillingWeight: NaN
   propCountWeight: 1
-  gameObjectsToDisable: []
+  gameObjectsToDisable:
+  - 'HOLDER: Props/GROUP: Mushrooms/*RJ_ShroomSmall'
+  - 'HOLDER: Props/GROUP: Rocks'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Root Bridge Front
+    Chest/*RJHangingMoss_Prefab'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Root Bridge Front
+    Chest/*spmFern1'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Root Bridge Front
+    Chest/*RJ_Pebble'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Root Bridge Front
+    Chest/*RJMossFoliage'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Mushroom Cave Chest/*RJHangingMoss_Prefab'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/*RJ_Pebble'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_Rock'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_ShroomBig'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_ShroomSmall'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/*spmRJgrass2'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/*spmRJgrass1'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/*RJHangingMoss'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/*spmRJgrass1'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/*spmRJgrass2'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/*RJHangingMoss'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/*spmFern1'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/*RJHangingMoss'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/*spmFern1'
+  - 'HOLDER: Foliage/GROUP: ShroomFoliage'
+  - 'HOLDER: Foliage/GROUP: MossPatch Foliage'
+  - 'HOLDER: Foliage/GROUP: TreeBigFoliage'
+  - 'HOLDER: Foliage/GROUP: HangingMoss'
+  - 'HOLDER: Foliage/GROUP: Ferns'
+  - 'HOLDER: Foliage/GROUP: Grass'
   gameObjectsToEnable: []
-  meshesToColor: []
-  terrainMeshes: []
+  meshesToColor:
+  - 'HOLDER: Terrain/RJ_Root Bridge'
+  - 'HOLDER: Terrain/RJ_Tree Downed'
+  - 'HOLDER: Terrain/RJ_Tree Downed Ring'
+  - 'HOLDER: Terrain/RJ_Tree Downed Top Section'
+  - 'HOLDER: Terrain/RJ_Tree Gianticus'
+  - 'HOLDER: Terrain/RJ_Vine Tree'
+  - 'HOLDER: Terrain/RJ_Wall East'
+  - 'HOLDER: Terrain/RJ_Wall NorthWest'
+  - 'HOLDER: Props/GROUP: Ruins/*'
+  - 'HOLDER: Props/GROUP: Roots/*'
+  - 'HOLDER: Props/GROUP: Mushrooms/*RJ_ShroomBig'
+  - 'HOLDER: Props/GROUP: Mushrooms/*RJ_ShroomShelf'
+  - 'HOLDER: Props/GROUP: Moss/*'
+  - 'HOLDER: Randomization/GROUP: Large Treasure Chests/CHOICE: Root Bridge Front
+    Chest/RJ_Root Bridge Front'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_Root1'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_RootBridgeRandom'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_RuinArch'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/*RJ_Triangle'
+  - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: NO Tunnel Landmass/*'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/RJ_Rock Holder'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/RJ_Rock Holder 2'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/RJ_Rock Raised 3'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/RJ_Rock Raised 4'
+  - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/RJ_Rock Raised 5'
+  - 'HOLDER: Randomization/GROUP: Underground Shortcut/CHOICE: Closed/*RJ_Rock'
+  - 'HOLDER: Terrain/RJ_Tree Big Bottom'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Terrain/RJ_Terrain Middle'
+    - 'HOLDER: Terrain/RJ_Terrain North'
+    - 'HOLDER: Terrain/RJ_Terrain South'
+    floorMesh: {fileID: 4300000, guid: b69c2897beb5c9646816d92e3f2f746e, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 6063814e47869f54eb71f65652f1c1b8, type: 2}
+  - gateName: SplitRock
+    paths:
+    - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Split Rock/RJ_Rock Raised
+      2'
+    floorMesh: {fileID: 4300000, guid: b0491b0df77477e4e8e81dac577111ff, type: 2}
+    ceilMesh: {fileID: 4300000, guid: de356ff925613514ea601561ac131bca, type: 2}
+  - gateName: ShortcutHole
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: TunnelLandmass
+    paths:
+    - 'HOLDER: Randomization/GROUP: Tunnel Landmass/CHOICE: Tunnel Landmass/RJ_TerrainRandom'
+    floorMesh: {fileID: 4300000, guid: 8991dd00d36cfcc4d8ac8522aa6fc6e0, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 1ecb7c70e0a4a934e8903a28e0ce235a, type: 2}
+  - gateName: ChestBridge
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: RockRandom
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: HeldRock
+    paths:
+    - 'HOLDER: Randomization/GROUP: Held Rocks/CHOICE: Held Rock/RJ_Rock Raised'
+    floorMesh: {fileID: 4300000, guid: ba827326cdc0db541b03390f62abf6f4, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 80f1c92d961557f49b6c3335241cc12e, type: 2}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 2.0093231, y: 46.237656, z: -23.583557}
+    m_Extent: {x: 211.90291, y: 111.47235, z: 246.98474}

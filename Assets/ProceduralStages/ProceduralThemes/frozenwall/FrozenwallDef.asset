@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: frozenwall
   assetKey: RoR2/Base/frozenwall/frozenwall.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
   propKindCount: 12
   propCeillingWeight: 0.27692673
@@ -85,7 +86,6 @@ MonoBehaviour:
     floorMesh: {fileID: 0}
     ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: 5.93692, y: 63.667084, z: -4.962387}
     m_Extent: {x: 286.2963, y: 74.599, z: 263.13727}

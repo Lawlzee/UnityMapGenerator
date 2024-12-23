@@ -20,6 +20,7 @@ namespace ProceduralStages
     {
         public string sceneName;
         public string assetKey;
+        public VanillaStageDefConfig config;
         public string nameToken;
         public int propKindCount = 12;
         public float propCeillingWeight = 0.5f;
@@ -29,7 +30,6 @@ namespace ProceduralStages
         public string[] meshesToColor;
         public TerrainMeshGateDef[] terrainMeshes;
         public string sceneInfo = "SceneInfo";
-        public float minFloorAngle = 0.35f;
 
         public Bounds mapBounds;
 
@@ -86,14 +86,9 @@ namespace ProceduralStages
                     MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
                     Mesh baseMesh = meshFilter.mesh.isReadable
                         ? meshFilter.mesh
-                        : gameObject.TryGetComponent(out MeshCollider meshCollider)
+                        : gameObject.TryGetComponent(out MeshCollider meshCollider) && meshCollider.sharedMesh.isReadable
                             ? meshCollider.sharedMesh
-                            : null;
-
-                    if (baseMesh == null)
-                    {
-                        continue;
-                    }
+                            : config.meshTransformer.CreateReadableCopy(meshFilter.mesh);
 
                     Mesh mesh = Instantiate(baseMesh);
 

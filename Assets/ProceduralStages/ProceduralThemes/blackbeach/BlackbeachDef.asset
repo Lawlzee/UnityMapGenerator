@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: blackbeach
   assetKey: RoR2/Base/blackbeach/blackbeach.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: MAP_BLACKBEACH_TITLE
   propKindCount: 12
   propCeillingWeight: 0.5
@@ -97,7 +98,6 @@ MonoBehaviour:
     floorMesh: {fileID: 0}
     ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: -44.023285, y: -168.01088, z: -160.65698}
     m_Extent: {x: 283.92886, y: 88.110886, z: 230.857}

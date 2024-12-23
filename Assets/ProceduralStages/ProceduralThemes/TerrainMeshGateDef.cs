@@ -55,12 +55,14 @@ namespace ProceduralStages
                         Mesh mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
                         if (!mesh.isReadable)
                         {
-                            if (!gameObject.TryGetComponent(out MeshCollider meshCollider))
+                            if (gameObject.TryGetComponent(out MeshCollider meshCollider) && meshCollider.sharedMesh.isReadable)
                             {
-                                continue;
+                                mesh = meshCollider.sharedMesh;
                             }
-
-                            mesh = meshCollider.sharedMesh;
+                            else
+                            {
+                                mesh = vanillaStageDef.config.meshTransformer.CreateReadableCopy(mesh);
+                            }
                         }
 
                         meshes.Add(new MeshInfo
@@ -116,7 +118,7 @@ namespace ProceduralStages
                         Vector3 worldNormal = normalMatrix.MultiplyVector(normals[j]).normalized;
 
                         float angle = Vector3.Dot(Vector3.up, worldNormal);
-                        if (angle > vanillaStageDef.minFloorAngle)
+                        if (angle > vanillaStageDef.config.minFloorAngle)
                         {
                             floorReIndex[j] = floorVertexCount;
                             floorNormals[floorVertexCount] = worldNormal;
@@ -129,7 +131,7 @@ namespace ProceduralStages
                         }
 
 
-                        if (angle < -vanillaStageDef.minFloorAngle)
+                        if (angle < -vanillaStageDef.config.minFloorAngle)
                         {
                             ceilReIndex[j] = ceilVertexCount;
                             ceilNormals[ceilVertexCount] = worldNormal;

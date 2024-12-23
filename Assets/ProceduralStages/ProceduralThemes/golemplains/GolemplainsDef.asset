@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: golemplains
   assetKey: RoR2/Base/golemplains/golemplains.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
   propKindCount: 10
   propCeillingWeight: 0.15770087
@@ -44,7 +45,6 @@ MonoBehaviour:
     floorMesh: {fileID: 4300000, guid: 015525e6646fce04e859f2e78443422b, type: 2}
     ceilMesh: {fileID: 4300000, guid: ca1a4e2fbfa0a7e4c9aa2470da5ec9b4, type: 2}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: 56.20845, y: -123.74124, z: -137.66655}
     m_Extent: {x: 241.60912, y: 40.85439, z: 268.84705}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: goolake
   assetKey: RoR2/Base/goolake/goolake.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
   propKindCount: 12
   propCeillingWeight: 0.18616182
@@ -85,7 +86,6 @@ MonoBehaviour:
     floorMesh: {fileID: 0}
     ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: 121.74524, y: -113.60924, z: -55.359528}
     m_Extent: {x: 216.90097, y: 64.02284, z: 353.63535}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: dampcavesimple
   assetKey: RoR2/Base/dampcavesimple/dampcavesimple.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: MAP_DAMPCAVE_TITLE
   propKindCount: 12
   propCeillingWeight: 0.5591541
@@ -167,7 +168,6 @@ MonoBehaviour:
     floorMesh: {fileID: 0}
     ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
-  minFloorAngle: 0.35
   mapBounds:
     m_Center: {x: 20.1419, y: -125.90427, z: -274.0376}
     m_Extent: {x: 224.67572, y: 60.20271, z: 350.0959}
