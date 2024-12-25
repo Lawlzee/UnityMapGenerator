@@ -17,13 +17,108 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
   propKindCount: 12
-  propCeillingWeight: 0.5
+  propCeillingWeight: 0.5096305
   propCountWeight: 1
-  gameObjectsToDisable: []
+  gameObjectsToDisable:
+  - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtMain/*'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveStairsSwitchbackMesh/*'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveStairsMesh/*'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/*spmSGMushroom2Cluster'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave2/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave3 (1)/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave3 (1)/*spmSGMushroom2Cluster'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveMeshBack/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveMeshBack/*spmSGMushroom2Cluster'
+  - 'HOLDER: Environment/HOLDER: Cave/*SGCaveInternalShelfMini/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveInternaMiniBridge/*spmSGGrassTall Variant'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave3 (1)/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtSkinnyPath/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Cave/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave2/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveMeshBack/*SGStalagmiteClusterBig'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Round/*'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/RectShipTail (1)/Foliage'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/RectShipMid/Foliage'
+  - 'HOLDER: Foliage'
   gameObjectsToEnable: []
-  meshesToColor: []
-  terrainMeshes: []
+  meshesToColor:
+  - 'HOLDER: Environment/HOLDER: Main Spikes/*'
+  - 'HOLDER: Environment/HOLDER: Terrain/Level Wall.001'
+  - 'HOLDER: Environment/HOLDER: Terrain/*SGTerrainDirtWall'
+  - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtWallFull'
+  - 'HOLDER: Environment/HOLDER: Cave/*SGCaveStalactite'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/SGStalagmiteClusterHugeCollision (1)'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave3 (1)/*SGStalagmiteClusterHugeCollision'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveMeshBack'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCaveStalactite (1)'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/SGStalagmiteClusterHugeCollision (2)'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/SGStalagmiteClusterHugeCollision (3)'
+  - 'HOLDER: Environment/HOLDER: Cave/SGCave/SGStalagmiteClusterHugeCollision'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Round'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Platform'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Platform
+    (1)'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Platform
+    w Beacon'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShipCrashed/TorusShip Platform
+    w Beacon/TorusShipContainer'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShip Round'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/*RectShipPiping'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/*RectShipPiping (1)'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/*RectShipPiping/RectShipPiping (1)'
+  - 'HOLDER: Environment/HOLDER: Ship Chunks/TorusShip Platform'
+  - 'HOLDER: Environment/HOLDER: Main Rocks/*'
+  - 'HOLDER: Environment/CONTAINER: Back Cave Blockage/Rock Plug 2 (1)'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/Level Wall (1)'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/SGCaveShelf/*SGSmallGroundStalagmite/Mesh'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/*SGCaveStalactite'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/*SGRockSmall'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/Spikes In Play.041 (1)'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf True/SGRockSmall (1)'
+  - 'HOLDER: Environment/CONTAINER: Cave Shelf False/Level Wall Alternate (1)'
+  - 'HOLDER: Skybox + OOB/FSSkyboxFloor'
+  - 'HOLDER: Skybox + OOB/SGTerrainSkybox'
+  - 'HOLDER: Skybox + OOB/*SGSpikeHugeDistant'
+  - 'HOLDER: Skybox + OOB/*SGSpikeHugeDistant/TorusShip Round (1)'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtMain'
+    - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtSkinnyPath'
+    - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtShelfSmall'
+    - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtShelfLarge'
+    - 'HOLDER: Environment/HOLDER: Terrain/SGTerrainDirtShelfLow'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCaveStairsSwitchbackMesh'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCaveStairsMesh'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCave'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCave2'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCave3 (1)'
+    - 'HOLDER: Environment/HOLDER: Cave/*SGCaveInternalShelfMini'
+    - 'HOLDER: Environment/HOLDER: Cave/SGCaveInternaMiniBridge'
+    floorMesh: {fileID: 4300000, guid: 60a659fa1b5788e4c99a39644df21158, type: 2}
+    ceilMesh: {fileID: 4300000, guid: f164ecb9649f54a4cb09ad104452fba8, type: 2}
+  - gateName: Spike1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: HighShelf
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: CaveShelf
+    paths:
+    - 'HOLDER: Environment/CONTAINER: Cave Shelf True/SGCaveShelf'
+    floorMesh: {fileID: 4300000, guid: e4d919b483991ed489c16d52058cc73f, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 7c29f5363c648dc499c486ea8c1a450f, type: 2}
+  - gateName: BackCave
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
   mapBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 38.203087, y: 53.09375, z: 80.893364}
+    m_Extent: {x: 196.04822, y: 120.12129, z: 310.06335}

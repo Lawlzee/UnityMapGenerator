@@ -17,13 +17,9 @@ public class MeshReadabilityTransformer : ScriptableObject
 
     public Mesh CreateReadableCopy(Mesh mesh)
     {
-        if (mesh.subMeshCount != 1)
-        {
-            throw new System.Exception("Expected 1 subMesh for " + mesh.name);
-        }
-
         int vertexCount = mesh.vertexCount;
-        int triangleCount = mesh.GetSubMesh(0).indexCount;
+        int triangleCount = mesh.GetSubMesh(mesh.subMeshCount - 1).indexCount + mesh.GetSubMesh(mesh.subMeshCount - 1).indexStart;
+
         //Debug.Log("mesh: " + mesh.name);
         //Debug.Log("vertexCount: " + vertexCount);
         //Debug.Log("triangleCount: " + triangleCount);

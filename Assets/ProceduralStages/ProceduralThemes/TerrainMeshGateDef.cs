@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityMeshSimplifier;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -237,26 +239,66 @@ namespace ProceduralStages
 
                 ProfilerLog.Info($"final floor/ceil meshes computed");
 
-                Mesh floorMesh = new Mesh
-                {
-                    vertices = resulState[0].vertices,
-                    normals = resulState[0].normals,
-                    triangles = resulState[0].triangles
-                };
+                Mesh floorMesh = MeshUtils.CreateMeshWithDensity(
+                    resulState[0].vertices,
+                    resulState[0].normals,
+                    resulState[0].triangles,
+                    vanillaStageDef.meshSplitDensity,
+                    vanillaStageDef.meshTrimDensity,
+                    vanillaStageDef.mapBounds);
 
-                floorMesh.RecalculateBounds();
+                ProfilerLog.Info($"floor CreateMeshWithDensity");
+
+                //Mesh floorMesh = new Mesh
+                //{
+                //    vertices = resulState[0].vertices,
+                //    normals = resulState[0].normals,
+                //    triangles = resulState[0].triangles
+                //};
+                //
+                //floorMesh.RecalculateBounds();
+                //
+                //float floorDensity = floorMesh.GetSurfaceArea() / resulState[0].triangles.Length;
+                //float floorMeshQuality = vanillaStageDef.config.minDecorationDensity / floorDensity;
+                //if (floorMeshQuality < 1)
+                //{
+                //    MeshSimplifier simplifier = new MeshSimplifier(floorMesh);
+                //    simplifier.SimplifyMesh(floorMeshQuality);
+                //    floorMesh = simplifier.ToMesh();
+                //    ProfilerLog.Info($"floor mesh optimized {floorMeshQuality * 100}%");
+                //}
 
                 SaveMeshToFile(vanillaStageDef, floorMesh, $"{gateName}FloorMesh.asset");
                 ProfilerLog.Info($"{gateName} Floor mesh saved. (vertices: {resulState[0].vertices.Length}, triangles: {resulState[0].triangles.Length})");
 
-                Mesh ceilMesh = new Mesh
-                {
-                    vertices = resulState[1].vertices,
-                    normals = resulState[1].normals,
-                    triangles = resulState[1].triangles
-                };
+                Mesh ceilMesh = MeshUtils.CreateMeshWithDensity(
+                    resulState[1].vertices,
+                    resulState[1].normals,
+                    resulState[1].triangles,
+                    vanillaStageDef.meshSplitDensity,
+                    vanillaStageDef.meshTrimDensity,
+                    vanillaStageDef.mapBounds);
 
-                ceilMesh.RecalculateBounds();
+                ProfilerLog.Info($"ceil CreateMeshWithDensity");
+
+                //Mesh ceilMesh = new Mesh
+                //{
+                //    vertices = resulState[1].vertices,
+                //    normals = resulState[1].normals,
+                //    triangles = resulState[1].triangles
+                //};
+                //
+                //ceilMesh.RecalculateBounds();
+                //
+                //float ceilDensity = ceilMesh.GetSurfaceArea() / resulState[1].triangles.Length;
+                //float ceilMeshQuality = vanillaStageDef.config.minDecorationDensity / ceilDensity;
+                //if (ceilMeshQuality < 1)
+                //{
+                //    MeshSimplifier simplifier = new MeshSimplifier(ceilMesh);
+                //    simplifier.SimplifyMesh(ceilMeshQuality);
+                //    ceilMesh = simplifier.ToMesh();
+                //    ProfilerLog.Info($"ceil mesh optimized {ceilMeshQuality * 100}%");
+                //}
 
                 SaveMeshToFile(vanillaStageDef, ceilMesh, $"{gateName}CeilMesh.asset");
                 ProfilerLog.Info($"{gateName} Ceil mesh saved. (vertices: {resulState[1].vertices.Length}, triangles: {resulState[1].triangles.Length})");

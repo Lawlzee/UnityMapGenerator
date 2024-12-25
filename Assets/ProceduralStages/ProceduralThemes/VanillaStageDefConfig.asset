@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: VanillaStageDefConfig
   m_EditorClassIdentifier: 
   minFloorAngle: 0.35
+  meshSplitDensity: 50
+  meshTrimDensity: 2
   meshTransformer: {fileID: 11400000, guid: 28cb18e836d36a5438edafa27d9b73e8, type: 2}

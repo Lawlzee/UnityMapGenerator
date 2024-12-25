@@ -168,6 +168,8 @@ MonoBehaviour:
     floorMesh: {fileID: 0}
     ceilMesh: {fileID: 0}
   sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
   mapBounds:
     m_Center: {x: 20.1419, y: -125.90427, z: -274.0376}
     m_Extent: {x: 224.67572, y: 60.20271, z: 350.0959}

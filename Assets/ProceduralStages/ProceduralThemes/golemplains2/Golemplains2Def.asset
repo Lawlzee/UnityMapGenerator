@@ -41,6 +41,8 @@ MonoBehaviour:
     floorMesh: {fileID: 4300000, guid: 8c23a53dc34bc474782954448e25162a, type: 2}
     ceilMesh: {fileID: 4300000, guid: 3d8997e2527add24896e844250179495, type: 2}
   sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
   mapBounds:
     m_Center: {x: 21.233353, y: 44.432407, z: -96.41615}
     m_Extent: {x: 296.3062, y: 50.137592, z: 181.32353}

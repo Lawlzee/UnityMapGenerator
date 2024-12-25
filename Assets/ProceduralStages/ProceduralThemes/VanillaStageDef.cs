@@ -31,6 +31,8 @@ namespace ProceduralStages
         public TerrainMeshGateDef[] terrainMeshes;
         public string sceneInfo = "SceneInfo";
 
+        public float meshSplitDensity = -1;
+        public float meshTrimDensity = -1;
         public Bounds mapBounds;
 
         public void DisableProps()
@@ -228,6 +230,16 @@ namespace ProceduralStages
         [ContextMenu("Bake Graph Meshes")]
         public void BakeGraphs()
         {
+            if (meshSplitDensity < 0)
+            {
+                meshSplitDensity = config.meshSplitDensity;
+            }
+
+            if (meshTrimDensity < 0)
+            {
+                meshTrimDensity = config.meshTrimDensity;
+            }
+
             foreach (TerrainMeshGateDef terrainMeshDef in terrainMeshes)
             {
                 terrainMeshDef.BakeGraphs(this);

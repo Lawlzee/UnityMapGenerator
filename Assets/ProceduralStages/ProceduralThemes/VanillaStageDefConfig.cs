@@ -19,6 +19,8 @@ namespace ProceduralStages
     public class VanillaStageDefConfig : ScriptableObject
     {
         public float minFloorAngle = 0.35f;
+        public float meshSplitDensity = 1.0f;
+        public float meshTrimDensity = 1.0f;
         public MeshReadabilityTransformer meshTransformer;
     }
 }

@@ -16,14 +16,168 @@ MonoBehaviour:
   assetKey: RoR2/Base/skymeadow/skymeadow.unity
   config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
-  propKindCount: 12
-  propCeillingWeight: 0.5
+  propKindCount: 14
+  propCeillingWeight: 1.0651673
   propCountWeight: 1
-  gameObjectsToDisable: []
+  gameObjectsToDisable:
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 2/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 2/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 2/SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/*SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/*SMHangingVinesCluster_Prefab'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/*SMHangingVinesCluster_Prefab'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/SMVine1'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/*SMHangingVinesCluster_Prefab'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/SMVine1'
+  - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/SMVine1 (2)'
+  - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/SMVine1 (1)'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*SMHangingVinesCluster_Prefab'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*SMVine2'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*spmBbDryBush'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*SM_Pebble'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15/*spmSMFruitPlant'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*spmSMFruitPlantDuo'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*spmSMGrass'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*SMHangingVinesCluster_Prefab'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*SMVine1'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*SMVine3'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*SMVine2'
+  - PortalDialerEvent/Final Zone/Grass
+  - 'HOLDER: Foliage'
+  - 'HOLDER: Hopoo Foliage'
   gameObjectsToEnable: []
-  meshesToColor: []
-  terrainMeshes: []
+  meshesToColor:
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/SMRuinPillar'
+  - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 2/SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/*SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/*SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/SMSpikeBridge (16)'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/SMSpikeBridge (15)'
+  - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option Bridge/SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/Gate Doors/*/*'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/*SMRockAngular'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/SMRockOblong'
+  - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/*SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15/*SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/*SMSpikeBridge'
+  - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option Bridge/SMSpikeBridge'
+  - 'HOLDER: Spinning Rocks/*'
+  - PortalDialerEvent/Final Zone/SM_RockFormationSmall2
+  - PortalDialerEvent/Final Zone/SM_RockFormationSmall2 (1)
+  - PortalDialerEvent/Final Zone/SM_RockFormationSmall2 (2)
+  - 'HOLDER: Props/GROUP: Rocks/*'
+  - 'HOLDER: Props/GROUP: Rocks/*/*'
+  - 'HOLDER: Props/GROUP: Spike Bridges/*'
+  - 'HOLDER: Props/GROUP: Ruins/*'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Terrain/*'
+    - PortalDialerEvent/Final Zone/MS_FloatingIsland1
+    - 'HOLDER: Props/GROUP: Rocks/*SM_RockBridge'
+    floorMesh: {fileID: 4300000, guid: 87756fffb3efc64469396395910b1fb8, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 3d355a9f04790184b9a3ae9b2bc232a0, type: 2}
+  - gateName: OverlookPillar1
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: P15OB
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: P15O1
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 15/P15 Option 1/SM_Plateau 15 Option
+      1'
+    floorMesh: {fileID: 4300000, guid: bb787e597034d2a41921a802c4788ae6, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 10f37760824d4f340a4a30d8aad5e8d4, type: 2}
+  - gateName: P11OB
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 11/P11 Option Bridge/SM_Plateau 11 Bridge'
+    floorMesh: {fileID: 4300000, guid: 6b07b65f57fc0e34883003faa0737374, type: 2}
+    ceilMesh: {fileID: 4300000, guid: b26c4fa995be49340b43553702c887b5, type: 2}
+  - gateName: PTO1
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 1/SM_Plateau Tall Option
+      1'
+    floorMesh: {fileID: 4300000, guid: e7648345da9a84b409df5c97149b1c71, type: 2}
+    ceilMesh: {fileID: 4300000, guid: c3cb3ac8c35f7b8478ad0af516084ec8, type: 2}
+  - gateName: P15
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 15/P15/SM_Plateau 15'
+    floorMesh: {fileID: 4300000, guid: 01c7cd40d5b2d0340b5bc161c93fb207, type: 2}
+    ceilMesh: {fileID: 4300000, guid: bec97ac5164bf924eb8fc6f0c1513e3a, type: 2}
+  - gateName: P6O2
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 2/SM_Plateau 6 Option 2'
+    floorMesh: {fileID: 4300000, guid: fc67a89b6287ed349a7d6e298f751e59, type: 2}
+    ceilMesh: {fileID: 4300000, guid: aba47d81f44630d47b10d79326f78569, type: 2}
+  - gateName: P6O3
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 6/P6 Option 3/SM_Plateau 6 Option 3'
+    floorMesh: {fileID: 4300000, guid: 12ca4bf6ace36af4bb1a089034701f66, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 6d624d818358f9343b8947fd87d33004, type: 2}
+  - gateName: Underground
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/SM_Rock
+      Connect'
+    - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/SM_Plateau
+      Under 4'
+    - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/SM_Plateau
+      Under 3'
+    - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/Underground/SM_Plateau
+      Under 1'
+    floorMesh: {fileID: 4300000, guid: 38b7a81eb4f2ef3458bdc33f43291cb9, type: 2}
+    ceilMesh: {fileID: 4300000, guid: e74293f9c27f0a641a312c225b12787f, type: 2}
+  - gateName: P9O1
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 9/P9 Option 1/SM_Plateau 9 Option 1'
+    floorMesh: {fileID: 4300000, guid: d0a69433da159f0459fc8255a42405c1, type: 2}
+    ceilMesh: {fileID: 4300000, guid: d2e21e3d555c2a744a612182e50d3bad, type: 2}
+  - gateName: PTO2
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau Tall/PT Option 2/SM_Plateau Tall Option
+      2'
+    floorMesh: {fileID: 4300000, guid: e25e1e4611f4d4e46a37d3e47ddff3da, type: 2}
+    ceilMesh: {fileID: 4300000, guid: b5e45ac6727408e459a5d961d9be3a06, type: 2}
+  - gateName: P9OB
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: P13
+    paths:
+    - 'HOLDER: Randomization/GROUP: Plateau 13 and Underground/P13/SM_Plateau 13'
+    floorMesh: {fileID: 4300000, guid: 2dfe6ffda881c234c942163482d6cba8, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 0e1731ec2a75893479bf3fd8a7234413, type: 2}
   sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
   mapBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 18.201569, y: 30.715004, z: -8.003525}
+    m_Extent: {x: 290.00858, y: 116.415, z: 306.89355}
