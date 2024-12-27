@@ -1,3 +1,8 @@
+## 2.0
+1. **Custom Themes for Vanilla Stages and Main Menu:** Introduced custom themes for vanilla stages and the main menu, currently available only for non-DLC stages.  
+2. **Default Spawn Rate Adjustment:** Reduced the default spawn rate for procedural stages to allow vanilla stages with custom themes to spawn.  
+3. **Stage Loading Fix:** Resolved an issue where stages would sometimes fail to load.  
+
 ## 1.20
 1. **Prop Rendering Fix:** Resolved an issue where props would occasionally fail to render.
 2. **Lunar Fields Gravity Adjustment:** Updated the gravity in Lunar Fields to match the vanilla moon's gravity.

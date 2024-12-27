@@ -16,9 +16,10 @@ MonoBehaviour:
   assetKey: RoR2/Base/goldshores/goldshores.unity
   config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
+  variant: 0
   propKindCount: 10
   propCeillingWeight: 0
-  propCountWeight: 0.7
+  propCountWeight: 0.3
   gameObjectsToDisable:
   - 'HOLDER: Foliage'
   - 'HOLDER: Boulders'

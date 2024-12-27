@@ -104,6 +104,7 @@ namespace ProceduralStages
             return new Graphs
             {
                 floorProps = floorProps,
+                ceilingProps = new PropsNode[0],
                 groundNodeIndexByPosition = new Dictionary<Vector3, int>()
             };
         }
