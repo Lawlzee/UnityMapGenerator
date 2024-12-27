@@ -86,7 +86,23 @@ At the moment, only the non DLC stages supports custom themes
 
 ### Screenshots
 
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image4.png)
+*Abyssal Depths with the void theme*
 
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image7.png)
+*Bazaar with the desert theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image12.png)
+*Titanic Plains with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image13.png)
+*Titanic Plains with the mushroom theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image15.png)
+*Verdant Falls with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image19.png)
+*Main menu with the plains theme*
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
