@@ -351,22 +351,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   editorSeed: 0
   editorTheme: 0
+  editorEnabled: 1
   themes: {fileID: 11400000, guid: df2385cd832379b49a30bfa1d057d8b5, type: 2}
   stages:
-  - {fileID: 11400000, guid: b44b306b17abccb429c231495190304a, type: 2}
   - {fileID: 11400000, guid: 97124c3c61b977845a9699ae9bd9742e, type: 2}
   - {fileID: 11400000, guid: 8737d44f094887a40828ed1b231acb46, type: 2}
-  - {fileID: 11400000, guid: 043b7aed5d56473459b84753083f59a9, type: 2}
-  - {fileID: 11400000, guid: 575c29a585c510a46a48322c11e9cf61, type: 2}
+  - {fileID: 11400000, guid: b44b306b17abccb429c231495190304a, type: 2}
+  - {fileID: 11400000, guid: 03b93a25aa5783f4aa7e2c3c26d6a82e, type: 2}
+  - {fileID: 11400000, guid: e901d4c371c145647a62d9ef0b351779, type: 2}
+  - {fileID: 11400000, guid: b6d29544ac6a4e04eb6a02db151dd69e, type: 2}
+  - {fileID: 11400000, guid: 74c696e4d3009fa40917e4352c32cb64, type: 2}
   - {fileID: 11400000, guid: 61f1055b6230d1648902d5de21a051d7, type: 2}
   - {fileID: 11400000, guid: e92f584f206aa104b852acb6aa774c7b, type: 2}
-  - {fileID: 11400000, guid: b14fa5af25cd73246a344e35c46856de, type: 2}
-  - {fileID: 11400000, guid: e901d4c371c145647a62d9ef0b351779, type: 2}
-  - {fileID: 11400000, guid: 03b93a25aa5783f4aa7e2c3c26d6a82e, type: 2}
-  - {fileID: 11400000, guid: 74c696e4d3009fa40917e4352c32cb64, type: 2}
+  - {fileID: 11400000, guid: c25da8bcd1a6e5042a3ac72bf6c7f9ba, type: 2}
+  - {fileID: 11400000, guid: 575c29a585c510a46a48322c11e9cf61, type: 2}
   - {fileID: 11400000, guid: 92a2b7fa55a48874d9b4593de28d1f44, type: 2}
-  - {fileID: 11400000, guid: 81a6bd4a31c3e2146a8a58ef9d876b6b, type: 2}
   - {fileID: 11400000, guid: 9a6ea7de2529d6c419e2aa4d7da71af7, type: 2}
+  - {fileID: 11400000, guid: 81a6bd4a31c3e2146a8a58ef9d876b6b, type: 2}
+  - {fileID: 11400000, guid: 043b7aed5d56473459b84753083f59a9, type: 2}
+  - {fileID: 11400000, guid: b14fa5af25cd73246a344e35c46856de, type: 2}
   propsPlacer:
     propsCount: 10
     propsObject: {fileID: 1462936002}

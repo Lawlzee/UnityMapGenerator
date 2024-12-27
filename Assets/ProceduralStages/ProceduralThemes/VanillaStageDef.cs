@@ -22,6 +22,7 @@ namespace ProceduralStages
         public string assetKey;
         public VanillaStageDefConfig config;
         public string nameToken;
+        public bool variant;
         public int propKindCount = 12;
         public float propCeillingWeight = 0.5f;
         public float propCountWeight = 1f;
@@ -75,9 +76,18 @@ namespace ProceduralStages
                     {
                         continue;
                     }
-                    renderer.material = new Material(terrainMaterial);
 
-                    materialInfo.ApplyTo(renderer.material);
+                    var newMaterial = new Material(terrainMaterial);
+                    materialInfo.ApplyTo(newMaterial);
+                    renderer.material = newMaterial;
+
+                    var materials = new Material[renderer.materials.Length];
+                    for (int i = 0; i < renderer.materials.Length; i++)
+                    {
+                        materials[i] = newMaterial;
+                    }
+
+                    renderer.materials = materials;
 
                     SurfaceDefProvider surfaceDefProvider = gameObject.GetComponent<SurfaceDefProvider>();
                     if (surfaceDef != null && surfaceDefProvider != null)
@@ -86,11 +96,26 @@ namespace ProceduralStages
                     }
 
                     MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-                    Mesh baseMesh = meshFilter.mesh.isReadable
-                        ? meshFilter.mesh
-                        : gameObject.TryGetComponent(out MeshCollider meshCollider) && meshCollider.sharedMesh.isReadable
-                            ? meshCollider.sharedMesh
-                            : config.meshTransformer.CreateReadableCopy(meshFilter.mesh);
+
+                    Mesh baseMesh;
+                    if (meshFilter.mesh.isReadable)
+                    {
+                        baseMesh = meshFilter.mesh;
+                    }
+                    else if (gameObject.TryGetComponent(out MeshCollider meshCollider) && meshCollider.sharedMesh.isReadable)
+                    {
+                        baseMesh = meshCollider.sharedMesh;
+                    }
+                    else if (meshFilter.mesh.subMeshCount == 1)
+                    {
+                        baseMesh = config.meshTransformer.CreateReadableCopy(meshFilter.mesh, path);
+                    }
+                    else
+                    {
+                        //todo: handle combined mesh
+                        Log.Debug($"mesh.subMeshCount != 1 ({meshFilter.mesh.name}) {path}");
+                        continue;
+                    }
 
                     Mesh mesh = Instantiate(baseMesh);
 
@@ -105,7 +130,7 @@ namespace ProceduralStages
                         gameObject.transform.localToWorldMatrix,
                         rng);
 
-                    meshFilter.sharedMesh = mesh;
+                    meshFilter.mesh = mesh;
                 }
             }
         }

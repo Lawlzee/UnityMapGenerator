@@ -16,6 +16,7 @@ MonoBehaviour:
   assetKey: RoR2/Base/bazaar/bazaar.unity
   config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: MAP_BAZAAR_TITLE
+  variant: 0
   propKindCount: 10
   propCeillingWeight: 0.5
   propCountWeight: 0.2

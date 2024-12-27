@@ -30,8 +30,6 @@ namespace ProceduralStages
         {
             Log.Init(Logger);
 
-            ModConfig.Init(Config);
-
             var texture = LoadTexture("icon.png");
             var sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));
             ModSettingsManager.SetModIcon(sprite);
@@ -46,6 +44,8 @@ namespace ProceduralStages
             ContentManager.collectContentPackProviders += GiveToRoR2OurContentPackProviders;
             RoR2Application.onLoadFinished += () =>
             {
+                ModConfig.Init(Config);
+
                 ContentProvider.mapThemeCollection.WarmUp();
                 SceneLoader.Init(new GameObject[] { ContentProvider.themeGeneratorPrefab });
             };

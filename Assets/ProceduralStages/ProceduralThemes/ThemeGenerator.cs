@@ -12,6 +12,7 @@ namespace ProceduralStages
     {
         public ulong editorSeed;
         public Theme editorTheme;
+        public bool editorEnabled = true;
         public MapThemeCollection themes;
         public VanillaStageDef[] stages;
 
@@ -107,6 +108,11 @@ namespace ProceduralStages
             ProfilerLog.Reset();
             using (ProfilerLog.CreateScope("total"))
             {
+                if (Application.isEditor && !editorEnabled)
+                {
+                    return;
+                }
+
                 string currentSceneName = SceneManager.GetActiveScene().name;
                 var stageDef = stages.FirstOrDefault(x => x.sceneName == currentSceneName);
 
@@ -116,6 +122,31 @@ namespace ProceduralStages
                     return;
                 }
 
+                if (!Application.isEditor)
+                {
+                    float remplacementPercent;
+
+                    if (RunConfig.instance != null)
+                    {
+                        remplacementPercent = RunConfig.instance.vanillaStageThemePercents
+                            .Where(x => x.Stage == stageDef.sceneName)
+                            .Select(x => x.Percent)
+                            .FirstOrDefault();
+                    }
+                    else //title scene
+                    {
+                        remplacementPercent = ModConfig.VanillaStageThemePercents                            
+                            .Where(x => x.Stage.sceneName == stageDef.sceneName)
+                            .Select(x => x.Config.Value)
+                            .FirstOrDefault();
+                    }
+
+                    if (rng.nextNormalizedFloat > remplacementPercent)
+                    {
+                        return;
+                    }
+                }
+                
                 stageDef.DisableProps();
                 ProfilerLog.Debug("Built in props disabled");
 

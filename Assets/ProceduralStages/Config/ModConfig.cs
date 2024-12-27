@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RoR2;
 using RiskOfOptions.OptionConfigs;
+using System.Text.RegularExpressions;
 
 namespace ProceduralStages
 {
@@ -21,6 +22,12 @@ namespace ProceduralStages
     public struct ThemeConfig
     {
         public Theme Theme;
+        public ConfigEntry<float> Config;
+    }
+
+    public struct VanillaStageConfig
+    {
+        public VanillaStageDef Stage;
         public ConfigEntry<float> Config;
     }
 
@@ -96,6 +103,8 @@ namespace ProceduralStages
         public static ConfigEntry<TerrainRepetition> TerrainTypeRepetition;
         public static List<TerrainTypePercentConfig> TerrainTypesPercents;
 
+        public static List<VanillaStageConfig> VanillaStageThemePercents;
+
         public static ConfigEntry<float> MoonSpawnRate;
         public static ConfigEntry<int> MoonRequiredPillarsCount;
 
@@ -126,7 +135,7 @@ namespace ProceduralStages
                 string description = $"Specifies the percentage of stages that will be generated with the <style=cIsHealing>{theme.GetName()}</style> theme.";
                 var themeConfig = config.Bind("Themes", $"{theme.GetName()} spawn rate", kvp.Value, description);
 
-                ModSettingsManager.AddOption(new StepSliderOption(themeConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
+                ModSettingsManager.AddOption(new StepSliderOption(themeConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, FormatString = "{0:P0}" }));
 
                 ThemeConfigs.Add(new ThemeConfig
                 {
@@ -155,6 +164,30 @@ namespace ProceduralStages
                 }
             }
 
+            VanillaStageThemePercents = new List<VanillaStageConfig>();
+            foreach (VanillaStageDef stageDef in ContentProvider.themeGeneratorPrefab.GetComponent<ThemeGenerator>().stages)
+            {
+                string stageToken = stageDef.nameToken != ""
+                    ? stageDef.nameToken
+                    : SceneCatalog.FindSceneDef(stageDef.sceneName).nameToken;
+
+                string stageName = Language.GetString(stageToken);
+
+                if (stageDef.variant)
+                {
+                    stageName += " (variant)";
+                }
+
+                ConfigEntry<float> themeConfig = config.Bind("Vanilla Stages Themes", $"{NormaliseName(stageName)}", 1f, "Specifies the probability that the vanilla theme for this stage is replaced with a custom theme.");
+                ModSettingsManager.AddOption(new StepSliderOption(themeConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, FormatString = "{0:P0}" }));
+
+                VanillaStageThemePercents.Add(new VanillaStageConfig
+                {
+                    Stage = stageDef,
+                    Config = themeConfig
+                });
+            }
+
             MinStageCount = config.Bind("All Stages", "Min stage count", 1, "Defines the minimum number of stages required to enable the spawning of procedural stages.");
             ModSettingsManager.AddOption(new IntSliderOption(MinStageCount, new IntSliderConfig { min = 1, max = 15 }));
 
@@ -175,7 +208,7 @@ namespace ProceduralStages
                     string description = $"Sets the overall percentage of stages that will feature the <style=cIsHealing>{terrainType.GetName()}</style> terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage.";
                     ConfigEntry<float> terrainConfig = config.Bind($"All Stages", $"{terrainType.GetName()} map spawn rate", variedSpawnRate, description);
 
-                    ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = variedSpawnRate, max = 1, increment = 0.01f, formatString = "{0:0%;'Varied';0%}" }));
+                    ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = variedSpawnRate, max = 1, increment = 0.01f, FormatString = "{0:0%;'Varied';0%}" }));
 
                     TerrainType currentTerrainType = terrainType;
                     terrainConfig.SettingChanged += (o, e) =>
@@ -267,7 +300,7 @@ namespace ProceduralStages
                             }
                         };
 
-                        ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
+                        ModSettingsManager.AddOption(new StepSliderOption(terrainConfig, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, FormatString = "{0:P0}" }));
 
                         TerrainTypesPercents.Add(new TerrainTypePercentConfig
                         {
@@ -295,7 +328,7 @@ namespace ProceduralStages
             }
 
             MoonSpawnRate = config.Bind("Moon", "Lunar Fields map spawn rate", 1f, "Indicates the percentage of final stages featuring the custom <style=cIsHealing>Lunar Fields</style> terrain type instead of the vanilla moon stage. If this percentage is less than 100%, the normal moon stage will also appear. If the total percentage is 0%, only the normal moon stage will be generated.");
-            ModSettingsManager.AddOption(new StepSliderOption(MoonSpawnRate, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, formatString = "{0:P0}" }));
+            ModSettingsManager.AddOption(new StepSliderOption(MoonSpawnRate, new StepSliderConfig() { min = 0, max = 1, increment = 0.01f, FormatString = "{0:P0}" }));
 
             MoonRequiredPillarsCount = config.Bind("Moon", "Required pillars", 4, "Number of pillars necessary to access the Mithrix arena");
             ModSettingsManager.AddOption(new IntSliderOption(MoonRequiredPillarsCount, new IntSliderConfig() { min = 0, max = 7 }));
@@ -314,6 +347,12 @@ namespace ProceduralStages
 
             PotRollingStageDepth = config.Bind("Pot rolling", "Stage depth", 900, "This feature is not production ready. Do not touch");
             ModSettingsManager.AddOption(new IntSliderOption(PotRollingStageDepth, new IntSliderConfig { min = 50, max = 2000 }));
+
+            string NormaliseName(string name)
+            {
+                //'=', '\n', '\t', '\\', '"', '\'', '[', ']'
+                return Regex.Replace(name, @"[=\n\t\\""'\[\]]", "").Trim();
+            }
         }
     }
 }

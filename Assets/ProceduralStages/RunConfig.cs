@@ -21,6 +21,12 @@ namespace ProceduralStages
         public float Percent;
     }
 
+    public struct VanillaThemePercent
+    {
+        public string Stage;
+        public float Percent;
+    }
+
     [Serializable]
     public struct TerrainTypeVisit : IEquatable<TerrainTypeVisit>
     {
@@ -115,6 +121,28 @@ namespace ProceduralStages
 
         private EventHandler[] _terrainTypesPercentsSettingChanged;
 
+        private SyncListFloat _vanillaStageThemePercents;
+
+        public VanillaThemePercent[] vanillaStageThemePercents
+        {
+            get
+            {
+                var result = new VanillaThemePercent[ModConfig.VanillaStageThemePercents.Count];
+                for (int i = 0; i < ModConfig.VanillaStageThemePercents.Count; i++)
+                {
+                    var config = ModConfig.VanillaStageThemePercents[i];
+                    ref var resultConfig = ref result[i];
+
+                    resultConfig.Stage = config.Stage.sceneName;
+                    resultConfig.Percent = _vanillaStageThemePercents[i];
+                }
+
+                return result;
+            }
+        }
+
+        private EventHandler[] _vanillaStageThemePercentsSettingChanged;
+
         private SyncListFloat _themePercents;
 
         public ThemePercent[] themePercents
@@ -179,6 +207,12 @@ namespace ProceduralStages
                     config.Config.SettingChanged -= _terrainTypesPercentsSettingChanged[i];
                 }
 
+                for (int i = 0; i < ModConfig.VanillaStageThemePercents.Count; i++)
+                {
+                    var config = ModConfig.VanillaStageThemePercents[i];
+                    config.Config.SettingChanged -= _vanillaStageThemePercentsSettingChanged[i];
+                }
+
                 for (int i = 0; i < ModConfig.ThemeConfigs.Count; i++)
                 {
                     var config = ModConfig.ThemeConfigs[i];
@@ -223,6 +257,24 @@ namespace ProceduralStages
 
                 config.Config.SettingChanged += settingsChanged;
                 _terrainTypesPercentsSettingChanged[i] = settingsChanged;
+            }
+
+            _vanillaStageThemePercentsSettingChanged = new EventHandler[ModConfig.VanillaStageThemePercents.Count];
+
+            for (int i = 0; i < ModConfig.VanillaStageThemePercents.Count; i++)
+            {
+                var config = ModConfig.VanillaStageThemePercents[i];
+
+                _vanillaStageThemePercents.Add(config.Config.Value);
+
+                int index = i;
+                EventHandler settingsChanged = (object o, EventArgs e) =>
+                {
+                    _vanillaStageThemePercents[index] = config.Config.Value;
+                };
+
+                config.Config.SettingChanged += settingsChanged;
+                _vanillaStageThemePercentsSettingChanged[i] = settingsChanged;
             }
 
             _themePercentsSettingChanged = new EventHandler[ModConfig.ThemeConfigs.Count];

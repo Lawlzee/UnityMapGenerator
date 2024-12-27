@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: LakesDef
+  m_EditorClassIdentifier: 
+  sceneName: lakes
+  assetKey: RoR2/DLC2/lakes/lakes.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
+  nameToken: 
+  variant: 0
+  propKindCount: 10
+  propCeillingWeight: 0.36192364
+  propCountWeight: 0.7
+  gameObjectsToDisable:
+  - 'HOLDER: Foliage'
+  - 'HOLDER: Toggle Groups/TG Island 01/TLShrub'
+  - 'HOLDER: Toggle Groups/TG Island 01/*TLGrassSparseSingleGreen'
+  - 'HOLDER: Toggle Groups/TG Island 01/TLGrassSparseGreen'
+  - 'HOLDER: Toggle Groups/TG Island 02/*TLGrass'
+  - 'HOLDER: Toggle Groups/TG Island 02/*TLPebbleB'
+  - 'HOLDER: Toggle Groups/TG Island 02/*TLGrassSparseSingleGreen'
+  - 'HOLDER: Toggle Groups/TG NE Cave  01/TLGrass'
+  - 'HOLDER: Toggle Groups/TG NE Cave  01/*TLGrassSparseSingleGreen'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - 'HOLDER: Terrain/TLTerrain_GiantFlower'
+  - 'HOLDER: Terrain/TLTerrain_Vines'
+  - 'HOLDER: Terrain/TLTerrain_VinesLeaves'
+  - 'HOLDER: Terrain/TLTerrainOuterDistant'
+  - 'HOLDER: Terrain/TLGFlowerMiddleDistant'
+  - 'HOLDER: Terrain/TLTerrain_Wall'
+  - 'HOLDER: Toggle Groups/TG Cave Wall 01/TLTerrainLeaf'
+  - 'HOLDER: Toggle Groups/TG Cave Wall 01/TLTerrain_NewtRoot'
+  - 'HOLDER: Toggle Groups/TG Cave Wall 01/TLTerrain_NewtRoot'
+  - 'HOLDER: Toggle Groups/TG Cave Wall 01/TL_TG_01'
+  - 'HOLDER: Toggle Groups/TG Island 01/*TLRockMedium'
+  - 'HOLDER: Toggle Groups/TG Island 01/TL_TG_02'
+  - 'HOLDER: Toggle Groups/TG Island 02/TL_TG_03'
+  - 'HOLDER: Toggle Groups/TG Island 02/TLArchiRampB'
+  - 'HOLDER: Toggle Groups/TG Island 03/TLArchiRampA'
+  - 'HOLDER: Toggle Groups/TG NE Cave  01/*TLRockMedium'
+  - 'HOLDER: Props/Rocks/*'
+  - 'HOLDER: Props/Dunes/*'
+  - 'HOLDER: Props/Roots/*'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'HOLDER: Terrain/TLTerrain_Ground'
+    - 'HOLDER: Terrain/TLTerrain_Isle1'
+    - 'HOLDER: Terrain/TLTerrain_Isle2'
+    - 'HOLDER: Terrain/TLTerrain_IsleCave'
+    - 'HOLDER: Terrain/TLTerrain_TreePads'
+    - 'HOLDER: Terrain/TLTerrainMiddleDistant'
+    - 'HOLDER: Terrain/meshTLTerrain_WallCave (1)'
+    floorMesh: {fileID: 4300000, guid: fdc182401bab82041a853c75f35573a2, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 37578d0f544a6bd49acdd72cd84f49dc, type: 2}
+  - gateName: Island03Enabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Island03Disabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Island01Enabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Island01Disabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: RescueShip
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Island02Enabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: Island02Disabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  - gateName: NECave01Disabled
+    paths: []
+    floorMesh: {fileID: 0}
+    ceilMesh: {fileID: 0}
+  sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
+  mapBounds:
+    m_Center: {x: 0.20907593, y: 52.351448, z: -21.962158}
+    m_Extent: {x: 186.51093, y: 52.70417, z: 175.03217}

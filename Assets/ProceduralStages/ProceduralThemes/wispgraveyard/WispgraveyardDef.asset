@@ -1,0 +1,594 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93b0026adf925a249bf2690653d98a50, type: 3}
+  m_Name: WispgraveyardDef
+  m_EditorClassIdentifier: 
+  sceneName: wispgraveyard
+  assetKey: RoR2/Base/wispgraveyard/wispgraveyard.unity
+  config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
+  nameToken: 
+  variant: 0
+  propKindCount: 12
+  propCeillingWeight: 0.5747857
+  propCountWeight: 1
+  gameObjectsToDisable:
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall1Detailed/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall2/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*spmBbDryBush'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*PebbleBlackbeach'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*spmWPPine1Collision'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*WPPlanter2WithPineTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/*WPBoulderMediumRound1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform1PartialRing
+    Variant/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlanter2WithPineTree
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform1PartialRing/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2ElevatedSectionRadial/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2ElevatedSectionRadial (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPObeliskLarge/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPWispMaskHolder1 (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2SideExtender/spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2SideExtender/spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPBridgeEntry
+    (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform2BarrierHigh/spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform2BarrierHigh
+    (1)/spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPPlatform1PartialRing/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPPlatform2ElevatedSectionRadial/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPPlatform2ElevatedSectionRadial/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall (1)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall (2)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskLarge/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2SpiralStairsCCW/spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2ElevatedSectionSweeped (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (7)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (8)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (10)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPWispMaskHolder1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1LongKnockedOver (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (11)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (14)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1Long (15)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPWispMaskHolder1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPWispMaskHolder1KnockedOver (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPWispMaskHolder1 (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPWispMaskHolder1 (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1WithBonsaiTree (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlanter1WithBonsaiTree (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1LongKnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter1Long'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlatform1PartialRing/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskLarge/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (2)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (3)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (1)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlanter2WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2DirtTrack/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2DirtTrack/*PebbleGoolake'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2ElevatedSectionSweeped/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2DirtTrack/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2DirtTrack/*PebbleGoolake'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (6)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (7)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (8)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (9)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (10)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (11)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (12)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1Long (13)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlanter1WithBonsaiTree (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1Long (6)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1Long (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter2WithBonsaiTree (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter2WithBonsaiTree (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter2WithBonsaiTree (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter2WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1LongKnockedOver (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1LongKnockedOver (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1LongKnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPWispMaskHolder1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPWispMaskHolder1 (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPWispMaskHolder1 (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPWispMaskHolder1 (6)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1LongKnockedOver (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1Long (7)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/*spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/PebbleGoolake'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2DirtTrack/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2DirtTrack/*PebbleGoolake'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (6)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (7)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (8)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (9)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPObeliskSmall (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (12)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlanter2WithBonsaiTree (13)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPObeliskSmall'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPObeliskSmall (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/spmDCGrass'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPObeliskLarge (1)/DirtMesh/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform1PartialRing/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPWispMaskHolder1
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPWispMaskHolder1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlanter1Long
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlanter1Long'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPWispMaskHolder1
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPWispMaskHolder1
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform2DirtTrack/*PebbleGoolake'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform2DirtTrack/*spmGlGrass1'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SpiralStairsCW/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1Long
+    (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1Long
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*WPPlanter1KnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*WPPlanter1LongKnockedOver'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (9)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlanter1WithBonsaiTree
+    (6)'
+  gameObjectsToEnable: []
+  meshesToColor:
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2Barrier'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2Barrier (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2Barrier (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform1PartialRing
+    Variant'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2BarrierHigh
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3/WPPlatform2BarrierHigh
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPBridgeColumn
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform1PartialRing'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2ElevatedSectionRadial'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2ElevatedSectionRadial (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPObeliskLarge/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2SideExtender/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2SideExtender (1)/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+    (1)/WPPlatform2SideExtender (2)/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform2BarrierHigh
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPPlatform1PartialRing'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskSmall (2)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform1Stairs (Level 3)/WPObeliskLarge/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPBridgeColumn (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlatform1PartialRing'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPPlatform2ElevatedSectionSweeped'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (3)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (2)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall
+    (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskSmall/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)/WPObeliskLarge/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2Barrier (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2DirtTrack'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2DirtTrack/BorderMesh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SideExtender'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SideExtender/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SideExtender
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SideExtender
+    (1)/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2/WPBridgeColumn
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2DirtTrack'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2DirtTrack/BorderMesh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2Barrier (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2BarrierHigh (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2DirtTrack'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2DirtTrack/BorderMesh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2SideExtender'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+    (1)/WPPlatform2 (2)/WPPlatform2SideExtender/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeColumn (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform2BarrierHigh (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform2BarrierHigh (5)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform2BarrierHigh (6)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPBridgeColumn (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPObeliskLarge (1)/*'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform1PartialRing'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform2DirtTrack'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform2DirtTrack/BorderMesh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+    (Level 2)/WPPlatform2BarrierHigh (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (3)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh
+    (1)/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*WPPlatform2BarrierHigh
+    (2)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2BarrierHigh
+    (2)/Ring'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2Barrier
+    (4)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*WPPlatform2BarrierHigh
+    (1)'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/*WPPlatform2BarrierHigh'
+  - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SpiralStairsCCW'
+  terrainMeshes:
+  - gateName: 
+    paths:
+    - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall1Detailed'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall2'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Terrain/WPTerrainBackwall3'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+      (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+      (1)/WPPlatform2SideExtender (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+      (1)/WPPlatform2SideExtender (2)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPPlatform1Stairs
+      (1)/WPPlatform2SideExtender'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/HOLDER: Forest Bridge/WPBridgeEntry
+      (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPPlatform1Stairs (Level 3)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPPlatform1Stairs (Level 3)/WPPlatform2ElevatedSectionRadial'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPPlatform2SpiralStairsCCW'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPPlatform2ElevatedSectionSweeped (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2ElevatedSectionSweeped'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)/WPPlatform2 (2)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)/WPPlatform2 (2)/WPPlatform2 (3)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2SpiralStairsCCW'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2ElevatedSectionRadial'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPBridgeDoubleEntry
+      (1)/WPPlatform2 (2)/WPPlatform2 (3)/WPPlatform2ElevatedSectionRadial (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2SpiralStairsCW'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2ElevatedSectionSweeped
+      (1)'
+    floorMesh: {fileID: 4300000, guid: 2c2f4e3d67f357343bd513aa82e55d8d, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 347b93f026dd1644a9ceb7f741780dc5, type: 2}
+  - gateName: IslandBridge
+    paths:
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPBridgeEntry (Gate: IslandBridge)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPBridgeEntry (Gate: IslandBridge)/WPPlatform1Stairs (1)'
+    floorMesh: {fileID: 4300000, guid: 3aad7dba072bd8d4c8cfebd8e98c9e03, type: 2}
+    ceilMesh: {fileID: 4300000, guid: 4ba9079c302dff84c8bbd04267e8f78d, type: 2}
+  - gateName: Walkway
+    paths:
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPBridgeEntry (Gate: Walkway)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)'
+    - 'ENTIRE SCENE HOLDER/HOLDER: Temple Pieces/*WPPlatform2 (Level 1)/WPPlatform2
+      (Level 2)/WPBridgeEntry (Gate: Walkway)/WPPlatform1Stairs (1)/WPPlatform2ElevatedSectionSweeped'
+    floorMesh: {fileID: 4300000, guid: a8f18c20b590f994f85d2132642eb0a1, type: 2}
+    ceilMesh: {fileID: 4300000, guid: d8d3a10825a709c4581d8a9342718636, type: 2}
+  sceneInfo: SceneInfo
+  meshSplitDensity: 50
+  meshTrimDensity: 2
+  mapBounds:
+    m_Center: {x: -105.18317, y: 31.485626, z: 28.992645}
+    m_Extent: {x: 301.6547, y: 63.35556, z: 305.2886}

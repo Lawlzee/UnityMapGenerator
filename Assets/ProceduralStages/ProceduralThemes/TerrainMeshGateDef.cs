@@ -63,7 +63,7 @@ namespace ProceduralStages
                             }
                             else
                             {
-                                mesh = vanillaStageDef.config.meshTransformer.CreateReadableCopy(mesh);
+                                mesh = vanillaStageDef.config.meshTransformer.CreateReadableCopy(mesh, path);
                             }
                         }
 

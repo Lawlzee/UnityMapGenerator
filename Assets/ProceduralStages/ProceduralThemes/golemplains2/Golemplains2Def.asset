@@ -16,6 +16,7 @@ MonoBehaviour:
   assetKey: RoR2/Base/golemplains2/golemplains2.unity
   config: {fileID: 11400000, guid: 0e83b735f0fe85e41974c22a80ac0792, type: 2}
   nameToken: 
+  variant: 1
   propKindCount: 12
   propCeillingWeight: 0.053823642
   propCountWeight: 0.7

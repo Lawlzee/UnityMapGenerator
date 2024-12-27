@@ -1,3 +1,4 @@
+using ProceduralStages;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -15,8 +16,13 @@ public class MeshReadabilityTransformer : ScriptableObject
         renderTexture.Create();
     }
 
-    public Mesh CreateReadableCopy(Mesh mesh)
+    public Mesh CreateReadableCopy(Mesh mesh, string path)
     {
+        if (mesh.subMeshCount != 1)
+        {
+            Log.Debug($"mesh.subMeshCount != 1 ({mesh.name}) {path}");
+        }
+
         int vertexCount = mesh.vertexCount;
         int triangleCount = mesh.GetSubMesh(mesh.subMeshCount - 1).indexCount + mesh.GetSubMesh(mesh.subMeshCount - 1).indexStart;
 

@@ -27,7 +27,6 @@
         "R2API.Director.dll",
         "RiskOfOptions.dll",
         "R2API.Language.dll",
-        "Wwise.dll",
         "Rewired_Core.dll",
         "RoRGauntlet.dll",
         "AK.Wwise.Unity.MonoBehaviour.dll",
