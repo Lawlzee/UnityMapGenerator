@@ -1,6 +1,6 @@
 # Procedural Stages
 
-Procedural Stages replaces conventional static terrains with procedurally generated environments, offering a fresh and varied experience with each stage while striving to maintain the familiar feel of vanilla stages.
+Procedural Stages introduces new procedurally generated environments, providing a fresh and varied experience for each stage while preserving the familiar feel of the vanilla stages. Additionally, it enhances the vanilla stages by incorporating custom themes to them.
 
 [Changelog](https://thunderstore.io/package/Lawlzee/ProceduralStages/changelog/)
 
@@ -8,27 +8,27 @@ Procedural Stages replaces conventional static terrains with procedurally genera
 
 - **Diverse Terrain Types**: Explore islands, open caves, twisted canyons, basalt isle, tunnel caves, lunar fields, temple and block maze, each dynamically generated for a fresh adventure.
 - **Dynamic Map Themes**: Experience different visual themes with every stage, including Plains, Desert, Snow, Void, Mushroom, and the old "random" theme.
+- **Custom Themes for Vanilla Stages**: Enhance your favorite vanilla stages with unique custom themes.
 - **Balanced Gameplay**: Despite the procedural generation, the stages are balanced to feel like vanilla stages.
-- **Multiplayer Support:** Enjoy the procedural adventure with friends.
-- **Integration with Simulacrum:** Seamlessly compatible with Simulacrum.
-- **Adaptive Map Size:** The map dynamically adjusts in size based on the stage number.
-- **Dynamic Map Themes:** Experience different visual themes with every stage.
-- **Stage-Specific Interactables:** Encounter stage-specific elements such as pressure plates, timed security chests, legendary chests, and the stage 4 alloy vulture nests.
-- **Random Decoration Placement:** Discover unique environments with randomly placed decorations.
-- **Randomized Enemy Pool:** Experience a dynamically curated assortment of enemies.
-- **Varied Music Selection:** Immerse yourself in randomly selected music tracks.
+- **Multiplayer Support**: Enjoy the procedural adventure with friends.
+- **Integration with Simulacrum**: Seamlessly compatible with Simulacrum.
+- **Adaptive Map Size**: The map dynamically adjusts in size based on the stage number.
+- **Dynamic Map Themes**: Experience different visual themes with every stage.
+- **Stage-Specific Interactables**: Encounter stage-specific elements such as pressure plates, timed security chests, legendary chests, and the stage 4 alloy vulture nests.
+- **Random Decoration Placement**: Discover unique environments with randomly placed decorations.
+- **Randomized Enemy Pool**: Experience a dynamically curated assortment of enemies.
+- **Varied Music Selection**: Immerse yourself in randomly selected music tracks.
 - **Teleport To Playable Area button**: Added a "Teleport To Playable Area" button in the pause menu. This button allows players to escape from being stuck in inaccessible areas, such as holes or glitches, by instantly teleporting them back to a playable area.
-- **Support for 'Judgement' Mod:** Compatible with the `Judgement` mod.
+- **Support for 'Judgement' Mod**: Compatible with the `Judgement` mod.
 
-## Stages
+## Procedural Stages
 
 Each stage is randomly generated, featuring unique terrain types and themes:
 
-- **Terrain Types:** Encounter islands, open caves, twisted canyons, basalt isle, tunnel caves, lunar fields, temple and block maze.
-- **Themes:** Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the legacy "Random" theme.
+- **Terrain Types**: Encounter islands, open caves, twisted canyons, basalt isle, tunnel caves, lunar fields, temple and block maze.
+- **Themes**: Experience various visual themes including Plains, Desert, Snow, Void, Mushroom, and the legacy "Random" theme.
 
 ### Screenshots
-
 
 ![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/1.15/Image20.png)
 *Temple map with the plains theme*
@@ -80,9 +80,37 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
+## Vanilla Stages  
+
+Custom themes are added to enhance the vanilla stages. Currently, this feature is available only for non-DLC stages.
+
+### Screenshots
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image4.png)
+*Abyssal Depths with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image7.png)
+*Bazaar with the desert theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image12.png)
+*Titanic Plains with the snow theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image13.png)
+*Titanic Plains with the mushroom theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image15.png)
+*Verdant Falls with the void theme*
+
+![screenshot](https://raw.githubusercontent.com/Lawlzee/UnityMapGenerator/master/Mod/Images/2.0/Image19.png)
+*Main menu with the plains theme*
+
+[More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
+
 ## Videos
 
 Below are several videos that demonstrate the mod in action:
+- [Pot-rolling charity stream by Raydans](https://www.twitch.tv/videos/2330270612)
+- [Video by Nurbley](https://www.youtube.com/watch?v=Dee7BLqus2Q)
 - [Video by LimeLight](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
 - [Video by TrentoMento](https://www.youtube.com/watch?v=5wyeGS0PbeU)
 - [Video by PixelClub](https://www.youtube.com/watch?v=dBWXATNUGjY)
@@ -97,6 +125,7 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 | Configuration | Infinite map scaling | Disabled         | If enabled, the stage size scaling will not be reset every loop. Exercise caution when utilizing this feature, as it may lead to increased map generation time and a decrease in framerate. |
 | Performance   | Occlusion culling frame delay | 6 | The number of frames between each occlusion culling check impacts performance. A shorter delay decreases FPS, while a longer delay causes decorations to flicker more when moving quickly. The game operates at 60 frames per second. Any changes to this configuration will take effect at the start of the next stage.|
 | Themes        | `<Theme>` spawn rate | See table below  | Specifies the percentage of stages that will be generated with the `<theme>` theme. |
+| Vanilla Stages Themes | `<Stage name>` | 100 %          | Specifies the probability that the vanilla theme for this stage is replaced with a custom theme. |
 | All Stages    | Min stage count      | 1                | Defines the minimum number of stages required to enable the spawning of procedural stages. |
 | All Stages    | Stage repetition     | NonePerLoop    | Specifies whether a stage can be repeated. Yes: The stage can be repeated multiple times. NonePerLoop: The stage cannot be repeated within the same loop. |
 | All Stages    | `<Terrain type>` map spawn rate | Varied | Sets the overall percentage of stages that will feature the `<Terrain type>` terrain type. Adjusting this value will automatically update the spawn rates for this terrain type in each individual stage. |
@@ -121,13 +150,13 @@ You can edit the configuration in `Settings > Mod Options > ProceduralStages`. A
 
 Here are the default spawn rates for all terrain types:
 
-| Stage   | Open Caves | Tunnel Caves | Lonely Island | Twisted Canyons | Basalt Isle | Temple | Block maze |
-|---------|------------|--------------|---------------|-----------------|-------------|--------|------------|
-| Stage 1 | 5%         | 5%           | 25%           | 10%             | 25%         | 25%    | 5%         |
-| Stage 2 | 25%        | 25%          | 5%            | 10%             | 5%          | 5%     | 25%        |
-| Stage 3 | 10%        | 10%          | 15%           | 25%             | 10%         | 15%    | 15%        |
-| Stage 4 | 15%        | 5%           | 20%           | 10%             | 10%         | 20%    | 20%        |
-| Stage 5 | 15%        | 25%          | 5%            | 20%             | 25%         | 5%     | 5%         |
+| Stage   | Open Caves | Tunnel Caves | Lonely Island | Twisted Canyons | Basalt Isle | Temple | Block maze | Vanilla Stage |
+|---------|------------|--------------|---------------|-----------------|-------------|--------|------------|---------------|
+| Stage 1 | 5%         | 5%           | 15%           | 10%             | 15%         | 15%    | 5%         | 30 %          |
+| Stage 2 | 15%        | 15%          | 5%            | 10%             | 5%          | 5%     | 15%        | 30 %          |
+| Stage 3 | 5%         | 5%           | 10%           | 15%             | 10%         | 15%    | 10%        | 30 %          |
+| Stage 4 | 5%         | 5%           | 15%           | 10%             | 10%         | 10%    | 15%        | 30 %          |
+| Stage 5 | 15%        | 15%          | 5%            | 10%             | 15%         | 5%     | 5%         | 30 %          |
 
 ## Commands
 - `ps_set_stage <terrain_type> <theme> <stage_count>`

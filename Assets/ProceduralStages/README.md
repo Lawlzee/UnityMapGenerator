@@ -80,9 +80,9 @@ Each stage is randomly generated, featuring unique terrain types and themes:
 
 [More screenshots are available here.](https://github.com/Lawlzee/UnityMapGenerator/tree/master/Mod/Images)
 
-## Vanilla Stages
+## Vanilla Stages  
 
-At the moment, only the non DLC stages supports custom themes
+Custom themes are added to enhance the vanilla stages. Currently, this feature is available only for non-DLC stages.
 
 ### Screenshots
 
@@ -109,6 +109,8 @@ At the moment, only the non DLC stages supports custom themes
 ## Videos
 
 Below are several videos that demonstrate the mod in action:
+- [Pot-rolling charity stream by Raydans](https://www.twitch.tv/videos/2330270612)
+- [Video by Nurbley](https://www.youtube.com/watch?v=Dee7BLqus2Q)
 - [Video by LimeLight](https://www.youtube.com/watch?v=CDH7QYtNGvc&lc=UgziI767yJ6zojgI77R4AaABAg)
 - [Video by TrentoMento](https://www.youtube.com/watch?v=5wyeGS0PbeU)
 - [Video by PixelClub](https://www.youtube.com/watch?v=dBWXATNUGjY)
