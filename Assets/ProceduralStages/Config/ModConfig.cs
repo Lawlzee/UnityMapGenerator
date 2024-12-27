@@ -43,41 +43,41 @@ namespace ProceduralStages
         {
             [(TerrainType.OpenCaves, 0)] = 0.05f,
             [(TerrainType.TunnelCaves, 0)] = 0.05f,
-            [(TerrainType.Islands, 0)] = 0.25f,
+            [(TerrainType.Islands, 0)] = 0.15f,
             [(TerrainType.Mines, 0)] = 0.10f,
-            [(TerrainType.Basalt, 0)] = 0.25f,
-            [(TerrainType.Towers, 0)] = 0.25f,
+            [(TerrainType.Basalt, 0)] = 0.15f,
+            [(TerrainType.Towers, 0)] = 0.15f,
             [(TerrainType.Temple, 0)] = 0.05f,
 
-            [(TerrainType.OpenCaves, 1)] = 0.25f,
-            [(TerrainType.TunnelCaves, 1)] = 0.25f,
+            [(TerrainType.OpenCaves, 1)] = 0.15f,
+            [(TerrainType.TunnelCaves, 1)] = 0.15f,
             [(TerrainType.Islands, 1)] = 0.05f,
             [(TerrainType.Mines, 1)] = 0.10f,
             [(TerrainType.Basalt, 1)] = 0.05f,
             [(TerrainType.Towers, 1)] = 0.05f,
-            [(TerrainType.Temple, 1)] = 0.25f,
+            [(TerrainType.Temple, 1)] = 0.15f,
 
-            [(TerrainType.OpenCaves, 2)] = 0.10f,
-            [(TerrainType.TunnelCaves, 2)] = 0.10f,
-            [(TerrainType.Islands, 2)] = 0.15f,
-            [(TerrainType.Mines, 2)] = 0.25f,
+            [(TerrainType.OpenCaves, 2)] = 0.05f,
+            [(TerrainType.TunnelCaves, 2)] = 0.05f,
+            [(TerrainType.Islands, 2)] = 0.10f,
+            [(TerrainType.Mines, 2)] = 0.15f,
             [(TerrainType.Basalt, 2)] = 0.10f,
             [(TerrainType.Towers, 2)] = 0.15f,
-            [(TerrainType.Temple, 2)] = 0.15f,
+            [(TerrainType.Temple, 2)] = 0.10f,
 
-            [(TerrainType.OpenCaves, 3)] = 0.15f,
+            [(TerrainType.OpenCaves, 3)] = 0.05f,
             [(TerrainType.TunnelCaves, 3)] = 0.05f,
-            [(TerrainType.Islands, 3)] = 0.20f,
+            [(TerrainType.Islands, 3)] = 0.15f,
             [(TerrainType.Mines, 3)] = 0.10f,
             [(TerrainType.Basalt, 3)] = 0.10f,
-            [(TerrainType.Towers, 3)] = 0.20f,
-            [(TerrainType.Temple, 3)] = 0.20f,
+            [(TerrainType.Towers, 3)] = 0.10f,
+            [(TerrainType.Temple, 3)] = 0.15f,
 
             [(TerrainType.OpenCaves, 4)] = 0.15f,
-            [(TerrainType.TunnelCaves, 4)] = 0.25f,
+            [(TerrainType.TunnelCaves, 4)] = 0.15f,
             [(TerrainType.Islands, 4)] = 0.05f,
-            [(TerrainType.Mines, 4)] = 0.20f,
-            [(TerrainType.Basalt, 4)] = 0.25f,
+            [(TerrainType.Mines, 4)] = 0.10f,
+            [(TerrainType.Basalt, 4)] = 0.15f,
             [(TerrainType.Towers, 4)] = 0.05f,
             [(TerrainType.Temple, 4)] = 0.05f,
         };
@@ -261,7 +261,7 @@ namespace ProceduralStages
 
                         string description = $"Specifies the percentage of maps that will be generated with the <style=cIsHealing>{terrainType.GetName()}</style> terrain type for stage {stageIndex + 1}. If the total percentage for stage 1 is less than 100%, normal stages may also spawn. If the total percentage for stage {stageIndex + 1} is 0%, only normal stages will spawn.";
                         var terrainConfig = config.Bind($"Stage {stageIndex + 1}", $"{terrainType.GetName()} map spawn rate", defaultPercent, description);
-                        if (lastVersion < SemanticVersion.Parse("1.15.0"))
+                        if (lastVersion < SemanticVersion.Parse("2.0.0"))
                         {
                             terrainConfig.Value = defaultPercent;
                         }
