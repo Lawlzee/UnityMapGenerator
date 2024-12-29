@@ -44,7 +44,6 @@ namespace ProceduralStages
                     themes.WarmUp();
                 }
 
-                lastSeed = SetSeed();
                 ApplyTheme();
             }
         }
@@ -57,13 +56,10 @@ namespace ProceduralStages
 
         private bool generateNextFrame;
 
+
+#if UNITY_EDITOR
         private void Update()
         {
-            if (!Application.isEditor)
-            {
-                return;
-            }
-
             if (generateNextFrame)
             {
                 generateNextFrame = false;
@@ -80,7 +76,7 @@ namespace ProceduralStages
 
                 if (Input.GetKeyDown(KeyCode.F2))
                 {
-                    lastSeed = SetSeed();
+                    lastSeed = 0;
                 }
                 else
                 {
@@ -92,9 +88,16 @@ namespace ProceduralStages
 
             if (Input.GetKeyDown(KeyCode.F5))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                string currentSceneName = SceneManager.GetActiveScene().name;
+                var stageDef = stages.FirstOrDefault(x => x.sceneName == currentSceneName);
+
+                if (stageDef)
+                {
+                    stageDef.LoadScene();
+                }
             }
         }
+#endif
 
         private void OnValidate()
         {
@@ -120,6 +123,11 @@ namespace ProceduralStages
                 {
                     ProfilerLog.Debug($"No stageDef found for '{currentSceneName}'");
                     return;
+                }
+
+                if (lastSeed == 0)
+                {
+                    lastSeed = SetSeed();
                 }
 
                 if (!Application.isEditor)

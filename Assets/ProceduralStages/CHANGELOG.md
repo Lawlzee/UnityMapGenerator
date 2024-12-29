@@ -1,3 +1,6 @@
+## 2.0.1  
+1. **Multiplayer Stage Desync Fix:** Resolved an issue causing stage desynchronization in multiplayer.  
+
 ## 2.0
 1. **Custom Themes for Vanilla Stages and Main Menu:** Introduced custom themes for vanilla stages and the main menu, currently available only for non-DLC stages.  
 2. **Default Spawn Rate Adjustment:** Reduced the default spawn rate for procedural stages to allow vanilla stages with custom themes to spawn.  
