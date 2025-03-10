@@ -1,3 +1,7 @@
+## 2.0.2  
+1. **Updated for Latest Game Version:** Ensured compatibility with the most recent update.  
+2. **PhotoMode Crash Fix:** Resolved a crash that occurred when pausing the game during the Mithrix fight while using the PhotoMode mod.
+
 ## 2.0.1  
 1. **Multiplayer Stage Desync Fix:** Resolved an issue causing stage desynchronization in multiplayer.  
 

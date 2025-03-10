@@ -87,16 +87,16 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
   - submoduleName: R2API_ContentManagement
     description: API for adding content to the game
     dependedncyID: RiskofThunder-R2API_ContentManagement
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Addressables
     description: R2API Submodule for implementing Addressables functionality
@@ -104,14 +104,14 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Animations
     description: API for modifying RuntimeAnimatorController
     dependedncyID: RiskofThunder-R2API_Animations
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
     - BepInExPack
     - R2API_Core
@@ -121,8 +121,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Colors
     description: API for registering Colors to the game
@@ -130,8 +130,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_CommandHelper
     description: API for registering console commands
@@ -139,8 +139,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_DamageType
     description: API for registering damage types
@@ -148,8 +148,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Deployable
     description: API for adding custom deployables
@@ -157,8 +157,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Difficulty
     description: API for adding custom in-game difficulties
@@ -166,8 +166,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Director
     description: API for easily modifiying the Director (RoR2 monster / interactable
@@ -176,18 +176,18 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
-    - R2API_Addressables
+    - HookGenPatcher
     - R2API_Core
+    - R2API_Addressables
   - submoduleName: R2API_Dot
     description: API for adding custom damage over time effects
     dependedncyID: RiskofThunder-R2API_Dot
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Elites
     description: API for adding custom elite types
@@ -195,18 +195,18 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
-    - R2API_ContentManagement
+    - HookGenPatcher
     - R2API_Core
+    - R2API_ContentManagement
   - submoduleName: R2API_Items
     description: API for adding custom items
     dependedncyID: RiskofThunder-R2API_Items
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
     - R2API_ContentManagement
   - submoduleName: R2API_Language
@@ -215,8 +215,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Loadout
     description: API for registering skills, skins and entity states
@@ -224,19 +224,19 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
+    - BepInExPack
     - HookGenPatcher
+    - R2API_Core
     - R2API_ContentManagement
     - R2API_Skins
-    - BepInExPack
-    - R2API_Core
   - submoduleName: R2API_LobbyConfig
     description: API for modifying the in-game lobby rules
     dependedncyID: RiskofThunder-R2API_LobbyConfig
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Networking
     description: Networking API around the Unity UNet Low Level API (LLAPI)
@@ -244,8 +244,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Orb
     description: API for creation and management of custom Orb types.
@@ -253,8 +253,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Prefab
     description: API for Prefab creation, networking and duplication
@@ -262,18 +262,18 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
     - R2API_ContentManagement
   - submoduleName: R2API_ProcType
     description: API for registering proc types
     dependedncyID: RiskofThunder-R2API_ProcType
     shouldInstall: 1
-    isHardDependency: 0
+    isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_RecalculateStats
     description: API for manipulating Character Stats
@@ -281,8 +281,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Rulebook
     description: API for registering rules to the Rule Catalog
@@ -290,8 +290,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_SceneAsset
     description: API for retrieving assets that live exclusively in game scenes
@@ -299,8 +299,17 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
+    - R2API_Core
+  - submoduleName: R2API_Skills
+    description: API for skills
+    dependedncyID: RiskofThunder-R2API_Skills
+    shouldInstall: 1
+    isHardDependency: 0
+    dependencies:
+    - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Skins
     description: R2API Submodule for adding custom Skins and Skin-related utilities
@@ -309,8 +318,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_Sound
     description: API for adding custom sounds or musics
@@ -318,8 +327,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
     - R2API_ContentManagement
   - submoduleName: R2API_Stages
@@ -328,8 +337,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_StringSerializerExtensions
     description: Increased string serializer support
@@ -337,8 +346,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
   - submoduleName: R2API_TempVisualEffect
     description: API for adding custom temporary visual effects for characters.
@@ -346,8 +355,8 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
     - R2API_ContentManagement
   - submoduleName: R2API_Unlockable
@@ -356,10 +365,10 @@ MonoBehaviour:
     shouldInstall: 1
     isHardDependency: 1
     dependencies:
-    - HookGenPatcher
-    - R2API_ContentManagement
     - BepInExPack
+    - HookGenPatcher
     - R2API_Core
+    - R2API_ContentManagement
 --- !u!114 &-4710790249027432553
 MonoBehaviour:
   m_ObjectHideFlags: 0

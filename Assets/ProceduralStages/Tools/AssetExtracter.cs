@@ -121,24 +121,24 @@ public class AssetExtracter : MonoBehaviour
                         name = pc.name,
                         categoryWeight = pc.categoryWeight,
                         alwaysIncluded = pc.alwaysIncluded
-                            .Select(y => new PoolEntry
+                            ?.Select(y => new PoolEntry
                             {
                                 dccs = MapDCCS(y),
                                 weight = y.weight
                             })
                             .ToArray(),
                         includedIfConditionsMet = pc.includedIfConditionsMet
-                            .Select(y => new ConditionalPoolEntry
+                            ?.Select(y => new ConditionalPoolEntry
                             {
                                 requiredExpansions = y.requiredExpansions
-                                    .Select(z => z.name)
+                                    ?.Select(z => z?.name)
                                     .ToArray(),
                                 dccs = MapDCCS(y),
                                 weight = y.weight
                             })
                             .ToArray(),
                         includedIfNoConditionsMet = pc.includedIfNoConditionsMet
-                            .Select(y => new PoolEntry
+                            ?.Select(y => new PoolEntry
                             {
                                 dccs = MapDCCS(y),
                                 weight = y.weight

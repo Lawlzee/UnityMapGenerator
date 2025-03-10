@@ -21,6 +21,7 @@ namespace ProceduralStages
         Other
     }
 
+    [Serializable]
     public class DccsPoolItem
     {
         public string Asset;

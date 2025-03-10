@@ -452,6 +452,7 @@ namespace ProceduralStages
 
                         var bossTracks = stages
                             .Select(x => x.bossTrack)
+                            .Where(x => x)
                             .Distinct()
                             .Where(x => x.cachedName != "muRaidfightDLC1_07" && x.cachedName != "muSong25")
                             .ToList();

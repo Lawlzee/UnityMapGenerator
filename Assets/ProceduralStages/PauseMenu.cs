@@ -16,9 +16,31 @@ namespace ProceduralStages
     {
         public static void Init()
         {
+            On.RoR2.CameraRigController.OnEnable += (orig, self) =>
+            {
+                Log.Debug("On.RoR2.CameraRigController.OnEnable");
+                orig(self);
+            };
+
+            On.RoR2.CameraRigController.OnDisable += (orig, self) =>
+            {
+                Log.Debug("On.RoR2.CameraRigController.OnDisable");
+                orig(self);
+            };
+
             On.RoR2.UI.PauseScreenController.Awake += (orig, self) =>
             {
                 orig(self);
+                //GameObject gameObject1 = self.GetComponentInChildren<ButtonSkinController>().gameObject;
+                //GameObject gameObject2 = UnityEngine.Object.Instantiate<GameObject>(gameObject1, gameObject1.transform.parent);
+                //gameObject2.name = "GenericMenuButton (Photo mode)";
+                //gameObject2.SetActive(true);
+                //gameObject2.GetComponent<ButtonSkinController>().GetComponent<LanguageTextMeshController>().token = "Photo mode";
+                //HGButton component = gameObject2.GetComponent<HGButton>();
+                //component.interactable = this.cameraRigController.localUserViewer != null;
+                //component.onClick.AddListener((UnityAction)(() => new GameObject("PhotoModeController").AddComponent<PhotoModeController>().EnterPhotoMode(pauseScreenController, this.cameraRigController)));
+                //gameObject2.transform.SetSiblingIndex(PhotoModePlugin.buttonPlacement.Value);
+
                 if (SceneCatalog.currentSceneDef?.cachedName == Main.SceneName)
                 {
                     AddTeleportButton(self);

@@ -1498,6 +1498,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   combatSquad: {fileID: 0}
+  maxSquadCount: 0
   spawnEffectPrefab: {fileID: 0}
   ignoreTeamSizeLimit: 0
   _monsterCards: {fileID: 0}
@@ -1543,6 +1544,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   combatSquad: {fileID: 0}
+  maxSquadCount: 0
   spawnEffectPrefab: {fileID: 0}
   ignoreTeamSizeLimit: 0
   _monsterCards: {fileID: 0}
@@ -1730,6 +1732,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterDccsPool: {fileID: 0}
   interactableDccsPool: {fileID: 0}
+  contentSourceMixLimitOverride: 0
+  contentSourceMixLimitOverrideValue: 2
   sceneDirectorInteractibleCredits: 0
   sceneDirectorMonsterCredits: 0
   bonusInteractibleCreditObjects: []

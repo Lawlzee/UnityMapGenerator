@@ -50,14 +50,34 @@ namespace ProceduralStages
                     int stageDistance = Math.Abs(currentStageInLoop - x.StageIndex);
                     float weigth = Mathf.Pow(blendFactor, stageDistance);
 
+                    List<DccsPool.PoolEntry> poolEntries = new List<DccsPool.PoolEntry>();
+
+                    if (standardCategory.alwaysIncluded != null)
+                    {
+                        poolEntries.AddRange(standardCategory.alwaysIncluded);
+                    }
+
+                    if (standardCategory.includedIfNoConditionsMet != null)
+                    {
+                        poolEntries.AddRange(standardCategory.includedIfNoConditionsMet);
+                    }
+
+                    if (standardCategory.includedIfConditionsMet != null)
+                    {
+                        var validDCCS = standardCategory.includedIfConditionsMet
+                            .Where(x => x.requiredExpansions == null || !x.requiredExpansions.Any(x => x?.name == "DLC1") || hasDLC1)
+                            .Where(x => x.requiredExpansions == null || !x.requiredExpansions.Any(x => x?.name == "DLC2") || hasDLC2)
+                            .ToList();
+
+                        poolEntries.AddRange(validDCCS);
+                    }
+
                     return new StagePool
                     {
                         Info = x,
                         Pool = pool,
                         StandardCategory = standardCategory,
-                        PoolEntry = hasDLC1 && standardCategory.includedIfConditionsMet.Length > 0
-                            ? standardCategory.includedIfConditionsMet[0]
-                            : standardCategory.includedIfNoConditionsMet[0],
+                        PoolEntries = poolEntries,
                         Weigth = weigth
                     };
                 })
@@ -72,7 +92,8 @@ namespace ProceduralStages
 
             StagePool templateStage = stageSelection.Evaluate(MapGenerator.rng.nextNormalizedFloat);
 
-            var categories = templateStage.PoolEntry.dccs.categories
+            var categories = templateStage.PoolEntries
+                .SelectMany(x => x.dccs.categories)
                 .Select(x => GenerateDccsCategory(x))
                 .ToArray();
 
@@ -112,11 +133,13 @@ namespace ProceduralStages
                 var stagesCards = validPools
                     .SelectMany(stage =>
                     {
-                        DirectorCardCategorySelection.Category dccsCategory = stage.PoolEntry.dccs.categories
+                        List<DirectorCardCategorySelection.Category> dccsCategories = stage.PoolEntries
+                            .SelectMany(x => x.dccs.categories)
                             .Where(x => x.name == template.name)
-                            .FirstOrDefault();
+                            .ToList();
 
-                        return (dccsCategory.cards ?? Array.Empty<DirectorCard>())
+                        return dccsCategories
+                            .SelectMany(x => x.cards)
                             .Where(x => x?.spawnCard?.name != null)
                             .Where(x => x.minimumStageCompletions <= stageCleared)
                             .Select(card => new
@@ -199,7 +222,7 @@ namespace ProceduralStages
             public DccsPoolItem Info;
             public DccsPool Pool;
             public DccsPool.Category StandardCategory;
-            public DccsPool.PoolEntry PoolEntry;
+            public List<DccsPool.PoolEntry> PoolEntries;
             public float Weigth;
         }
     }
